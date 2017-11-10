@@ -33,7 +33,8 @@ public class StoreTrailerSet {
 //			String content = StoreTrailerUrl(i);
 //			System.out.println(content);|
 			try {
-				list.addAll(getList(StoreTrailerUrl(i)));	
+				//list.addAll(getList(StoreTrailerUrl(i)));	
+				insBatchEs(getList(StoreTrailerUrl(i)) , jestClient , "storetrailer");
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -41,8 +42,8 @@ public class StoreTrailerSet {
 			//保存es
 			
 		}
-		System.out.println(list.size());
-		insBatchEs(list , jestClient , "storetrailer");
+	//	System.out.println(list.size());
+		//insBatchEs(list , jestClient , "storetrailer");
 		
 		//System.out.println(content);
 	}

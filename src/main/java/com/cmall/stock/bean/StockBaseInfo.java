@@ -25,6 +25,7 @@ public class StockBaseInfo implements Serializable {
 	private  float high; // 最高价
 	private  float low; // 最低价
 	private  float close; // 收盘价
+	private  String nextRises; //下一天收盘价
 	private  long volume; // 量
 //	private String xLabel; // X 轴标签
 
@@ -64,6 +65,12 @@ public class StockBaseInfo implements Serializable {
     private int up5 = 0;
     
     private int up10 = 0;
+    
+    private  float upSumRises5;
+    
+    private  float upSumRises10;
+    
+    
 	/**
 	 * 自定义分时图用的数据
 	 *
@@ -436,6 +443,31 @@ public class StockBaseInfo implements Serializable {
 	public void setUp10(int up10) {
 		this.up10 = up10;
 	}
+
+	public String getNextRises() {
+		return nextRises;
+	}
+
+	public void setNextRises(String nextRises) {
+		this.nextRises = nextRises;
+	}
+
+	public float getUpSumRises5() {
+		return upSumRises5;
+	}
+
+	public void setUpSumRises5(float upSumRises5) {
+		this.upSumRises5 = upSumRises5;
+	}
+
+	public float getUpSumRises10() {
+		return upSumRises10;
+	}
+
+	public void setUpSumRises10(float upSumRises10) {
+		this.upSumRises10 = upSumRises10;
+	}
+
 	
 	
 	

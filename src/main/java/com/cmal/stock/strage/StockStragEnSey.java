@@ -257,6 +257,19 @@ public class StockStragEnSey {
     private void computeUpDateNum(){
     	for (int i = 0; i < entries.size(); i++) {
     		StockBaseInfo StockBaseInfo = entries.get(i);
+    		if(i != entries.size() - 1){
+    			String nextRises = entries.get(i+1).getRises();
+    			StockBaseInfo.setNextRises(nextRises);
+    		}
+    		Float rises =Float.parseFloat(StockBaseInfo.getRises());
+    		if(i>=5){
+    			Float Rises5 = Float.parseFloat(entries.get(i-5).getRises());
+    			StockBaseInfo.setUpSumRises5(rises-Rises5);
+    		}
+    		if(i>=10){
+    			Float Rises10 = Float.parseFloat(entries.get(i-10).getRises());
+    			StockBaseInfo.setUpSumRises10(rises-Rises10);
+    		}
     		if(i != 0){
     			float upClose = entries.get(i-1).getClose();
     			float close = StockBaseInfo.getClose();
@@ -272,7 +285,7 @@ public class StockStragEnSey {
 					}
 					float upCloses = entries.get(i-j).getClose();
 					float closes = entries.get(i-j+1).getClose();
-					if(closes >= upCloses){
+					if(closes >= upCloses){  
 						if(j < 6){
 							up5++;
 						}
