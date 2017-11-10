@@ -248,8 +248,27 @@ public class StockStragEnSey {
         computeBOLL();
         computeRSI();
         computeKDJ();
+        computeUpDateNum();
     }
 
+    /**
+     * 计算连续上涨天数
+     */
+    private void computeUpDateNum(){
+    	for (int i = 0; i < entries.size(); i++) {
+    		StockBaseInfo StockBaseInfo = entries.get(i);
+    		if(i != 0){
+    			float upClose = entries.get(i-1).getClose();
+    			float close = StockBaseInfo.getClose();
+    			if(close >= upClose){
+    				int n = entries.get(i-1).getUpDateNum() + 1;
+    				StockBaseInfo.setUpDateNum(n);
+    			}
+    			System.out.println(StockBaseInfo.getStockCode() + " 收盘价：" + close + " 连涨天数：" + StockBaseInfo.getUpDateNum());
+    		}
+    	}
+    }
+    
     /**
      * 计算 MA
      */

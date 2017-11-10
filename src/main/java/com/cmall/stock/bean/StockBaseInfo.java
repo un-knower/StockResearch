@@ -58,6 +58,8 @@ public class StockBaseInfo implements Serializable {
 	private float dn=0; // 下轨线
     private String dayForWeek;
 
+    //连续上涨天数
+    private int upDateNum = 0;
 	/**
 	 * 自定义分时图用的数据
 	 *
@@ -406,5 +408,14 @@ public class StockBaseInfo implements Serializable {
 	public void setDayForWeek(String dayForWeek) {
 		this.dayForWeek = dayForWeek;
 	}
+
+	public int getUpDateNum() {
+		return upDateNum;
+	}
+
+	public void setUpDateNum(int upDateNum) {
+		this.upDateNum = upDateNum;
+	}
+	
 	
 }
