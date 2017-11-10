@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,20 +31,26 @@ import com.kers.esmodel.BaseCommonConfig;
  */
 public class StoreDaySet {
 	
-	public final static String savePathsuff = "D://gits//dataGrab//data//";
+	public final static String savePathsuff = "D://data//info//";
 	
 	public static void main(String[] args) throws Exception {
-		
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		List<String> lstSource = StoreAstockTradInfo.getAllAStockInfo();
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		for(final String  sat:lstSource){
-			//if(sat.equals("600345")){
+			if(sat.equals("600345")){
 				String neDate = getNextDate(sat,jestClient);
-				 List<StockBaseInfo> list = getstockBaseInfoFile(sat , neDate);
-				 for (StockBaseInfo stockBaseInfo : list) {
-					System.out.println(stockBaseInfo.toString());
-				}
-			//}
+				 List<StockBaseInfo> list = getstockBaseInfoFile(sat);
+//				 List<StockBaseInfo> addlist = new ArrayList<StockBaseInfo>();
+//				 for (StockBaseInfo stockBaseInfo : list) {
+//					if(!neDate.equals("") && df.parse(stockBaseInfo.getDate()).getTime() <= df.parse(neDate).getTime() ){
+//							break;
+//					}
+//					addlist.add(stockBaseInfo);
+//					System.out.println(stockBaseInfo.toString());
+//				}
+//				 StoreAstockTradInfo.insBatchEs(addlist, jestClient, "stockpcse");
+			}
 		}
 		 
 		
@@ -61,7 +68,7 @@ public class StoreDaySet {
 	        searchSourceBuilder.size(1000);  
 	        searchSourceBuilder.from(0);
 	        String query = searchSourceBuilder.toString();   
-	        System.out.println(query);
+	       // System.out.println(query);
 	        Sort sort = new Sort("date");
 	        Search search = new Search.Builder(query)
          .addIndex("stockpcse")  
@@ -77,16 +84,13 @@ public class StoreDaySet {
 	       return date;
 	}
 	
-	public static List<StockBaseInfo> getstockBaseInfoFile(String stockCode , String date) throws IOException, ParseException {
-		System.out.println(date);
-		
+	public static List<StockBaseInfo> getstockBaseInfoFile(String stockCode) throws Exception {
 		  final StockStragEnSey stockStragEnSey = new StockStragEnSey();
 		String absPath = savePathsuff + stockCode + ".csv";
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
 		List<List<String>> lstSource = csvHandUtils.readCSVFile();
 		List<StockBaseInfo> result = Lists.newArrayList();
-		for (int i = 1; i< lstSource.size() ;i++) {
+		for (int i = lstSource.size() - 1; i >=1; i--) {
 			// List<String> llData=
 			List<String> objdata = lstSource.get(i);
 			// System.out.println(lstSource.get(i).get(1));
@@ -100,15 +104,11 @@ public class StoreDaySet {
 //			System.out.println(objdata.size());
 			StockBaseInfo stockBaseInfo = new StockBaseInfo(objdata.get(0), objdata.get(6), objdata.get(4),
 					objdata.get(5), objdata.get(3), objdata.get(11), objdata.get(9), stockCode, objdata.get(2),objdata.get(10),objdata.get(12),objdata.get(13),objdata.get(14),objdata.size()<15?null: objdata.get(14),TimeUtils.dayForWeek(objdata.get(0))+"");
-			System.out.println(stockBaseInfo.getDate());
-			if(!date.equals("") && df.parse(stockBaseInfo.getDate()).getTime() <= df.parse(date).getTime() ){
-				break;
-			}
 			//System.out.println(stockBaseInfo.toString());
-			if(!(stockBaseInfo.getOpen()==0||stockBaseInfo.getClose()==0||stockBaseInfo.getHigh()==0||stockBaseInfo.getLow()==0||StringUtils.isBlank(stockBaseInfo.getCjbs()))){//!(stockBaseInfo.getOpen()==0||stockBaseInfo.getClose()==0||stockBaseInfo.getHigh()==0||stockBaseInfo.getLow()==0||StringUtils.isBlank(stockBaseInfo.getCjbs()))){
-//				?System.out.println(stockBaseInfo.toString());
+			if(!(stockBaseInfo.getOpen()==0||stockBaseInfo.getClose()==0||stockBaseInfo.getHigh()==0||stockBaseInfo.getLow()==0)){///|StringUtils.isBlank(stockBaseInfo.getCjbs()))){//!(stockBaseInfo.getOpen()==0||stockBaseInfo.getClose()==0||stockBaseInfo.getHigh()==0||stockBaseInfo.getLow()==0||StringUtils.isBlank(stockBaseInfo.getCjbs()))){
 				result.add(stockBaseInfo);
-			}//|stockBaseInfo.getRises()))
+			}
+			//|stockBaseInfo.getRises()))
 			
 		}
 		  stockStragEnSey.addStockBaseInfos(result);

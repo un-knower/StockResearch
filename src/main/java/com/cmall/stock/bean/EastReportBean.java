@@ -15,17 +15,22 @@ public class EastReportBean {
 	private String mgsykc;
 	// 营业收入[4]
 	private String yysr;
-
+	//营业收入格式化
+	private String yysr_yw;
 	// 营业收入_同比增长[5]
 	private String yysr_tbzz;
 	// 营业收入季度环比 增长[6]
 	private String yysr_hbzz;
 	// 净利润[7];
 	private String jlr;
+	//净利润格式换
+	private String jlr_gsh;
 	// 净利润_同比增长[8]
 	private String jlr_tbzz;
 	// 净利润_季度环比[9]
 	private String jlr_hbzz;
+	//净利润预测比例
+	private Double jlr_ycb;
 	// 每股净资产(元)[10]
 	private String mgjzc;
 	// 净资产收益率(%)[11]
@@ -43,7 +48,7 @@ public class EastReportBean {
 	// 截止日期[17];
 	private String jzrq;
 	// 上季度到本季度的增长率
-	private String jdzzl;
+	private Double jdzzl;
 	//公布当天收盘价格   非工作日开盘后一天
 	private String currentPrice;
 
@@ -191,17 +196,17 @@ public class EastReportBean {
 		this.jzrq = jzrq;
 	}
 
-	public String getJdzzl() {
+	public Double getJdzzl() {
 		return jdzzl;
 	}
 
-	public void setJdzzl(String jdzzl) {
+	public void setJdzzl(Double jdzzl) {
 		this.jdzzl = jdzzl;
 	}
 
 	public EastReportBean(String stockCode, String stockName, String mgsy, String mgsykc, String yysr, String yysr_tbzz,
 			String yysr_hbzz, String jlr, String jlr_tbzz, String jlr_hbzz, String mgjzc, String jzcsyl, String mgxjl,
-			String xsmll, String lrfp, String gxl, String ggrq, String jzrq, String jdzzl,String currentPrice) {
+			String xsmll, String lrfp, String gxl, String ggrq, String jzrq, Double jdzzl,String currentPrice) {
 		this.stockCode = stockCode;
 		this.stockName = stockName;
 		this.mgsy = mgsy;
@@ -231,5 +236,44 @@ public class EastReportBean {
 	public void setCurrentPrice(String currentPrice) {
 		this.currentPrice = currentPrice;
 	}
+
+	@Override
+	public String toString() {
+		return "EastReportBean [stockCode=" + stockCode + ", stockName="
+				+ stockName + ", mgsy=" + mgsy + ", mgsykc=" + mgsykc
+				+ ", yysr=" + yysr + ", yysr_tbzz=" + yysr_tbzz
+				+ ", yysr_hbzz=" + yysr_hbzz + ", jlr=" + jlr + ", jlr_tbzz="
+				+ jlr_tbzz + ", jlr_hbzz=" + jlr_hbzz + ", mgjzc=" + mgjzc
+				+ ", jzcsyl=" + jzcsyl + ", mgxjl=" + mgxjl + ", xsmll="
+				+ xsmll + ", lrfp=" + lrfp + ", gxl=" + gxl + ", ggrq=" + ggrq
+				+ ", jzrq=" + jzrq + ", jdzzl=" + jdzzl + ", currentPrice="
+				+ currentPrice + "]";
+	}
+
+	public String getYysr_yw() {
+		return yysr_yw;
+	}
+
+	public void setYysr_yw(String yysr_yw) {
+		this.yysr_yw = yysr_yw;
+	}
+
+	public String getJlr_gsh() {
+		return jlr_gsh;
+	}
+
+	public void setJlr_gsh(String jlr_gsh) {
+		this.jlr_gsh = jlr_gsh;
+	}
+
+	public Double getJlr_ycb() {
+		return jlr_ycb;
+	}
+
+	public void setJlr_ycb(Double jlr_ycb) {
+		this.jlr_ycb = jlr_ycb;
+	}
+ 
+	
 
 }

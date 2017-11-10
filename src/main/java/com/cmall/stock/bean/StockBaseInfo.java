@@ -60,6 +60,10 @@ public class StockBaseInfo implements Serializable {
 
     //连续上涨天数
     private int upDateNum = 0;
+    
+    private int up5 = 0;
+    
+    private int up10 = 0;
 	/**
 	 * 自定义分时图用的数据
 	 *
@@ -416,6 +420,23 @@ public class StockBaseInfo implements Serializable {
 	public void setUpDateNum(int upDateNum) {
 		this.upDateNum = upDateNum;
 	}
+
+	public int getUp5() {
+		return up5;
+	}
+
+	public void setUp5(int up5) {
+		this.up5 = up5;
+	}
+
+	public int getUp10() {
+		return up10;
+	}
+
+	public void setUp10(int up10) {
+		this.up10 = up10;
+	}
+	
 	
 	
 }

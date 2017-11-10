@@ -7,6 +7,10 @@ public class StoreTrailer {
 	private String perChanges;
 	//业绩变化幅度
 	private String rangeability;
+	
+	private Double startRangeability;
+	
+	private Double endRangeability;
 	//预测类型
 	private String type;
 	//净利润
@@ -15,9 +19,6 @@ public class StoreTrailer {
 	private String startDate;
 	//结束时间
 	private String endDate;
-	
-	
-	
 	public String getStockCode() {
 		return stockCode;
 	}
@@ -41,6 +42,18 @@ public class StoreTrailer {
 	}
 	public void setRangeability(String rangeability) {
 		this.rangeability = rangeability;
+	}
+	public Double getStartRangeability() {
+		return startRangeability;
+	}
+	public void setStartRangeability(Double startRangeability) {
+		this.startRangeability = startRangeability;
+	}
+	public Double getEndRangeability() {
+		return endRangeability;
+	}
+	public void setEndRangeability(Double endRangeability) {
+		this.endRangeability = endRangeability;
 	}
 	public String getType() {
 		return type;
@@ -66,13 +79,8 @@ public class StoreTrailer {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-	@Override
-	public String toString() {
-		return "StoreTrailer [stockCode=" + stockCode + ", stockName="
-				+ stockName + ", perChanges=" + perChanges + ", rangeability="
-				+ rangeability + ", type=" + type + ", netProfit=" + netProfit
-				+ ", startDate=" + startDate + ", endDate=" + endDate + "]";
-	}
+	
+	
 	
 	
 }

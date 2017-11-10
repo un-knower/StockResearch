@@ -264,7 +264,26 @@ public class StockStragEnSey {
     				int n = entries.get(i-1).getUpDateNum() + 1;
     				StockBaseInfo.setUpDateNum(n);
     			}
-    			System.out.println(StockBaseInfo.getStockCode() + " 收盘价：" + close + " 连涨天数：" + StockBaseInfo.getUpDateNum());
+    			int up5 = 0;
+    			int up10 = 0;
+    			for (int j = 1; j <= 10; j++) {
+					if(i-j < 0){
+						break;
+					}
+					float upCloses = entries.get(i-j).getClose();
+					float closes = entries.get(i-j+1).getClose();
+					if(closes >= upCloses){
+						if(j < 6){
+							up5++;
+						}
+						up10++;
+					}
+				}
+    			StockBaseInfo.setUp5(up5);
+    			StockBaseInfo.setUp10(up10);
+    			
+//    			System.out.println(StockBaseInfo.getStockCode() + StockBaseInfo.getDate() +" 收盘价:" +
+//    					StockBaseInfo.getRises() + " 前5天涨的次数" + StockBaseInfo.getUp5() + " 前10天涨的次数：" + StockBaseInfo.getUp10());
     		}
     	}
     }
