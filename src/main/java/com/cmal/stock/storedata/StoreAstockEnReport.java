@@ -82,9 +82,9 @@ public class StoreAstockEnReport {
 			String gxl = arrayconent[15];
 			String ggrq = arrayconent[16];
 			String jzrq = arrayconent[17];
-			String jdzzl = "0";
+			Double jdzzl = 0d;
 			if (i > 1) {
-				jdzzl = Double.parseDouble(jlr) / Double.parseDouble(content[i - 1].split(",")[7]) + "";
+				jdzzl = Double.parseDouble(jlr) / Double.parseDouble(content[i - 1].split(",")[7]) ;
 			}
 			StockBaseInfo baseInfo = (maps == null ? null
 					: StoreAstockTradInfo.getStockContinuePrice(maps, ggrq, true));
@@ -151,8 +151,8 @@ public class StoreAstockEnReport {
 			public int compare(EastReportBean arg0, EastReportBean arg1) {
 				
 				 
-				Double  ret=Double.parseDouble(arg1.getJdzzl());
-				Double  ret2=Double.parseDouble(arg0.getJdzzl());
+				Double  ret=arg1.getJdzzl();
+				Double  ret2=arg0.getJdzzl();
 				return ret.compareTo(ret2);
 //						. -Double.parseDouble(arg0.getJdzzl());
 //				ret
@@ -171,7 +171,7 @@ public class StoreAstockEnReport {
 		for (EastReportBean bean : lstResult) {
 			if (i <= 60) {
 				String output = bean.getStockCode() + "  " + bean.getStockName() + " " + bean.getGgrq() + " "
-						+ df.format(Double.parseDouble(bean.getJdzzl()))+ " " + getFormatNum(bean.getJlr()) + " "
+						+ df.format((bean.getJdzzl()))+ " " + getFormatNum(bean.getJlr()) + " "
 						+ bean.getJlr_hbzz();
 				System.out.println(output);
 				i++;
