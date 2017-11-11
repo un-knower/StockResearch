@@ -35,28 +35,17 @@ import io.searchbox.core.Index;
 public class StoreAstockTradInfo {
 
 	public final static String savePathsuff = "/opt/stock/stockhistdata/";
-	public final static String astockfilePath = "/opt/workspace/splider/src/test/java/com/cmall/stock/data/shareAstock";
 	public final static String stockHisCrawUrl = "http://quotes.money.163.com/service/chddata.html?code=";
 	public final static String  stockRealTimeUrl="http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=2&num=5000&sort=symbol&asc=1&node=hs_a&symbol=&_s_r_a=init#";
 //symbol:"sz300720",code:"300720",name:"海川智能",trade:"22.510",pricechange:"2.050",changepercent:"10.020",buy:"22.510",sell:"0.000",settlement:"20.460",open:"22.510",high:"22.510",low:"22.510",volume:2300,amount:51773,ticktime:"11:35:03",per:32.157,pb:5.104,mktcap:162072,nmc:40518,turnoverratio:0.01278
 	static ExecutorService executorServiceLocal = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(30));
 
-	public static List<String> getAllAStockInfo() throws IOException {
-		List<String> filePath = FileUtils.readLines(new File(astockfilePath));
-		List<String> lstCode = Lists.newArrayList();
-		for (final String s : filePath) {
-			String code = s.split(",")[0];
-			if(!code.equals("code"))
-			lstCode.add(code);
-		}
-		return lstCode;
-
-	}
+	
 	@SuppressWarnings("all")
 	public static void getHistoryData() throws IOException {
 		  final String  sfd=new SimpleDateFormat("yyyyMMdd").format(new Date());
 
-		List<String> filePath = FileUtils.readLines(new File(astockfilePath));
+		List<String> filePath =CommonBaseStockInfo.getAllAStockInfo();// FileUtils.readLines(new File(CommonBaseStockInfo.astockfilePath));
 		for (final String s : filePath) {
 
 			executorServiceLocal.execute(new Thread() {
@@ -65,7 +54,7 @@ public class StoreAstockTradInfo {
 					String code = s.split(",")[0];
 					String scode = s.startsWith("6") ? "0" + code : "1" + code;
 					 
-					String webUri = stockHisCrawUrl + scode + "&start=20150101&end="+sfd;
+					String webUri = stockHisCrawUrl + scode + "&start=20170101&end="+sfd;
 					try {
 						HttpClientEx.downloadFromUri(webUri, savePathsuff + code + ".csv");
 					} catch (Exception e) {
@@ -123,7 +112,7 @@ public class StoreAstockTradInfo {
 			List<String> objdata = lstSource.get(i);
 			// System.out.println(lstSource.get(i).get(1));
 			StockBaseInfo stockBaseInfo = new StockBaseInfo(objdata.get(0), objdata.get(6), objdata.get(4),
-					objdata.get(5), objdata.get(3), objdata.get(11), objdata.get(9), stockCode, objdata.get(2),objdata.get(10),objdata.get(12),objdata.get(13),objdata.get(14),objdata.get(15),TimeUtils.dayForWeek(objdata.get(0))+"");
+					objdata.get(5), objdata.get(3), objdata.get(11), objdata.get(9), stockCode, objdata.get(2),objdata.get(10),objdata.get(12),objdata.get(13),objdata.get(14),objdata.get(14),TimeUtils.dayForWeek(objdata.get(0))+"");
 			mapsInfo.put(stockBaseInfo.getDate(), stockBaseInfo);
 			// result.add(stockBaseInfo);
 		}
@@ -176,7 +165,7 @@ public class StoreAstockTradInfo {
 		 //jestClient.shutdownClient();
 	 }
 	public      static  void  wDataToEs() throws IOException{
-		List<String> lstSource = getAllAStockInfo();
+		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 
 		for(final String  sat:lstSource){
