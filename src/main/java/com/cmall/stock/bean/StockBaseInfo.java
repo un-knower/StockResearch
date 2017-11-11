@@ -45,6 +45,8 @@ public class StockBaseInfo implements Serializable {
 	
 	//macd 持续天数
 	private int macdNum = 0;
+	private int macdUp5 = 0;
+	private int macdUp10;
 
 	// KDJ 指标的三个属性
 	private float k=0;
@@ -477,6 +479,22 @@ public class StockBaseInfo implements Serializable {
 
 	public void setMacdNum(int macdNum) {
 		this.macdNum = macdNum;
+	}
+
+	public int getMacdUp5() {
+		return macdUp5;
+	}
+
+	public void setMacdUp5(int macdUp5) {
+		this.macdUp5 = macdUp5;
+	}
+
+	public int getMacdUp10() {
+		return macdUp10;
+	}
+
+	public void setMacdUp10(int macdUp10) {
+		this.macdUp10 = macdUp10;
 	}
 
 	
