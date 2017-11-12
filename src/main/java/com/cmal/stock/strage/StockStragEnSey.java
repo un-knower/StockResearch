@@ -309,9 +309,9 @@ public class StockStragEnSey {
 					macd10=macd10 + upMacd;
 					if(macds > 0){
 						if(j < 6){
-							macd5 = macd5 + upMacd;
 							macdUp5++;
 						}
+						macdUp10++;
 					}
 					if(closes >= upCloses){  
 						if(j < 6){
