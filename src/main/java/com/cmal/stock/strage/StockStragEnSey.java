@@ -278,7 +278,7 @@ public class StockStragEnSey {
     		}
     		if(i != 0){
     			int m = StockBaseInfo.getMacdNum();
-    			if(StockBaseInfo.getMacd() > 0){
+    			if(StockBaseInfo.getMacd() >= 0){
     				StockBaseInfo.setMacdNum(m+1);
     			}
     			float upClose = entries.get(i-1).getClose();

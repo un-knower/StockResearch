@@ -514,5 +514,6 @@ public class StockBaseInfo implements Serializable {
 		this.sumMacdUp10 = sumMacdUp10;
 	}
 
+
 	
 }
