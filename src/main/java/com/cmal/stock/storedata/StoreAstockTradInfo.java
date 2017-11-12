@@ -81,7 +81,6 @@ public class StoreAstockTradInfo {
 			//Integer.parseInt(
 			//日期,股票代码,名称,收盘价,最高价,最低价,开盘价,前收盘,涨跌额,涨跌幅,换手率(10),成交量,成交金额(12),总市值(13),流通市值(14),成交笔数(15)
 			//String date, String open, String high, String low, String close, String volume, String rises,
-			 
 	
 //		//,成交金额,总市值,流通市值,成交笔数
 //			System.out.println(objdata);

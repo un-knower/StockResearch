@@ -4,78 +4,78 @@ import java.io.Serializable;
 
 public class StockBaseInfo implements Serializable {
 
-	/**    
-	 * serialVersionUID:TODO      
-	 */    
-	
+	/**
+	 * serialVersionUID:TODO
+	 */
+
 	private static final long serialVersionUID = 1L;
-	private String date;
-	private String rises;
 	private String stockCode;
 	private String stockName;
+	private String date;
+	private String rises;
+	// 连续上涨天数
+	private int upDateNum = 0;
+	 // 5天内上涨次数
+	private int up5 = 0;
+	//10天内上涨次数
+	private int up10 = 0;
+
+	// 换手率
 	private String hslv;
+	// 成交金额
 	private String cjje;
+	// 总市值
 	private String zsz;
+	// 流通市值
 	private String ltsz;
+	// 成交笔数
 	private String cjbs;
-//,成交金额,总市值,流通市值,成交笔数
-
-	// 初始需全部赋值的属性
-	private  float open; // 开盘价
-	private  float high; // 最高价
-	private  float low; // 最低价
-	private  float close; // 收盘价
-	private  String nextRises; //下一天收盘价
-	private  long volume; // 量
-//	private String xLabel; // X 轴标签
-
-	// MA 指标的三个属性
-	private float ma5=0;
-	private float ma10=0;
-	private float ma20=0;
-
-	// 量的5日平均和10日平均
-	private double volumeMa5=0;
-	private double volumeMa10=0;
-
 	// MACD 指标的三个属性
-	private float dea=0;
-	private float diff=0;
-	private float macd=0;
-	
-	//macd 持续天数
+	private float dea = 0;
+	private float diff = 0;
+	private float macd = 0;
+
+	// macd 持续天数
 	private int macdNum = 0;
 	private int macdUp5 = 0;
 	private int macdUp10;
-
+	// 5天内 上涨总计
+	private float upSumRises5;
+	private float upSumRises10;
 	// KDJ 指标的三个属性
-	private float k=0;
-	private float d=0;
-	private float j=0;
+	private float k = 0;
+	private float d = 0;
+	private float j = 0;
+	// 初始需全部赋值的属性
+	private float open; // 开盘价
+	private float high; // 最高价
+	private float low; // 最低价
+	private float close; // 收盘价
+	private String nextRises; // 下一天收盘价
+	private long volume; // 量
+	// private String xLabel; // X 轴标签
 
+	// MA 指标的三个属性
+	private float ma5 = 0;
+	private float ma10 = 0;
+	private float ma20 = 0;
+
+	// 量的5日平均和10日平均
+	private double volumeMa5 = 0;
+	private double volumeMa10 = 0;
+
+	
 	// RSI 指标的三个属性
-	private float rsi1=0;
-	private float rsi2=0;
-	private float rsi3=0;
+	private float rsi1 = 0;
+	private float rsi2 = 0;
+	private float rsi3 = 0;
 
 	// BOLL 指标的三个属性
-	private float up=0; // 上轨线
-	private float mb=0; // 中轨线
-	private float dn=0; // 下轨线
-    private String dayForWeek;
+	private float up = 0; // 上轨线
+	private float mb = 0; // 中轨线
+	private float dn = 0; // 下轨线
+	private String dayForWeek;
 
-    //连续上涨天数
-    private int upDateNum = 0;
-    
-    private int up5 = 0;
-    
-    private int up10 = 0;
-    
-    private  float upSumRises5;
-    
-    private  float upSumRises10;
-    
-    
 	/**
 	 * 自定义分时图用的数据
 	 *
@@ -128,9 +128,8 @@ public class StockBaseInfo implements Serializable {
 		return high;
 	}
 
-
 	public float getLow() {
-		
+
 		return retERRNAN(low);
 	}
 
@@ -142,17 +141,17 @@ public class StockBaseInfo implements Serializable {
 		return volume;
 	}
 
-//	public void setVolume(long volume) {
-//		this. volume=volume;
-//	}
+	// public void setVolume(long volume) {
+	// this. volume=volume;
+	// }
 
-//	public String getXLabel() {
-//		return xLabel;
-//	}
-//
-//	public void setXLabel(String xLabel) {
-//		this.xLabel = xLabel;
-//	}
+	// public String getXLabel() {
+	// return xLabel;
+	// }
+	//
+	// public void setXLabel(String xLabel) {
+	// this.xLabel = xLabel;
+	// }
 
 	public float getMa5() {
 		return retERRNAN(ma5);
@@ -227,7 +226,7 @@ public class StockBaseInfo implements Serializable {
 	}
 
 	public float getD() {
-		return retERRNAN( d);
+		return retERRNAN(d);
 	}
 
 	public void setD(float d) {
@@ -290,8 +289,6 @@ public class StockBaseInfo implements Serializable {
 		this.dn = dn;
 	}
 
- 
-
 	public String getDate() {
 		return date;
 	}
@@ -324,34 +321,35 @@ public class StockBaseInfo implements Serializable {
 		this.stockName = stockName;
 	}
 
- 
-	public StockBaseInfo(String date, String open,String high,String low,String close,String volume,String rises){
-		this.date=date;
-		this.open=Float.parseFloat(open);
-		this.high=Float.parseFloat(high);
-		this.low=Float.parseFloat(low);
-		this.close=Float.parseFloat(close);
-		this.volume=Long.parseLong(volume);
-		this.rises=rises;
-		
+	public StockBaseInfo(String date, String open, String high, String low, String close, String volume, String rises) {
+		this.date = date;
+		this.open = Float.parseFloat(open);
+		this.high = Float.parseFloat(high);
+		this.low = Float.parseFloat(low);
+		this.close = Float.parseFloat(close);
+		this.volume = Long.parseLong(volume);
+		this.rises = rises;
+
 	}
+
 	public StockBaseInfo(String date, String open, String high, String low, String close, String volume, String rises,
-			String stockCode, String stockName, String hslv,String String,String zsz,String ltsz,String cjbs,String dayForWeek) {
+			String stockCode, String stockName, String hslv, String String, String zsz, String ltsz, String cjbs,
+			String dayForWeek) {
 		super();
 		this.date = date;
 		this.open = Float.parseFloat(open);
 		this.high = Float.parseFloat(high);
-		this.low =Float.parseFloat( low);
+		this.low = Float.parseFloat(low);
 		this.close = Float.parseFloat(close);
-		this.volume =Long.parseLong( volume);
+		this.volume = Long.parseLong(volume);
 		this.rises = rises;
 		this.stockCode = stockCode;
 		this.stockName = stockName;
-		this.hslv=hslv;
-		this.zsz=zsz;
-		this.ltsz=ltsz;
-		this.cjbs=cjbs;
-		this.dayForWeek=dayForWeek;
+		this.hslv = hslv;
+		this.zsz = zsz;
+		this.ltsz = ltsz;
+		this.cjbs = cjbs;
+		this.dayForWeek = dayForWeek;
 	}
 
 	public String getHslv() {
@@ -404,11 +402,12 @@ public class StockBaseInfo implements Serializable {
 				+ j + ", rsi1=" + rsi1 + ", rsi2=" + rsi2 + ", rsi3=" + rsi3 + ", up=" + up + ", mb=" + mb + ", dn="
 				+ dn + "]";
 	}
-	public    float retERRNAN(float num){
-//		 System.out.println(num);
-		if((num+"").equals("NaN"))
+
+	public float retERRNAN(float num) {
+		// System.out.println(num);
+		if ((num + "").equals("NaN"))
 			return 0;
-		else 
+		else
 			return num;
 	}
 
@@ -497,7 +496,4 @@ public class StockBaseInfo implements Serializable {
 		this.macdUp10 = macdUp10;
 	}
 
-	
-	
-	
 }

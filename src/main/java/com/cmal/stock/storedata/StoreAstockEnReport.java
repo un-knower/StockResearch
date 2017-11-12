@@ -112,7 +112,7 @@ public class StoreAstockEnReport {
 //					System.out.println(jzrq+"====="+content[i - 2].split(",")[7]+"   =="+content[i - 1].split(",")[7]);
 //					
 //				}
-				double  svfgh=Double.parseDouble(content[i - 2].split(",")[7])==0?1:Double.parseDouble(content[i - 1].split(",")[7]);
+				double  svfgh=Double.parseDouble(content[i - 2].split(",")[7])==0?1:Double.parseDouble(content[i - 2].split(",")[7]);
 				double  svf=Double.parseDouble(content[i - 1].split(",")[7]);
 				jdzzl_before =((svf-svfgh)/Math.abs(svfgh))*100;   ////( Double.parseDouble(content[i - 1].split(",")[7])) / (svf==0?1:svf);
 			}
@@ -271,6 +271,7 @@ public class StoreAstockEnReport {
 						}
 					});
 				} catch (Exception e) {
+					System.out.println(files[i].getAbsolutePath());
 					e.printStackTrace();
 				}
 			}
