@@ -248,7 +248,7 @@ public class StoreAstockEnReport {
 									eBean.setJlr_ycb(-1d);
 								}
 							} else {
-								eBean.setJlr_ycb(tr.getStartRangeability());
+								eBean.setJlr_ycb(retERRNANDou(tr.getStartRangeability()));
 							}
 						}
 						eBean.setJlr_gsh(getFormatNum(eBean.getJlr()+""));

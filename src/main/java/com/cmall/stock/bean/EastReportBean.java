@@ -23,7 +23,7 @@ public class EastReportBean   implements Serializable {
 	//净利润格式换
 		private String jlr_gsh;
 	//净利润预测比例
-		private Double jlr_ycb;
+		private Double jlr_ycb=0d;
 	// 每股收益(元)[2]
 	private double mgsy;
 	// 每股收益(扣除)(元)[3]
