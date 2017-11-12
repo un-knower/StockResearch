@@ -277,7 +277,7 @@ public class StockStragEnSey {
     			StockBaseInfo.setUpSumRises10(rises-Rises10);
     		}
     		if(i != 0){
-    			int m = StockBaseInfo.getMacdNum();
+    			int m = entries.get(i-1).getMacdNum();
     			if(StockBaseInfo.getMacd() >= 0){
     				StockBaseInfo.setMacdNum(m+1);
     			}
