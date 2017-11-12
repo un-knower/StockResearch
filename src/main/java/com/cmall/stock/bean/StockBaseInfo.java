@@ -39,6 +39,8 @@ public class StockBaseInfo implements Serializable {
 	private int macdNum = 0;
 	private int macdUp5 = 0;
 	private int macdUp10;
+	private float sumMacdUp5;
+	private float sumMacdUp10;
 	// 5天内 上涨总计
 	private float upSumRises5;
 	private float upSumRises10;
@@ -496,4 +498,21 @@ public class StockBaseInfo implements Serializable {
 		this.macdUp10 = macdUp10;
 	}
 
+	public float getSumMacdUp5() {
+		return sumMacdUp5;
+	}
+
+	public void setSumMacdUp5(float sumMacdUp5) {
+		this.sumMacdUp5 = sumMacdUp5;
+	}
+
+	public float getSumMacdUp10() {
+		return sumMacdUp10;
+	}
+
+	public void setSumMacdUp10(float sumMacdUp10) {
+		this.sumMacdUp10 = sumMacdUp10;
+	}
+
+	
 }
