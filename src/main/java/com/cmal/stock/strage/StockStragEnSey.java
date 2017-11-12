@@ -258,7 +258,7 @@ public class StockStragEnSey {
     	for (int i = 0; i < entries.size(); i++) {
     		StockBaseInfo StockBaseInfo = entries.get(i);
     		if(i == 0){
-    			if(StockBaseInfo.getMacd() > 0){
+    			if(StockBaseInfo.getMacd() >= 0){
     				StockBaseInfo.setMacdNum(1);
     			}
     		}
