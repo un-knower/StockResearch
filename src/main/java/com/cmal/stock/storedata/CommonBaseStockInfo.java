@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 import org.apache.commons.io.FileUtils;
 
-import com.cmal.stock.strage.FilePath;
+import com.cmall.stock.utils.FilePath;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
 

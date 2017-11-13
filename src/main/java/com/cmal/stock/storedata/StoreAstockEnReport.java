@@ -2,8 +2,6 @@ package com.cmal.stock.storedata;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +9,10 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
 
-import com.cmal.stock.strage.FilePath;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StoreTrailer;
+import com.cmall.stock.utils.FilePath;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;

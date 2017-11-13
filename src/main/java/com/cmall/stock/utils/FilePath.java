@@ -1,4 +1,4 @@
-package com.cmal.stock.strage;
+package com.cmall.stock.utils;
 
 public class FilePath {
 	public final static String savePathsuff = "/opt/stock/stockhistdata/";

@@ -1,6 +1,5 @@
 package com.cmal.stock.storedata;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -11,15 +10,14 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
 
 import com.artbulb.httpmodel.HttpClientEx;
-import com.cmal.stock.strage.FilePath;
 import com.cmal.stock.strage.StockStragEnSey;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockRealBean;
 import com.cmall.stock.utils.CsvHandUtils;
+import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.TimeUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
