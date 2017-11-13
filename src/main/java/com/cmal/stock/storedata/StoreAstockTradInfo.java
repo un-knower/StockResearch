@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
 
 import com.artbulb.httpmodel.HttpClientEx;
+import com.cmal.stock.strage.FilePath;
 import com.cmal.stock.strage.StockStragEnSey;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockRealBean;
@@ -34,7 +35,7 @@ import io.searchbox.core.Index;
 
 public class StoreAstockTradInfo {
 
-	public final static String savePathsuff = "/opt/stock/stockhistdata/";
+	public final static String savePathsuff = FilePath.savePathsuff;
 	public final static String stockHisCrawUrl = "http://quotes.money.163.com/service/chddata.html?code=";
 	public final static String  stockRealTimeUrl="http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=2&num=5000&sort=symbol&asc=1&node=hs_a&symbol=&_s_r_a=init#";
 //symbol:"sz300720",code:"300720",name:"海川智能",trade:"22.510",pricechange:"2.050",changepercent:"10.020",buy:"22.510",sell:"0.000",settlement:"20.460",open:"22.510",high:"22.510",low:"22.510",volume:2300,amount:51773,ticktime:"11:35:03",per:32.157,pb:5.104,mktcap:162072,nmc:40518,turnoverratio:0.01278

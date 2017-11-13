@@ -269,7 +269,6 @@ public class StockStragEnSey {
     		Float rises =Float.parseFloat(StockBaseInfo.getRises());
     		if(i>=5){
     			Float Rises5 = Float.parseFloat(entries.get(i-5).getRises());
-    			Float macd5 = entries.get(i-5).getMacd();
     			StockBaseInfo.setUpSumRises5(rises-Rises5);
     		}
     		if(i>=10){

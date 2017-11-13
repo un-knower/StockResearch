@@ -8,15 +8,14 @@ import java.util.concurrent.Executors;
 
 import org.apache.commons.io.FileUtils;
 
+import com.cmal.stock.strage.FilePath;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
 
 public class CommonBaseStockInfo {
 	
-	public final static String astockfilePath = "/opt/stock/data/shareAstock";
-
 	public static List<String> getAllAStockInfo() throws IOException {
-		List<String> filePath = FileUtils.readLines(new File(astockfilePath));
+		List<String> filePath = FileUtils.readLines(new File(FilePath.astockfilePath));
 		List<String> lstCode = Lists.newArrayList();
 		for (final String s : filePath) {
 			String code = s.split(",")[0];

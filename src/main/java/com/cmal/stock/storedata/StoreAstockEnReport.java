@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
 
+import com.cmal.stock.strage.FilePath;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StoreTrailer;
@@ -25,7 +26,7 @@ import io.searchbox.core.Bulk;
 import io.searchbox.core.Index;
 
 public class StoreAstockEnReport {
-	static String cnFinalReportPath = "/opt/stock/data/cnmarket/finalReport/";
+	static String cnFinalReportPath = FilePath.cnFinalReportPath;
 
 	public static void writeFinalReport(String stockCode) throws ClientProtocolException, IOException {
 		String url = "http://datainterface.eastmoney.com/EM_DataCenter/JS.aspx?type=SR&sty=YJBB&code=" + stockCode
