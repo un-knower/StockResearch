@@ -18,7 +18,9 @@ public class StockBaseInfo implements Serializable {
 	private float rises;
 	private float nextRises; // 下一天涨幅
 	private int upDateNum = 0;
+	private float upMacd=0;
 	private float macd = 0;
+	private float nextMacd=0;
 	// 连续上涨天数
 	
 	
@@ -576,6 +578,22 @@ public class StockBaseInfo implements Serializable {
 
 	public void setNextJ(float nextJ) {
 		this.nextJ = nextJ;
+	}
+
+	public float getUpMacd() {
+		return upMacd;
+	}
+
+	public void setUpMacd(float upMacd) {
+		this.upMacd = upMacd;
+	}
+
+	public float getNextMacd() {
+		return nextMacd;
+	}
+
+	public void setNextMacd(float nextMacd) {
+		this.nextMacd = nextMacd;
 	}
 
 	
