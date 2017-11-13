@@ -11,10 +11,21 @@ public class StockBaseInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String stockCode;
 	private String stockName;
+	private String industry;
+	private String area;
 	private String date;
-	private String rises;
+	private float rises;
+	private float macd = 0;
 	// 连续上涨天数
 	private int upDateNum = 0;
+	private float j = 0;
+	private float upRises; //上一天涨幅
+	private float nextRises; // 下一天涨幅
+	
+	
+	
+	
+	
 	 // 5天内上涨次数
 	private int up5 = 0;
 	//10天内上涨次数
@@ -33,7 +44,7 @@ public class StockBaseInfo implements Serializable {
 	// MACD 指标的三个属性
 	private float dea = 0;
 	private float diff = 0;
-	private float macd = 0;
+	
 
 	// macd 持续天数
 	private int macdNum = 0;
@@ -47,13 +58,14 @@ public class StockBaseInfo implements Serializable {
 	// KDJ 指标的三个属性
 	private float k = 0;
 	private float d = 0;
-	private float j = 0;
+	
 	// 初始需全部赋值的属性
 	private float open; // 开盘价
 	private float high; // 最高价
 	private float low; // 最低价
 	private float close; // 收盘价
-	private String nextRises; // 下一天收盘价
+	
+	
 	private long volume; // 量
 	// private String xLabel; // X 轴标签
 
@@ -77,7 +89,7 @@ public class StockBaseInfo implements Serializable {
 	private float mb = 0; // 中轨线
 	private float dn = 0; // 下轨线
 	private String dayForWeek;
-
+	
 	/**
 	 * 自定义分时图用的数据
 	 *
@@ -299,13 +311,7 @@ public class StockBaseInfo implements Serializable {
 		this.date = date;
 	}
 
-	public String getRises() {
-		return rises;
-	}
-
-	public void setRises(String rises) {
-		this.rises = rises;
-	}
+	
 
 	public String getStockCode() {
 		return stockCode;
@@ -330,7 +336,7 @@ public class StockBaseInfo implements Serializable {
 		this.low = Float.parseFloat(low);
 		this.close = Float.parseFloat(close);
 		this.volume = Long.parseLong(volume);
-		this.rises = rises;
+		this.rises = Float.parseFloat(rises);
 
 	}
 
@@ -344,7 +350,7 @@ public class StockBaseInfo implements Serializable {
 		this.low = Float.parseFloat(low);
 		this.close = Float.parseFloat(close);
 		this.volume = Long.parseLong(volume);
-		this.rises = rises;
+		this.rises = Float.parseFloat(rises);
 		this.stockCode = stockCode;
 		this.stockName = stockName;
 		this.hslv = hslv;
@@ -450,11 +456,21 @@ public class StockBaseInfo implements Serializable {
 		this.up10 = up10;
 	}
 
-	public String getNextRises() {
+	
+
+	public float getUpRises() {
+		return upRises;
+	}
+
+	public void setUpRises(float upRises) {
+		this.upRises = upRises;
+	}
+
+	public float getNextRises() {
 		return nextRises;
 	}
 
-	public void setNextRises(String nextRises) {
+	public void setNextRises(float nextRises) {
 		this.nextRises = nextRises;
 	}
 
@@ -514,6 +530,35 @@ public class StockBaseInfo implements Serializable {
 		this.sumMacdUp10 = sumMacdUp10;
 	}
 
+	public float getRises() {
+		return rises;
+	}
 
+	public void setRises(float rises) {
+		this.rises = rises;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	public void setClose(float close) {
+		this.close = close;
+	}
+
+	public String getIndustry() {
+		return industry;
+	}
+
+	public void setIndustry(String industry) {
+		this.industry = industry;
+	}
+
+	
+	
 	
 }

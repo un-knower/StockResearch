@@ -263,19 +263,21 @@ public class StockStragEnSey {
     			}
     		}
     		if(i != entries.size() - 1){
-    			String nextRises = entries.get(i+1).getRises();
+    			float nextRises = entries.get(i+1).getRises();
     			StockBaseInfo.setNextRises(nextRises);
     		}
-    		Float rises =Float.parseFloat(StockBaseInfo.getRises());
+    		Float rises =StockBaseInfo.getRises();
     		if(i>=5){
-    			Float Rises5 = Float.parseFloat(entries.get(i-5).getRises());
+    			Float Rises5 = entries.get(i-5).getRises();
     			StockBaseInfo.setUpSumRises5(rises-Rises5);
     		}
     		if(i>=10){
-    			Float Rises10 = Float.parseFloat(entries.get(i-10).getRises());
+    			Float Rises10 = entries.get(i-10).getRises();
     			StockBaseInfo.setUpSumRises10(rises-Rises10);
     		}
     		if(i != 0){
+    			float upRises = entries.get(i-1).getRises();
+    			StockBaseInfo.setUpRises(upRises);
     			int m = entries.get(i-1).getMacdNum();
     			if(StockBaseInfo.getMacd() >= 0){
     				StockBaseInfo.setMacdNum(m+1);
@@ -297,7 +299,6 @@ public class StockStragEnSey {
 					if(i-j < 0){
 						break;
 					}
-					
 					float upCloses = entries.get(i-j).getClose();
 					float closes = entries.get(i-j+1).getClose();
 					float macds = entries.get(i-j+1).getMacd();
@@ -325,9 +326,12 @@ public class StockStragEnSey {
     			StockBaseInfo.setMacdUp10(macdUp10);
     			StockBaseInfo.setSumMacdUp5(macd5);
     			StockBaseInfo.setSumMacdUp10(macd10);
+    			
 //    			System.out.println(StockBaseInfo.getStockCode() + StockBaseInfo.getDate() +" 收盘价:" +
 //    					StockBaseInfo.getRises() + " 前5天涨的次数" + StockBaseInfo.getUp5() + " 前10天涨的次数：" + StockBaseInfo.getUp10());
     		}
+//    		System.out.println(StockBaseInfo.getDate()+" 当天涨幅：" + StockBaseInfo.getRises() 
+//					+ " 上一天涨幅：" + StockBaseInfo.getNextRises());
     	}
     }
     

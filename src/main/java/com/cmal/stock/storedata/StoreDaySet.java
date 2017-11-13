@@ -38,8 +38,8 @@ public class StoreDaySet {
 		List<String> lstSource =CommonBaseStockInfo.getAllAStockInfo();;
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		for(final String  sat:lstSource){
-			if(sat.equals("600345")){
-				String neDate = getNextDate(sat,jestClient);
+			if(sat.equals("600290")){
+				//String neDate = getNextDate(sat,jestClient);
 				 List<StockBaseInfo> list = getstockBaseInfoFile(sat);
 //				 List<StockBaseInfo> addlist = new ArrayList<StockBaseInfo>();
 //				 for (StockBaseInfo stockBaseInfo : list) {

@@ -1,5 +1,9 @@
 package com.cmal.stock.storedata;
 
+import io.searchbox.client.JestClient;
+import io.searchbox.core.Bulk;
+import io.searchbox.core.Index;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -10,11 +14,14 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
+import org.elasticsearch.common.netty.util.internal.StringUtil;
 
 import com.artbulb.httpmodel.HttpClientEx;
 import com.cmal.stock.strage.StockStragEnSey;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.bean.StockFuncDetailInfo;
 import com.cmall.stock.bean.StockRealBean;
 import com.cmall.stock.utils.CsvHandUtils;
 import com.cmall.stock.utils.FilePath;
@@ -26,10 +33,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.httpmodel.BaseConnClient;
-
-import io.searchbox.client.JestClient;
-import io.searchbox.core.Bulk;
-import io.searchbox.core.Index;
 
 public class StoreAstockTradInfo {
 
@@ -67,7 +70,7 @@ public class StoreAstockTradInfo {
 
 	}
 
-	public static List<StockBaseInfo> getstockBaseInfoFile(String stockCode) throws Exception {
+	public static List<StockBaseInfo> getstockBaseInfoFile(String stockCode , StockFuncDetailInfo info) throws Exception {
 		  final StockStragEnSey stockStragEnSey = new StockStragEnSey();
 		String absPath = savePathsuff + stockCode + ".csv";
 		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
@@ -84,10 +87,18 @@ public class StoreAstockTradInfo {
 //		//,成交金额,总市值,流通市值,成交笔数
 //			System.out.println(objdata);
 //			System.out.println(objdata.size());
-			StockBaseInfo stockBaseInfo = new StockBaseInfo(objdata.get(0), objdata.get(6), objdata.get(4),
-					objdata.get(5), objdata.get(3), objdata.get(11), objdata.get(9), stockCode, objdata.get(2),objdata.get(10),objdata.get(12),objdata.get(13),objdata.get(14),objdata.size()<15?null: objdata.get(14),TimeUtils.dayForWeek(objdata.get(0))+"");
+//			String date, String open, String high, String low, String close, String volume, String rises,
+//			String stockCode, String stockName, String hslv, String String, String zsz, String ltsz, String cjbs,
+//			String dayForWeek
+			
 			//System.out.println(stockBaseInfo.toString());
-			if(!(stockBaseInfo.getOpen()==0||stockBaseInfo.getClose()==0||stockBaseInfo.getHigh()==0||stockBaseInfo.getLow()==0)){///|StringUtils.isBlank(stockBaseInfo.getCjbs()))){//!(stockBaseInfo.getOpen()==0||stockBaseInfo.getClose()==0||stockBaseInfo.getHigh()==0||stockBaseInfo.getLow()==0||StringUtils.isBlank(stockBaseInfo.getCjbs()))){
+			if(!(objIsEmpty(objdata.get(6))||objIsEmpty(objdata.get(3))||objIsEmpty(objdata.get(4))||objIsEmpty(objdata.get(5))||objdata.get(9).equals("None"))){///|StringUtils.isBlank(stockBaseInfo.getCjbs()))){//!(stockBaseInfo.getOpen()==0||stockBaseInfo.getClose()==0||stockBaseInfo.getHigh()==0||stockBaseInfo.getLow()==0||StringUtils.isBlank(stockBaseInfo.getCjbs()))){
+				StockBaseInfo stockBaseInfo = new StockBaseInfo(objdata.get(0), objdata.get(6), objdata.get(4),
+						objdata.get(5), objdata.get(3), objdata.get(11), objdata.get(9), stockCode, objdata.get(2),objdata.get(10),objdata.get(12),objdata.get(13),objdata.get(14),objdata.size()<15?null: objdata.get(14),TimeUtils.dayForWeek(objdata.get(0))+"");
+				if(info!=null){
+					stockBaseInfo.setIndustry(info.getIndustry());
+					stockBaseInfo.setArea(info.getArea());
+				}
 				result.add(stockBaseInfo);
 			}
 			//|stockBaseInfo.getRises()))
@@ -97,6 +108,13 @@ public class StoreAstockTradInfo {
 		  stockStragEnSey.computeStockIndex();
 		return result;
 
+	}
+	
+	public static boolean objIsEmpty(String str){
+		if(StringUtils.isEmpty(str) || str.equals("0")||str.equals("None") ){
+			return true;
+		}
+		return false;
 	}
 
 	public static Map<String, StockBaseInfo> fetchKeyStockInfo(String stockCode) throws IOException, ParseException {
@@ -165,14 +183,14 @@ public class StoreAstockTradInfo {
 	public      static  void  wDataToEs() throws IOException{
 		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
-
+		 final Map<String , StockFuncDetailInfo> map = getInfoByCsv();
 		for(final String  sat:lstSource){
 //			if(sat.equals("603612")){
 			executorServiceLocal.execute(new Thread(){
 				@Override
 				public void run() {
 			          try {
-			        	  List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat);
+			        	 List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat ,  map.get(sat));
 			  			 insBatchEs(lstInfo, jestClient, "stockpcse");
 					} catch (Exception e) {
 						System.out.println(sat);
@@ -183,6 +201,23 @@ public class StoreAstockTradInfo {
 			});
 		}
 		
+	}
+	
+	public static Map<String , StockFuncDetailInfo> getInfoByCsv() throws IOException{
+		Map<String , StockFuncDetailInfo> map = Maps.newHashMap();
+		CsvHandUtils util = new CsvHandUtils(FilePath.stockFuncDetailInfoPath);
+		List<List<String>> list = util.readCSVFile();
+		for (int i = 1; i < list.size(); i++) {
+			List<String> data = list.get(i);
+			StockFuncDetailInfo info = new StockFuncDetailInfo();
+			info.setCode(data.get(0));
+			info.setName(data.get(1));
+			info.setIndustry(data.get(2));
+			info.setArea(data.get(3));
+			map.put(data.get(0), info);
+//			System.out.println("chax:"+data.get(2));
+		}
+		return map;
 	}
 	
 	public static List<StockRealBean>   getRealTimeData() throws ClientProtocolException, IOException{
@@ -206,7 +241,7 @@ public class StoreAstockTradInfo {
 		
 	}
 	public static void main(String[] args) throws ClientProtocolException, IOException, Exception {
-//		getHistoryData();
+		//getHistoryData();
 //		getRealTimeData();
 		wDataToEs();
 	}
