@@ -12,20 +12,23 @@ public class StockBaseInfo implements Serializable {
 	private String stockCode;
 	private String stockName;
 	private String industry;
-	private String area;
+	
 	private String date;
+	private float upRises; //上一天涨幅
 	private float rises;
+	private float nextRises; // 下一天涨幅
+	private int upDateNum = 0;
 	private float macd = 0;
 	// 连续上涨天数
-	private int upDateNum = 0;
+	
+	
+	
+	
+	
+	
+	
 	private float j = 0;
-	private float upRises; //上一天涨幅
-	private float nextRises; // 下一天涨幅
-	
-	
-	
-	
-	
+	private String area;
 	 // 5天内上涨次数
 	private int up5 = 0;
 	//10天内上涨次数
