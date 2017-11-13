@@ -264,7 +264,9 @@ public class StockStragEnSey {
     		}
     		if(i != entries.size() - 1){
     			float nextRises = entries.get(i+1).getRises();
+    			float nextJ = entries.get(i+1).getJ();
     			StockBaseInfo.setNextRises(nextRises);
+    			StockBaseInfo.setNextJ(nextJ);
     		}
     		Float rises =StockBaseInfo.getRises();
     		if(i>=5){
@@ -277,7 +279,9 @@ public class StockStragEnSey {
     		}
     		if(i != 0){
     			float upRises = entries.get(i-1).getRises();
+    			float upJ = entries.get(i-1).getJ();
     			StockBaseInfo.setUpRises(upRises);
+    			StockBaseInfo.setUpJ(upJ);
     			int m = entries.get(i-1).getMacdNum();
     			if(StockBaseInfo.getMacd() >= 0){
     				StockBaseInfo.setMacdNum(m+1);

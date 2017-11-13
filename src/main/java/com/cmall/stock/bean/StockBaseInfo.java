@@ -26,8 +26,9 @@ public class StockBaseInfo implements Serializable {
 	
 	
 	
-	
+	private float upJ = 0;
 	private float j = 0;
+	private float nextJ = 0;
 	private String area;
 	 // 5天内上涨次数
 	private int up5 = 0;
@@ -559,6 +560,22 @@ public class StockBaseInfo implements Serializable {
 
 	public void setIndustry(String industry) {
 		this.industry = industry;
+	}
+
+	public float getUpJ() {
+		return upJ;
+	}
+
+	public void setUpJ(float upJ) {
+		this.upJ = upJ;
+	}
+
+	public float getNextJ() {
+		return nextJ;
+	}
+
+	public void setNextJ(float nextJ) {
+		this.nextJ = nextJ;
 	}
 
 	
