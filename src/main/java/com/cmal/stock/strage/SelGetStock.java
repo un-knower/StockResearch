@@ -1,22 +1,22 @@
 package com.cmal.stock.strage;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
-
-import com.cmal.stock.storedata.StoreAstockTradInfo;
-import com.cmall.stock.bean.StockBaseInfo;
-import com.kers.esmodel.BaseCommonConfig;
-import com.kers.esmodel.UtilEs;
-
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Search;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
+
+import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.vo.StockBasePageInfo;
+import com.google.common.collect.Maps;
+import com.kers.esmodel.BaseCommonConfig;
+import com.kers.esmodel.UtilEs;
 /**
  * 
  *       
@@ -39,18 +39,34 @@ public class SelGetStock {
 	
 	
 
-	public static List<StockBaseInfo> getLstResult(BoolQueryBuilder query) throws Exception {
+	public static Map<String,Object> getLstResult(BoolQueryBuilder query , StockBasePageInfo page) throws Exception {
+		Map<String,Object> returnMap = Maps.newHashMap();
 		SearchSourceBuilder ssb = new SearchSourceBuilder();
-		// BoolQueryBuilder query = QueryBuilders.boolQuery();
-		// query.must(QueryBuilders.rangeQuery("macd").from(0));
-		// query.must(QueryBuilders.termQuery("date", "2017-11-08"));
+		if(!StringUtils.isEmpty(page.getSort())){
+			String order = page.getSort().split("\\.")[1];
+			if(order.equalsIgnoreCase("desc")){
+				ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
+			}else{
+				ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
+			}
+		}
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		Search selResult = UtilEs.getSearch(searchSourceBuilder, "stockpcse", "2017", 0, 3800);
-
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, "stockpcse", "2017", (page.getPage()- 1) * page.getLimit() , page.getLimit());
+		
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
 		List<StockBaseInfo> lstBean = results.getSourceAsObjectList(StockBaseInfo.class);
-		return lstBean;
+		if(lstBean!= null && lstBean.size() > 0){
+			Map hitsMap = (Map)results.getValue("hits");
+			if(hitsMap!=null){
+				Number total = (Number)hitsMap.get("total");
+				if(total!=null){
+					returnMap.put("totalCount", total.intValue());
+				}
+			}
+		}
+		returnMap.put("items", lstBean);
+		return returnMap;
 
 	}
 	
