@@ -63,6 +63,29 @@
                 </tr>
             </table>
             <div id="pg" style="text-align: right;"></div>
+
+
+            <!-- Modal -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="分时图">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">分时图</h4>
+			      </div>
+			      <div class="modal-body">
+			      	<input type="hidden" id = "code"/>
+			      	<button class="btn btn-default" onclick = "huan('min')">分时</button>
+			      	<button class="btn btn-default" onclick = "huan('daily')">周</button>
+			      	<button class="btn btn-default" onclick = "huan('weekly')">月</button>
+			        <img src = "" id = "imgFen">
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">关</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
         </main>
 
         <script src="js/vendor/jquery-1.9.1.min.js"></script>
@@ -70,6 +93,7 @@
         <script src="js/vendor/json2.js"></script>
         <script src="src/mmGrid.js"></script>
         <script src="src/mmPaginator.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
         <script>
             var classNames = [];
 
@@ -88,7 +112,7 @@
                 
                 var cols = [
                     {title:'行情', name:'', width: 30, align: 'center', renderer: function(val,item,rowIndex){
-                        return '<div class="btnPrice"></div>';
+                        return '<div class="btnPrice" onclick = "openDiv(\''+item['stockCode']+'\')"></div>';
                     }},
                     { title:'日期', name:'date' , align:'center' },
                     { title:'股票代码', name:'stockCode' , align:'center' },
@@ -210,6 +234,24 @@
                     datas[i] = j;
                 });
                 return datas;
+            }
+
+            function openDiv(code){
+            	$('#code').val('min');
+            	if(code.toString().substring(0,1) == 6){
+            		$('#imgFen').attr('src' ,'http://image.sinajs.cn/newchart/min/n/sh'+code+'.gif');
+            	}else{
+            		$('#imgFen').attr('src' ,'http://image.sinajs.cn/newchart/min/n/sz'+code+'.gif');
+            	}
+            	$('#myModal').modal('show');
+            }
+
+            function huan(type){
+            	var old = $('#code').val();
+            	var imgPath = $('#imgFen').attr('src');
+            	imgPath = imgPath.replace(old , type);
+            	$('#code').val(type);
+            	$('#imgFen').attr('src' ,imgPath);
             }
         </script>
     </body>
