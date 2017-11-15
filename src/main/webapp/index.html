@@ -103,7 +103,7 @@
                     {title:'成交量',name:'volume',sortable:true},
                     {title:'5日成交量',name:'volumeMa5',sortable:true},
                     {title:'10日成交量',name:'volumeMa10',sortable:true}
-                   
+
                    /*  { title:'今开盘', name:'open', align:'right', renderer: fixed2},
                     { title:'今收盘', name:'close' , align:'right', renderer: fixed2,sortable:true},
                    
@@ -175,11 +175,11 @@
             }
 
             var formHtml = function(){
-                var html = '<div class="row"><div class="col-md-12 data"><select>';
+                var html = '<div class="row"><div class="col-md-12 data"></select> <select style = "width:100px"><option>must</option><option>must_not</option><option>should</option></select> <select>';
                 for (var i = 0; i < classNames.length; i++) {
                     html = html + '<option>'+classNames[i]+'</option>';
                 }
-                html = html + '</select> <select style = "width:60px"><option>=</option><option>></option><option><</option><option>>=</option><option><=</option></select>';
+                html = html + '</select> <select style = "width:100px"><option>=</option><option>></option><option><</option><option>>=</option><option><=</option><option>prefix</option><option>queryStr</option><option>missing</option></select>';
                 html = html + '<input type="text">';
                 html = html + '<button class="btn btn-default" onclick = "addFormDiv()">+</button>';            
                 html = html + '<button class="btn btn-default" onclick = "delFormDiv(this)">-</button></div></div>';            
@@ -191,8 +191,8 @@
             }
 
             function delFormDiv(obj){
-            	if($('#fh .data').find('select').size() == 2){
-            		break;
+            	if($('#fh .data').find('select').size() == 3){
+            		return;
             	}
                 $(obj).parent().parent().remove();
             }
@@ -202,8 +202,9 @@
                 $('#fh .data').each(function(i){
                     var obj = $(this);
                     var j = {
-                        name:obj.find('select').eq(0).val(),
-                        type:obj.find('select').eq(1).val(),
+                    	must:obj.find('select').eq(0).val(),
+                        name:obj.find('select').eq(1).val(),
+                        type:obj.find('select').eq(2).val(),
                         value:obj.find('input').eq(0).val()
                     }
                     datas[i] = j;

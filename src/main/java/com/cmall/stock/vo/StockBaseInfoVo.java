@@ -1,6 +1,7 @@
 package com.cmall.stock.vo;
 
 public class StockBaseInfoVo {
+	private String must;
 	private String name;
 	private String type;
 	private String value;
@@ -21,6 +22,12 @@ public class StockBaseInfoVo {
 	}
 	public void setValue(String value) {
 		this.value = value;
+	}
+	public String getMust() {
+		return must;
+	}
+	public void setMust(String must) {
+		this.must = must;
 	}
 	
 	

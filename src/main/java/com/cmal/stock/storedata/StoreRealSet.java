@@ -50,6 +50,18 @@ public class StoreRealSet {
 		}
 	}
 	
+	public static StockRealBean getBeanByCode(String sat) throws ClientProtocolException, IOException{
+		String code = sat;
+		if(sat.split("")[0].equals("0") || sat.split("")[0].equals("3")){
+			code = "1" + sat;
+		}else{
+			code = "0" + sat;
+		}
+		String content = StoreRealUrl(code);
+		StockRealBean bean = getList(content , code);
+		return bean;
+	}
+	
 	private static void sVo() throws Exception{
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		List<String> lstSource =CommonBaseStockInfo.getAllAStockInfo();
@@ -93,7 +105,7 @@ public class StoreRealSet {
 	public static String StoreRealUrl(String StoreCode) throws ClientProtocolException, IOException {
 		String url = "http://api.money.126.net/data/feed/"+StoreCode+",money.api";
 		String content = BaseConnClient.baseGetReq(url);
-//		System.out.println(content);
+		System.out.println(content);
 		return content;
 	}
 

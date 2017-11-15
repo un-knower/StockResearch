@@ -6,6 +6,7 @@ import io.searchbox.core.Index;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,7 +17,6 @@ import java.util.concurrent.Executors;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
-import org.elasticsearch.common.netty.util.internal.StringUtil;
 
 import com.artbulb.httpmodel.HttpClientEx;
 import com.cmal.stock.strage.StockStragEnSey;
@@ -75,6 +75,7 @@ public class StoreAstockTradInfo {
 		String absPath = savePathsuff + stockCode + ".csv";
 		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
 		List<List<String>> lstSource = csvHandUtils.readCSVFile();
+		 DecimalFormat df = new DecimalFormat("#.00");
 		List<StockBaseInfo> result = Lists.newArrayList();
 		for (int i = lstSource.size() - 1; i >=1; i--) {
 			// List<String> llData=
@@ -104,9 +105,81 @@ public class StoreAstockTradInfo {
 			//|stockBaseInfo.getRises()))
 			
 		}
-		  stockStragEnSey.addStockBaseInfos(result);
-		  stockStragEnSey.computeStockIndex();
+//		StockRealBean bean = StoreRealSet.getBeanByCode(stockCode);
+//		StockBaseInfo stockBaseInfo = new StockBaseInfo(bean.getUpdate().split("[ ]")[0].replace("/", "-"), bean.getOpen()+"", bean.getHigh()+"",
+//				bean.getLow()+"", bean.getPrice()+"", bean.getVolume()+"", df.format((bean.getPrice()-bean.getYestclose()) /bean.getYestclose() * 100) +"", stockCode, bean.getName(),"","","","","","");
+//		if(info!=null){
+//			stockBaseInfo.setIndustry(info.getIndustry());
+//			stockBaseInfo.setArea(info.getArea());
+//		}
+//		result.add(stockBaseInfo);
+		stockStragEnSey.addStockBaseInfos(result);
+		stockStragEnSey.computeStockIndex();
 		return result;
+
+	}
+	
+	public      static  void  wDataRealToEs() throws Exception{
+		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
+		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
+		 final Map<String , StockFuncDetailInfo> map = getInfoByCsv();
+		 
+		for(final String  sat:lstSource){
+//			if(sat.equals("603612")){
+			executorServiceLocal.execute(new Thread(){
+				@Override
+				public void run() {
+			          try {
+//			        	  List<StockBaseInfo> lstInfo = Lists.newArrayList();
+			        	  List<StockBaseInfo> lstInfo = getstockBaseInfo(sat ,  map.get(sat));
+//			        	 lstInfo.add(info);
+			        	 insBatchEs(lstInfo, jestClient, "stockpcse");
+					} catch (Exception e) {
+						System.out.println(sat);
+						e.printStackTrace();
+					}
+						
+				}
+			});
+		}
+		
+	}
+	
+	public static List<StockBaseInfo> getstockBaseInfo(String stockCode , StockFuncDetailInfo info ) throws Exception {
+		  final StockStragEnSey stockStragEnSey = new StockStragEnSey();
+		  List<StockBaseInfo> list = Lists.newArrayList();
+		  DecimalFormat df = new DecimalFormat("#.00");
+		String absPath = savePathsuff + stockCode + ".csv";
+		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
+		List<List<String>> lstSource = csvHandUtils.readCSVFile();
+		List<StockBaseInfo> result = Lists.newArrayList();
+		for (int i = lstSource.size() - 1; i >=1; i--) {
+			List<String> objdata = lstSource.get(i);
+			if(!(objIsEmpty(objdata.get(6))||objIsEmpty(objdata.get(3))||objIsEmpty(objdata.get(4))||objIsEmpty(objdata.get(5))||objdata.get(9).equals("None"))){///|StringUtils.isBlank(stockBaseInfo.getCjbs()))){//!(stockBaseInfo.getOpen()==0||stockBaseInfo.getClose()==0||stockBaseInfo.getHigh()==0||stockBaseInfo.getLow()==0||StringUtils.isBlank(stockBaseInfo.getCjbs()))){
+				StockBaseInfo stockBaseInfo = new StockBaseInfo(objdata.get(0), objdata.get(6), objdata.get(4),
+						objdata.get(5), objdata.get(3), objdata.get(11), objdata.get(9), stockCode, objdata.get(2),objdata.get(10),objdata.get(12),objdata.get(13),objdata.get(14),objdata.size()<15?null: objdata.get(14),TimeUtils.dayForWeek(objdata.get(0))+"");
+				if(info!=null){
+					stockBaseInfo.setIndustry(info.getIndustry());
+					stockBaseInfo.setArea(info.getArea());
+				}
+				result.add(stockBaseInfo);
+			}
+		}
+		
+		//增加今天的实时数据
+			StockRealBean bean = StoreRealSet.getBeanByCode(stockCode);
+			StockBaseInfo stockBaseInfo = new StockBaseInfo(bean.getUpdate().split("[ ]")[0].replace("/", "-"), bean.getOpen()+"", bean.getHigh()+"",
+					bean.getLow()+"", bean.getPrice()+"", bean.getVolume()+"", df.format((bean.getPrice()-bean.getYestclose()) /bean.getYestclose() * 100) +"", stockCode, bean.getName(),"","","","","","");
+			if(info!=null){
+				stockBaseInfo.setIndustry(info.getIndustry());
+				stockBaseInfo.setArea(info.getArea());
+			}
+			result.add(stockBaseInfo);
+		stockStragEnSey.addStockBaseInfos(result);
+		stockStragEnSey.computeStockIndex();
+		list.add(result.get(result.size()-1));
+		list.add(result.get(result.size()-2));
+		return list;
 
 	}
 	
@@ -241,9 +314,10 @@ public class StoreAstockTradInfo {
 		
 	}
 	public static void main(String[] args) throws ClientProtocolException, IOException, Exception {
-//		getHistoryData();
+		//getHistoryData();
 //		getRealTimeData();
-		wDataToEs();
+//		wDataToEs();
+		wDataRealToEs();
 	}
 //		List<StockBaseInfo>  lstResult=getstockBaseInfoFile("000001");
 //		String output="";
