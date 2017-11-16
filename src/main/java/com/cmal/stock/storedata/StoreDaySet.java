@@ -38,18 +38,17 @@ public class StoreDaySet {
 		List<String> lstSource =CommonBaseStockInfo.getAllAStockInfo();;
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		for(final String  sat:lstSource){
-			if(sat.equals("600290")){
-				//String neDate = getNextDate(sat,jestClient);
+			//if(sat.equals("600290")){
+				String neDate = getNextDate(sat,jestClient);
 				 List<StockBaseInfo> list = getstockBaseInfoFile(sat);
-//				 List<StockBaseInfo> addlist = new ArrayList<StockBaseInfo>();
-//				 for (StockBaseInfo stockBaseInfo : list) {
-//					if(!neDate.equals("") && df.parse(stockBaseInfo.getDate()).getTime() <= df.parse(neDate).getTime() ){
-//							break;
-//					}
-//					addlist.add(stockBaseInfo);
-//					System.out.println(stockBaseInfo.toString());
-//				}
-//				 StoreAstockTradInfo.insBatchEs(addlist, jestClient, "stockpcse");
+				 List<StockBaseInfo> addlist = new ArrayList<StockBaseInfo>();
+				 for (StockBaseInfo stockBaseInfo : list) {
+					if(!neDate.equals("") && df.parse(stockBaseInfo.getDate()).getTime() <= df.parse(neDate).getTime() ){
+							break;
+					}
+					addlist.add(stockBaseInfo);
+				//}
+				 StoreAstockTradInfo.insBatchEs(addlist, jestClient, "stockpcse");
 			}
 		}
 		 

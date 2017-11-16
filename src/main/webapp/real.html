@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>查看stockpcse</title>
+        <title>查看实时数据</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -63,29 +63,6 @@
                 </tr>
             </table>
             <div id="pg" style="text-align: right;"></div>
-
-
-            <!-- Modal -->
-			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="分时图">
-			  <div class="modal-dialog" role="document">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="myModalLabel">分时图</h4>
-			      </div>
-			      <div class="modal-body">
-			      	<input type="hidden" id = "code"/>
-			      	<button class="btn btn-default" onclick = "huan('min')">分时</button>
-			      	<button class="btn btn-default" onclick = "huan('daily')">周</button>
-			      	<button class="btn btn-default" onclick = "huan('weekly')">月</button>
-			        <img src = "" id = "imgFen">
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-default" data-dismiss="modal">关</button>
-			      </div>
-			    </div>
-			  </div>
-			</div>
         </main>
 
         <script src="js/vendor/jquery-1.9.1.min.js"></script>
@@ -93,7 +70,6 @@
         <script src="js/vendor/json2.js"></script>
         <script src="src/mmGrid.js"></script>
         <script src="src/mmPaginator.js"></script>
-        <script src="bootstrap/js/bootstrap.min.js"></script>
         <script>
             var classNames = [];
 
@@ -111,17 +87,13 @@
                 var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
                 
                 var cols = [
-                    {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
-                        /*return '<div class="btnPrice" onclick = "openDiv(\''+item['stockCode']+'\')"></div>';*/
-                        var path = getPath(item['stockCode']);
-                        return '<img src = "' +path+ '" onclick = "openDiv(\''+item['stockCode']+'\')">';
+                    {title:'行情', name:'', width: 30, align: 'center', renderer: function(val,item,rowIndex){
+                        return '<div class="btnPrice"></div>';
                     }},
                     { title:'日期', name:'date' , align:'center' },
                     { title:'股票代码', name:'stockCode' , align:'center' },
                     { title:'股票名称', name:'stockName' , align:'center'},
                     {title:'板块',name:'industry',sortable:true},
-                    {title:'开盘价',name:'open',sortable:true},
-                    {title:'收盘价',name:'close',sortable:true},
                     { title:'前一日涨跌幅', name:'upRises' , align:'right',sortable:true,renderer: fixed2percentage},
                     { title:'涨跌幅', name:'rises' , align:'right',renderer: fixed2percentage,sortable:true},
                     { title:'后一日涨跌幅', name:'nextRises' , align:'right',renderer: fixed2percentage,sortable:true},
@@ -238,32 +210,6 @@
                     datas[i] = j;
                 });
                 return datas;
-            }
-
-            function openDiv(code){
-            	$('#code').val('min');
-            	$('#imgFen').attr('src' ,getPath(code));
-            	$('#myModal').modal('show');
-            }
-
-            function huan(type){
-            	var old = $('#code').val();
-            	var imgPath = $('#imgFen').attr('src');
-            	imgPath = imgPath.replace(old , type);
-            	$('#code').val(type);
-            	$('#imgFen').attr('src' ,imgPath);
-            }
-
-            function getPath(code){
-            	var timestamp = Date.parse(new Date());
-            	var path = 'http://image.sinajs.cn/newchart/min/n/';
-            	if(code.toString().substring(0,1) == 6){
-            		path = path +  'sh'+code+'.gif';
-            	}else{
-            		path = path +  'sz'+code+'.gif';
-            	}
-            	path = path + '?'+timestamp;
-            	return path;
             }
         </script>
     </body>

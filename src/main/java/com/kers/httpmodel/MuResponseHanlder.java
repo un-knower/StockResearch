@@ -38,8 +38,7 @@ public class MuResponseHanlder {
 	public static ResponseHandler responseHandler(final String filePath)  throws Exception{
 		ResponseHandler handler = new ResponseHandler() {
 
-		@Override
-			public Object handleResponse(HttpResponse response)
+		public Object handleResponse(HttpResponse response)
 					throws ClientProtocolException, IOException {
 			StatusLine  statusLine = response.getStatusLine();
 			if(statusLine==null||statusLine.getStatusCode()!=HttpStatus.SC_OK){
