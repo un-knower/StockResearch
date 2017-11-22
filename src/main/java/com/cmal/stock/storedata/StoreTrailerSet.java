@@ -37,7 +37,7 @@ public class StoreTrailerSet {
 	public static void main(String[] args) throws Exception {
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		// List<StoreTrailer> list= Lists.newArrayList();
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i <= 26; i++) {
 			// String content = StoreTrailerUrl(i);
 			// System.out.println(content);|
 			try {

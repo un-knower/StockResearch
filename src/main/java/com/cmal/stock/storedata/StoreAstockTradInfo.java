@@ -316,8 +316,8 @@ public class StoreAstockTradInfo {
 	public static void main(String[] args) throws ClientProtocolException, IOException, Exception {
 		//getHistoryData();
 //		getRealTimeData();
-//		wDataToEs();
-		wDataRealToEs();
+		wDataToEs();
+		//wDataRealToEs();
 	}
 //		List<StockBaseInfo>  lstResult=getstockBaseInfoFile("000001");
 //		String output="";

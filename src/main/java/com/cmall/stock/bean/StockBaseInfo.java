@@ -30,6 +30,8 @@ public class StockBaseInfo implements Serializable {
 	
 	private float upJ = 0;
 	private float j = 0;
+	private float j3 = 0;
+	private float j5 = 0;
 	private float nextJ = 0;
 	private String area;
 	 // 5天内上涨次数
@@ -73,6 +75,8 @@ public class StockBaseInfo implements Serializable {
 	
 	
 	private long volume; // 量
+	//量的增长比
+	private double volumeRises;
 	// private String xLabel; // X 轴标签
 
 	// MA 指标的三个属性
@@ -594,6 +598,30 @@ public class StockBaseInfo implements Serializable {
 
 	public void setNextMacd(float nextMacd) {
 		this.nextMacd = nextMacd;
+	}
+
+	public float getJ3() {
+		return j3;
+	}
+
+	public void setJ3(float j3) {
+		this.j3 = j3;
+	}
+
+	public float getJ5() {
+		return j5;
+	}
+
+	public void setJ5(float j5) {
+		this.j5 = j5;
+	}
+
+	public double getVolumeRises() {
+		return volumeRises;
+	}
+
+	public void setVolumeRises(double volumeRises) {
+		this.volumeRises = volumeRises;
 	}
 
 	

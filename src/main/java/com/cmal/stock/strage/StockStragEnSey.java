@@ -270,19 +270,14 @@ public class StockStragEnSey {
     			StockBaseInfo.setNextJ(nextJ);
     			StockBaseInfo.setNextMacd(nextMacd);
     		}
-    		Float rises =StockBaseInfo.getRises();
-    		if(i>=5){
-    			Float Rises5 = entries.get(i-5).getRises();
-    			StockBaseInfo.setUpSumRises5(rises-Rises5);
-    		}
-    		if(i>=10){
-    			Float Rises10 = entries.get(i-10).getRises();
-    			StockBaseInfo.setUpSumRises10(rises-Rises10);
-    		}
     		if(i != 0){
     			float upRises = entries.get(i-1).getRises();
     			float upJ = entries.get(i-1).getJ();
     			float upMacds = entries.get(i-1).getMacd();
+    			float upVom = entries.get(i-1).getVolume();
+    			if(upVom != 0){
+    				StockBaseInfo.setVolumeRises(StockBaseInfo.getVolume() / upVom);
+    			}
     			StockBaseInfo.setUpRises(upRises);
     			StockBaseInfo.setUpJ(upJ);
     			StockBaseInfo.setUpMacd(upMacds);
@@ -300,9 +295,13 @@ public class StockStragEnSey {
     			int up10 = 0;
     			int macdUp5 = 0;
     			int macdUp10 = 0;
+    			float j3 =  StockBaseInfo.getJ();
+    			float j5 =  StockBaseInfo.getJ();
         		Float macd = StockBaseInfo.getMacd();
         		Float macd5 = macd;
         		Float macd10 = macd;
+        		Float Rises5 = StockBaseInfo.getRises();
+        		Float Rises10 = StockBaseInfo.getRises();
     			for (int j = 1; j <= 10; j++) {
 					if(i-j < 0){
 						break;
@@ -311,10 +310,18 @@ public class StockStragEnSey {
 					float closes = entries.get(i-j+1).getClose();
 					float macds = entries.get(i-j+1).getMacd();
 					float upMacd = entries.get(i-j).getClose();
+					float Risess = entries.get(i-j).getRises();
+					float js = entries.get(i-j).getJ();
+					if(j < 4){
+						j3 = j3 + js;
+					}
 					if(j < 6){
 						macd5 = macd5 + upMacd;
+						Rises5 = Rises5 + Risess;
+						j5 = j5 + js;
 					}
 					macd10=macd10 + upMacd;
+					Rises10 = Rises10 + Risess;
 					if(macds > 0){
 						if(j < 6){
 							macdUp5++;
@@ -334,7 +341,10 @@ public class StockStragEnSey {
     			StockBaseInfo.setMacdUp10(macdUp10);
     			StockBaseInfo.setSumMacdUp5(macd5);
     			StockBaseInfo.setSumMacdUp10(macd10);
-    			
+    			StockBaseInfo.setUpSumRises5(Rises5);
+    			StockBaseInfo.setUpSumRises10(Rises10);
+    			StockBaseInfo.setJ3(j3);
+    			StockBaseInfo.setJ5(j5);
 //    			System.out.println(StockBaseInfo.getStockCode() + StockBaseInfo.getDate() +" 收盘价:" +
 //    					StockBaseInfo.getRises() + " 前5天涨的次数" + StockBaseInfo.getUp5() + " 前10天涨的次数：" + StockBaseInfo.getUp10());
     		}
