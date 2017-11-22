@@ -1,6 +1,12 @@
 package com.cmall.stock.bean;
 
-public class StoreTrailer {
+import java.io.Serializable;
+
+public class StoreTrailer implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4906076360248153256L;
 	private String stockCode;
 	private String stockName;
 	//业绩变动

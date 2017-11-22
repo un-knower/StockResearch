@@ -40,32 +40,35 @@ public class StoreReportSet {
 	public static void main(String[] args) throws Exception {
 		
 		
-//		final JestClient  jestClient =BaseCommonConfig.clientConfig();
-//		Map<String, StoreTrailer> map = getTrailerMap(jestClient);
-//		System.out.println(getTrailerMap(jestClient));
+		final JestClient  jestClient =BaseCommonConfig.clientConfig();
+		Map<String, StoreTrailer> map = StoreTrailerSet.getAllTrailerMap("2017-12-31");
 		
-//		Map<String, StoreTrailer> map = getTrailerMap(jestClient);
-//		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
-//		List<EastReportBean> list = new ArrayList<EastReportBean>();
-//		for(final String  sat:lstSource){
-//			String content = writeFinalReport(sat);
-//			List<EastReportBean> ls = StoreAstockEnReport.retBeanLst(new Gson().fromJson(content, PaInfo.class).getData());
-//			StoreTrailer tr = map.get(sat);
-//			if(tr != null && ls.size() > 0){
-//				EastReportBean bean = ls.get(0);
-//				if(tr.getStartRangeability() == null){
-//					if(tr.getType().equals("预增") || tr.getType().equals("预盈")){
-//						bean.setJlr_ycb(1d);
-//					}else{
-//						bean.setJlr_ycb(-1d);
-//					}
-//				}else{
-//					bean.setJlr_ycb(tr.getStartRangeability());
-//				}
-//			}
-//			list.addAll(ls);
-//		}
-//		insBatchEs(list , jestClient , "storereport");
+		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
+		List<EastReportBean> list = new ArrayList<EastReportBean>();
+		for(final String  sat:lstSource){
+			System.out.println(sat);
+			String content = writeFinalReport(sat);
+			System.out.println(content);
+			List<EastReportBean> ls = retBeanLst(new Gson().fromJson(content, PaInfo.class).getData());
+			StoreTrailer tr = map.get(sat);
+			if(tr != null && ls.size() > 0){
+				EastReportBean bean = ls.get(0);
+				if(tr.getStartRangeability() == null){
+					if(tr.getType().equals("预增") || tr.getType().equals("预盈")){
+						bean.setJlr_ycb(1d);
+					}else{
+						bean.setJlr_ycb(-1d);
+					}
+				}else{
+					bean.setJlr_ycb(tr.getStartRangeability());
+					if(tr.getEndRangeability() != null && tr.getEndRangeability() != 0){
+						bean.setJlr((tr.getStartRangeability() + tr.getEndRangeability())/2);
+					}
+				}
+			}
+			insBatchEs(ls , jestClient , "storereport");
+		}
+		
 		
 //		final JestClient  jestClient =BaseCommonConfig.clientConfig();
 //		for (int i = 0; i < 25; i++) {
@@ -98,55 +101,65 @@ public class StoreReportSet {
 	
 	
 	
-	// public static List<EastReportBean> retBeanLst(String content[]) throws
-	// IOException, ParseException {
-	// List<EastReportBean> lstRestlt = Lists.newArrayList();
-	// Map<String, StockBaseInfo> maps = Maps.newConcurrentMap();
-	// // if (true)//content[0].split(",")[0].equals(stockCode))
-	// maps = StoreAstockTradInfo.fetchKeyStockInfo(content[0].split(",")[0]);
-	// for (int i = content.length -1; i >= 0; i--) {
-	// String arrayconent[] = content[i].split(",");
-	// String stockCode = arrayconent[0];
-	// String stockName = arrayconent[1];
-	// String mgsy = arrayconent[2];
-	// String mgsykc = arrayconent[3];
-	// String yysr = arrayconent[4];
-	// String yysr_yw = StoreAstockEnReport.getFormatNum(yysr);
-	// String yysr_tbzz = arrayconent[5];
-	// String yysr_hbzz = arrayconent[6];
-	// String jlr = arrayconent[7];
-	// String jlr_gsh = StoreAstockEnReport.getFormatNum(jlr);
-	// String jlr_tbzz = arrayconent[8];
-	// String jlr_hbzz = arrayconent[9];
-	// String mgjzc = arrayconent[10];
-	// String jzcsyl = arrayconent[11];
-	// String mgxjl = arrayconent[12];
-	// String xsmll = arrayconent[13];
-	// String lrfp = arrayconent[14];
-	// String gxl = arrayconent[15];
-	// String ggrq = arrayconent[16];
-	// String jzrq = arrayconent[17];
-	// Double jdzzl = 0d;
-	// if (i > 1) {
-	// jdzzl = Double.parseDouble(jlr) / Double.parseDouble(content[i -
-	// 1].split(",")[7]);
-	// }
-	// StockBaseInfo baseInfo = (maps == null ? null
-	// : StoreAstockTradInfo.getStockContinuePrice(maps, ggrq, true));
-	// String currentPrice = baseInfo == null ? "null" : baseInfo.getClose()+"";
-	// EastReportBean eastReportBean = new EastReportBean(stockCode, stockName,
-	// mgsy, mgsykc, yysr, yysr_tbzz,
-	// yysr_hbzz, jlr, jlr_tbzz, jlr_hbzz, mgjzc, jzcsyl, mgxjl, xsmll, lrfp,
-	// gxl, ggrq, jzrq, jdzzl,
-	// currentPrice);
-	// eastReportBean.setYysr_yw(yysr_yw);
-	// eastReportBean.setJlr_gsh(jlr_gsh);
-	// lstRestlt.add(eastReportBean);
-	// }
-	// return lstRestlt;
-	//
-	// }
-	//
+	 public static List<EastReportBean> retBeanLst(String content[]) throws
+	 IOException, ParseException {
+	 List<EastReportBean> lstRestlt = Lists.newArrayList();
+	 Map<String, StockBaseInfo> maps = Maps.newConcurrentMap();
+	 // if (true)//content[0].split(",")[0].equals(stockCode))
+	 try{
+		 maps = StoreAstockTradInfo.fetchKeyStockInfo(content[0].split(",")[0]);
+	 }catch(Exception e){
+		 
+	 }
+	 
+	 for (int i = content.length -1; i >= 0; i--) {
+	 String arrayconent[] = content[i].split(",");
+	 String stockCode = arrayconent[0];
+	 String stockName = arrayconent[1];
+	 String mgsy = arrayconent[2];
+	 String mgsykc = arrayconent[3];
+	 String yysr = arrayconent[4];
+	 String yysr_yw = StoreAstockEnReport.getFormatNum(yysr);
+	 String yysr_tbzz = arrayconent[5];
+	 String yysr_hbzz = arrayconent[6];
+	 String jlr = arrayconent[7];
+	 String jlr_gsh = StoreAstockEnReport.getFormatNum(jlr);
+	 String jlr_tbzz = arrayconent[8];
+	 String jlr_hbzz = arrayconent[9];
+	 String mgjzc = arrayconent[10];
+	 String jzcsyl = arrayconent[11];
+	 String mgxjl = arrayconent[12];
+	 String xsmll = arrayconent[13];
+	 String lrfp = arrayconent[14];
+	 String gxl = arrayconent[15];
+	 String ggrq = arrayconent[16];
+	 String jzrq = arrayconent[17];
+	 Double jdzzl = 0d;
+	 if (i > 1) {
+	 jdzzl = Double.parseDouble(jlr) / Double.parseDouble(content[i -
+	 1].split(",")[7]);
+	 }
+	 double jlr_ycb = 0;
+	 if (i < content.length - 1) {
+		 jlr_ycb = Double.parseDouble(content[i +1].split(",")[7]) / Double.parseDouble(jlr);
+	 }
+	 StockBaseInfo baseInfo = (maps == null ? null
+	 : StoreAstockTradInfo.getStockContinuePrice(maps, ggrq, true));
+	 String currentPrice = baseInfo == null ? "null" : baseInfo.getClose()+"";
+	 EastReportBean eastReportBean = new EastReportBean(stockCode, stockName,
+	 mgsy, mgsykc, yysr, yysr_tbzz,
+	 yysr_hbzz, jlr, jlr_tbzz, jlr_hbzz, mgjzc, jzcsyl, mgxjl, xsmll, lrfp,
+	 gxl, ggrq, jzrq, jdzzl,
+	 currentPrice);
+	 eastReportBean.setYysr_yw(yysr_yw);
+	 eastReportBean.setJlr_gsh(jlr_gsh);
+	 eastReportBean.setJlr_ycb(jlr_ycb);
+	 lstRestlt.add(eastReportBean);
+	 }
+	 return lstRestlt;
+	
+	 }
+	
 	public static void insBatchEs(List<EastReportBean> list,JestClient jestClient,String  indexIns) throws Exception{
 		  int i =0;
 		  Bulk.Builder bulkBuilder = new Bulk.Builder();

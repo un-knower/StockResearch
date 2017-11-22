@@ -3,6 +3,8 @@ package com.cmall.stock.bean;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 
 public class EastReportBean   implements Serializable {
 	/**    
@@ -33,19 +35,19 @@ public class EastReportBean   implements Serializable {
 	//营业收入格式化
 	private String yysr_yw;
 	// 营业收入_同比增长[5]
-	private double yysr_tbzz;
+	private String yysr_tbzz;
 	// 营业收入季度环比 增长[6]
 	private double yysr_hbzz;
 	
 	// 净利润_同比增长[8]
-	private double jlr_tbzz;
+	private String jlr_tbzz;
 	// 净利润_季度环比[9]
 	private double jlr_hbzz;
 	
 	// 每股净资产(元)[10]
 	private double mgjzc;
 	// 净资产收益率(%)[11]
-	private double jzcsyl;
+	private String jzcsyl;
 	// 每股经现金流量(元)[12]
 	private double mgxjl;
 	// 销售毛利率(%)[13]
@@ -105,24 +107,39 @@ public class EastReportBean   implements Serializable {
 	public void setJdzzl(Double jdzzl) {
 		this.jdzzl = jdzzl;
 	}
+	
+	public EastReportBean(){
+		
+	}
 
-	public EastReportBean(String stockCode, String stockName, double mgsy, double mgsykc, double yysr, double yysr_tbzz,
-			double yysr_hbzz, double jlr, double jlr_tbzz, double jlr_hbzz, double mgjzc, double jzcsyl, double mgxjl,
-			double xsmll, String lrfp, String gxl, String ggrq, String jzrq, Double jdzzl,String currentPrice) {
+	public EastReportBean(String stockCode, String stockName, String mgsy, String mgsykc, String yysr, String yysr_tbzz,
+			String yysr_hbzz, String jlr, String jlr_tbzz, String jlr_hbzz, String mgjzc, String jzcsyl, String mgxjl,
+			String xsmll, String lrfp, String gxl, String ggrq, String jzrq, Double jdzzl,String currentPrice) {
 		this.stockCode = stockCode;
 		this.stockName = stockName;
-		this.mgsy = mgsy;
-		this.mgsykc = mgsykc;
-		this.yysr = yysr;
+		this.mgsy = Double.parseDouble(mgsy);
+		this.mgsykc = Double.parseDouble(mgsykc);
+		this.yysr = Double.parseDouble(yysr);
 		this.yysr_tbzz = yysr_tbzz;
-		this.yysr_hbzz = yysr_hbzz;
-		this.jlr = jlr;
+		if(StringUtils.isNumeric(yysr_hbzz)){
+			this.yysr_hbzz = Double.parseDouble(yysr_hbzz);
+		}
+		this.jlr = Double.parseDouble(jlr);
 		this.jlr_tbzz = jlr_tbzz;
-		this.jlr_hbzz = jlr_hbzz;
-		this.mgjzc = mgjzc;
+		if(StringUtils.isNumeric(jlr_hbzz)){
+			this.jlr_hbzz = Double.parseDouble(jlr_hbzz);
+		}
+		if(StringUtils.isNumeric(mgjzc)){
+			this.mgjzc = Double.parseDouble(mgjzc);
+		}
 		this.jzcsyl = jzcsyl;
-		this.mgxjl = mgxjl;
-		this.xsmll = xsmll;
+		if(StringUtils.isNumeric(mgxjl)){
+			this.mgxjl = Double.parseDouble(mgxjl);
+		}
+		if(StringUtils.isNumeric(xsmll)){
+			this.xsmll = Double.parseDouble(xsmll);
+		}
+		
 		this.lrfp = lrfp;
 		this.gxl = gxl;
 		this.ggrq = ggrq;
@@ -198,11 +215,13 @@ public class EastReportBean   implements Serializable {
 		this.yysr = yysr;
 	}
 
-	public double getYysr_tbzz() {
+	
+
+	public String getYysr_tbzz() {
 		return yysr_tbzz;
 	}
 
-	public void setYysr_tbzz(double yysr_tbzz) {
+	public void setYysr_tbzz(String yysr_tbzz) {
 		this.yysr_tbzz = yysr_tbzz;
 	}
 
@@ -230,11 +249,13 @@ public class EastReportBean   implements Serializable {
 		this.jlr_gsh = jlr_gsh;
 	}
 
-	public double getJlr_tbzz() {
+	
+
+	public String getJlr_tbzz() {
 		return jlr_tbzz;
 	}
 
-	public void setJlr_tbzz(double jlr_tbzz) {
+	public void setJlr_tbzz(String jlr_tbzz) {
 		this.jlr_tbzz = jlr_tbzz;
 	}
 
@@ -254,11 +275,13 @@ public class EastReportBean   implements Serializable {
 		this.mgjzc = mgjzc;
 	}
 
-	public double getJzcsyl() {
+	
+
+	public String getJzcsyl() {
 		return jzcsyl;
 	}
 
-	public void setJzcsyl(double jzcsyl) {
+	public void setJzcsyl(String jzcsyl) {
 		this.jzcsyl = jzcsyl;
 	}
 

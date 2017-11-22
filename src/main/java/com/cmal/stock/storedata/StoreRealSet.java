@@ -105,7 +105,7 @@ public class StoreRealSet {
 	public static String StoreRealUrl(String StoreCode) throws ClientProtocolException, IOException {
 		String url = "http://api.money.126.net/data/feed/"+StoreCode+",money.api";
 		String content = BaseConnClient.baseGetReq(url);
-		System.out.println(content);
+//		System.out.println(content);
 		return content;
 	}
 

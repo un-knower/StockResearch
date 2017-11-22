@@ -12,7 +12,9 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
+import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.vo.StockBasePageInfo;
 import com.google.common.collect.Maps;
 import com.kers.esmodel.BaseCommonConfig;
@@ -71,7 +73,68 @@ public class SelGetStock {
 	}
 	
 	
-	 
+	public static Map<String,Object> getReportLstResult(BoolQueryBuilder query , StockBasePageInfo page , String type) throws Exception {
+		Map<String,Object> returnMap = Maps.newHashMap();
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
+		if(!StringUtils.isEmpty(page.getSort())){
+			String order = page.getSort().split("\\.")[1];
+			if(order.equalsIgnoreCase("desc")){
+				ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
+			}else{
+				ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
+			}
+		}
+		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, "storereport", type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
+		
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		JestResult results = jestClient.execute(selResult);
+		List<EastReportBean> lstBean = results.getSourceAsObjectList(EastReportBean.class);
+		if(lstBean!= null && lstBean.size() > 0){
+			Map hitsMap = (Map)results.getValue("hits");
+			if(hitsMap!=null){
+				Number total = (Number)hitsMap.get("total");
+				if(total!=null){
+					returnMap.put("totalCount", total.intValue());
+				}
+			}
+		}
+		returnMap.put("items", lstBean);
+		return returnMap;
+
+	} 
+	
+	
+	public static Map<String,Object> getTrailerLstResult(BoolQueryBuilder query , StockBasePageInfo page , String type) throws Exception {
+		Map<String,Object> returnMap = Maps.newHashMap();
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
+		if(!StringUtils.isEmpty(page.getSort())){
+			String order = page.getSort().split("\\.")[1];
+			if(order.equalsIgnoreCase("desc")){
+				ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
+			}else{
+				ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
+			}
+		}
+		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, "storetrailer", type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
+		
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		JestResult results = jestClient.execute(selResult);
+		List<StoreTrailer> lstBean = results.getSourceAsObjectList(StoreTrailer.class);
+		if(lstBean!= null && lstBean.size() > 0){
+			Map hitsMap = (Map)results.getValue("hits");
+			if(hitsMap!=null){
+				Number total = (Number)hitsMap.get("total");
+				if(total!=null){
+					returnMap.put("totalCount", total.intValue());
+				}
+			}
+		}
+		returnMap.put("items", lstBean);
+		return returnMap;
+
+	} 
 
 	public static void main(String[] args) throws Exception {
 
