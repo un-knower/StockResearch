@@ -129,9 +129,9 @@
                     { title:'连涨天数', name:'upDateNum' , align:'right',sortable:true},
                     {title:'macd',name:'macd',renderer: fixed2,sortable:true},
                     {title:'macd连涨天数',name:'macdNum',sortable:true},
-                    {title:'成交量',name:'volume',sortable:true},
-                    {title:'5日成交量',name:'volumeMa5',sortable:true},
-                    {title:'10日成交量',name:'volumeMa10',sortable:true}
+                    {title:'成交量比',name:'volumeRises',sortable:true,renderer: fixed2percentage}
+                    /* {title:'5日成交量',name:'volumeMa5',sortable:true},
+                    {title:'10日成交量',name:'volumeMa10',sortable:true} */
 
                    /*  { title:'今开盘', name:'open', align:'right', renderer: fixed2},
                     { title:'今收盘', name:'close' , align:'right', renderer: fixed2,sortable:true},
