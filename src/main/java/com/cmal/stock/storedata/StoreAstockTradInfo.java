@@ -200,9 +200,12 @@ public class StoreAstockTradInfo {
 			// List<String> llData=
 			List<String> objdata = lstSource.get(i);
 			// System.out.println(lstSource.get(i).get(1));
-			StockBaseInfo stockBaseInfo = new StockBaseInfo(objdata.get(0), objdata.get(6), objdata.get(4),
-					objdata.get(5), objdata.get(3), objdata.get(11), objdata.get(9), stockCode, objdata.get(2),objdata.get(10),objdata.get(12),objdata.get(13),objdata.get(14),objdata.get(14),TimeUtils.dayForWeek(objdata.get(0))+"");
-			mapsInfo.put(stockBaseInfo.getDate(), stockBaseInfo);
+			if(!(objIsEmpty(objdata.get(6))||objIsEmpty(objdata.get(3))||objIsEmpty(objdata.get(4))||objIsEmpty(objdata.get(5))||objdata.get(9).equals("None"))){
+				StockBaseInfo stockBaseInfo = new StockBaseInfo(objdata.get(0), objdata.get(6), objdata.get(4),
+						objdata.get(5), objdata.get(3), objdata.get(11), objdata.get(9), stockCode, objdata.get(2),objdata.get(10),objdata.get(12),objdata.get(13),objdata.get(14),objdata.get(14),TimeUtils.dayForWeek(objdata.get(0))+"");
+				mapsInfo.put(stockBaseInfo.getDate(), stockBaseInfo);
+			}
+			
 			// result.add(stockBaseInfo);
 		}
 
@@ -316,8 +319,8 @@ public class StoreAstockTradInfo {
 	public static void main(String[] args) throws ClientProtocolException, IOException, Exception {
 		//getHistoryData();
 //		getRealTimeData();
-		wDataToEs();
-		//wDataRealToEs();
+		//wDataToEs();
+		wDataRealToEs();
 	}
 //		List<StockBaseInfo>  lstResult=getstockBaseInfoFile("000001");
 //		String output="";

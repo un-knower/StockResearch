@@ -18,6 +18,10 @@ public class EastReportBean   implements Serializable {
 	private String stockName;
 	// 净利润[7];
 	private double jlr;
+	//上季度净利润
+	private double sjlr;
+	//下季度净利润
+	private double xjlr;
 	// 上季度到本季度的增长率
 	private Double jdzzl;
 	//上上季度增长率
@@ -307,6 +311,24 @@ public class EastReportBean   implements Serializable {
 
 	public void setJdzzl_before(Double jdzzl_before) {
 		this.jdzzl_before = jdzzl_before;
+	}
+	
+	
+
+	public double getSjlr() {
+		return sjlr;
+	}
+
+	public void setSjlr(double sjlr) {
+		this.sjlr = sjlr;
+	}
+
+	public double getXjlr() {
+		return xjlr;
+	}
+
+	public void setXjlr(double xjlr) {
+		this.xjlr = xjlr;
 	}
 
 	@Override

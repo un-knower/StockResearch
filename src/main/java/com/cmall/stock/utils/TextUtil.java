@@ -17,7 +17,7 @@ public class TextUtil {
 	 * @param path
 	 * @param value
 	 */
-	public void writerTxt( String path , String value) {
+	public static void writerTxt( String path , String value) {
 		BufferedWriter fw = null;
 		try {
 			

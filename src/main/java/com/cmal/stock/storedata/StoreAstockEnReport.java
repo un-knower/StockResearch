@@ -74,59 +74,59 @@ public class StoreAstockEnReport {
 	public static List<EastReportBean> retBeanLst(String content[]) throws IOException, ParseException {
 
 		List<EastReportBean> lstRestlt = Lists.newArrayList();
-		Map<String, StockBaseInfo> maps = Maps.newConcurrentMap();
-		// if (true)//content[0].split(",")[0].equals(stockCode))
-		maps = StoreAstockTradInfo.fetchKeyStockInfo(content[0].split(",")[0]);
-		Double jdzzl_before = 0d;
-		for (int i = content.length - 1; i >= 0; i--) {
-			String arrayconent[] = content[i].split(",");
-			String stockCode = arrayconent[0];
-			String stockName = arrayconent[1];
-			double mgsy = tranDouEroC(arrayconent[2]);
-			double mgsykc = tranDouEroC(arrayconent[3]);
-			double yysr = tranDouEroC(arrayconent[4]);
-			double yysr_tbzz = tranDouEroC(arrayconent[5]);
-			double yysr_hbzz = tranDouEroC(arrayconent[6]);
-			double jlr = tranDouEroC(arrayconent[7]);
-			double jlr_tbzz = tranDouEroC(arrayconent[8]);
-			double jlr_hbzz = tranDouEroC(arrayconent[9]);
-			double mgjzc = tranDouEroC(arrayconent[10]);
-			// System.out.println(arrayconent[11]);
-			double jzcsyl = tranDouEroC(arrayconent[11]);
-			double mgxjl = tranDouEroC(arrayconent[12]);
-			double xsmll = tranDouEroC(arrayconent[13]);// tranDouEroC("-0.982");//
-														// tranDdouEroC(arrayconent[13]);
-			String lrfp = arrayconent[14];
-			String gxl = arrayconent[15];
-			String ggrq = arrayconent[16];
-			String jzrq = arrayconent[17];
-			Double jdzzl = 0d;
-			if (i > 1) {
-				double  svf=Double.parseDouble(content[i - 1].split(",")[7])==0?1:Double.parseDouble(content[i - 1].split(",")[7]);
-				jdzzl = ((jlr-svf) /svf)*100;
-			}
-//			Double jdzzl_before = 0d;
-			if(i>2){
-//				if(stockCode.equals("000546")){
-//					System.out.println(jzrq+"====="+content[i - 2].split(",")[7]+"   =="+content[i - 1].split(",")[7]);
-//					
-//				}
-				double  svfgh=Double.parseDouble(content[i - 2].split(",")[7])==0?1:Double.parseDouble(content[i - 2].split(",")[7]);
-				double  svf=Double.parseDouble(content[i - 1].split(",")[7]);
-				jdzzl_before =((svf-svfgh)/Math.abs(svfgh))*100;   ////( Double.parseDouble(content[i - 1].split(",")[7])) / (svf==0?1:svf);
-			}
-			StockBaseInfo baseInfo = (maps == null ? null
-					: StoreAstockTradInfo.getStockContinuePrice(maps, ggrq, true));
-			String currentPrice = baseInfo == null ? "null" : baseInfo.getClose() + "";
-			EastReportBean eastReportBean = new EastReportBean(stockCode, stockName, mgsy, mgsykc, yysr, yysr_tbzz,
-					yysr_hbzz, jlr, jlr_tbzz, jlr_hbzz, mgjzc, jzcsyl, mgxjl, xsmll, lrfp, gxl, ggrq, jzrq, jdzzl,
-					currentPrice);
-			eastReportBean.setJdzzl_before(retERRNANDou(jdzzl_before));
-			lstRestlt.add(eastReportBean);
-//			jdzzl_before=eastReportBean.getJdzzl_before();
-//			System.out.println(eastReportBean.getJzrq());
-
-		}
+//		Map<String, StockBaseInfo> maps = Maps.newConcurrentMap();
+//		// if (true)//content[0].split(",")[0].equals(stockCode))
+//		maps = StoreAstockTradInfo.fetchKeyStockInfo(content[0].split(",")[0]);
+//		Double jdzzl_before = 0d;
+//		for (int i = content.length - 1; i >= 0; i--) {
+//			String arrayconent[] = content[i].split(",");
+//			String stockCode = arrayconent[0];
+//			String stockName = arrayconent[1];
+//			double mgsy = tranDouEroC(arrayconent[2]);
+//			double mgsykc = tranDouEroC(arrayconent[3]);
+//			double yysr = tranDouEroC(arrayconent[4]);
+//			double yysr_tbzz = tranDouEroC(arrayconent[5]);
+//			double yysr_hbzz = tranDouEroC(arrayconent[6]);
+//			double jlr = tranDouEroC(arrayconent[7]);
+//			double jlr_tbzz = tranDouEroC(arrayconent[8]);
+//			double jlr_hbzz = tranDouEroC(arrayconent[9]);
+//			double mgjzc = tranDouEroC(arrayconent[10]);
+//			// System.out.println(arrayconent[11]);
+//			double jzcsyl = tranDouEroC(arrayconent[11]);
+//			double mgxjl = tranDouEroC(arrayconent[12]);
+//			double xsmll = tranDouEroC(arrayconent[13]);// tranDouEroC("-0.982");//
+//														// tranDdouEroC(arrayconent[13]);
+//			String lrfp = arrayconent[14];
+//			String gxl = arrayconent[15];
+//			String ggrq = arrayconent[16];
+//			String jzrq = arrayconent[17];
+//			Double jdzzl = 0d;
+//			if (i > 1) {
+//				double  svf=Double.parseDouble(content[i - 1].split(",")[7])==0?1:Double.parseDouble(content[i - 1].split(",")[7]);
+//				jdzzl = ((jlr-svf) /svf)*100;
+//			}
+////			Double jdzzl_before = 0d;
+//			if(i>2){
+////				if(stockCode.equals("000546")){
+////					System.out.println(jzrq+"====="+content[i - 2].split(",")[7]+"   =="+content[i - 1].split(",")[7]);
+////					
+////				}
+//				double  svfgh=Double.parseDouble(content[i - 2].split(",")[7])==0?1:Double.parseDouble(content[i - 2].split(",")[7]);
+//				double  svf=Double.parseDouble(content[i - 1].split(",")[7]);
+//				jdzzl_before =((svf-svfgh)/Math.abs(svfgh))*100;   ////( Double.parseDouble(content[i - 1].split(",")[7])) / (svf==0?1:svf);
+//			}
+//			StockBaseInfo baseInfo = (maps == null ? null
+//					: StoreAstockTradInfo.getStockContinuePrice(maps, ggrq, true));
+//			String currentPrice = baseInfo == null ? "null" : baseInfo.getClose() + "";
+//			EastReportBean eastReportBean = new EastReportBean(stockCode, stockName, mgsy, mgsykc, yysr, yysr_tbzz,
+//					yysr_hbzz, jlr, jlr_tbzz, jlr_hbzz, mgjzc, jzcsyl, mgxjl, xsmll, lrfp, gxl, ggrq, jzrq, jdzzl,
+//					currentPrice);
+//			eastReportBean.setJdzzl_before(retERRNANDou(jdzzl_before));
+//			lstRestlt.add(eastReportBean);
+////			jdzzl_before=eastReportBean.getJdzzl_before();
+////			System.out.println(eastReportBean.getJzrq());
+//
+//		}
 		return lstRestlt;
 
 		//
