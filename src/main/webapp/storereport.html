@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div style="text-align: center;margin-bottom: 5px;">
-            	<input type = "text" id = "type" value = "2017-09-30">
+            	<input type = "text" id = "type"> <!-- value = "2017-09-30" -->
             	<button id="btnSearch" class="btn" >搜索</button>
             </div>
             <table id="mmg" class="mmg">
@@ -115,25 +115,25 @@
                 var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
                 
                 var cols = [
-                    { title:'公告日期', name:'ggrq' , align:'center' }, 
-                    /* { title:'结束日期', name:'jzrq' , align:'center' }, */ 
+                    { title:'公告日期', name:'ggrq' , align:'center' ,sortable:true}, 
+                     { title:'结束日期', name:'jzrq' , align:'center' ,sortable:true}, 
                     { title:'股票代码', name:'stockCode' , align:'center' },
                     { title:'股票名称', name:'stockName' , align:'center'},
                     { title:'每股收益', name:'mgsy' , align:'center',sortable:true},
-                  /*   { title:'每股净资产', name:'mgsykc' , align:'center',sortable:true}, */
+                  /*  { title:'每股净资产', name:'mgsykc' , align:'center',sortable:true},  */
                     { title:'上净利润', name:'sjlr' , align:'center',renderer: moformat,sortable:true},
                     { title:'净利润', name:'jlr' , align:'center',renderer: moformat,sortable:true},
-                    { title:'下净利润', name:'xjlr' , align:'center',renderer: moformat,sortable:true},
+                  /*   { title:'下净利润', name:'xjlr' , align:'center',renderer: moformat,sortable:true}, */
                      { title:'上季度利润增长率', name:'jdzzl_before' , align:'center',renderer: fixed2,sortable:true},
-                    { title:'净利润增长率', name:'jdzzl' , align:'center',renderer: fixed2,sortable:true},
-                    { title:'下季度利润增长率', name:'jlr_ycb' , align:'center',renderer: fixed2,sortable:true}
+                    { title:'净利润增长率', name:'jdzzl' , align:'center',renderer: fixed2,sortable:true}
+                  /*   { title:'下季度利润增长率', name:'jlr_ycb' , align:'center',renderer: fixed2,sortable:true} */
                 ];
 
 
                 var mmg = $('.mmg').mmGrid({
                     height: 'auto'
                     , cols: cols
-                    , url: 'http://localhost:8080/report/getList?type='+$('#type').val()
+                    , url: 'http://localhost:8080/report/getList?aaa=b&type='+ $('#type').val()
                     , method: 'get'
                     , remoteSort:true
                     , sortName: 'close'

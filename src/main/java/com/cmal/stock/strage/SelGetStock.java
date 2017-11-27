@@ -16,6 +16,7 @@ import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.vo.StockBasePageInfo;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.esmodel.UtilEs;
@@ -75,6 +76,25 @@ public class SelGetStock {
 	
 	public static Map<String,Object> getReportLstResult(BoolQueryBuilder query , StockBasePageInfo page , String type) throws Exception {
 		Map<String,Object> returnMap = Maps.newHashMap();
+		List<String> types= Lists.newArrayList();
+		System.out.println(type);
+		if(type.equals(",all")){//StringUtils.isEmpty(type)||type.equals(",")){
+			types.add("2017-09-30");
+			types.add("2017-06-30");
+			types.add("2017-03-31");
+			
+			types.add("2016-12-31");
+			types.add("2016-09-30");
+			types.add("2016-06-30");
+			types.add("2016-03-31");
+			
+			types.add("2015-12-31");
+			types.add("2015-09-30");
+			types.add("2015-06-30");
+			types.add("2015-03-31");
+		}else{
+			types.add("2017-09-30");
+		}
 		SearchSourceBuilder ssb = new SearchSourceBuilder();
 		if(!StringUtils.isEmpty(page.getSort())){
 			String order = page.getSort().split("\\.")[1];
@@ -85,7 +105,9 @@ public class SelGetStock {
 			}
 		}
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		Search selResult = UtilEs.getSearch(searchSourceBuilder, "storereport", type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
+		System.out.println(searchSourceBuilder.toString());
+		System.out.println(types);
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, "storereport", types, (page.getPage()- 1) * page.getLimit() , page.getLimit());
 		
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);

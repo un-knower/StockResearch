@@ -24,6 +24,8 @@ package com.cmal.stock.strage;
  *当天涨幅大于0
  *连续涨至少两天
  *
+ *002016
+ *http://quotes.money.163.com/f10/dbfx_000513.html
 {"query":{"bool":{"must":[{"term":{"2017.date":"2017-11-08"}},{"range":{"2017.macd":{"gt":"0"}}},{"range":{"2017.rises":{"gt":"0"}}},{"range":{"2017.nextRises":{"gt":"3"}}},{"range":{"2017.upDateNum":{"gt":"2"}}},{"range":{"2017.macdNum":{"gt":"2"}}}],"must_not":[],"should":[]}},"from":0,"size":50,"sort":[],"facets":{}}
 
  *
