@@ -302,6 +302,9 @@ public class StockStragEnSey {
         		Float macd10 = macd;
         		Float Rises5 = StockBaseInfo.getRises();
         		Float Rises10 = StockBaseInfo.getRises();
+        		Float maxRises3 = Rises5;
+        		Float maxRises5 = Rises5;
+        		Float maxRises10 = Rises5;
     			for (int j = 1; j <= 10; j++) {
 					if(i-j < 0){
 						break;
@@ -313,12 +316,21 @@ public class StockStragEnSey {
 					float Risess = entries.get(i-j).getRises();
 					float js = entries.get(i-j).getJ();
 					if(j < 4){
+						if(maxRises3 > Risess){
+							maxRises3 = Risess;
+						}
 						j3 = j3 + js;
 					}
 					if(j < 6){
+						if(maxRises5 > Risess){
+							maxRises5 = Risess;
+						}
 						macd5 = macd5 + upMacd;
 						Rises5 = Rises5 + Risess;
 						j5 = j5 + js;
+					}
+					if(maxRises10 > Risess){
+						maxRises10 = Risess;
 					}
 					macd10=macd10 + upMacd;
 					Rises10 = Rises10 + Risess;
@@ -345,6 +357,9 @@ public class StockStragEnSey {
     			StockBaseInfo.setUpSumRises10(Rises10);
     			StockBaseInfo.setJ3(j3);
     			StockBaseInfo.setJ5(j5);
+    			StockBaseInfo.setMinRises5(maxRises5);
+    			StockBaseInfo.setMinRises10(maxRises10);
+    			StockBaseInfo.setMinRises3(maxRises3);
 //    			System.out.println(StockBaseInfo.getStockCode() + StockBaseInfo.getDate() +" 收盘价:" +
 //    					StockBaseInfo.getRises() + " 前5天涨的次数" + StockBaseInfo.getUp5() + " 前10天涨的次数：" + StockBaseInfo.getUp10());
     		}

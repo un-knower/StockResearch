@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -15,6 +16,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StoreTrailer;
+import com.cmall.stock.utils.TextUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -38,35 +40,46 @@ public class StoreReportSet {
 //	static String cnFinalReportPath = "D://data//Report//";
 	
 	public static void main(String[] args) throws Exception {
-		
+//		writeTextReport();
 		
 		final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		Map<String, StoreTrailer> map = StoreTrailerSet.getAllTrailerMap("2017-12-31");
 		
 		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
-		List<EastReportBean> list = new ArrayList<EastReportBean>();
+//		List<EastReportBean> list = new ArrayList<EastReportBean>();
 		for(final String  sat:lstSource){
-			System.out.println(sat);
-			String content = writeFinalReport(sat);
+			try {
+			String content = readTextReport(sat);
 			System.out.println(content);
 			List<EastReportBean> ls = retBeanLst(new Gson().fromJson(content, PaInfo.class).getData());
 			StoreTrailer tr = map.get(sat);
 			if(tr != null && ls.size() > 0){
 				EastReportBean bean = ls.get(0);
-				if(tr.getStartRangeability() == null){
-					if(tr.getType().equals("预增") || tr.getType().equals("预盈")){
-						bean.setJlr_ycb(1d);
-					}else{
-						bean.setJlr_ycb(-1d);
-					}
-				}else{
-					bean.setJlr_ycb(tr.getStartRangeability());
-					if(tr.getEndRangeability() != null && tr.getEndRangeability() != 0){
-						bean.setJlr((tr.getStartRangeability() + tr.getEndRangeability())/2);
-					}
-				}
+//				if(StringUtils.isNumeric(tr.getNetProfit())){
+					
+					bean.setXjlr(Double.parseDouble(tr.getNetProfit()));
+					Double ycb = (bean.getXjlr()) / bean.getJlr();
+					ycb = V(bean.getJlr() ,bean.getXjlr() ,  ycb);
+					bean.setJlr_ycb(ycb);
+//				}
+//				if(tr.getStartRangeability() == null){
+//					if(tr.getType().equals("预增") || tr.getType().equals("预盈")){
+//						bean.setJlr_ycb(1d);
+//					}else{
+//						bean.setJlr_ycb(-1d);
+//					}
+//				}else{
+//					bean.setJlr_ycb(tr.getStartRangeability());
+//					if(tr.getEndRangeability() != null && tr.getEndRangeability() != 0){
+//						bean.setJlr((tr.getStartRangeability() + tr.getEndRangeability())/2);
+//					}
+//				}
 			}
 			insBatchEs(ls , jestClient , "storereport");
+			} catch (Exception e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
 		}
 		
 		
@@ -106,12 +119,12 @@ public class StoreReportSet {
 	 List<EastReportBean> lstRestlt = Lists.newArrayList();
 	 Map<String, StockBaseInfo> maps = Maps.newConcurrentMap();
 	 // if (true)//content[0].split(",")[0].equals(stockCode))
-	 try{
+//	 try{
 		 maps = StoreAstockTradInfo.fetchKeyStockInfo(content[0].split(",")[0]);
-	 }catch(Exception e){
-		 
-	 }
-	 
+//	 }catch(Exception e){
+//		 
+//	 }
+		 EastReportBean upbean = null;
 	 for (int i = content.length -1; i >= 0; i--) {
 	 String arrayconent[] = content[i].split(",");
 	 String stockCode = arrayconent[0];
@@ -135,13 +148,26 @@ public class StoreReportSet {
 	 String ggrq = arrayconent[16];
 	 String jzrq = arrayconent[17];
 	 Double jdzzl = 0d;
+	 Double sjlr = 0d;
+	 Double xjlr = 0d;
+	 Double jdzzl_before = 0d;
+//	 if(upbean != null){
+//		 jdzzl_before = upbean.getJdzzl();
+//	 }
 	 if (i > 1) {
-	 jdzzl = Double.parseDouble(jlr) / Double.parseDouble(content[i -
-	 1].split(",")[7]);
+	 jdzzl = Double.parseDouble(jlr) / Double.parseDouble(content[i -1].split(",")[7]);
+	 jdzzl = V(Double.parseDouble(content[i - 1].split(",")[7]) , Double.parseDouble(jlr) , jdzzl);
+	 sjlr = Double.parseDouble(content[i - 1].split(",")[7]);
+	 }
+	 if (i > 2){
+		 jdzzl_before =(Double.parseDouble(content[i -1].split(",")[7]))/ Double.parseDouble(content[i -2].split(",")[7]);
+		 jdzzl_before = V(Double.parseDouble(content[i -2].split(",")[7]) , Double.parseDouble(content[i -1].split(",")[7]) , jdzzl_before);
 	 }
 	 double jlr_ycb = 0;
 	 if (i < content.length - 1) {
-		 jlr_ycb = Double.parseDouble(content[i +1].split(",")[7]) / Double.parseDouble(jlr);
+		 jlr_ycb = (Double.parseDouble(content[i +1].split(",")[7])) / Double.parseDouble(jlr);
+		 jlr_ycb = V(Double.parseDouble(jlr) , Double.parseDouble(content[i +1].split(",")[7]) , jlr_ycb);
+		 xjlr = Double.parseDouble(content[i +1].split(",")[7]);
 	 }
 	 StockBaseInfo baseInfo = (maps == null ? null
 	 : StoreAstockTradInfo.getStockContinuePrice(maps, ggrq, true));
@@ -154,7 +180,11 @@ public class StoreReportSet {
 	 eastReportBean.setYysr_yw(yysr_yw);
 	 eastReportBean.setJlr_gsh(jlr_gsh);
 	 eastReportBean.setJlr_ycb(jlr_ycb);
+	 eastReportBean.setSjlr(sjlr);
+	 eastReportBean.setXjlr(xjlr);
+	 eastReportBean.setJdzzl_before(jdzzl_before);
 	 lstRestlt.add(eastReportBean);
+	 upbean = eastReportBean;
 	 }
 	 return lstRestlt;
 	
@@ -186,7 +216,32 @@ public class StoreReportSet {
 	 }
 	
 	
-
+	public static void writeTextReport() throws IOException{
+		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
+		for(final String  sat:lstSource){
+			String content = writeFinalReport(sat);
+			TextUtil.writerTxt("D://data//repoty//"+sat+".txt", content);
+		}
+	}
+	
+	public static String readTextReport(String stockCode){
+		String reText = "";
+		List<String> list = TextUtil.readTxtFile("D://data//repoty//"+stockCode+".txt");
+		for (String string : list) {
+			reText = reText + string;
+		}
+		return reText;
+	}
+	
+	public static Double V(Double v1 , Double v2 , Double value){
+		if(v2 > v1 && value < 0){
+			return (value * -1);
+		}
+		if(v2 < v1 && value > 0){
+			return (value * -1);
+		}
+		return value;
+	}
 }
 
 

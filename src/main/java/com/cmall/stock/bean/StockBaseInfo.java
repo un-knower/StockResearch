@@ -17,6 +17,9 @@ public class StockBaseInfo implements Serializable {
 	private float upRises; //上一天涨幅
 	private float rises;
 	private float nextRises; // 下一天涨幅
+	private float minRises3; //5日内最大涨幅
+	private float minRises5; //5日内最大涨幅
+	private float minRises10; //10日内最大涨幅
 	private int upDateNum = 0;
 	private float upMacd=0;
 	private float macd = 0;
@@ -624,6 +627,31 @@ public class StockBaseInfo implements Serializable {
 		this.volumeRises = volumeRises;
 	}
 
+	public float getMinRises3() {
+		return minRises3;
+	}
+
+	public void setMinRises3(float minRises3) {
+		this.minRises3 = minRises3;
+	}
+
+	public float getMinRises5() {
+		return minRises5;
+	}
+
+	public void setMinRises5(float minRises5) {
+		this.minRises5 = minRises5;
+	}
+
+	public float getMinRises10() {
+		return minRises10;
+	}
+
+	public void setMinRises10(float minRises10) {
+		this.minRises10 = minRises10;
+	}
+
+	
 	
 	
 	
