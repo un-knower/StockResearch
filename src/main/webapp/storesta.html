@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>查看stockpcse</title>
+        <title>查看策略</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -50,7 +50,7 @@
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body style="padding: 40px;">
-        <a href = "/">stockpcse</a> <a href = "/storereport.html">storereport</a> 
+        <a href = "/">stockpcse</a> <a href = "/storetrailer.html">storetrailer</a> 
         <a href = "/storesta.html">查看策略</a>
         <main>
             <div style="margin-bottom: 5px;">
@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div style="text-align: center;margin-bottom: 5px;">
-            	<input type = "text" id = "type" value = "2017-12-31">
+            	<input type = "text" id = "type" value = "2017"> <!-- value = "2017-09-30" -->
             	<button id="btnSearch" class="btn" >搜索</button>
             </div>
             <table id="mmg" class="mmg">
@@ -105,7 +105,7 @@
             $(document).ready(function(){
                 $.ajax({  
                     type : "GET",  //提交方式  
-                    url : "http://localhost:8080/trailer/getClassNameList",//路径  
+                    url : "http://localhost:8080/sta/getClassNameList",//路径  
                     data : {},//数据，这里使用的是Json格式进行传输  
                     success : function(result) {//返回数据根据结果进行相应的处理  
                         classNames =  result;
@@ -116,21 +116,19 @@
                 var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
                 
                 var cols = [
-                    { title:'公告日期', name:'startDate' , align:'center' },
-                    { title:'结束日期', name:'endDate' , align:'center' },
+                    { title:'日期', name:'date' , align:'center' ,sortable:true}, 
                     { title:'股票代码', name:'stockCode' , align:'center' },
                     { title:'股票名称', name:'stockName' , align:'center'},
-                    { title:'预测类型', name:'type' , align:'center',sortable:true},
-                    { title:'净利润', name:'netProfit' , align:'center',sortable:true,renderer: moformat},
-                    { title:'业绩变动', name:'perChanges' , align:'center',sortable:true},
-                    { title:'变化幅度', name:'rangeability' , align:'center',sortable:true}
+                    { title:'f1', name:'f1' , align:'center',sortable:true,renderer: moformat},
+                 	{ title:'f2', name:'f2' , align:'center',sortable:true,renderer: moformat},
+                 	{ title:'f3', name:'f3' , align:'center',sortable:true,renderer: fixed2}
                 ];
 
 
                 var mmg = $('.mmg').mmGrid({
                     height: 'auto'
                     , cols: cols
-                    , url: 'http://localhost:8080/trailer/getList?type='+$('#type').val()
+                    , url: 'http://localhost:8080/sta/getList?aaa=b&type='+ $('#type').val()
                     , method: 'get'
                     , remoteSort:true
                     , sortName: 'close'
@@ -173,6 +171,26 @@
                 }
                 return fixed2(val);
             };
+            
+            var   moformat=function(val){
+            	  if(typeof val != 'number'){
+                      return '';
+                  }
+            	  var   nnn=val/10000;
+          		   var   ccc="万";
+          		   if(Math.abs(nnn)>=10000){
+          			    nnn=nnn/10000;
+          			    ccc="亿";
+          		   }
+            	  
+            	   if(val > 0){
+            		    
+                     return '<span style="color: #b00">' + fixed2(nnn) +ccc+ '</span>';
+                 }else if(val < 0){
+                     return '<span style="color: #0b0">' + fixed2(nnn) + ccc+'</span>';
+                 }  
+            	
+            }
 
             var fixed2 = function(val){
                     if(typeof val != 'number'){
@@ -249,26 +267,6 @@
             	path = path + '?'+timestamp;
             	return path;
             }
-            
-            var   moformat=function(val){
-          	  if(typeof val != 'number'){
-                    return '';
-                }
-          	  var   nnn=val/10000;
-        		   var   ccc="万";
-        		   if(Math.abs(nnn)>=10000){
-        			    nnn=nnn/10000;
-        			    ccc="亿";
-        		   }
-          	  
-          	   if(val > 0){
-          		    
-                   return '<span style="color: #b00">' + fixed2(nnn) +ccc+ '</span>';
-               }else if(val < 0){
-                   return '<span style="color: #0b0">' + fixed2(nnn) + ccc+'</span>';
-               }  
-          	
-          }
         </script>
     </body>
 </html>

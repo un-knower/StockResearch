@@ -51,6 +51,7 @@
     </head>
     <body style="padding: 40px;">
         <a href = "/">stockpcse</a> <a href = "/storetrailer.html">storetrailer</a>
+         <a href = "/storesta.html">查看策略</a>
         <main>
             <div style="margin-bottom: 5px;">
                 <div style="text-align: center;">
@@ -69,29 +70,30 @@
             <div id="pg" style="text-align: right;"></div>
 
 
-            <!-- Modal -->
-			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="分时图">
-			  <div class="modal-dialog" role="document">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="myModalLabel">分时图</h4>
-			      </div>
-			      <div class="modal-body">
-			      	<input type="hidden" id = "code"/>
-			      	<button class="btn btn-default" onclick = "huan('min')">分时</button>
-			      	<button class="btn btn-default" onclick = "huan('daily')">周</button>
-			      	<button class="btn btn-default" onclick = "huan('weekly')">月</button>
-			        <img src = "" id = "imgFen">
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-default" data-dismiss="modal">关</button>
-			      </div>
-			    </div>
-			  </div>
-			</div>
+            
         </main>
-
+<!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="详情">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">详情</h4>
+                  </div>
+                  <div class="modal-body">
+                    <table id="mmg2" class="mmg">
+                        <tr>
+                            <th rowspan="" colspan=""></th>
+                        </tr>
+                    </table>
+                    <div id="pg2" style="text-align: right;"></div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关</button>
+                  </div>
+                </div>
+              </div>
+            </div>
         <script src="js/vendor/jquery-1.9.1.min.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/vendor/json2.js"></script>
@@ -117,7 +119,9 @@
                 var cols = [
                     { title:'公告日期', name:'ggrq' , align:'center' ,sortable:true}, 
                      { title:'结束日期', name:'jzrq' , align:'center' ,sortable:true}, 
-                    { title:'股票代码', name:'stockCode' , align:'center' },
+                    { title:'股票代码', name:'stockCode' , align:'center' , renderer: function(val,item,rowIndex){
+                        return '<a href="#" onclick = "openDiv(\''+item['stockCode']+'\')">'+val+'</a>' ;
+                    }},
                     { title:'股票名称', name:'stockName' , align:'center'},
                     { title:'每股收益', name:'mgsy' , align:'center',sortable:true},
                   /*  { title:'每股净资产', name:'mgsykc' , align:'center',sortable:true},  */
@@ -248,30 +252,48 @@
             }
 
             function openDiv(code){
-            	$('#code').val('min');
-            	$('#imgFen').attr('src' ,getPath(code));
-            	$('#myModal').modal('show');
+            	var pgBar = $('#pg2').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
+            	var cols = [
+                    { title:'公告日期', name:'ggrq' , align:'center' ,sortable:true}, 
+                     { title:'结束日期', name:'jzrq' , align:'center' ,sortable:true}, 
+                    { title:'股票代码', name:'stockCode' , align:'center'},
+                    { title:'股票名称', name:'stockName' , align:'center'},
+                    { title:'每股收益', name:'mgsy' , align:'center',sortable:true},
+                  /*  { title:'每股净资产', name:'mgsykc' , align:'center',sortable:true},  */
+                    { title:'上净利润', name:'sjlr' , align:'center',renderer: moformat,sortable:true},
+                    { title:'净利润', name:'jlr' , align:'center',renderer: moformat,sortable:true},
+                  /*   { title:'下净利润', name:'xjlr' , align:'center',renderer: moformat,sortable:true}, */
+                     { title:'上季度利润增长率', name:'jdzzl_before' , align:'center',renderer: fixed2,sortable:true},
+                    { title:'净利润增长率', name:'jdzzl' , align:'center',renderer: fixed2,sortable:true}
+                  /*   { title:'下季度利润增长率', name:'jlr_ycb' , align:'center',renderer: fixed2,sortable:true} */
+                ];
+            	
+            	var mmg2 = $('.mmg2').mmGrid({
+                    height: 'auto'
+                    , cols: cols
+                    , url: 'http://localhost:8080/report/getList?aaa=b&type=&datas='+'[{"must":"must","name":"stockCode","type":"=","value":"'+code+'"}]'
+                    , method: 'get'
+                    , remoteSort:true
+                    , sortName: 'ggrq'
+                    , sortStatus: 'asc'
+                    , fullWidthRows: true
+                    , autoLoad: false
+                    ,showBackboard:true
+                    , plugins: [
+                        pgBar
+                    ]
+                    , params: function(){
+                        //如果这里有验证，在验证失败时返回false则不执行AJAX查询。
+                      return {}
+                    }
+                });
+
+
+                mmg2.load();
+				$('#myModal').modal('show');
             }
 
-            function huan(type){
-            	var old = $('#code').val();
-            	var imgPath = $('#imgFen').attr('src');
-            	imgPath = imgPath.replace(old , type);
-            	$('#code').val(type);
-            	$('#imgFen').attr('src' ,imgPath);
-            }
-
-            function getPath(code){
-            	var timestamp = Date.parse(new Date());
-            	var path = 'http://image.sinajs.cn/newchart/min/n/';
-            	if(code.toString().substring(0,1) == 6){
-            		path = path +  'sh'+code+'.gif';
-            	}else{
-            		path = path +  'sz'+code+'.gif';
-            	}
-            	path = path + '?'+timestamp;
-            	return path;
-            }
+           
         </script>
     </body>
 </html>

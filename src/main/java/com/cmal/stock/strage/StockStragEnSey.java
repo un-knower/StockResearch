@@ -18,10 +18,16 @@
 
 package com.cmal.stock.strage;
 
+import io.searchbox.client.JestClient;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cmal.stock.storedata.StoreStrategySet;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.bean.StockStrategyInfo;
+import com.google.common.collect.Lists;
+import com.kers.esmodel.BaseCommonConfig;
 
 /**
  * <p>StockBaseInfoSet</p>
@@ -255,6 +261,8 @@ public class StockStragEnSey {
      * 计算连续上涨天数
      */
     private void computeUpDateNum(){
+    	final JestClient jestClient = BaseCommonConfig.clientConfig();
+    	List<StockStrategyInfo> list = Lists.newArrayList();
     	for (int i = 0; i < entries.size(); i++) {
     		StockBaseInfo StockBaseInfo = entries.get(i);
     		if(i == 0){
@@ -277,6 +285,17 @@ public class StockStragEnSey {
     			float upVom = entries.get(i-1).getVolume();
     			if(upVom != 0){
     				StockBaseInfo.setVolumeRises(StockBaseInfo.getVolume() / upVom);
+    				if(StockBaseInfo.getVolumeRises() > 2){
+    					StockStrategyInfo info = new StockStrategyInfo();
+    					info.setStockCode(StockBaseInfo.getStockCode());
+    					info.setStockName(StockBaseInfo.getStockName());
+    					info.setF1(upVom);
+    					info.setF2(StockBaseInfo.getVolume());
+    					info.setF3(Float.parseFloat(StockBaseInfo.getVolumeRises()+""));
+    					info.setType(1);
+    					info.setDate(StockBaseInfo.getDate());
+    					list.add(info);
+    				}
     			}
     			StockBaseInfo.setUpRises(upRises);
     			StockBaseInfo.setUpJ(upJ);
@@ -365,6 +384,14 @@ public class StockStragEnSey {
     		}
 //    		System.out.println(StockBaseInfo.getDate()+" 当天涨幅：" + StockBaseInfo.getRises() 
 //					+ " 上一天涨幅：" + StockBaseInfo.getNextRises());
+    	}
+    	if(list.size() > 0){
+    		try {
+				StoreStrategySet.insBatchEs(list, jestClient, "storestrateinfo");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     }
     

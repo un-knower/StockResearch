@@ -14,6 +14,7 @@ import org.elasticsearch.search.sort.SortOrder;
 
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.bean.StockStrategyInfo;
 import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.vo.StockBasePageInfo;
 import com.google.common.collect.Lists;
@@ -78,7 +79,7 @@ public class SelGetStock {
 		Map<String,Object> returnMap = Maps.newHashMap();
 		List<String> types= Lists.newArrayList();
 		System.out.println(type);
-		if(type.equals(",all")){//StringUtils.isEmpty(type)||type.equals(",")){
+		if(type.equals("2017")){//StringUtils.isEmpty(type)||type.equals(",")){
 			types.add("2017-09-30");
 			types.add("2017-06-30");
 			types.add("2017-03-31");
@@ -144,6 +145,37 @@ public class SelGetStock {
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
 		List<StoreTrailer> lstBean = results.getSourceAsObjectList(StoreTrailer.class);
+		if(lstBean!= null && lstBean.size() > 0){
+			Map hitsMap = (Map)results.getValue("hits");
+			if(hitsMap!=null){
+				Number total = (Number)hitsMap.get("total");
+				if(total!=null){
+					returnMap.put("totalCount", total.intValue());
+				}
+			}
+		}
+		returnMap.put("items", lstBean);
+		return returnMap;
+
+	} 
+	
+	public static Map<String,Object> getStaLstResult(BoolQueryBuilder query , StockBasePageInfo page , String type) throws Exception {
+		Map<String,Object> returnMap = Maps.newHashMap();
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
+		if(!StringUtils.isEmpty(page.getSort())){
+			String order = page.getSort().split("\\.")[1];
+			if(order.equalsIgnoreCase("desc")){
+				ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
+			}else{
+				ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
+			}
+		}
+		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, "storestrateinfo", type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
+		
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		JestResult results = jestClient.execute(selResult);
+		List<StockStrategyInfo> lstBean = results.getSourceAsObjectList(StockStrategyInfo.class);
 		if(lstBean!= null && lstBean.size() > 0){
 			Map hitsMap = (Map)results.getValue("hits");
 			if(hitsMap!=null){
