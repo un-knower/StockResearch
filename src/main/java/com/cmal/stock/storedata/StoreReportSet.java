@@ -50,7 +50,7 @@ public class StoreReportSet {
 		for(final String  sat:lstSource){
 			try {
 			String content = readTextReport(sat);
-			System.out.println(content);
+//			System.out.println(content);
 			List<EastReportBean> ls = retBeanLst(new Gson().fromJson(content, PaInfo.class).getData());
 			StoreTrailer tr = map.get(sat);
 			if(tr != null && ls.size() > 0){
@@ -155,17 +155,19 @@ public class StoreReportSet {
 //		 jdzzl_before = upbean.getJdzzl();
 //	 }
 	 if (i > 1) {
-	 jdzzl = Double.parseDouble(jlr) / Double.parseDouble(content[i -1].split(",")[7]);
-	 jdzzl = V(Double.parseDouble(content[i - 1].split(",")[7]) , Double.parseDouble(jlr) , jdzzl);
-	 sjlr = Double.parseDouble(content[i - 1].split(",")[7]);
+		 double   tfg=Double.parseDouble(content[i -1].split(",")[7]);
+	 jdzzl = Double.parseDouble(jlr) /(tfg==0?1:tfg) ;
+	 jdzzl = V(tfg , Double.parseDouble(jlr) , jdzzl);
+	 sjlr =tfg;
 	 }
 	 if (i > 2){
-		 jdzzl_before =(Double.parseDouble(content[i -1].split(",")[7]))/ Double.parseDouble(content[i -2].split(",")[7]);
-		 jdzzl_before = V(Double.parseDouble(content[i -2].split(",")[7]) , Double.parseDouble(content[i -1].split(",")[7]) , jdzzl_before);
+		 double   tfg2=Double.parseDouble(content[i -2].split(",")[7]);
+		 jdzzl_before =(Double.parseDouble(content[i -1].split(",")[7]))/(tfg2==0?1:tfg2) ;
+		 jdzzl_before = V(tfg2, Double.parseDouble(content[i -1].split(",")[7]) , jdzzl_before);
 	 }
 	 double jlr_ycb = 0;
 	 if (i < content.length - 1) {
-		 jlr_ycb = (Double.parseDouble(content[i +1].split(",")[7])) / Double.parseDouble(jlr);
+		 jlr_ycb = (Double.parseDouble(content[i +1].split(",")[7])) /  (Double.parseDouble(jlr)==0?1:Double.parseDouble(jlr));
 		 jlr_ycb = V(Double.parseDouble(jlr) , Double.parseDouble(content[i +1].split(",")[7]) , jlr_ycb);
 		 xjlr = Double.parseDouble(content[i +1].split(",")[7]);
 	 }
@@ -226,7 +228,7 @@ public class StoreReportSet {
 	
 	public static String readTextReport(String stockCode){
 		String reText = "";
-		List<String> list = TextUtil.readTxtFile("D://data//repoty//"+stockCode+".txt");
+		List<String> list = TextUtil.readTxtFile("/opt/stock/data/cnmarket/finalReport/rep_"+stockCode+".txt");
 		for (String string : list) {
 			reText = reText + string;
 		}

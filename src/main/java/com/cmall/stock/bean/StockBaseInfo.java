@@ -47,7 +47,7 @@ public class StockBaseInfo implements Serializable {
 	// 成交金额
 	private String cjje;
 	// 总市值
-	private String zsz;
+	private double zsz;
 	// 流通市值
 	private String ltsz;
 	// 成交笔数
@@ -367,7 +367,7 @@ public class StockBaseInfo implements Serializable {
 		this.stockCode = stockCode;
 		this.stockName = stockName;
 		this.hslv = hslv;
-		this.zsz = zsz;
+		this.zsz = Double.parseDouble(zsz);
 		this.ltsz = ltsz;
 		this.cjbs = cjbs;
 		this.dayForWeek = dayForWeek;
@@ -389,11 +389,11 @@ public class StockBaseInfo implements Serializable {
 		this.cjje = cjje;
 	}
 
-	public String getZsz() {
+	public Double getZsz() {
 		return zsz;
 	}
 
-	public void setZsz(String zsz) {
+	public void setZsz(Double zsz) {
 		this.zsz = zsz;
 	}
 

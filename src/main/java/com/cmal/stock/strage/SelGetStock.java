@@ -78,7 +78,7 @@ public class SelGetStock {
 	public static Map<String,Object> getReportLstResult(BoolQueryBuilder query , StockBasePageInfo page , String type) throws Exception {
 		Map<String,Object> returnMap = Maps.newHashMap();
 		List<String> types= Lists.newArrayList();
-		System.out.println(type);
+//		System.out.println(type);
 		if(type.equals("2017")){//StringUtils.isEmpty(type)||type.equals(",")){
 			types.add("2017-09-30");
 			types.add("2017-06-30");
@@ -107,12 +107,26 @@ public class SelGetStock {
 		}
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
 		System.out.println(searchSourceBuilder.toString());
-		System.out.println(types);
+//		System.out.println(types);
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, "storereport", types, (page.getPage()- 1) * page.getLimit() , page.getLimit());
 		
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
 		List<EastReportBean> lstBean = results.getSourceAsObjectList(EastReportBean.class);
+		
+		List<EastReportBean>  lstBean2 = Lists.newArrayList();
+		for(EastReportBean  beans:lstBean){
+			if(beans.getJdzzl_before()/beans.getJdzzl()<20){
+			if(beans.getJlr()<200000000){
+				if(beans.getJdzzl()>beans.getJdzzl_before()){
+					lstBean2.add(beans);
+				}
+			}else{
+				lstBean2.add(beans);
+			}
+			}
+		}
+//		lstBean=lstBean2;
 		if(lstBean!= null && lstBean.size() > 0){
 			Map hitsMap = (Map)results.getValue("hits");
 			if(hitsMap!=null){
@@ -122,6 +136,7 @@ public class SelGetStock {
 				}
 			}
 		}
+//		System.out.println(lstBean);
 		returnMap.put("items", lstBean);
 		return returnMap;
 

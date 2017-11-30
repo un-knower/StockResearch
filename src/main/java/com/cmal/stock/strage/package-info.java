@@ -38,4 +38,11 @@ package com.cmal.stock.strage;
  从下至上 macd转红    即DIFF<0  DEA<= 0  macd>0
  *
  *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */

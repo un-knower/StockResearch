@@ -118,25 +118,26 @@
                         var path = getPath(item['stockCode']);
                         return '<img src = "' +path+ '" onclick = "openDiv(\''+item['stockCode']+'\')">';
                     }},
-                    { title:'日期', name:'date' , align:'center' },
-                    { title:'股票代码', name:'stockCode' , align:'center' },
-                    { title:'股票名称', name:'stockName' , align:'center'},
-                    {title:'板块',name:'industry',sortable:true},
-                    {title:'开盘价',name:'open',sortable:true},
-                    {title:'收盘价',name:'close',sortable:true},
-                    { title:'前一日涨跌幅', name:'upRises' , align:'right',sortable:true,renderer: fixed2percentage},
-                    { title:'涨跌幅', name:'rises' , align:'right',renderer: fixed2percentage,sortable:true},
-                    { title:'后一日涨跌幅', name:'nextRises' , align:'right',renderer: fixed2percentage,sortable:true},
-                    { title:'连涨天数', name:'upDateNum' , align:'right',sortable:true},
-                    {title:'macd',name:'macd',renderer: fixed2,sortable:true},
-                    {title:'macd连涨天数',name:'macdNum',sortable:true},
-                    {title:'成交量比',name:'volumeRises',sortable:true,renderer: fixed2percentage},
-                    {title:'5日涨幅',name:'upSumRises5',sortable:true,renderer: fixed2percentage},
-                    {title:'10日涨幅',name:'upSumRises10',sortable:true,renderer: fixed2percentage},
-                    {title:'10日涨幅',name:'upSumRises10',sortable:true,renderer: fixed2percentage},
-                    {title:'dea',name:'dea',sortable:true,renderer: fixed2percentage},
-                    {title:'diff',name:'diff',sortable:true,renderer: fixed2percentage},
-                    {title:'总市值',name:'zsz',sortable:true,renderer: fixed2percentage}
+                    { title:'日期', name:'date',width:80 , align:'center' },
+                    { title:'股票代码', name:'stockCode' ,width:60, align:'center' },
+                    { title:'股票名称', name:'stockName' ,width:60, align:'center'},
+                    {title:'板块',name:'industry',width:60,sortable:true  },
+                    {title:'总市值',name:'zsz',width:70,sortable:true,renderer:moformat},
+                    /* {title:'开盘价',name:'open',width:40,sortable:true  }, */
+                   /*  {title:'收盘价',name:'close',width:40,sortable:true }, */
+                    { title:'前1涨幅',width:40, name:'upRises' , align:'right',sortable:true,renderer: fixed2percentage},
+                    { title:'涨跌幅', name:'rises',width:40 , align:'right',renderer: fixed2percentage,sortable:true},
+                    { title:'后1涨幅', name:'nextRises',width:40 , align:'right',renderer: fixed2percentage,sortable:true},
+                    { title:'连涨天数', name:'upDateNum' ,width:40, align:'right',sortable:true},
+                    {title:'macd',name:'macd',width:40,renderer: fixed2,sortable:true},
+                    {title:'macd连涨天数',width:60,name:'macdNum',sortable:true},
+                    {title:'成交量比',width:60,name:'volumeRises',sortable:true,renderer: fixed2percentage},
+                    {title:'5日涨幅',width:50,name:'upSumRises5',sortable:true,renderer: fixed2percentage},
+                    {title:'10日涨幅',width:50,name:'upSumRises10',sortable:true,renderer: fixed2percentage},
+                /*     {title:'10日涨幅',name:'upSumRises10',sortable:true,renderer: fixed2percentage}, */
+                    {title:'dea',name:'dea',width:40,sortable:true,renderer: fixed2percentage},
+                    {title:'diff',name:'diff',width:40,sortable:true,renderer: fixed2percentage}
+                   
                     
                 	
                     
@@ -276,6 +277,26 @@
             	path = path + '?'+timestamp;
             	return path;
             }
+            var   moformat=function(val){
+            	val=parseFloat(val);
+          	  if(typeof val != 'number'){
+                    return 'aaaa';
+                }
+          	  var   nnn=val/10000;
+        		   var   ccc="万";
+        		   if(Math.abs(nnn)>=10000){
+        			    nnn=nnn/10000;
+        			    ccc="亿";
+        		   }
+          	  
+          	   if(val > 0){
+          		    
+                   return '<span style="color: #b00">' + fixed2(nnn) +ccc+ '</span>';
+               }else if(val < 0){
+                   return '<span style="color: #0b0">' + fixed2(nnn) + ccc+'</span>';
+               }  
+          	
+          }
         </script>
     </body>
 </html>
