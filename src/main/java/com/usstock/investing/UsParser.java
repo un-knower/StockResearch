@@ -14,7 +14,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.Test;
 
 import com.cmall.stock.bean.CnInvRoot;
 import com.cmall.stock.bean.StockBaseInfo;
@@ -51,7 +50,7 @@ public class UsParser {
 //		System.out.println();
 		
 //	}
-	@Test
+	//@Test
 	public void testbase() throws ClientProtocolException, IOException{
 //		 Map<String,NasStockHis> mapSource= stockHistory("1y|false|MU");
 //	        System.out.println(mapSource);
@@ -121,7 +120,7 @@ public class UsParser {
 
 	
 	}
-//	@Test
+//	//@Test
 //	public void ttt() throws ClientProtocolException, IOException{
 //		 stockHistory("1y|false|"+"yumc","yumc");
 //	}
@@ -188,7 +187,7 @@ public class UsParser {
 	  
 	  
 	  
-	  @Test
+	  //@Test
 	  public   void  getStockCnParserInfo( String  stock) throws ClientProtocolException, IOException{
 //		  String stock ="QSR";
 //		  String url = "http://www.marketwatch.com/investing/Stock/"+stock+"/SecFilings?seqid=21&subview=all";
@@ -242,7 +241,7 @@ public class UsParser {
 //			System.out.println(content);
 //		}
 	 
-		@Test
+//		//@Test
 		 public void parser() throws IOException{
 			String path="/opt/workspace/splider/src/test/java/com/cmall/stock/data/needShareData";
 			String url="https://cn.investing.com/search/service/search";
@@ -272,7 +271,7 @@ public class UsParser {
 //				  }
 			 }
 			 }
-//	@Test
+//	//@Test
 //	@SuppressWarnings("all")
 //	public void testA() throws ClientProtocolException, IOException {
 //		  

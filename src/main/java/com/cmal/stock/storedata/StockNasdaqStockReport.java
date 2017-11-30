@@ -1,13 +1,6 @@
 package com.cmal.stock.storedata;
 
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.junit.Test;
-
 import com.cmall.stock.bean.CnInvRoot;
-import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.kers.httpmodel.BaseConnClient;
 
@@ -24,7 +17,7 @@ public class StockNasdaqStockReport {
           return null;
 	}
 	
-	@Test
+//	@Test
 	public void getMorehistory()throws Exception{
 		//https://cn.investing.com/equities/
 		System.out.println(getLinkUrl("momo"));

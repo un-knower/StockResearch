@@ -4,16 +4,12 @@
 	<groupId>com.kers.research</groupId>
 	<artifactId>stock</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<build />
+	<packaging>war</packaging>
 
 
-<!-- 	<parent> 
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.3.7.RELEASE</version>
-		<relativePath/> lookup parent from repository
-	</parent>
-	 -->
+	<!-- <parent> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-parent</artifactId> 
+		<version>1.3.7.RELEASE</version> <relativePath/> lookup parent from repository 
+		</parent> -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
@@ -27,24 +23,31 @@
 			<artifactId>spring-boot-starter</artifactId>
 			<version>1.3.7.RELEASE</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<version>1.3.7.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-starter-web</artifactId>
-	        <version>1.3.7.RELEASE</version>
-	    </dependency>
-	     <dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-devtools</artifactId>
-	        <version>1.3.7.RELEASE</version>
-	        <optional>true</optional>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>1.3.7.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<version>1.3.7.RELEASE</version>
+			<optional>true</optional>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-tomcat</artifactId>
+					<version>1.3.7.RELEASE</version>
+				<scope>provided</scope>
+			
 		</dependency>
 
 		<dependency>
@@ -214,6 +217,15 @@
 	</dependencies>
 
 
+	<build>
+	   <finalName>stock</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 	<distributionManagement>
 		<repository>
 			<id>deploySnapshot</id>
