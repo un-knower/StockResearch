@@ -24,18 +24,25 @@ import io.searchbox.core.Bulk;
 import io.searchbox.core.Index;
 
 public class StoreAstockEnReport {
-	static String cnFinalReportPath = FilePath.cnFinalReportPath;
+//	static String FilePath.cnFinalReportPath = FilePath.FilePath.cnFinalReportPath;
 
 	public static void writeFinalReport(String stockCode) throws ClientProtocolException, IOException {
 		String url = "http://datainterface.eastmoney.com/EM_DataCenter/JS.aspx?type=SR&sty=YJBB&code=" + stockCode
 				+ "&st=14&sr=1&p=1&ps=100&rt=50331436&";
 		url = url + "js={pages:(pc),data:[(x)]}";
 		String content = BaseConnClient.baseGetReq(url);
-		String wPath = cnFinalReportPath + "rep_" + stockCode + ".txt";
+		String wPath = FilePath.cnFinalReportPath + "rep_" + stockCode + ".txt";
 		FileUtils.write(new File(wPath), content);
 	}
+	public static void writeFinalReportDetail(String stockCode) throws ClientProtocolException, IOException {
+		String url = "http://quotes.money.163.com/service/cwbbzy_"+stockCode+".html" ;
+//		url = url + "js={pages:(pc),data:[(x)]}";
+		String content = BaseConnClient.baseGetReq(url);
+		String wPath = FilePath.cnFinalReportPathDetail  + stockCode + ".csv";
+		FileUtils.write(new File(wPath), content,"GBK");
+	}
 
-	public static void downReportInfofromUrl() throws IOException {
+	public static void downReportInfofromUrl(final String type) throws IOException {
 		List<String> fStr = CommonBaseStockInfo.getAllAStockInfo();// FileUtils.readLines(new
 																	// File("/opt/workspace/StockResearch/data/cnmarket/shareAstock"));
 		for (final String cStocksInfo : fStr) {
@@ -44,7 +51,10 @@ public class StoreAstockEnReport {
 				public void run() {
 					String stockCode = cStocksInfo.split(",")[0];
 					try {
+						if(type.equals("report"))
 						writeFinalReport(stockCode);
+						else if (type.equals("reportDetail"))
+							writeFinalReportDetail(stockCode);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -136,7 +146,8 @@ public class StoreAstockEnReport {
 
 	public static void main(String[] args) throws Exception {
 		
-		writeES();
+		downReportInfofromUrl("reportDetail");
+//		writeES();
 		
 		
 		
@@ -144,7 +155,7 @@ public class StoreAstockEnReport {
 		
 		
 		
-//		 File[] file  = new File(cnFinalReportPath).listFiles();
+//		 File[] file  = new File(FilePath.cnFinalReportPath).listFiles();
 //		 Map<String,String> maps=Maps.newConcurrentMap();
 //		  for(File  files:file){
 //			  if(files.getName().startsWith("rep_")){
@@ -221,7 +232,7 @@ public class StoreAstockEnReport {
 //	}
 
 	public static void writeES() throws Exception {
-		File[] files = new File(cnFinalReportPath).listFiles();
+		File[] files = new File(FilePath.cnFinalReportPath).listFiles();
 		// List<EastReportBean> lCCC = Lists.newArrayList();
 		 final  JestClient   jestClient=BaseCommonConfig.clientConfig();
 		Map<String, StoreTrailer> map = StoreTrailerSet.getAllTrailerMap(StoreTrailerSet.P_TYPE_2017_12_31);
