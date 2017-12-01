@@ -21,6 +21,7 @@ public class StoreTrailer implements Serializable{
 	private String type;
 	//净利润
 	private String netProfit;
+	private double jlr;
 	//开始时间
 	private String startDate;
 	//结束时间
@@ -84,6 +85,12 @@ public class StoreTrailer implements Serializable{
 	}
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+	public double getJlr() {
+		return jlr;
+	}
+	public void setJlr(double jlr) {
+		this.jlr = jlr;
 	}
 	
 	
