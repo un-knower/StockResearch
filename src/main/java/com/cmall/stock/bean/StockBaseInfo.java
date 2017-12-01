@@ -2,6 +2,8 @@ package com.cmall.stock.bean;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class StockBaseInfo implements Serializable {
 
 	/**
@@ -367,7 +369,7 @@ public class StockBaseInfo implements Serializable {
 		this.stockCode = stockCode;
 		this.stockName = stockName;
 		this.hslv = hslv;
-		this.zsz = Double.parseDouble(zsz);
+		this.zsz =StringUtils.isEmpty(zsz)?0: Double.parseDouble(zsz);
 		this.ltsz = ltsz;
 		this.cjbs = cjbs;
 		this.dayForWeek = dayForWeek;

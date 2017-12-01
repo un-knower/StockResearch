@@ -9,7 +9,9 @@ import io.searchbox.core.search.sort.Sort;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -58,6 +60,7 @@ public class StoreRealSet {
 			code = "0" + sat;
 		}
 		String content = StoreRealUrl(code);
+		System.out.println(content);
 		StockRealBean bean = getList(content , code);
 		return bean;
 	}
@@ -131,14 +134,14 @@ public class StoreRealSet {
 	}
 
 	public static void insBatchEs(List<StockRealBean> list, JestClient jestClient, String indexIns) throws Exception {
-
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		int i = 0;
 		Bulk.Builder bulkBuilder = new Bulk.Builder();
 		for (StockRealBean bean : list) {
 			i++;
 			// System.out.println(bean.getUnionId());
-			Index index = new Index.Builder(bean).index(indexIns).type("2017-11-13")
-					.id(bean.getSymbol() + bean.getUpdate().trim()).build();// type("walunifolia").build();
+			Index index = new Index.Builder(bean).index(indexIns).type(formatter.format(new Date()))
+					.id(bean.getSymbol() + formatter.format(new Date())).build();// type("walunifolia").build();
 			bulkBuilder.addAction(index);
 			if (i % 5000 == 0) {
 				jestClient.execute(bulkBuilder.build());

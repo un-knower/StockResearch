@@ -14,6 +14,7 @@ import org.elasticsearch.search.sort.SortOrder;
 
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.bean.StockRealBean;
 import com.cmall.stock.bean.StockStrategyInfo;
 import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.vo.StockBasePageInfo;
@@ -246,5 +247,37 @@ public class SelGetStock {
 		// return results.getSourceAsObject(UnionFotoliaBean.class);
 		// selResult.getData(gson)
 	}
+	
+	
+	public static Map<String,Object> getRealLstResult(BoolQueryBuilder query , StockBasePageInfo page , String type) throws Exception {
+		Map<String,Object> returnMap = Maps.newHashMap();
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
+		if(!StringUtils.isEmpty(page.getSort())){
+			String order = page.getSort().split("\\.")[1];
+			if(order.equalsIgnoreCase("desc")){
+				ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
+			}else{
+				ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
+			}
+		}
+		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, "stockrealinfo", type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
+		
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		JestResult results = jestClient.execute(selResult);
+		List<StockRealBean> lstBean = results.getSourceAsObjectList(StockRealBean.class);
+		if(lstBean!= null && lstBean.size() > 0){
+			Map hitsMap = (Map)results.getValue("hits");
+			if(hitsMap!=null){
+				Number total = (Number)hitsMap.get("total");
+				if(total!=null){
+					returnMap.put("totalCount", total.intValue());
+				}
+			}
+		}
+		returnMap.put("items", lstBean);
+		return returnMap;
+
+	} 
 
 }

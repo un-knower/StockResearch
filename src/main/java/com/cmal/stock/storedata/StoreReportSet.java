@@ -1,17 +1,15 @@
 package com.cmal.stock.storedata;
 
+import io.searchbox.client.JestClient;
+import io.searchbox.core.Bulk;
+import io.searchbox.core.Index;
+
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
@@ -21,14 +19,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.kers.esmodel.BaseCommonConfig;
-import com.kers.esmodel.UtilEs;
 import com.kers.httpmodel.BaseConnClient;
-
-import io.searchbox.client.JestClient;
-import io.searchbox.client.JestResult;
-import io.searchbox.core.Bulk;
-import io.searchbox.core.Index;
-import io.searchbox.core.Search;
 
 /**
  * 获取业绩报表数据
@@ -57,7 +48,7 @@ public class StoreReportSet {
 				EastReportBean bean = ls.get(0);
 //				if(StringUtils.isNumeric(tr.getNetProfit())){
 					
-					bean.setXjlr(Double.parseDouble(tr.getNetProfit()));
+					bean.setXjlr(tr.getJlr());
 					Double ycb = (bean.getXjlr()) / bean.getJlr();
 					ycb = V(bean.getJlr() ,bean.getXjlr() ,  ycb);
 					bean.setJlr_ycb(ycb);
@@ -228,7 +219,7 @@ public class StoreReportSet {
 	
 	public static String readTextReport(String stockCode){
 		String reText = "";
-		List<String> list = TextUtil.readTxtFile("/opt/stock/data/cnmarket/finalReport/rep_"+stockCode+".txt");
+		List<String> list = TextUtil.readTxtFile("D://data//repoty//"+stockCode+".txt");
 		for (String string : list) {
 			reText = reText + string;
 		}

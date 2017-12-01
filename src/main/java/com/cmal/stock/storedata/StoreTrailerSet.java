@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
@@ -64,6 +65,7 @@ public class StoreTrailerSet {
 			for (int i = 0; i < arr.size(); i++) {
 				Object o = arr.get(i);
 				StoreTrailer tr = getDate(o.toString());
+				tr.setJlr(getJlr(tr.getPerChanges()));
 				list.add(tr);
 			}
 		}
@@ -127,8 +129,54 @@ public class StoreTrailerSet {
 		JestResult results = jestClient.execute(selResult);
 		List<StoreTrailer> lstBean = results.getSourceAsObjectList(StoreTrailer.class);
 		for (StoreTrailer storeTrailer : lstBean) {
+			if(storeTrailer.getStockCode().equals("000063")){
+				System.out.println("123");
+			}
+			//storeTrailer.setJlr(getJlr(storeTrailer.getPerChanges()));
 			map.put(storeTrailer.getStockCode(), storeTrailer);
 		}
 		return map;
+	}
+	
+	public static double getJlr(String text){
+		//第一个有可能为负数
+		//第二个为--的时候才为负
+		//第二个为至-
+		//文字里面有亏损的需要乘以-1
+		boolean kui = false;
+		if(text.indexOf("亏损") > 0){
+			kui = true;
+		}
+		Pattern p = Pattern.compile("(-)?[0-9]+([.]{1}[0-9]+){0,1}万元");
+		java.util.regex.Matcher m = p.matcher(text);
+		double s1= -1;
+		double s2 = 0;
+		while(m.find()){
+			String reuslt = m.group(0);
+			if(s1 != -1){
+				s2 = Float.parseFloat(reuslt.replace("万元", "")) * 10000;
+				if(s2 < 0){
+					s2  = s2 * -1;
+				}
+				break;
+			}
+			s1 = Double.parseDouble(reuslt.replace("万元", "")) * 10000;
+			if(s1 < 0){
+				break;
+			}
+		};
+		if(s1 == -1){
+			return 0;
+		}
+		if(s2 == 0){
+			if(kui){
+				return s1 * -1;
+			}
+			return s1;
+		}
+		if(kui){
+			return (s2 + s1) / 2 * -1;
+		}
+		return (s2 + s1) / 2;
 	}
 }
