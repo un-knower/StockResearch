@@ -9,7 +9,6 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
 
-import com.cmall.baseutils.StringUtil;
 import com.cmall.stock.Controller.StoreReportController;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;

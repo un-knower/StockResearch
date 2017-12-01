@@ -27,7 +27,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.kers.esmodel.BaseCommonConfig;
 
 @Configuration
-@EnableScheduling // 启用定时任务
+//@EnableScheduling // 启用定时任务
 public class SchedulingConfig {
 
 	Logger logger = Logger.getLogger("chapter07");

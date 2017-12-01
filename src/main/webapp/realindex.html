@@ -124,14 +124,15 @@
                         var path = getPath(item['symbol']);
                         return '<img src = "' +path+ '" onclick = "openDiv(\''+item['symbol']+'\')">';
                     }},
-                    { title:'日期', name:'update',width:80 , align:'center' },
-                    { title:'股票代码', name:'symbol' ,width:60, align:'center' },
-                    { title:'股票名称', name:'name' ,width:60, align:'center'},
-                    { title:'涨幅', name:'percent' ,width:60, align:'center'},
-                    { title:'现价', name:'price' ,width:60, align:'center'},
-                    { title:'开盘价', name:'open' ,width:60, align:'center'},
-                   { title:'最高价', name:'high' ,width:60, align:'center'},
-                   { title:'最低价', name:'low' ,width:60, align:'center'}
+                    /* { title:'日期', name:'update',width:80 , align:'center' }, */
+                    { title:'股票代码', name:'symbol' ,width:60, align:'center' ,sortable:true},
+                    { title:'股票名称', name:'name' ,width:60, align:'center',sortable:true},
+                    { title:'涨幅', name:'percent' ,width:60, align:'center',sortable:true,renderer: fixed2percentage},
+                    { title:'现价', name:'price' ,width:60, align:'center',sortable:true},
+                    { title:'开盘价', name:'open' ,width:60, align:'center',sortable:true},
+                   { title:'最高价', name:'high' ,width:60, align:'center',sortable:true},
+                   { title:'最低价', name:'low' ,width:60, align:'center',sortable:true},
+                   { title:'成交量', name:'volume' ,width:60, align:'center',sortable:true},
                 ];
 
 				var mydate = new Date();
