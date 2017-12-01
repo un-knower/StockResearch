@@ -102,6 +102,13 @@ public class StockRealBean implements Serializable{
     private double yestclose;
     //成交额
     private double turnover;
+    
+    //上一天涨幅
+    private double upRises;
+    //上一天的量
+    private long upVolume; 
+    //量比
+    private Double volumeRises;
 
 	public String getCode() {
 		return code;
@@ -397,6 +404,30 @@ public class StockRealBean implements Serializable{
 
 	public void setTurnover(double turnover) {
 		this.turnover = turnover;
+	}
+
+	public double getUpRises() {
+		return upRises;
+	}
+
+	public long getUpVolume() {
+		return upVolume;
+	}
+
+	public void setUpRises(double upRises) {
+		this.upRises = upRises;
+	}
+
+	public void setUpVolume(long upVolume) {
+		this.upVolume = upVolume;
+	}
+
+	public Double getVolumeRises() {
+		return volumeRises;
+	}
+
+	public void setVolumeRises(Double volumeRises) {
+		this.volumeRises = volumeRises;
 	}
     
     

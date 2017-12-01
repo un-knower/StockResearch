@@ -417,13 +417,28 @@ public class StockBaseInfo implements Serializable {
 
 	@Override
 	public String toString() {
-		return "StockBaseInfo [date=" + date + ", rises=" + rises + ", stockCode=" + stockCode + ", stockName="
-				+ stockName + ", hslv=" + hslv + ", cjje=" + cjje + ", zsz=" + zsz + ", ltsz=" + ltsz + ", cjbs=" + cjbs
-				+ ", open=" + open + ", high=" + high + ", low=" + low + ", close=" + close + ", volume=" + volume
-				+ ", ma5=" + ma5 + ", ma10=" + ma10 + ", ma20=" + ma20 + ", volumeMa5=" + volumeMa5 + ", volumeMa10="
-				+ volumeMa10 + ", dea=" + dea + ", diff=" + diff + ", macd=" + macd + ", k=" + k + ", d=" + d + ", j="
-				+ j + ", rsi1=" + rsi1 + ", rsi2=" + rsi2 + ", rsi3=" + rsi3 + ", up=" + up + ", mb=" + mb + ", dn="
-				+ dn + "]";
+		return "StockBaseInfo [stockCode=" + stockCode + ", stockName="
+				+ stockName + ", industry=" + industry + ", date=" + date
+				+ ", upRises=" + upRises + ", rises=" + rises + ", nextRises="
+				+ nextRises + ", minRises3=" + minRises3 + ", minRises5="
+				+ minRises5 + ", minRises10=" + minRises10 + ", upDateNum="
+				+ upDateNum + ", upMacd=" + upMacd + ", macd=" + macd
+				+ ", nextMacd=" + nextMacd + ", upJ=" + upJ + ", j=" + j
+				+ ", j3=" + j3 + ", j5=" + j5 + ", nextJ=" + nextJ + ", area="
+				+ area + ", up5=" + up5 + ", up10=" + up10 + ", hslv=" + hslv
+				+ ", cjje=" + cjje + ", zsz=" + zsz + ", ltsz=" + ltsz
+				+ ", cjbs=" + cjbs + ", dea=" + dea + ", diff=" + diff
+				+ ", macdNum=" + macdNum + ", macdUp5=" + macdUp5
+				+ ", macdUp10=" + macdUp10 + ", sumMacdUp5=" + sumMacdUp5
+				+ ", sumMacdUp10=" + sumMacdUp10 + ", upSumRises5="
+				+ upSumRises5 + ", upSumRises10=" + upSumRises10 + ", k=" + k
+				+ ", d=" + d + ", open=" + open + ", high=" + high + ", low="
+				+ low + ", close=" + close + ", volume=" + volume
+				+ ", volumeRises=" + volumeRises + ", ma5=" + ma5 + ", ma10="
+				+ ma10 + ", ma20=" + ma20 + ", volumeMa5=" + volumeMa5
+				+ ", volumeMa10=" + volumeMa10 + ", rsi1=" + rsi1 + ", rsi2="
+				+ rsi2 + ", rsi3=" + rsi3 + ", up=" + up + ", mb=" + mb
+				+ ", dn=" + dn + ", dayForWeek=" + dayForWeek + "]";
 	}
 
 	public float retERRNAN(float num) {

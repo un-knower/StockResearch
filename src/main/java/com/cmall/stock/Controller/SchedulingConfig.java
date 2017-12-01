@@ -33,36 +33,50 @@ public class SchedulingConfig {
 	Logger logger = Logger.getLogger("chapter07");
 //	public static String path = "D://data//sto.txt";
 	
-	static ExecutorService executorServiceLocal = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(30));
+	public static ExecutorService executorServiceLocal = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(30));
+	
+	public static Map<String, StockBaseInfo> upMap;
 	
 	@Scheduled(cron = "0 0/1 * * * ?") // 每20秒执行一次
     public void scheduler() {
+		if(upMap == null){
+			final JestClient jestClient = BaseCommonConfig.clientConfig();
+			try {
+				upMap = StoreRealSet.getUpMap(jestClient);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		Calendar ncalendar = Calendar.getInstance();
 		int H = ncalendar.get(Calendar.HOUR_OF_DAY);
 		int M = ncalendar.get(Calendar.MINUTE);
-		logger.info("===========:"+H);
-		logger.info("===========:"+M);
-		System.out.println(H);
-		System.out.println(M);
-		boolean k = false;
-		if((H == 9 && M >= 30) || (H==10) || (H==11 && M <= 30) || (H==13) || (H==14)){
+		int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 1;
+		boolean k = true;
+		if(((H == 9 && M >= 30) || (H==10) || (H==11 && M <= 30) || (H==13) || (H==14)) 
+				&& w !=6 && w !=7){
 			k = true;
 		}else{
 			k = false;
 		}
-		System.out.println(k);
 		if(k){
 			try {
 				List<String> lstSource = TextUtil.readTxtFile(FilePath.path);
 				final JestClient jestClient = BaseCommonConfig.clientConfig();
+				final Map<String, StockBaseInfo> map = upMap;
 				 for (final String string : lstSource) {
 					executorServiceLocal.execute(new Thread(){
 						@Override
 						public void run() {
 					          try {
+					        	  StockBaseInfo info = map.get(string);
 					        	 List<StockRealBean> list = new ArrayList<StockRealBean>();
 					        	 StockRealBean real = StoreRealSet.getBeanByCode(string);
 					        	 real.setPercent(real.getPercent() * 100);
+					        	 if(info != null){
+					        		 real.setUpRises(info.getRises());
+					        		 real.setUpVolume(info.getVolume());
+					        		 real.setVolumeRises((double)real.getVolume() / (double)info.getVolume());
+					        	 }
 					        	 list.add(real);
 					        	 StoreRealSet.insBatchEs(list,jestClient,"stockrealinfo");
 							} catch (Exception e) {
@@ -78,10 +92,20 @@ public class SchedulingConfig {
 		
     }
 	
-	@Scheduled(cron = "0 05 16 * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 00 16 * * ?") // 每20秒执行一次
     public void updateInfo() {
 		try {
 			wDataRealToEs();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Scheduled(cron = "0 55 15 * * ?") // 每天9点20初始化数据
+    public void setMap() {
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		try {
+			upMap = StoreRealSet.getUpMap(jestClient);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

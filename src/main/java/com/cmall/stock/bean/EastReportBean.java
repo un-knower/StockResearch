@@ -45,6 +45,7 @@ public class EastReportBean   implements Serializable {
 	
 	// 净利润_同比增长[8]
 	private String jlr_tbzz;
+	private String jlr_tbzz_str;
 	// 净利润_季度环比[9]
 	private double jlr_hbzz;
 	
@@ -69,7 +70,10 @@ public class EastReportBean   implements Serializable {
 	//公布当天收盘价格   非工作日开盘后一天
 	private String currentPrice;
 	
-
+//	经营活动产生的现金流量净额(万元)
+	private String jyhdcsdxjllje;
+//	投资活动产生的现金流量净额(万元)
+	private String tzhdcsdxjllje;
 
 
 	public String getLrfp() {
@@ -339,6 +343,30 @@ public class EastReportBean   implements Serializable {
 				+ ", yysr_hbzz=" + yysr_hbzz + ", jlr_tbzz=" + jlr_tbzz + ", jlr_hbzz=" + jlr_hbzz + ", mgjzc=" + mgjzc
 				+ ", jzcsyl=" + jzcsyl + ", mgxjl=" + mgxjl + ", xsmll=" + xsmll + ", lrfp=" + lrfp + ", gxl=" + gxl
 				+ ", ggrq=" + ggrq + ", jzrq=" + jzrq + ", currentPrice=" + currentPrice + "]";
+	}
+
+	public String getJyhdcsdxjllje() {
+		return jyhdcsdxjllje;
+	}
+
+	public String getTzhdcsdxjllje() {
+		return tzhdcsdxjllje;
+	}
+
+	public void setJyhdcsdxjllje(String jyhdcsdxjllje) {
+		this.jyhdcsdxjllje = jyhdcsdxjllje;
+	}
+
+	public void setTzhdcsdxjllje(String tzhdcsdxjllje) {
+		this.tzhdcsdxjllje = tzhdcsdxjllje;
+	}
+
+	public String getJlr_tbzz_str() {
+		return jlr_tbzz_str;
+	}
+
+	public void setJlr_tbzz_str(String jlr_tbzz_str) {
+		this.jlr_tbzz_str = jlr_tbzz_str;
 	}
 
  

@@ -11,9 +11,12 @@ import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 
+import com.cmall.stock.Controller.SchedulingConfig;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.bean.StockReCupplement;
 import com.cmall.stock.bean.StoreTrailer;
+import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.TextUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -32,58 +35,61 @@ public class StoreReportSet {
 	
 	public static void main(String[] args) throws Exception {
 //		writeTextReport();
+//		ups();
 		
+		daoshuju();
+		
+		
+	}
+	
+	public static void daoshuju() throws Exception{
 		final JestClient  jestClient =BaseCommonConfig.clientConfig();
-		Map<String, StoreTrailer> map = StoreTrailerSet.getAllTrailerMap("2017-12-31");
+		final Map<String, StoreTrailer> map = StoreTrailerSet.getAllTrailerMap("2017-12-31");
 		
 		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
 //		List<EastReportBean> list = new ArrayList<EastReportBean>();
 		for(final String  sat:lstSource){
-			try {
-			String content = readTextReport(sat);
-//			System.out.println(content);
-			List<EastReportBean> ls = retBeanLst(new Gson().fromJson(content, PaInfo.class).getData());
-			StoreTrailer tr = map.get(sat);
-			if(tr != null && ls.size() > 0){
-				EastReportBean bean = ls.get(0);
-//				if(StringUtils.isNumeric(tr.getNetProfit())){
-					
-					bean.setXjlr(tr.getJlr());
-					Double ycb = (bean.getXjlr()) / bean.getJlr();
-					ycb = V(bean.getJlr() ,bean.getXjlr() ,  ycb);
-					bean.setJlr_ycb(ycb);
-//				}
-//				if(tr.getStartRangeability() == null){
-//					if(tr.getType().equals("预增") || tr.getType().equals("预盈")){
-//						bean.setJlr_ycb(1d);
-//					}else{
-//						bean.setJlr_ycb(-1d);
-//					}
-//				}else{
-//					bean.setJlr_ycb(tr.getStartRangeability());
-//					if(tr.getEndRangeability() != null && tr.getEndRangeability() != 0){
-//						bean.setJlr((tr.getStartRangeability() + tr.getEndRangeability())/2);
-//					}
-//				}
-			}
-			insBatchEs(ls , jestClient , "storereport");
-			} catch (Exception e) {
-				e.printStackTrace();
-				// TODO: handle exception
-			}
+			SchedulingConfig.executorServiceLocal.execute(new Thread(){
+				@Override
+				public void run() {
+					try {
+						String content = readTextReport(sat);
+						List<StockReCupplement> mapList = StoreAstockEnReport.readFinalReportDetail(sat);
+						Map<String, StockReCupplement> CuMap = Maps.newHashMap();
+						for (StockReCupplement stockReCupplement : mapList) {
+							CuMap.put(stockReCupplement.getBgq(), stockReCupplement);
+						}
+//						System.out.println(content);
+						List<EastReportBean> ls = retBeanLst(new Gson().fromJson(content, PaInfo.class).getData());
+						for (int i = 0; i < ls.size(); i++) {
+							EastReportBean bean = ls.get(i);
+							if(i == 0){
+								StoreTrailer tr = map.get(sat);
+								if(tr != null && ls.size() > 0){
+									bean.setXjlr(tr.getJlr());
+									Double ycb = (bean.getXjlr()) / bean.getJlr();
+									ycb = V(bean.getJlr() ,bean.getXjlr() ,  ycb);
+									bean.setJlr_ycb(ycb);
+									bean.setJlr_tbzz(tr.getStartRangeability() +"");
+									bean.setJlr_tbzz_str(tr.getRangeability());
+								}
+							}
+							StockReCupplement cu = CuMap.get(bean.getJzrq());
+							if(cu != null){
+								bean.setJyhdcsdxjllje(cu.getJyhdcsdxjllje());
+								bean.setTzhdcsdxjllje(cu.getTzhdcsdxjllje());
+							}
+							
+						}
+						
+						insBatchEs(ls , jestClient , "storereport");
+						} catch (Exception e) {
+							e.printStackTrace();
+							// TODO: handle exception
+						}
+					}
+			});
 		}
-		
-		
-//		final JestClient  jestClient =BaseCommonConfig.clientConfig();
-//		for (int i = 0; i < 25; i++) {
-//			String content = StoreTrailerUrl(i);
-//			List<EastReportBean> lstResult = retBeanLst(new Gson().fromJson(content, PaInfo.class).getData());
-//			//List<EastReportBean> list = getList(content);
-//			//保存es
-//			insBatchEs(lstResult , jestClient , "storereport");
-//		}
-		
-		//System.out.println(content);
 	}
 	
 	public static String writeFinalReport(String stockCode) throws ClientProtocolException, IOException {
@@ -208,6 +214,54 @@ public class StoreReportSet {
 		 //jestClient.shutdownClient();
 	 }
 	
+	public static void ups(){
+		List<String> lstSource = TextUtil.readTxtFile(FilePath.path);
+		final JestClient  jestClient =BaseCommonConfig.clientConfig();
+		for(final String  sat:lstSource){
+			CommonBaseStockInfo.executorServiceLocal.execute(new Thread(){
+				@Override
+				public void run() {
+					try {
+						List<StockReCupplement> list =StoreAstockEnReport.readFinalReportDetail(sat);
+						try {
+							UpsBatchEs(list,jestClient,"storereport");
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+	}
+	
+	public static void UpsBatchEs(List<StockReCupplement> list,JestClient jestClient,String  indexIns) throws Exception{
+		  int i =0;
+		  Bulk.Builder bulkBuilder = new Bulk.Builder();
+		 for(StockReCupplement bean:list){
+			   
+			   try {
+				   i++;
+				   Index index =new Index.Builder(bean).index(indexIns).type(bean.getBgq()).id(bean.getStockCode()+bean.getBgq()).build();//type("walunifolia").build();
+					 bulkBuilder.addAction(index);
+					 if(i%5000==0){
+						 jestClient.execute(bulkBuilder.build());
+						 bulkBuilder = new   Bulk.Builder();
+					 }
+					 jestClient.execute(bulkBuilder.build());
+			} catch (Exception e) {
+				
+				System.out.println(bean.toString());
+				e.printStackTrace();
+			}
+			
+		 	}
+
+		 //jestClient.shutdownClient();
+	 }
 	
 	public static void writeTextReport() throws IOException{
 		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();

@@ -9,10 +9,15 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
 
+import com.cmall.baseutils.StringUtil;
+import com.cmall.stock.Controller.StoreReportController;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.bean.StockReCupplement;
 import com.cmall.stock.bean.StoreTrailer;
+import com.cmall.stock.utils.CsvHandUtils;
 import com.cmall.stock.utils.FilePath;
+import com.cmall.stock.utils.TextUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -40,6 +45,71 @@ public class StoreAstockEnReport {
 		String content = BaseConnClient.baseGetReq(url);
 		String wPath = FilePath.cnFinalReportPathDetail  + stockCode + ".csv";
 		FileUtils.write(new File(wPath), content,"GBK");
+	}
+	
+	public static List<StockReCupplement> readFinalReportDetail(String stockCode) throws IOException{
+		String absPath = FilePath.cnFinalReportPathDetail + stockCode + ".csv";
+		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
+		List<List<String>> lstSource = csvHandUtils.readCSVFile();
+		List<StockReCupplement> reList = Lists.newArrayList();
+		if(lstSource.size() >= 24){
+			List<String> str = lstSource.get(0);
+			for (int i = 1; i < str.size(); i++) {
+				if( i >= lstSource.get(1).size()|| i >= lstSource.get(2).size()
+						|| i >= lstSource.get(3).size()
+						|| i >= lstSource.get(4).size()
+						|| i >= lstSource.get(5).size()
+						|| i >= lstSource.get(6).size()
+						|| i >= lstSource.get(7).size()
+						|| i >= lstSource.get(8).size()
+						|| i >= lstSource.get(9).size()
+						|| i >= lstSource.get(10).size()
+						|| i >= lstSource.get(11).size()
+						|| i >= lstSource.get(12).size()
+						|| i >= lstSource.get(13).size()
+						|| i >= lstSource.get(14).size()
+						|| i >= lstSource.get(15).size()
+						|| i >= lstSource.get(16).size()
+						|| i >= lstSource.get(17).size()
+						|| i >= lstSource.get(18).size()
+						|| i >= lstSource.get(19).size()
+						|| i >= lstSource.get(20).size()
+						|| i >= lstSource.get(21).size()
+						|| i >= lstSource.get(22).size()
+						|| i >= lstSource.get(23).size()){
+					break;
+				}
+				StockReCupplement cu = new StockReCupplement(
+						stockCode,
+						lstSource.get(0).get(i),
+						lstSource.get(1).get(i),
+						lstSource.get(2).get(i),
+						lstSource.get(3).get(i),
+						lstSource.get(4).get(i),
+						lstSource.get(5).get(i),
+						lstSource.get(6).get(i),
+						lstSource.get(7).get(i),
+						lstSource.get(8).get(i),
+						lstSource.get(9).get(i),
+						lstSource.get(10).get(i),
+						lstSource.get(11).get(i),
+						lstSource.get(12).get(i),
+						lstSource.get(13).get(i),
+						lstSource.get(14).get(i),
+						lstSource.get(15).get(i),
+						lstSource.get(16).get(i),
+						lstSource.get(17).get(i),
+						lstSource.get(18).get(i),
+						lstSource.get(19).get(i),
+						lstSource.get(20).get(i),
+						lstSource.get(21).get(i),
+						lstSource.get(22).get(i),
+						lstSource.get(23).get(i));
+//				System.out.println(cu);
+				reList.add(cu);
+			}
+		}
+		return reList;
 	}
 
 	public static void downReportInfofromUrl(final String type) throws IOException {
@@ -146,14 +216,8 @@ public class StoreAstockEnReport {
 
 	public static void main(String[] args) throws Exception {
 		
-		downReportInfofromUrl("reportDetail");
+//		downReportInfofromUrl("reportDetail");
 //		writeES();
-		
-		
-		
-		
-		
-		
 		
 //		 File[] file  = new File(FilePath.cnFinalReportPath).listFiles();
 //		 Map<String,String> maps=Maps.newConcurrentMap();
