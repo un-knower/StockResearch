@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 
+import com.cmall.baseutils.StringUtil;
 import com.cmall.stock.Controller.SchedulingConfig;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
@@ -76,8 +77,16 @@ public class StoreReportSet {
 							}
 							StockReCupplement cu = CuMap.get(bean.getJzrq());
 							if(cu != null){
-								bean.setJyhdcsdxjllje(cu.getJyhdcsdxjllje());
-								bean.setTzhdcsdxjllje(cu.getTzhdcsdxjllje());
+								if(StringUtil.isNumeric(cu.getJyhdcsdxjllje())){
+									bean.setJyhdcsdxjllje(Double.parseDouble(cu.getJyhdcsdxjllje()) * 10000);
+								}
+								if(StringUtil.isNumeric(cu.getTzhdcsdxjllje())){
+									bean.setTzhdcsdxjllje(Double.parseDouble(cu.getTzhdcsdxjllje()) * 10000);
+								}
+								
+								if(bean.getTzhdcsdxjllje() != 0){
+									bean.setTzb((bean.getJyhdcsdxjllje() - bean.getTzhdcsdxjllje()) / bean.getTzhdcsdxjllje());
+								}
 							}
 							
 						}
@@ -289,6 +298,7 @@ public class StoreReportSet {
 		}
 		return value;
 	}
+	
 }
 
 

@@ -71,11 +71,11 @@ public class EastReportBean   implements Serializable {
 	private String currentPrice;
 	
 //	经营活动产生的现金流量净额(万元)
-	private String jyhdcsdxjllje;
+	private double jyhdcsdxjllje = 0;
 //	投资活动产生的现金流量净额(万元)
-	private String tzhdcsdxjllje;
-
-
+	private double tzhdcsdxjllje = 0;
+	//touzibi
+	private double tzb;
 	public String getLrfp() {
 		return lrfp;
 	}
@@ -345,20 +345,30 @@ public class EastReportBean   implements Serializable {
 				+ ", ggrq=" + ggrq + ", jzrq=" + jzrq + ", currentPrice=" + currentPrice + "]";
 	}
 
-	public String getJyhdcsdxjllje() {
+	
+
+	public double getJyhdcsdxjllje() {
 		return jyhdcsdxjllje;
 	}
 
-	public String getTzhdcsdxjllje() {
+	public double getTzhdcsdxjllje() {
 		return tzhdcsdxjllje;
 	}
 
-	public void setJyhdcsdxjllje(String jyhdcsdxjllje) {
+	public double getTzb() {
+		return tzb;
+	}
+
+	public void setJyhdcsdxjllje(double jyhdcsdxjllje) {
 		this.jyhdcsdxjllje = jyhdcsdxjllje;
 	}
 
-	public void setTzhdcsdxjllje(String tzhdcsdxjllje) {
+	public void setTzhdcsdxjllje(double tzhdcsdxjllje) {
 		this.tzhdcsdxjllje = tzhdcsdxjllje;
+	}
+
+	public void setTzb(double tzb) {
+		this.tzb = tzb;
 	}
 
 	public String getJlr_tbzz_str() {

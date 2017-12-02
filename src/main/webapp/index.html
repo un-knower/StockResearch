@@ -50,9 +50,11 @@
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body style="padding: 40px;">
-    	<a href = "/storereport.html">storereport</a> <a href = "/storetrailer.html">storetrailer</a> 
-    	<a href = "/storesta.html">查看策略</a> 
-    	<a href = "/realindex.html">实时数据</a>
+    	<a href = "/stock/">首页</a> 
+    	<a href = "/stock/storereport.html">storereport</a> 
+    	<a href = "/stock/storetrailer.html">storetrailer</a> 
+    	<a href = "/stock/storesta.html">查看策略</a> 
+    	<a href = "/stock/realindex.html">实时数据</a>
         <main>
             <div style="margin-bottom: 5px;">
                 <div style="text-align: center;">
@@ -89,6 +91,44 @@
 			    </div>
 			  </div>
 			</div>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="jiaModal" tabindex="-1" role="dialog" aria-labelledby="加自选">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">加自选</h4>
+			      </div>
+			      <div class="modal-body">
+			      	<form>
+					  <div class="form-group">
+					    <label for="exampleInputEmail1">类型</label>
+					    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+					  </div>
+					  <div class="form-group">
+					    <label for="exampleInputPassword1">Password</label>
+					    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+					  </div>
+					  <div class="form-group">
+					    <label for="exampleInputFile">File input</label>
+					    <input type="file" id="exampleInputFile">
+					    <p class="help-block">Example block-level help text here.</p>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox"> Check me out
+					    </label>
+					  </div>
+					  <button type="submit" class="btn btn-default">Submit</button>
+					</form>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">关</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
         </main>
 
         <script src="js/vendor/jquery-1.9.1.min.js"></script>
@@ -103,7 +143,7 @@
             $(document).ready(function(){
                 $.ajax({  
                     type : "GET",  //提交方式  
-                    url : "http://localhost:8080/getClassNameList",//路径  
+                    url : "http://localhost:8080/stock/getClassNameList",//路径  
                     data : {},//数据，这里使用的是Json格式进行传输  
                     success : function(result) {//返回数据根据结果进行相应的处理  
                         classNames =  result;
@@ -137,9 +177,11 @@
                     {title:'10日涨幅',width:50,name:'upSumRises10',sortable:true,renderer: fixed2percentage},
                 /*     {title:'10日涨幅',name:'upSumRises10',sortable:true,renderer: fixed2percentage}, */
                     {title:'dea',name:'dea',width:40,sortable:true,renderer: fixed2percentage},
-                    {title:'diff',name:'diff',width:40,sortable:true,renderer: fixed2percentage}
+                    {title:'diff',name:'diff',width:40,sortable:true,renderer: fixed2percentage},
                    
-                    
+                    {title:'操作',name:'',width:50,renderer: function(val,item,rowIndex){
+                        return ' <button type="button" class="btn btn-primary btn-xs" onclick = "openzi()">加</button>';
+                    }}
                 	
                     
                     /* {title:'5日成交量',name:'volumeMa5',sortable:true},
@@ -160,7 +202,7 @@
                 var mmg = $('.mmg').mmGrid({
                     height: 'auto'
                     , cols: cols
-                    , url: 'http://localhost:8080/getList'
+                    , url: 'http://localhost:8080/stock/getList'
                     , method: 'get'
                     , remoteSort:true
                     , sortName: 'close'
@@ -297,6 +339,10 @@
                    return '<span style="color: #0b0">' + fixed2(nnn) + ccc+'</span>';
                }  
           	
+          }
+          
+          function openzi(){
+          	$('#jiaModal').modal('show');
           }
         </script>
     </body>

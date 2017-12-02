@@ -280,4 +280,22 @@ public class SelGetStock {
 
 	} 
 
+	
+	public static EastReportBean getReportInfo(BoolQueryBuilder query) throws Exception {
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
+//		ssb.sort("jzrq",SortOrder.DESC);
+		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, "storereport", "match_all", 0 , 10);
+//		System.out.println(selResult.toString());
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		JestResult results = jestClient.execute(selResult);
+		System.out.println(results.getJsonString());
+		List<EastReportBean> lstBean = results.getSourceAsObjectList(EastReportBean.class);
+		if(lstBean.size() > 0){
+			return lstBean.get(0);
+		}
+		return null;
+
+	}
+	
 }

@@ -29,6 +29,13 @@ public class StoreReportController {
         return SelGetStock.getReportLstResult(query,page,type);
     }
     
+    @RequestMapping("/report/getInfo")
+    public EastReportBean getInfo( String stockCode) throws Exception {
+    	BoolQueryBuilder query = QueryBuilders.boolQuery();
+    	query.must(QueryBuilders.termQuery("stockCode", stockCode));
+        return SelGetStock.getReportInfo(query);
+    }
+    
     @RequestMapping("/report/getClassNameList")
     public String[] getClassNameList() throws Exception {
     	EastReportBean info = new EastReportBean();
