@@ -27,7 +27,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.kers.esmodel.BaseCommonConfig;
 
 @Configuration
-@EnableScheduling // 启用定时任务
+//@EnableScheduling // 启用定时任务
 public class SchedulingConfig {
 
 	Logger logger = Logger.getLogger("chapter07");
@@ -40,7 +40,6 @@ public class SchedulingConfig {
 	@Scheduled(cron = "0 0/1 * * * ?") // 每20秒执行一次
     public void scheduler() {
 		if(upMap == null){
-			System.out.println("初始化数据");
 			final JestClient jestClient = BaseCommonConfig.clientConfig();
 			try {
 				upMap = StoreRealSet.getUpMap(jestClient);

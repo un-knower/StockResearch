@@ -44,7 +44,9 @@ public class EastReportBean   implements Serializable {
 	private double yysr_hbzz;
 	
 	// 净利润_同比增长[8]
-	private String jlr_tbzz;
+	private double jlr_tbzz;
+	//下级同比增长
+	private double jlr_tbzz_xjd;
 	private String jlr_tbzz_str;
 	// 净利润_季度环比[9]
 	private double jlr_hbzz;
@@ -71,11 +73,11 @@ public class EastReportBean   implements Serializable {
 	private String currentPrice;
 	
 //	经营活动产生的现金流量净额(万元)
-	private double jyhdcsdxjllje = 0;
+	private String jyhdcsdxjllje;
 //	投资活动产生的现金流量净额(万元)
-	private double tzhdcsdxjllje = 0;
-	//touzibi
-	private double tzb;
+	private String tzhdcsdxjllje;
+
+
 	public String getLrfp() {
 		return lrfp;
 	}
@@ -129,24 +131,20 @@ public class EastReportBean   implements Serializable {
 		this.mgsykc = Double.parseDouble(mgsykc);
 		this.yysr = Double.parseDouble(yysr);
 		this.yysr_tbzz = yysr_tbzz;
-		if(StringUtils.isNumeric(yysr_hbzz)){
-			this.yysr_hbzz = Double.parseDouble(yysr_hbzz);
-		}
-		this.jlr = Double.parseDouble(jlr);
-		this.jlr_tbzz = jlr_tbzz;
-		if(StringUtils.isNumeric(jlr_hbzz)){
-			this.jlr_hbzz = Double.parseDouble(jlr_hbzz);
-		}
-		if(StringUtils.isNumeric(mgjzc)){
-			this.mgjzc = Double.parseDouble(mgjzc);
-		}
+		this.yysr_hbzz = parseDouble(yysr_hbzz);
+		this.jlr =parseDouble(jlr);
+		
+//		this.jlr_tbzz =StringUtils.isNumeric(jlr_tbzz)?Double.parseDouble(jlr_tbzz):0;
+//		System.out.println("bean+"+jlr_tbzz);
+//		if(StringUtils.isNumeric(jlr_tbzz)){
+//			System.out.println("bbb"+jlr_tbzz);
+			this.jlr_tbzz = parseDouble(jlr_tbzz);
+//		}
+			this.jlr_hbzz = parseDouble(jlr_hbzz);
+			this.mgjzc = parseDouble(mgjzc);
 		this.jzcsyl = jzcsyl;
-		if(StringUtils.isNumeric(mgxjl)){
-			this.mgxjl = Double.parseDouble(mgxjl);
-		}
-		if(StringUtils.isNumeric(xsmll)){
-			this.xsmll = Double.parseDouble(xsmll);
-		}
+			this.mgxjl = parseDouble(mgxjl);
+			this.xsmll = parseDouble(xsmll);
 		
 		this.lrfp = lrfp;
 		this.gxl = gxl;
@@ -259,11 +257,11 @@ public class EastReportBean   implements Serializable {
 
 	
 
-	public String getJlr_tbzz() {
+	public double getJlr_tbzz() {
 		return jlr_tbzz;
 	}
 
-	public void setJlr_tbzz(String jlr_tbzz) {
+	public void setJlr_tbzz(double jlr_tbzz) {
 		this.jlr_tbzz = jlr_tbzz;
 	}
 
@@ -345,30 +343,20 @@ public class EastReportBean   implements Serializable {
 				+ ", ggrq=" + ggrq + ", jzrq=" + jzrq + ", currentPrice=" + currentPrice + "]";
 	}
 
-	
-
-	public double getJyhdcsdxjllje() {
+	public String getJyhdcsdxjllje() {
 		return jyhdcsdxjllje;
 	}
 
-	public double getTzhdcsdxjllje() {
+	public String getTzhdcsdxjllje() {
 		return tzhdcsdxjllje;
 	}
 
-	public double getTzb() {
-		return tzb;
-	}
-
-	public void setJyhdcsdxjllje(double jyhdcsdxjllje) {
+	public void setJyhdcsdxjllje(String jyhdcsdxjllje) {
 		this.jyhdcsdxjllje = jyhdcsdxjllje;
 	}
 
-	public void setTzhdcsdxjllje(double tzhdcsdxjllje) {
+	public void setTzhdcsdxjllje(String tzhdcsdxjllje) {
 		this.tzhdcsdxjllje = tzhdcsdxjllje;
-	}
-
-	public void setTzb(double tzb) {
-		this.tzb = tzb;
 	}
 
 	public String getJlr_tbzz_str() {
@@ -379,7 +367,23 @@ public class EastReportBean   implements Serializable {
 		this.jlr_tbzz_str = jlr_tbzz_str;
 	}
 
+	public double getJlr_tbzz_xjd() {
+		return jlr_tbzz_xjd;
+	}
+
+	public void setJlr_tbzz_xjd(double jlr_tbzz_xjd) {
+		this.jlr_tbzz_xjd = jlr_tbzz_xjd;
+	}
+
  
-	
+	public   double   parseDouble(String  str){
+		try {
+			 return Double.parseDouble(str);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return 0;
+		
+	}
 
 }

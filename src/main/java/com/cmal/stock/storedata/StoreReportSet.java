@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 
-import com.cmall.baseutils.StringUtil;
 import com.cmall.stock.Controller.SchedulingConfig;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
@@ -48,6 +47,7 @@ public class StoreReportSet {
 		final Map<String, StoreTrailer> map = StoreTrailerSet.getAllTrailerMap("2017-12-31");
 		
 		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
+//		lstSource=Lists.newArrayList("000001");
 //		List<EastReportBean> list = new ArrayList<EastReportBean>();
 		for(final String  sat:lstSource){
 			SchedulingConfig.executorServiceLocal.execute(new Thread(){
@@ -71,22 +71,14 @@ public class StoreReportSet {
 									Double ycb = (bean.getXjlr()) / bean.getJlr();
 									ycb = V(bean.getJlr() ,bean.getXjlr() ,  ycb);
 									bean.setJlr_ycb(ycb);
-									bean.setJlr_tbzz(tr.getStartRangeability() +"");
+									bean.setJlr_tbzz_xjd(tr.getStartRangeability()==null?0:tr.getStartRangeability());
 									bean.setJlr_tbzz_str(tr.getRangeability());
 								}
 							}
 							StockReCupplement cu = CuMap.get(bean.getJzrq());
 							if(cu != null){
-								if(StringUtil.isNumeric(cu.getJyhdcsdxjllje())){
-									bean.setJyhdcsdxjllje(Double.parseDouble(cu.getJyhdcsdxjllje()) * 10000);
-								}
-								if(StringUtil.isNumeric(cu.getTzhdcsdxjllje())){
-									bean.setTzhdcsdxjllje(Double.parseDouble(cu.getTzhdcsdxjllje()) * 10000);
-								}
-								
-								if(bean.getTzhdcsdxjllje() != 0){
-									bean.setTzb((bean.getJyhdcsdxjllje() - bean.getTzhdcsdxjllje()) / bean.getTzhdcsdxjllje());
-								}
+								bean.setJyhdcsdxjllje(cu.getJyhdcsdxjllje());
+								bean.setTzhdcsdxjllje(cu.getTzhdcsdxjllje());
 							}
 							
 						}
@@ -133,6 +125,7 @@ public class StoreReportSet {
 		 EastReportBean upbean = null;
 	 for (int i = content.length -1; i >= 0; i--) {
 	 String arrayconent[] = content[i].split(",");
+//	 System.out.println(arrayconent);
 	 String stockCode = arrayconent[0];
 	 String stockName = arrayconent[1];
 	 String mgsy = arrayconent[2];
@@ -177,6 +170,7 @@ public class StoreReportSet {
 		 jlr_ycb = V(Double.parseDouble(jlr) , Double.parseDouble(content[i +1].split(",")[7]) , jlr_ycb);
 		 xjlr = Double.parseDouble(content[i +1].split(",")[7]);
 	 }
+//	 System.out.println(jlr_tbzz);
 	 StockBaseInfo baseInfo = (maps == null ? null
 	 : StoreAstockTradInfo.getStockContinuePrice(maps, ggrq, true));
 	 String currentPrice = baseInfo == null ? "null" : baseInfo.getClose()+"";
@@ -190,6 +184,7 @@ public class StoreReportSet {
 	 eastReportBean.setJlr_ycb(jlr_ycb);
 	 eastReportBean.setSjlr(sjlr);
 	 eastReportBean.setXjlr(xjlr);
+//	 eastReportBean.setJlr_tbzz(jlr_tbzz);
 	 eastReportBean.setJdzzl_before(jdzzl_before);
 	 lstRestlt.add(eastReportBean);
 	 upbean = eastReportBean;
@@ -276,13 +271,13 @@ public class StoreReportSet {
 		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
 		for(final String  sat:lstSource){
 			String content = writeFinalReport(sat);
-			TextUtil.writerTxt("D://data//repoty//"+sat+".txt", content);
+			TextUtil.writerTxt(FilePath.cnFinalReportPath+sat+".txt", content);
 		}
 	}
 	
 	public static String readTextReport(String stockCode){
 		String reText = "";
-		List<String> list = TextUtil.readTxtFile("D://data//repoty//"+stockCode+".txt");
+		List<String> list = TextUtil.readTxtFile(FilePath.cnFinalReportPath+"rep_"+stockCode+".txt");
 		for (String string : list) {
 			reText = reText + string;
 		}
@@ -298,7 +293,6 @@ public class StoreReportSet {
 		}
 		return value;
 	}
-	
 }
 
 

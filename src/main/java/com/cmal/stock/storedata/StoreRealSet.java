@@ -211,7 +211,7 @@ public class StoreRealSet {
 		        list =  result.getSourceAsObjectList(StockBaseInfo.class);
 		}
 		for (StockBaseInfo stockBaseInfo : list) {
-//			System.out.println(stockBaseInfo.toString());
+			System.out.println(stockBaseInfo.toString());
 			map.put(stockBaseInfo.getStockCode(), stockBaseInfo);
 		}
         return map;

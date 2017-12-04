@@ -80,7 +80,8 @@ public class SelGetStock {
 		Map<String,Object> returnMap = Maps.newHashMap();
 		List<String> types= Lists.newArrayList();
 //		System.out.println(type);
-		if(type.equals("2017")){//StringUtils.isEmpty(type)||type.equals(",")){
+		
+		if(type.equals(",all")){//StringUtils.isEmpty(type)||type.equals(",")){
 			types.add("2017-09-30");
 			types.add("2017-06-30");
 			types.add("2017-03-31");
@@ -94,6 +95,56 @@ public class SelGetStock {
 			types.add("2015-09-30");
 			types.add("2015-06-30");
 			types.add("2015-03-31");
+			
+			types.add("2015-12-31");
+			types.add("2015-09-30");
+			types.add("2015-06-30");
+			types.add("2015-03-31");
+			
+			types.add("2014-12-31");
+			types.add("2014-09-30");
+			types.add("2014-06-30");
+			types.add("2014-03-31");
+			
+			types.add("2013-12-31");
+			types.add("2013-09-30");
+			types.add("2013-06-30");
+			types.add("2013-03-31");
+			
+			types.add("2012-12-31");
+			types.add("2012-09-30");
+			types.add("2012-06-30");
+			types.add("2012-03-31");
+			
+			types.add("2012-12-31");
+			types.add("2012-09-30");
+			types.add("2012-06-30");
+			types.add("2012-03-31");
+			
+			types.add("2011-12-31");
+			types.add("2011-09-30");
+			types.add("2011-06-30");
+			types.add("2011-03-31");
+			
+			types.add("2010-12-31");
+			types.add("2010-09-30");
+			types.add("2010-06-30");
+			types.add("2010-03-31");
+			
+			types.add("2009-12-31");
+			types.add("2009-09-30");
+			types.add("2009-06-30");
+			types.add("2009-03-31");
+			
+			types.add("2008-12-31");
+			types.add("2008-09-30");
+			types.add("2008-06-30");
+			types.add("2008-03-31");
+			
+			types.add("2007-12-31");
+			types.add("2007-09-30");
+			types.add("2007-06-30");
+			types.add("2007-03-31");
 		}else{
 			types.add("2017-09-30");
 		}
@@ -280,22 +331,4 @@ public class SelGetStock {
 
 	} 
 
-	
-	public static EastReportBean getReportInfo(BoolQueryBuilder query) throws Exception {
-		SearchSourceBuilder ssb = new SearchSourceBuilder();
-//		ssb.sort("jzrq",SortOrder.DESC);
-		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		Search selResult = UtilEs.getSearch(searchSourceBuilder, "storereport", "match_all", 0 , 10);
-//		System.out.println(selResult.toString());
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
-		JestResult results = jestClient.execute(selResult);
-		System.out.println(results.getJsonString());
-		List<EastReportBean> lstBean = results.getSourceAsObjectList(EastReportBean.class);
-		if(lstBean.size() > 0){
-			return lstBean.get(0);
-		}
-		return null;
-
-	}
-	
 }

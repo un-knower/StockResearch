@@ -50,11 +50,10 @@
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body style="padding: 40px;">
-    	<a href = "/stock/">首页</a> 
-    	<a href = "/stock/storereport.html">storereport</a> 
-    	<a href = "/stock/storetrailer.html">storetrailer</a> 
-    	<a href = "/stock/storesta.html">查看策略</a> 
-    	<a href = "/stock/realindex.html">实时数据</a>
+    	<a href = "/">历史数据</a>
+    	<a href = "/storereport.html">storereport</a> 
+    	<a href = "/storetrailer.html">storetrailer</a> 
+    	<a href = "/storesta.html">查看策略</a>
     	
         <main>
             <div style="margin-bottom: 5px;">
@@ -109,7 +108,7 @@
             $(document).ready(function(){
                 $.ajax({  
                     type : "GET",  //提交方式  
-                    url : "http://localhost:8080/stock/real/getClassNameList",//路径  
+                    url : "http://www.estock.com:8080/real/getClassNameList",//路径  
                     data : {},//数据，这里使用的是Json格式进行传输  
                     success : function(result) {//返回数据根据结果进行相应的处理  
                         classNames =  result;
@@ -157,7 +156,7 @@
                 var mmg = $('.mmg').mmGrid({
                     height: 'auto'
                     , cols: cols
-                    , url: 'http://localhost:8080/stock/real/getList?type='+str
+                    , url: 'http://www.estock.com:8080/real/getList?type='+str
                     , method: 'get'
                     , remoteSort:true
                     , sortName: 'close'

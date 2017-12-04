@@ -42,7 +42,7 @@ $(document).ready(function(){
     //AJAX示例
     $('#table2-2').mmGrid({
         cols: cols,
-        url: 'http://localhost:8080/hello',
+        url: 'http://www.estock.com:8080/hello',
         method: 'get'
     });
 

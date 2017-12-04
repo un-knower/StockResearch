@@ -76,7 +76,7 @@ public class StoreTrailerSet {
 		String url = "http://datainterface.eastmoney.com/EM_DataCenter/JS.aspx?type=SR&sty="
 				+ "YJYG&fd=2017-12-31&st=4&sr=-1&p=" + index + "&ps=50&js={pages:(pc),data:[(x)]}&stat=0&rt=50342803";
 		String content = BaseConnClient.baseGetReq(url);
-		System.out.println(content);
+//		System.out.println(content);
 		return content;
 	}
 
@@ -129,9 +129,9 @@ public class StoreTrailerSet {
 		JestResult results = jestClient.execute(selResult);
 		List<StoreTrailer> lstBean = results.getSourceAsObjectList(StoreTrailer.class);
 		for (StoreTrailer storeTrailer : lstBean) {
-			if(storeTrailer.getStockCode().equals("000063")){
-				System.out.println("123");
-			}
+//			if(storeTrailer.getStockCode().equals("000063")){
+//				System.out.println("123");
+//			}
 			//storeTrailer.setJlr(getJlr(storeTrailer.getPerChanges()));
 			map.put(storeTrailer.getStockCode(), storeTrailer);
 		}
