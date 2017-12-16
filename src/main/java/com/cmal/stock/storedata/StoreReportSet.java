@@ -66,7 +66,30 @@ public class StoreReportSet {
 							EastReportBean bean = ls.get(i);
 							if(i == 0){
 								StoreTrailer tr = map.get(sat);
-								if(tr != null && ls.size() > 0){
+								if(tr != null && ls.size() > 0){  
+//									try {
+//										if(tr.getStartRangeability()!=null&&(tr.getJlr()==0)){ //600578
+//											 double lastYearJrl=ls.get(i+3).getJlr();
+//											if(tr.getStartRangeability()>1){
+//											  double ccn=1+tr.getStartRangeability()/100;//((tr.getStartRangeability()+(tr.getEndRangeability()==null?0:tr.getEndRangeability()))/2)/2/100;
+//												tr.setJlr(lastYearJrl*ccn);
+//											}
+//												
+//											else
+//												tr.setJlr(lastYearJrl*Math.abs(tr.getStartRangeability()/100));
+//												
+//												
+////											System.out.println(tr.getStartRangeability());
+////											System.out.println("========");
+//////											tr.setJlr(((ls.get(i+3).getJlr())*tr.getStartRangeability()));
+////											System.out.println(bean.getStockCode()+"  "+tr.getJlr());
+//											
+//										}
+//									} catch (Exception e) {
+//										System.out.println(bean.getStockCode()+"   "+tr.getRangeability()+"    "+bean.getJlr()+"  "+bean.getJzrq());
+//										e.printStackTrace();
+//									}
+								
 									bean.setXjlr(tr.getJlr());
 									Double ycb = (bean.getXjlr()) / bean.getJlr();
 									ycb = V(bean.getJlr() ,bean.getXjlr() ,  ycb);

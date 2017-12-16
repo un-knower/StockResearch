@@ -10,21 +10,18 @@
 package com.kers.httpmodel;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.Header;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
 
@@ -84,6 +81,22 @@ public class BaseConnClient {
 		HttpEntity entity2 = response.getEntity();
 		String entityBody = EntityUtils.toString(entity2, "utf-8");
 		return entityBody;
+
+	}
+	
+	public static InputStream baseGetReqToStream(String url) throws ClientProtocolException, IOException {
+
+		DefaultHttpClient client = new DefaultHttpClient();
+
+		HttpGet getType = new HttpGet(regUrl(url));
+		getType.addHeader("Content-Type", "text/html;charset=UTF-8");
+		getType.setHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+		getType.setHeader("X-Requested-With", "XMLHttpRequest");
+		getType.setHeader("Accept","application/json, text/javascript, */*; q=0.01");
+		getType.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "UTF-8");
+		getType.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "UTF-8");
+		HttpResponse response = client.execute(getType);
+		return  response.getEntity().getContent();
 
 	}
 

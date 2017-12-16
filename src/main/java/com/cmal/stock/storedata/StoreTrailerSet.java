@@ -38,7 +38,7 @@ public class StoreTrailerSet {
 	public static void main(String[] args) throws Exception {
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		// List<StoreTrailer> list= Lists.newArrayList();
-		for (int i = 0; i <= 26; i++) {
+		for (int i = 0; i <= 28; i++) {
 			// String content = StoreTrailerUrl(i);
 			// System.out.println(content);|
 			try {
@@ -50,7 +50,7 @@ public class StoreTrailerSet {
 			}
 			// 保存es
 		}
-		Thread.sleep(10000);
+		Thread.sleep(100000);
 		// System.out.println(list.size());
 		// insBatchEs(list , jestClient , "storetrailer");
 

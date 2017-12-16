@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>查看实时数据</title>
+        <title>查看stockpcse</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -50,12 +50,7 @@
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body style="padding: 40px;">
-   <a href = "/stock/">首页</a> 
-    	<a href = "/stock/storereport.html">storereport</a> 
-    	<a href = "/stock/storetrailer.html">storetrailer</a> 
-    	<a href = "/stock/storesta.html">查看策略</a> 
-    	<a href = "/stock/realindex.html">实时数据</a>
-    	
+        <a href = "/stock/">stockpcse</a> <a href = "/stock/storetrailer.html">storetrailer</a>
         <main>
             <div style="margin-bottom: 5px;">
                 <div style="text-align: center;">
@@ -63,8 +58,8 @@
                 </div>
             </div>
             <div style="text-align: center;margin-bottom: 5px;">
-            <input type = "text" id = "type">
-            <button id="btnSearch" class="btn" >搜索</button>
+            	<input type = "text" id = "type"> <!-- value = "2017-09-30" -->
+            	<button id="btnSearch" class="btn" >搜索</button>
             </div>
             <table id="mmg" class="mmg">
                 <tr>
@@ -109,7 +104,7 @@
             $(document).ready(function(){
                 $.ajax({  
                     type : "GET",  //提交方式  
-                    url : "http://www.estock.com:8080/stock/real/getClassNameList",//路径  
+                    url : "http://www.estock.com:8080/stock/gdzjc/getClassNameList",//路径  
                     data : {},//数据，这里使用的是Json格式进行传输  
                     success : function(result) {//返回数据根据结果进行相应的处理  
                         classNames =  result;
@@ -117,47 +112,34 @@
                     }  
                 }); 
 
-                var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
+                var pgBar = $('#pg').mmPaginator({"limitList":[60,100,200,300,500,1000]});
+                
+                 
+            
+
                 
                 var cols = [
-                    {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
-                        /*return '<div class="btnPrice" onclick = "openDiv(\''+item['symbol']+'\')"></div>';*/
-                        var path = getPath(item['symbol']);
-                        return '<img src = "' +path+ '" onclick = "openDiv(\''+item['symbol']+'\')">';
-                    }},
-                    /* { title:'日期', name:'update',width:80 , align:'center' }, */
-                    { title:'股票代码', name:'symbol' ,width:60, align:'center' ,sortable:true},
-                    { title:'股票名称', name:'name' ,width:60, align:'center',sortable:true},
-                    { title:'涨幅', name:'percent' ,width:60, align:'center',sortable:true,renderer: fixed2percentage},
-                    { title:'现价', name:'price' ,width:60, align:'center',sortable:true},
-                    { title:'开盘价', name:'open' ,width:60, align:'center',sortable:true},
-                   { title:'最高价', name:'high' ,width:60, align:'center',sortable:true},
-                   { title:'最低价', name:'low' ,width:60, align:'center',sortable:true},
-                   { title:'成交量', name:'volume' ,width:60, align:'center',sortable:true},
+                    { title:'股票代码', name:'stockCode' , align:'center',width:40 ,sortable:true},
+                    { title:'股票名称', name:'stockName' , align:'center',width:60},
+                    { title:'股东名称', name:'shareHolderName' , align:'center',sortable:true},
+                   { title:'增减类型', name:'zjcType' , align:'center',sortable:true,width:60},  
+                    { title:'变动数量', name:'zjcNum' , align:'center',sortable:true,width:60,renderer:moformat2},
+                    { title:'占总股本比例', name:'zjcZGBRatio' , align:'center',sortable:true,width:60,renderer:fixed2percentage},
+                    { title:'流通股比例', name:'zjcLGTRatio' , align:'center',sortable:true,width:60,renderer:fixed2percentage}, 
+                    { title:'变后持股总数', name:'zjcNumLater' , align:'center',sortable:true,width:60,renderer:moformat2},
+                    { title:'变后占总股本比例', name:'zjcZGBRatioLater' , align:'center',sortable:true,width:60,renderer:fixed2percentage} ,
+                    { title:'变后持流通股数', name:'zjcLGTNumLater' , align:'center',sortable:true,width:80,renderer:moformat2} ,
+                    { title:'变后流通股比', name:'zjcLGTRatioLater' , align:'center',sortable:true,width:80,renderer:fixed2percentage} ,
+                    { title:'变动开始日', name:'bdrq' , align:'center',sortable:true,width:80} ,
+                    { title:'变动截止日', name:'bdzzrq' , align:'center',sortable:true,width:80} ,
+                    { title:'公告日', name:'reportDate' , align:'center',sortable:true,width:80} 
                 ];
 
-				var mydate = new Date();
-			    var str = "" + mydate.getFullYear();
-			    var mm = mydate.getMonth()+1;
-			    if(mydate.getMonth()>9){
-			     str +="-"+ mm;
-			    }
-			    else{
-			     str += "-"+"0" + mm;
-			    }
-			    if(mydate.getDate()>9){
-			     str += "-"+mydate.getDate();
-			    }
-			    else{
-			     str += "-"+"0" + mydate.getDate();
-			    }
-			    
-			    $('#type').val(str);
 
                 var mmg = $('.mmg').mmGrid({
                     height: 'auto'
                     , cols: cols
-                    , url: 'http://www.estock.com:8080/stock/real/getList?type='+str
+                    , url: 'http://www.estock.com:8080/stock/gdzjc/getList?aaa=b&type='+ $('#type').val()
                     , method: 'get'
                     , remoteSort:true
                     , sortName: 'close'
@@ -171,7 +153,8 @@
                     , params: function(){
                         //如果这里有验证，在验证失败时返回false则不执行AJAX查询。
                       return {
-                          datas: JSON.stringify(getDatas())
+                          datas: JSON.stringify(getDatas()),
+                          type:$('#type').val()
                       }
                     }
                 });
@@ -193,6 +176,7 @@
 
              //高亮
             var highliht = function(val){
+            	val=parseFloat(val);
                 if(val > 0){
                     return '<span style="color: #b00">' + fixed2(val) + '</span>';
                 }else if(val < 0){
@@ -200,6 +184,48 @@
                 }
                 return fixed2(val);
             };
+            
+            var   moformat=function(val){
+            	val=parseFloat(val);
+            	  if(typeof val != 'number'){
+                      return '';
+                  }
+            	  var   nnn=val/10000;
+          		   var   ccc="万";
+          		   if(Math.abs(nnn)>=10000){
+          			    nnn=nnn/10000;
+          			    ccc="亿";
+          		   }
+            	  
+            	   if(val > 0){
+            		    
+                     return '<span style="color: #b00">' + fixed2(nnn) +ccc+ '</span>';
+                 }else if(val < 0){
+                     return '<span style="color: #0b0">' + fixed2(nnn) + ccc+'</span>';
+                 }  
+            	
+            }
+            
+            var   moformat2=function(val){
+            	val=parseFloat(val)*10000;
+            	  if(typeof val != 'number'){
+                      return '';
+                  }
+            	  var   nnn=val/10000;
+          		   var   ccc="万";
+          		   if(Math.abs(nnn)>=10000){
+          			    nnn=nnn/10000;
+          			    ccc="亿";
+          		   }
+            	  
+            	   if(val > 0){
+            		    
+                     return '<span style="color: #b00">' + fixed2(nnn) +ccc+ '</span>';
+                 }else if(val < 0){
+                     return '<span style="color: #0b0">' + fixed2(nnn) + ccc+'</span>';
+                 }  
+            	
+            }
 
             var fixed2 = function(val){
                     if(typeof val != 'number'){
@@ -213,6 +239,7 @@
                 return highliht(val)+'%';
             }
 
+             
             var formHtml = function(){
                 var html = '<div class="row"><div class="col-md-12 data"></select> <select style = "width:100px"><option>must</option><option>must_not</option><option>should</option></select> <select>';
                 for (var i = 0; i < classNames.length; i++) {
@@ -276,26 +303,6 @@
             	path = path + '?'+timestamp;
             	return path;
             }
-            var   moformat=function(val){
-            	val=parseFloat(val);
-          	  if(typeof val != 'number'){
-                    return 'aaaa';
-                }
-          	  var   nnn=val/10000;
-        		   var   ccc="万";
-        		   if(Math.abs(nnn)>=10000){
-        			    nnn=nnn/10000;
-        			    ccc="亿";
-        		   }
-          	  
-          	   if(val > 0){
-          		    
-                   return '<span style="color: #b00">' + fixed2(nnn) +ccc+ '</span>';
-               }else if(val < 0){
-                   return '<span style="color: #0b0">' + fixed2(nnn) + ccc+'</span>';
-               }  
-          	
-          }
         </script>
     </body>
 </html>

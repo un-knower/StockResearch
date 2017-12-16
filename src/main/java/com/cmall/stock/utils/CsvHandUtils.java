@@ -3,19 +3,26 @@ package com.cmall.stock.utils;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.kers.httpmodel.BaseConnClient;
+
 public class CsvHandUtils {
 	private InputStreamReader fr = null;
 	private BufferedReader br = null;
 
-	public CsvHandUtils(String f) throws IOException {  
-	        fr = new InputStreamReader(new FileInputStream(f),"GBK");  
-	    }
+	public CsvHandUtils(String f) throws IOException {
+		fr = new InputStreamReader(new FileInputStream(f), "GBK");
+	}
+
+	public CsvHandUtils(InputStream inputStream) throws IOException {
+		fr = new InputStreamReader(inputStream, "GBK");
+	}
 
 	/**
 	 * 解析csv文件 到一个list中 每个单元个为一个String类型记录，每一行为一个list。 再将所有的行放到一个总list中

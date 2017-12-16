@@ -47,4 +47,29 @@ package com.cmal.stock.strage;
  *
  *主力流入分析
  *http://data.eastmoney.com/zjlx/300038.html
+ *
+ *
+ *
+ *板块财报信息
+ *http://quotes.money.163.com/data/caibao/bkyjyl_20170930.html
+ 
+ *行业信息
+ *http://quotes.money.163.com/old/#query=hy001000&DataType=HS_RANK&sort=PERCENT&order=desc&count=24&page=0
+ *
+ *
+ *
+ *
+ *辅助数据
+ *
+ *
+ *http://ac.sci99.com/dynamic/
+ *http://ac.sci99.com/dynamic/api/getalldata.ashx?isexport=1&type=1&date=2017-12-14&name=
+ *
+ *
+ *大宗商品关联股份
+ *http://www.yuncaijing.com/search/s.html
+ *
+ *
+ *
+ *
  */

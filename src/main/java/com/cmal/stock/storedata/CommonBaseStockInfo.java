@@ -23,6 +23,11 @@ import io.searchbox.core.Search;
 
 public class CommonBaseStockInfo {
 	
+	public final static String   ES_INDEX_GDZJC="gdzjc";
+	public final static String ES_INDEX_STOCKREALINFO="stockrealinfo";
+	public final static String ES_INDEX_STOCK_DETAILINFO="stockdetailinfo";
+	
+	 // http://file.tushare.org/tsdata/all.csv
 	public static List<String> getAllAStockInfo() throws IOException {
 		List<String> filePath = FileUtils.readLines(new File(FilePath.astockfilePath));
 		List<String> lstCode = Lists.newArrayList();

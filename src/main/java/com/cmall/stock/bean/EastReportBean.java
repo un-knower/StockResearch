@@ -1,21 +1,17 @@
 package com.cmall.stock.bean;
 
 import java.io.Serializable;
-import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
-
-public class EastReportBean   implements Serializable {
+public class EastReportBean  extends    StockDetailInfoBean   implements Serializable  {
 	/**    
 	 * serialVersionUID:TODO      
 	 */    
 	
 	private static final long serialVersionUID = 1L;
-	// 股票代码[0]
-	private String stockCode;
+//	// 股票代码[0]
+//	private String stockCode;
 	// 股票名称[1]
-	private String stockName;
+//	private String stockName;
 	// 净利润[7];
 	private double jlr;
 	//上季度净利润
@@ -39,7 +35,7 @@ public class EastReportBean   implements Serializable {
 	//营业收入格式化
 	private String yysr_yw;
 	// 营业收入_同比增长[5]
-	private String yysr_tbzz;
+	private double yysr_tbzz;
 	// 营业收入季度环比 增长[6]
 	private double yysr_hbzz;
 	
@@ -54,7 +50,7 @@ public class EastReportBean   implements Serializable {
 	// 每股净资产(元)[10]
 	private double mgjzc;
 	// 净资产收益率(%)[11]
-	private String jzcsyl;
+	private double jzcsyl;
 	// 每股经现金流量(元)[12]
 	private double mgxjl;
 	// 销售毛利率(%)[13]
@@ -76,6 +72,8 @@ public class EastReportBean   implements Serializable {
 	private String jyhdcsdxjllje;
 //	投资活动产生的现金流量净额(万元)
 	private String tzhdcsdxjllje;
+	
+	private StockDetailInfoBean detailInfoBean;
 
 
 	public String getLrfp() {
@@ -125,12 +123,13 @@ public class EastReportBean   implements Serializable {
 	public EastReportBean(String stockCode, String stockName, String mgsy, String mgsykc, String yysr, String yysr_tbzz,
 			String yysr_hbzz, String jlr, String jlr_tbzz, String jlr_hbzz, String mgjzc, String jzcsyl, String mgxjl,
 			String xsmll, String lrfp, String gxl, String ggrq, String jzrq, Double jdzzl,String currentPrice) {
-		this.stockCode = stockCode;
-		this.stockName = stockName;
+		
+		super.setStockCode(stockCode);
+		super.setStockName(stockName);
 		this.mgsy = Double.parseDouble(mgsy);
 		this.mgsykc = Double.parseDouble(mgsykc);
 		this.yysr = Double.parseDouble(yysr);
-		this.yysr_tbzz = yysr_tbzz;
+		this.yysr_tbzz = parseDouble(yysr_tbzz);
 		this.yysr_hbzz = parseDouble(yysr_hbzz);
 		this.jlr =parseDouble(jlr);
 		
@@ -142,7 +141,7 @@ public class EastReportBean   implements Serializable {
 //		}
 			this.jlr_hbzz = parseDouble(jlr_hbzz);
 			this.mgjzc = parseDouble(mgjzc);
-		this.jzcsyl = jzcsyl;
+		this.jzcsyl = parseDouble(jzcsyl);
 			this.mgxjl = parseDouble(mgxjl);
 			this.xsmll = parseDouble(xsmll);
 		
@@ -181,21 +180,21 @@ public class EastReportBean   implements Serializable {
 		this.jlr_ycb = jlr_ycb;
 	}
 
-	public String getStockCode() {
-		return stockCode;
-	}
+//	public String getStockCode() {
+//		return stockCode;
+//	}
+//
+//	public void setStockCode(String stockCode) {
+//		this.stockCode = stockCode;
+//	}
 
-	public void setStockCode(String stockCode) {
-		this.stockCode = stockCode;
-	}
-
-	public String getStockName() {
-		return stockName;
-	}
-
-	public void setStockName(String stockName) {
-		this.stockName = stockName;
-	}
+//	public String getStockName() {
+//		return stockName;
+//	}
+//
+//	public void setStockName(String stockName) {
+//		this.stockName = stockName;
+//	}
 
 	public double getMgsy() {
 		return mgsy;
@@ -223,11 +222,11 @@ public class EastReportBean   implements Serializable {
 
 	
 
-	public String getYysr_tbzz() {
+	public double getYysr_tbzz() {
 		return yysr_tbzz;
 	}
 
-	public void setYysr_tbzz(String yysr_tbzz) {
+	public void setYysr_tbzz(double yysr_tbzz) {
 		this.yysr_tbzz = yysr_tbzz;
 	}
 
@@ -283,11 +282,11 @@ public class EastReportBean   implements Serializable {
 
 	
 
-	public String getJzcsyl() {
+	public double getJzcsyl() {
 		return jzcsyl;
 	}
 
-	public void setJzcsyl(String jzcsyl) {
+	public void setJzcsyl(double jzcsyl) {
 		this.jzcsyl = jzcsyl;
 	}
 
@@ -333,15 +332,15 @@ public class EastReportBean   implements Serializable {
 		this.xjlr = xjlr;
 	}
 
-	@Override
-	public String toString() {
-		return "EastReportBean [stockCode=" + stockCode + ", stockName=" + stockName + ", jlr=" + jlr + ", jdzzl="
-				+ jdzzl + ", jdzzl_before=" + jdzzl_before + ", jlr_gsh=" + jlr_gsh + ", jlr_ycb=" + jlr_ycb + ", mgsy="
-				+ mgsy + ", mgsykc=" + mgsykc + ", yysr=" + yysr + ", yysr_yw=" + yysr_yw + ", yysr_tbzz=" + yysr_tbzz
-				+ ", yysr_hbzz=" + yysr_hbzz + ", jlr_tbzz=" + jlr_tbzz + ", jlr_hbzz=" + jlr_hbzz + ", mgjzc=" + mgjzc
-				+ ", jzcsyl=" + jzcsyl + ", mgxjl=" + mgxjl + ", xsmll=" + xsmll + ", lrfp=" + lrfp + ", gxl=" + gxl
-				+ ", ggrq=" + ggrq + ", jzrq=" + jzrq + ", currentPrice=" + currentPrice + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "EastReportBean [stockCode=" + stockCode + ", stockName=" + stockName + ", jlr=" + jlr + ", jdzzl="
+//				+ jdzzl + ", jdzzl_before=" + jdzzl_before + ", jlr_gsh=" + jlr_gsh + ", jlr_ycb=" + jlr_ycb + ", mgsy="
+//				+ mgsy + ", mgsykc=" + mgsykc + ", yysr=" + yysr + ", yysr_yw=" + yysr_yw + ", yysr_tbzz=" + yysr_tbzz
+//				+ ", yysr_hbzz=" + yysr_hbzz + ", jlr_tbzz=" + jlr_tbzz + ", jlr_hbzz=" + jlr_hbzz + ", mgjzc=" + mgjzc
+//				+ ", jzcsyl=" + jzcsyl + ", mgxjl=" + mgxjl + ", xsmll=" + xsmll + ", lrfp=" + lrfp + ", gxl=" + gxl
+//				+ ", ggrq=" + ggrq + ", jzrq=" + jzrq + ", currentPrice=" + currentPrice + "]";
+//	}
 
 	public String getJyhdcsdxjllje() {
 		return jyhdcsdxjllje;
@@ -385,5 +384,14 @@ public class EastReportBean   implements Serializable {
 		return 0;
 		
 	}
+
+	public StockDetailInfoBean getDetailInfoBean() {
+		return detailInfoBean;
+	}
+
+	public void setDetailInfoBean(StockDetailInfoBean detailInfoBean) {
+		this.detailInfoBean = detailInfoBean;
+	}
+	
 
 }

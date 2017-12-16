@@ -213,6 +213,11 @@
 			<artifactId>jackson-core-asl</artifactId>
 			<version>1.9.4</version>
 		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.htmlcleaner</groupId>
+			<artifactId>htmlcleaner</artifactId>
+			<version>2.9</version>
+		</dependency>
 
 	</dependencies>
 
@@ -221,20 +226,19 @@
 		<finalName>stock</finalName>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>1.1</version>
+				<configuration>
+					<path>/stock</path>
+					<port>8080</port>
+					<uriEncoding>UTF-8</uriEncoding>
+					<url>http://192.168.1.219:8080/manager/text</url>
+					<server>tomcat</server>
+					<username>tomcat</username>
+					<password>tomcat</password>
+				</configuration>
 			</plugin>
-			<plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <configuration>
-                    <url>http://192.168.1.219:8080/manager/text</url>
-                    <server>tomcat</server>
-                    <username>tomcat</username>
-                    <password>tomcat</password>
-                    <path>/</path>
-                </configuration>
-            </plugin>
 		</plugins>
 	</build>
 	<distributionManagement>
