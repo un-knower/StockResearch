@@ -75,7 +75,7 @@ public class StoreAstockTradInfo {
 		String absPath = savePathsuff + stockCode + ".csv";
 		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
 		List<List<String>> lstSource = csvHandUtils.readCSVFile();
-		 DecimalFormat df = new DecimalFormat("#.00");
+//		 DecimalFormat df = new DecimalFormat("#.00");
 		List<StockBaseInfo> result = Lists.newArrayList();
 		for (int i = lstSource.size() - 1; i >=1; i--) {
 			// List<String> llData=

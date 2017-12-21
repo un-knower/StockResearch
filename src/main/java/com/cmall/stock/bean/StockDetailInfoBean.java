@@ -27,6 +27,7 @@ public class StockDetailInfoBean  implements  Serializable {
 	private double gpr;//毛利率(%)
 	private double npr;//净利润率(%)
 	private double holders;//股东人数
+	private double zsz;//总市值
 	public String getStockCode() {
 		return stockCode;
 	}
@@ -223,6 +224,12 @@ public class StockDetailInfoBean  implements  Serializable {
 	public StockDetailInfoBean() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	public double getZsz() {
+		return zsz;
+	}
+	public void setZsz(double zsz) {
+		this.zsz = zsz;
 	}
 	
 	

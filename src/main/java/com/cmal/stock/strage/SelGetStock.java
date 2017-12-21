@@ -181,9 +181,12 @@ static{
 		
 		
 		 for(EastReportBean  bean:lstBean){
-			 bean.setTotals(mapsInfo.get(bean.getStockCode()).getTotals());
-			 bean.setIndustry(mapsInfo.get(bean.getStockCode()).getIndustry());
-			 bean.setPe(mapsInfo.get(bean.getStockCode()).getPe());
+			 StockDetailInfoBean       mapsBean=mapsInfo.get(bean.getStockCode());
+			 if(mapsBean!=null){
+			 bean.setTotals(mapsBean.getTotals()*mapsBean.getEsp()*mapsBean.getPe());//mapsBean.getTotalAssets());
+			 bean.setIndustry(mapsBean.getIndustry());
+			 bean.setPe(mapsBean.getPe());
+			 }
 		 }
 		
 		

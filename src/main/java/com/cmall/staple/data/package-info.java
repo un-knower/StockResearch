@@ -20,4 +20,28 @@ package com.cmall.staple.data;
 /**
 大宗商品
  *     
+ *     
+ *     http://data.eastmoney.com/ifdata/xhgp.html
+ *     
+ *     
+ *      产业链分析
+ *     http://www.100ppi.com/focus/1657.html
+ *     
+ *     http://f9.eastmoney.com/sz002915.html#cwzb
+ *     
+ *     
+ *     http://emweb.securities.eastmoney.com/f10_v2/BusinessAnalysis.aspx?type=web&code=SZ002911
+ *     
+ *     
+ *     http://emweb.securities.eastmoney.com/PC_HSF10/BusinessAnalysis/BusinessAnalysisAjax?code=sh600230
+ *     
+ *     
+ *     
+ *     股票与大宗商品主营业务关联关系
+ *     http://stock.100ppi.com/list.html
+ *     
+ *     
  */
+
+
+
