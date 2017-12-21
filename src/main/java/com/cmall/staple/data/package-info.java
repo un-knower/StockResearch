@@ -36,6 +36,9 @@ package com.cmall.staple.data;
  *     http://emweb.securities.eastmoney.com/PC_HSF10/BusinessAnalysis/BusinessAnalysisAjax?code=sh600230
  *     
  *     
+ *     http://www.100ppi.com/image/mkpage/xml/stock_chance.xml
+ *     
+ *     
  *     
  *     股票与大宗商品主营业务关联关系
  *     http://stock.100ppi.com/list.html
