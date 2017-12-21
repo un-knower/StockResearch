@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class Hy {
 
-    private Date rq;
+    private String rq;
     private String zygc;
     private String zysr;
     private String srbl;
@@ -23,14 +23,15 @@ public class Hy {
     private String mll;
     private String dw;
     private double orderby;
-    public void setRq(Date rq) {
-         this.rq = rq;
-     }
-     public Date getRq() {
-         return rq;
-     }
+   
 
-    public void setZygc(String zygc) {
+    public String getRq() {
+		return rq;
+	}
+	public void setRq(String rq) {
+		this.rq = rq;
+	}
+	public void setZygc(String zygc) {
          this.zygc = zygc;
      }
      public String getZygc() {

@@ -13,7 +13,7 @@ import java.util.Date;
 public class Jyps {
 
     private String gpdm;
-    private Date rq;
+    private String rq;
     private String ms;
     public void setGpdm(String gpdm) {
          this.gpdm = gpdm;
@@ -22,14 +22,15 @@ public class Jyps {
          return gpdm;
      }
 
-    public void setRq(Date rq) {
-         this.rq = rq;
-     }
-     public Date getRq() {
-         return rq;
-     }
+  
 
-    public void setMs(String ms) {
+    public String getRq() {
+		return rq;
+	}
+	public void setRq(String rq) {
+		this.rq = rq;
+	}
+	public void setMs(String ms) {
          this.ms = ms;
      }
      public String getMs() {

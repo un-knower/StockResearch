@@ -12,10 +12,10 @@ import java.util.Date;
  */
 public class Cp {
 
-    private Date rq;
+    private String rq;
     private String zygc;
     private String zysr;
-    private Date srbl;
+    private String srbl;
     private String zycb;
     private String cbbl;
     private String zylr;
@@ -23,12 +23,7 @@ public class Cp {
     private String mll;
     private String dw;
     private double orderby;
-    public void setRq(Date rq) {
-         this.rq = rq;
-     }
-     public Date getRq() {
-         return rq;
-     }
+   
 
     public void setZygc(String zygc) {
          this.zygc = zygc;
@@ -44,14 +39,21 @@ public class Cp {
          return zysr;
      }
 
-    public void setSrbl(Date srbl) {
-         this.srbl = srbl;
-     }
-     public Date getSrbl() {
-         return srbl;
-     }
+    
 
-    public void setZycb(String zycb) {
+    public String getRq() {
+		return rq;
+	}
+	public void setRq(String rq) {
+		this.rq = rq;
+	}
+	public String getSrbl() {
+		return srbl;
+	}
+	public void setSrbl(String srbl) {
+		this.srbl = srbl;
+	}
+	public void setZycb(String zycb) {
          this.zycb = zycb;
      }
      public String getZycb() {
