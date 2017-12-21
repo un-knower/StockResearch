@@ -21,6 +21,7 @@ package com.cmall.stock.bean.jyfx;
 大宗商品
  *     
  *     
+ * http://emweb.securities.eastmoney.com/BusinessAnalysis/Index?type=web&code=sh600230#zyfw-0    
  *http://emweb.securities.eastmoney.com/PC_HSF10/BusinessAnalysis/BusinessAnalysisAjax?code=sh600230
  *     
  *     
