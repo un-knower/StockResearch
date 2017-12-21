@@ -11,12 +11,6 @@ public class JyfxInfo implements Serializable{
 	
 	private String stockCode;
 	private String stockName;
-	//主营范围
-	private String zyfwms;
-	
-	//经营评述
-	private String jypsms;
-	
 	//日期
 	private String rq;
 	
@@ -43,6 +37,12 @@ public class JyfxInfo implements Serializable{
 	private String dw;
 	//排序
 	private double orderby;
+	
+	//主营范围
+	private String zyfwms;
+		
+	//经营评述
+	private String jypsms;
 	public String getStockCode() {
 		return stockCode;
 	}
