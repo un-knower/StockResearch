@@ -1,7 +1,14 @@
 package com.cmall.staple.bean;
 
-public class Stap100PPI {
+import java.io.Serializable;
+
+public class Stap100PPI implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// 商品 行业 月初价格 月末价格 单位 月涨跌 同比涨跌
+	private String rq;
 	private String productName;
 	private String productHy;
 	private double monthYcPrice;
@@ -9,6 +16,17 @@ public class Stap100PPI {
 	private String priceDw;
 	private double monthRise;
 	private double tbRise;
+	//5天涨幅
+	private double wtzf;
+
+	
+	public String getRq() {
+		return rq;
+	}
+
+	public void setRq(String rq) {
+		this.rq = rq;
+	}
 
 	public String getProductName() {
 		return productName;
@@ -81,6 +99,14 @@ public class Stap100PPI {
 
 	public void setProductHy(String productHy) {
 		this.productHy = productHy;
+	}
+
+	public double getWtzf() {
+		return wtzf;
+	}
+
+	public void setWtzf(double wtzf) {
+		this.wtzf = wtzf;
 	}
 	
 	

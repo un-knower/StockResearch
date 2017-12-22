@@ -9,4 +9,5 @@ public class FilePath {
 	public final static String path = "/opt/stock/data/sto.txt";
 	public final static String stockFuncDetailInfoPath = "/opt/stock/data/cnmarket/stockFuncDetailInfo.csv";
 	public final static String saveJyfxPathsuff = "/opt/stock/data/jyfx/";
+	public final static String saveStapleDayPathsuff = "/opt/stock/data/StapleDay/";
 }

@@ -27,7 +27,9 @@ public class CommonBaseStockInfo {
 	public final static String ES_INDEX_STOCKREALINFO="stockrealinfo";
 	public final static String ES_INDEX_STOCK_DETAILINFO="stockdetailinfo";
 	
-	public final static String ES_INDEX_STOCK_STAPLEINFP="jyfx";
+	public final static String ES_INDEX_STOCK_JYFX="jyfx";
+	
+	public final static String ES_INDEX_STOCK_STAPLEDAY="stapleday";
 	
 	 // http://file.tushare.org/tsdata/all.csv
 	public static List<String> getAllAStockInfo() throws IOException {

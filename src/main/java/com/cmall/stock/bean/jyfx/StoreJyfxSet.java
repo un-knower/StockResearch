@@ -52,7 +52,7 @@ public class StoreJyfxSet {
 						StockJyfx jyfx = new StockJyfx();
 						jyfx = gson.fromJson(content, type);
 						List<JyfxInfo> list = transData(jyfx , sat);
-						insBatchEs(list,jestClient,CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEINFP);
+						insBatchEs(list,jestClient,CommonBaseStockInfo.ES_INDEX_STOCK_JYFX);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
