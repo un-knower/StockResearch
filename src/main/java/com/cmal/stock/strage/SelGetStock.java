@@ -49,7 +49,13 @@ public class SelGetStock {
 	
 
 	public static Map<String,Object> getLstResult(BoolQueryBuilder query , StockBasePageInfo page) throws Exception {
-		Map<String,Object> returnMap = Maps.newHashMap();
+		return getCommonLstResult(query, page, "stockpcse", "2017");
+	}public static Map<String,Object> getTrailerLstResult(BoolQueryBuilder query , StockBasePageInfo page , String type) throws Exception {
+		return getCommonLstResult(query, page, "storestrateinfo", type);}
+	public static Map<String,Object> getStaLstResult(BoolQueryBuilder query , StockBasePageInfo page , String type) throws Exception {
+		
+		return getCommonLstResult(query, page, "storestrateinfo", type);}
+	public static Map<String,Object> getCommonLstResult(BoolQueryBuilder query , StockBasePageInfo page , String index,String type) throws Exception {
 		SearchSourceBuilder ssb = new SearchSourceBuilder();
 		if(!StringUtils.isEmpty(page.getSort())){
 			String order = page.getSort().split("\\.")[1];
@@ -60,24 +66,13 @@ public class SelGetStock {
 			}
 		}
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		Search selResult = UtilEs.getSearch(searchSourceBuilder, "stockpcse", "2017", (page.getPage()- 1) * page.getLimit() , page.getLimit());
-		
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
-		JestResult results = jestClient.execute(selResult);
-		List<StockBaseInfo> lstBean = results.getSourceAsObjectList(StockBaseInfo.class);
-		if(lstBean!= null && lstBean.size() > 0){
-			Map hitsMap = (Map)results.getValue("hits");
-			if(hitsMap!=null){
-				Number total = (Number)hitsMap.get("total");
-				if(total!=null){
-					returnMap.put("totalCount", total.intValue());
-				}
-			}
-		}
-		returnMap.put("items", lstBean);
-		return returnMap;
-
+		   System.out.println(searchSourceBuilder.toString());
+			final JestClient jestClient = BaseCommonConfig.clientConfig();
+		return UtilEs.getSearchRsult(searchSourceBuilder, index, type, (page.getPage()- 1) * page.getLimit() , page.getLimit(),jestClient);
 	}
+		
+
+	
 static 	Map<String, StockDetailInfoBean>   mapsInfo;
 static{
 	try {
@@ -219,67 +214,100 @@ static{
 	} 
 	
 	
-	public static Map<String,Object> getTrailerLstResult(BoolQueryBuilder query , StockBasePageInfo page , String type) throws Exception {
-		Map<String,Object> returnMap = Maps.newHashMap();
-		SearchSourceBuilder ssb = new SearchSourceBuilder();
-		if(!StringUtils.isEmpty(page.getSort())){
-			String order = page.getSort().split("\\.")[1];
-			if(order.equalsIgnoreCase("desc")){
-				ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
-			}else{
-				ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
-			}
-		}
-		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		Search selResult = UtilEs.getSearch(searchSourceBuilder, "storetrailer", type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
-		
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
-		JestResult results = jestClient.execute(selResult);
-		List<StoreTrailer> lstBean = results.getSourceAsObjectList(StoreTrailer.class);
-		if(lstBean!= null && lstBean.size() > 0){
-			Map hitsMap = (Map)results.getValue("hits");
-			if(hitsMap!=null){
-				Number total = (Number)hitsMap.get("total");
-				if(total!=null){
-					returnMap.put("totalCount", total.intValue());
-				}
-			}
-		}
-		returnMap.put("items", lstBean);
-		return returnMap;
-
-	} 
 	
-	public static Map<String,Object> getStaLstResult(BoolQueryBuilder query , StockBasePageInfo page , String type) throws Exception {
-		Map<String,Object> returnMap = Maps.newHashMap();
-		SearchSourceBuilder ssb = new SearchSourceBuilder();
-		if(!StringUtils.isEmpty(page.getSort())){
-			String order = page.getSort().split("\\.")[1];
-			if(order.equalsIgnoreCase("desc")){
-				ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
-			}else{
-				ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
-			}
-		}
-		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		Search selResult = UtilEs.getSearch(searchSourceBuilder, "storestrateinfo", type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
-		
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
-		JestResult results = jestClient.execute(selResult);
-		List<StockStrategyInfo> lstBean = results.getSourceAsObjectList(StockStrategyInfo.class);
-		if(lstBean!= null && lstBean.size() > 0){
-			Map hitsMap = (Map)results.getValue("hits");
-			if(hitsMap!=null){
-				Number total = (Number)hitsMap.get("total");
-				if(total!=null){
-					returnMap.put("totalCount", total.intValue());
-				}
-			}
-		}
-		returnMap.put("items", lstBean);
-		return returnMap;
+	// Map<String,Object> returnMap = Maps.newHashMap();
+			// SearchSourceBuilder ssb = new SearchSourceBuilder();
+			// if(!StringUtils.isEmpty(page.getSort())){
+			// String order = page.getSort().split("\\.")[1];
+			// if(order.equalsIgnoreCase("desc")){
+			// ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
+			// }else{
+			// ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
+			// }
+			// }
+			// SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+			// Search selResult = UtilEs.getSearch(searchSourceBuilder, "stockpcse",
+			// "2017", (page.getPage()- 1) * page.getLimit() , page.getLimit());
+			//
+			// final JestClient jestClient = BaseCommonConfig.clientConfig();
+			// JestResult results = jestClient.execute(selResult);
+			// List<StockBaseInfo> lstBean =
+			// results.getSourceAsObjectList(StockBaseInfo.class);
+			// if(lstBean!= null && lstBean.size() > 0){
+			// Map hitsMap = (Map)results.getValue("hits");
+			// if(hitsMap!=null){
+			// Number total = (Number)hitsMap.get("total");
+			// if(total!=null){
+			// returnMap.put("totalCount", total.intValue());
+			// }
+			// }
+			// }
+			// returnMap.put("items", lstBean);
+			// return returnMap;
+	
+		// Map<String,Object> returnMap = Maps.newHashMap();
+		// SearchSourceBuilder ssb = new SearchSourceBuilder();
+		// if(!StringUtils.isEmpty(page.getSort())){
+		// String order = page.getSort().split("\\.")[1];
+		// if(order.equalsIgnoreCase("desc")){
+		// ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
+		// }else{
+		// ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
+		// }
+		// }
+		// SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+		// Search selResult = UtilEs.getSearch(searchSourceBuilder,
+		// "storetrailer", type, (page.getPage()- 1) * page.getLimit() ,
+		// page.getLimit());
+		//
+		// final JestClient jestClient = BaseCommonConfig.clientConfig();
+		// JestResult results = jestClient.execute(selResult);
+		// List<StoreTrailer> lstBean =
+		// results.getSourceAsObjectList(StoreTrailer.class);
+		// if(lstBean!= null && lstBean.size() > 0){
+		// Map hitsMap = (Map)results.getValue("hits");
+		// if(hitsMap!=null){
+		// Number total = (Number)hitsMap.get("total");
+		// if(total!=null){
+		// returnMap.put("totalCount", total.intValue());
+		// }
+		// }
+		// }
+		// returnMap.put("items", lstBean);
+		// return returnMap;
 
-	} 
+//	} 
+	
+
+//		Map<String,Object> returnMap = Maps.newHashMap();
+//		SearchSourceBuilder ssb = new SearchSourceBuilder();
+//		if(!StringUtils.isEmpty(page.getSort())){
+//			String order = page.getSort().split("\\.")[1];
+//			if(order.equalsIgnoreCase("desc")){
+//				ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
+//			}else{
+//				ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
+//			}
+//		}
+//		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+//		Search selResult = UtilEs.getSearch(searchSourceBuilder, "storestrateinfo", type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
+//		
+//		final JestClient jestClient = BaseCommonConfig.clientConfig();
+//		JestResult results = jestClient.execute(selResult);
+//		List<StockStrategyInfo> lstBean = results.getSourceAsObjectList(StockStrategyInfo.class);
+//		if(lstBean!= null && lstBean.size() > 0){
+//			Map hitsMap = (Map)results.getValue("hits");
+//			if(hitsMap!=null){
+//				Number total = (Number)hitsMap.get("total");
+//				if(total!=null){
+//					returnMap.put("totalCount", total.intValue());
+//				}
+//			}
+//		}
+//		returnMap.put("items", lstBean);
+//		return returnMap;
+
+//	} 
 
 //	public static void main(String[] args) throws Exception {
 
@@ -359,36 +387,22 @@ static{
 	// }
 	
 	
-	public static Map<String,Object> getCommonLstResult(BoolQueryBuilder query , StockBasePageInfo page , String index,String type) throws Exception {
-		Map<String,Object> returnMap = Maps.newHashMap();
-		SearchSourceBuilder ssb = new SearchSourceBuilder();
-		if(!StringUtils.isEmpty(page.getSort())){
-			String order = page.getSort().split("\\.")[1];
-			if(order.equalsIgnoreCase("desc")){
-				ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
-			}else{
-				ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
-			}
-		}
-		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		   System.out.println(searchSourceBuilder.toString());
-		Search selResult = UtilEs.getSearch(searchSourceBuilder, index, type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
-		
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
-		JestResult results = jestClient.execute(selResult);
-		List lstBean = results.getSourceAsObjectList(Object.class);
-		if(lstBean!= null && lstBean.size() > 0){
-			Map hitsMap = (Map)results.getValue("hits");
-			if(hitsMap!=null){
-				Number total = (Number)hitsMap.get("total");
-				if(total!=null){
-					returnMap.put("totalCount", total.intValue());
-				}
-			}
-		}
-		returnMap.put("items", lstBean);
-		return returnMap;
+	
+	
+//		JestResult results = jestClient.execute(selResult);
+//		List lstBean = results.getSourceAsObjectList(Object.class);
+//		if(lstBean!= null && lstBean.size() > 0){
+//			Map hitsMap = (Map)results.getValue("hits");
+//			if(hitsMap!=null){
+//				Number total = (Number)hitsMap.get("total");
+//				if(total!=null){
+//					returnMap.put("totalCount", total.intValue());
+//				}
+//			}
+//		}
+//		returnMap.put("items", lstBean);
+//		return returnMap;
 
-	} 
+//	} 
 
 }

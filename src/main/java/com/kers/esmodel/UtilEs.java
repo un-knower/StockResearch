@@ -1,10 +1,14 @@
 package com.kers.esmodel;
 
 import java.util.List;
+import java.util.Map;
 
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
+import com.google.common.collect.Maps;
+
 import io.searchbox.client.JestClient;
+import io.searchbox.client.JestResult;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.Count;
 import io.searchbox.core.Count.Builder;
@@ -81,6 +85,25 @@ public class UtilEs {
     	builder.addIndex(indexName);
     	builder.addType(indexType);
     	return   builder.build();
+    }
+    public static Map<String,Object>  getSearchRsult(SearchSourceBuilder searchSourceBuilder,String indexName,String indexType,Integer pageFrom,Integer pageSize, JestClient jestClient ) throws Exception{
+    	Map<String,Object> returnMap = Maps.newHashMap();
+	Search selResult = getSearch(searchSourceBuilder, indexName, indexType, (pageFrom- 1) * pageSize , pageSize);
+		
+//		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		JestResult results = jestClient.execute(selResult);
+		List lstBean = results.getSourceAsObjectList(Object.class);
+		if(lstBean!= null && lstBean.size() > 0){
+			Map hitsMap = (Map)results.getValue("hits");
+			if(hitsMap!=null){
+				Number total = (Number)hitsMap.get("total");
+				if(total!=null){
+					returnMap.put("totalCount", total.intValue());
+				}
+			}
+		}
+		returnMap.put("items", lstBean);
+		return  returnMap;
     }
     
     /**

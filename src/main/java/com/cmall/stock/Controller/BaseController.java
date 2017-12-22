@@ -60,11 +60,10 @@ public class BaseController {
 	    	else if(vo.getType().equals("queryStr")){
 	    		q=QueryBuilders.queryString("\""+vo.getValue()+"\"").field(vo.getName());
 			}
-//	    	else if(vo.getType().equals("miss")){
-//	    		QueryBuilders.
-//	    		q=QueryBuilders.queryString(vo.getValue()).field(vo.getName());
-//			}
-			
+	    	else if(vo.getType().equals("in")){
+	    		q=QueryBuilders.inQuery(vo.getName(), vo.getValue().split(","));
+			}
+	    	
 	    	return q;
 	    }
 	    
