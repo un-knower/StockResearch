@@ -7,14 +7,12 @@ import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-
-import com.cmall.stock.bean.GdZJcBean;
 import com.cmall.stock.vo.StockBaseInfoVo;
 import com.cmall.stock.vo.StockBasePageInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class BaseController {
+public class BaseController<T> {
 	  public void setQuery(BoolQueryBuilder query , StockBasePageInfo info){
 	    	if(!StringUtils.isEmpty(info.getDatas())){
 	    		Type type = new TypeToken<List<StockBaseInfoVo>>() {}.getType();
@@ -68,8 +66,9 @@ public class BaseController {
 	    }
 	    
 	    
-	    public String[] getClassNameList(Class info) throws Exception {
-	    	java.lang.reflect.Field[] fields=info.getDeclaredFields();  
+	    public String[] getClassNameList(T info) throws Exception {
+	    	
+	    	java.lang.reflect.Field[] fields=info.getClass().getDeclaredFields();
 	        String[] fieldNames=new String[fields.length-1];  
 		    for(int i=1;i<fields.length;i++){  
 		        fieldNames[i-1]=fields[i].getName();  
