@@ -43,7 +43,7 @@ package com.cmall.staple.data;
  *     股票与大宗商品主营业务关联关系
  *     http://stock.100ppi.com/list.html
  *     
- *     
+ *     http://hq.sinajs.cn/list=M0
  */
 
 

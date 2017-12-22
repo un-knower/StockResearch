@@ -88,12 +88,3 @@
        });
        return datas;
    }
-   $('#btnSearch').on('click',function(){
-       //点击查询时页码置为1
-       var str=JSON.stringify(getDatas());
-       var type = $('#type').val();
-       mmg.load({page:1,datas:str,type:type});
-   });
-function addFormDiv(){
-   $('#fh').append(formHtml);
-}
