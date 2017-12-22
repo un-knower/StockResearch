@@ -13,6 +13,7 @@ import org.elasticsearch.common.collect.Lists;
 
 import com.cmal.stock.storedata.CommonBaseStockInfo;
 import com.cmall.stock.utils.FilePath;
+import com.cmall.stock.utils.MathsUtils;
 import com.cmall.stock.utils.StockCodeTransUtil;
 import com.cmall.stock.utils.TextUtil;
 import com.google.common.reflect.TypeToken;
@@ -100,18 +101,18 @@ public class StoreJyfxSet {
 	public static JyfxInfo transCp(Cp cp , String stockCode ,String zyms , String jpms, int type){
 		JyfxInfo info = new JyfxInfo();
 		info.setStockCode(stockCode);
-		info.setCbbl(cp.getCbbl());
+		info.setCbbl(MathsUtils.priceTrans(cp.getCbbl()));
 		info.setDw(cp.getDw());
-		info.setLrbl(cp.getLrbl());
-		info.setMll(cp.getMll());
+		info.setLrbl(MathsUtils.priceTrans(cp.getLrbl()));
+		info.setMll(MathsUtils.priceTrans(cp.getMll()));
 		info.setOrderby(cp.getOrderby());
 		info.setRq(cp.getRq());
-		info.setSrbl(cp.getSrbl());
+		info.setSrbl(MathsUtils.priceTrans(cp.getSrbl()));
 		info.setType(type);
-		info.setZycb(cp.getZycb());
+		info.setZycb(MathsUtils.priceTrans(cp.getZycb()));
 		info.setZygc(cp.getZygc());
-		info.setZylr(cp.getZylr());
-		info.setZysr(cp.getZysr());
+		info.setZylr(MathsUtils.priceTrans(cp.getZylr()));
+		info.setZysr(MathsUtils.priceTrans(cp.getZysr()));
 		info.setJypsms(jpms);
 		info.setZyfwms(zyms);
 		return info;

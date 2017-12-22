@@ -74,6 +74,11 @@
    var fixed2percentage = function(val){
        return highliht(val)+'%';
    }
+   
+   var fixed2percentage2 = function(val){
+   		val = parseFloat(val) * 100
+       return highliht(val)+'%';
+   }
    function getDatas(){
        var datas = [];
        $('#fh .data').each(function(i){

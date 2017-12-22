@@ -49,7 +49,6 @@ public class SelGetStock {
 
 	public static Map<String, Object> getStaLstResult(BoolQueryBuilder query, StockBasePageInfo page, String type)
 			throws Exception {
-
 		return getCommonLstResult(query, page, "storestrateinfo", type);
 	}
 

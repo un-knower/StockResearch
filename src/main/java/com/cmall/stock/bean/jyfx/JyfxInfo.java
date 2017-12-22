@@ -20,19 +20,19 @@ public class JyfxInfo implements Serializable{
 	//主营构成
 	private String zygc;
 	//主营收入(元)
-	private String zysr;
+	private double zysr;
 	//收入比例
-	private String srbl;
+	private double srbl;
 	//主营成本(元)
-	private String zycb;
+	private double zycb;
 	//成本比例
-	private String cbbl;
+	private double cbbl;
 	//主营利润(元)
-	private String zylr;
+	private double zylr;
 	//利润比例
-	private String lrbl;
+	private double lrbl;
 	//毛利率(%)
-	private String mll;
+	private double mll;
 	//单位
 	private String dw;
 	//排序
@@ -85,46 +85,47 @@ public class JyfxInfo implements Serializable{
 	public void setZygc(String zygc) {
 		this.zygc = zygc;
 	}
-	public String getZysr() {
+	
+	public double getZysr() {
 		return zysr;
 	}
-	public void setZysr(String zysr) {
+	public void setZysr(double zysr) {
 		this.zysr = zysr;
 	}
-	public String getSrbl() {
+	public double getSrbl() {
 		return srbl;
 	}
-	public void setSrbl(String srbl) {
+	public void setSrbl(double srbl) {
 		this.srbl = srbl;
 	}
-	public String getZycb() {
+	public double getZycb() {
 		return zycb;
 	}
-	public void setZycb(String zycb) {
+	public void setZycb(double zycb) {
 		this.zycb = zycb;
 	}
-	public String getCbbl() {
+	public double getCbbl() {
 		return cbbl;
 	}
-	public void setCbbl(String cbbl) {
+	public void setCbbl(double cbbl) {
 		this.cbbl = cbbl;
 	}
-	public String getZylr() {
+	public double getZylr() {
 		return zylr;
 	}
-	public void setZylr(String zylr) {
+	public void setZylr(double zylr) {
 		this.zylr = zylr;
 	}
-	public String getLrbl() {
+	public double getLrbl() {
 		return lrbl;
 	}
-	public void setLrbl(String lrbl) {
+	public void setLrbl(double lrbl) {
 		this.lrbl = lrbl;
 	}
-	public String getMll() {
+	public double getMll() {
 		return mll;
 	}
-	public void setMll(String mll) {
+	public void setMll(double mll) {
 		this.mll = mll;
 	}
 	public String getDw() {
