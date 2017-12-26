@@ -83,7 +83,6 @@
     -moz-box-shadow: 0 0px 2px #bbb !important;
     -webkit-box-shadow: 0 0px 2px #bbb !important;
     box-shadow: 0 0px 2px #bbb !important;
-    border-top: 2px solid #b00 !important;
     z-index: 1 !important;
 
 }

@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="images/favicon.png">
+    <link rel="shortcut icon" th:href="@{/images/favicon.png}">
     <title th:text="${title}"></title>
     <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" th:href="@{/mmGrid/css/normalize.css}" />
     <link rel="stylesheet" th:href="@{/js/bootstrap/dist/css/bootstrap.css}" />
       <link rel="stylesheet" th:href="@{/fonts/font-awesome-4/css/font-awesome.min.css}">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -16,11 +17,13 @@
     <script th:src="@{/js/html5shiv.js}"></script>
     <![endif]-->
     <!-- Custom styles for this template -->
-    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    
   	<link rel="stylesheet" th:href="@{/mmGrid/src/mmGrid.css}">
   	<link rel="stylesheet" th:href="@{/mmGrid/src/theme/bootstrap/mmGrid-bootstrap.css}">
   	<link rel="stylesheet" th:href="@{/mmGrid/src/mmPaginator.css}">
 	<link rel="stylesheet" th:href="@{/mmGrid/src/theme/bootstrap/mmPaginator-bootstrap.css}">
+	<link th:href="@{/css/style.css}" rel="stylesheet" />
+	 <script th:src="@{/mmGrid/js/vendor/modernizr-2.6.2.min.js}"></script>
     </meta>
   </head>
 </html>

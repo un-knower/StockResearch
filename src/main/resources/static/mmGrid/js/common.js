@@ -1,12 +1,12 @@
    var formHtml = function(){
-                var html = '<div class="row"><div class="col-md-12 data"></select> <select style = "width:100px"><option>must</option><option>must_not</option><option>should</option></select> <select>';
+                var html = '<form class="form-inline"><div class="row "><div class="data" style = "vertical-align: middle;"> <select class="form-control"><option>must</option><option>must_not</option><option>should</option></select> <select class="form-control">';
                 for (var i = 0; i < classNames.length; i++) {
                     html = html + '<option>'+classNames[i]+'</option>';
                 }
-                html = html + '</select> <select style = "width:100px"><option>=</option><option>></option><option><</option><option>>=</option><option><=</option><option>prefix</option><option>queryStr</option><option>missing</option><option>in</option></select>';
-                html = html + '<input type="text">';
-                html = html + '<button class="btn btn-default" onclick = "addFormDiv()">+</button>';            
-                html = html + '<button class="btn btn-default" onclick = "delFormDiv(this)">-</button></div></div>';            
+                html = html + '</select> <select style = "width:100px" class="form-control"><option>=</option><option>></option><option><</option><option>>=</option><option><=</option><option>prefix</option><option>queryStr</option><option>missing</option><option>in</option></select>';
+                html = html + ' <input type="text" class="form-control">';
+                html = html + ' <input type="button" class="form-control" onclick = "addFormDiv()" value = " + ">';            
+                html = html + ' <input type="button" class="form-control" onclick = "delFormDiv(this)" value = " - "></div></div></from>';            
                 return html;
             }
    

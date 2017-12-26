@@ -32,5 +32,10 @@ public class HtmlController{
     public String  dataDzsj(Model model) throws Exception {
         return "/datas/dzsj";
     }
+	
+	@RequestMapping("/login")
+    public String  login(Model model) throws Exception {
+        return "/login";
+    }
    
 }
