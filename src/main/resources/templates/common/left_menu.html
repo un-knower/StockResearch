@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+  <body>
+      <div th:fragment="menu(menuname)">
+            <div class="cl-toggle"><i class="fa fa-bars"></i></div>
+			<div class="cl-navblock">
+        <div class="menu-space">
+          <div class="content">
+            <ul class="cl-vnavigation">
+              <li><a href="#"><i class="fa fa-home"></i><span>分析</span></a>
+                <ul class="sub-menu">
+                  <li th:class="${menuname=='index'}? 'active'"><a href="/stock">信息总会</a></li>
+                </ul>
+              </li>
+              <li><a href="#"><i class="fa fa-smile-o"></i><span>ES及基础数据</span></a>
+                <ul class="sub-menu">
+                  <li th:class="${menuname=='stockinfo'}? 'active'"><a href="/stock/datas/stockinfo">股票历史数据</a></li>
+                  <li th:class="${menuname=='stockrailer'}? 'active'"><a href="/stock/datas/storetrailer">财报数据</a></li>
+                  <li th:class="${menuname=='dzsj'}? 'active'"><a href="/stock/datas/dzsj">大宗商品数据</a></li>
+                  <li th:class="${menuname=='jyfx'}? 'active'"><a href="/stock/datas/jyfx">jyfx</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+			</div>
+      </div>
+  </body>
+</html>

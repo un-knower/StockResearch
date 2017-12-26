@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+  <head th:include="/common/common_head :: commonHeader('首页')"></head>
+<body>
+
+  <!-- Fixed navbar -->
+  <div id="head-nav" class="navbar navbar-default navbar-fixed-top" th:include="/common/top_nav :: nav"></div>
+
+	<div id="cl-wrapper" class="fixed-menu">
+		<div class="cl-sidebar" data-position="right" data-step="1" th:include="/common/left_menu :: menu"></div>
+	
+		<div class="container-fluid" id="pcont">
+		  <div class="cl-mcont">
+
+		  </div>
+		</div> 	
+	</div>
+  <div th:include="/common/onload_js :: onloadJs"></div>
+  <script type="text/javascript">
+    $(document).ready(function(){
+       App.init({
+        nanoScroller: false
+      });
+        
+      App.dashBoard();        
+    });
+  </script>
+  </body>
+</html>

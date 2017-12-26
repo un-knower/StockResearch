@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+  <body>
+
+
+
+                <div  th:fragment="nav">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="fa fa-gear"></span>
+        </button>
+        <a class="navbar-brand" href="#"><span>Clean Zone</span></a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">   
+          <li class="active"><a href="/stock">首页</a></li>         
+        </ul>
+        <ul class="nav navbar-nav navbar-right user-nav">
+          <li class="dropdown profile_menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="Avatar" th:src="@{/images/avatar2.jpg}" /><span>超级管理员</span> <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">个人信息</a></li>
+              <li class="divider"></li>
+              <li><a href="#">退出</a></li>
+            </ul>
+          </li>
+        </ul>                 
+      </div><!--/.nav-collapse animate-collapse -->
+    </div>
+  </div>
+  </body>
+</html>

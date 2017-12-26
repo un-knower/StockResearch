@@ -28,9 +28,9 @@ import io.searchbox.client.config.ClientConfig;
  */
 public class BaseCommonConfig {
 	public  static JestClient clientConfig() {
-//		String hostUrl = "http://192.168.100.62:9200/";
+//		String hostUrl = "http://192.168.100.48:9200/";
 		String hostUrl = "http://192.168.1.219:9200/";
-		hostUrl="http://127.0.0.1:9200/";
+//		hostUrl="http://127.0.0.1:9200/";
 		//ESClient esClient = new ESClient(hostUrl);
 
 		ClientConfig clientConfig = new ClientConfig.Builder(hostUrl).multiThreaded(true).build();

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+  <head th:include="/gridCommon/common_head :: commonHeader('股票历史数据')"></head>
+<body>
+
+  <!-- Fixed navbar -->
+  <div id="head-nav" class="navbar navbar-default navbar-fixed-top" th:include="/common/top_nav :: nav"></div>
+
+	<div id="cl-wrapper" class="fixed-menu">
+		<div class="cl-sidebar" data-position="right" data-step="1" th:include="/common/left_menu :: menu('stockinfo')"></div>
+	
+		<div class="container-fluid" id="pcont">
+		  <div class="cl-mcont">
+			<div class = "row dash-cols">
+				<div class = "col-sm-12 col-md-12">
+					 <main th:include="/gridCommon/main :: main"></main>
+				</div>
+			</div>
+		  </div>
+		</div> 	
+	</div>
+	
+	<!-- Modal -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="分时图">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">分时图</h4>
+			      </div>
+			      <div class="modal-body">
+			      	<input type="hidden" id = "code"/>
+			      	<button class="btn btn-default" onclick = "huan('min')">分时</button>
+			      	<button class="btn btn-default" onclick = "huan('daily')">周</button>
+			      	<button class="btn btn-default" onclick = "huan('weekly')">月</button>
+			        <img src = "" id = "imgFen">
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">关</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+  <div th:include="/gridCommon/onload_js :: onloadJs"></div>
+  
+  <script type="text/javascript">
+  	var classNames = [];
+    $(document).ready(function(){
+       App.init({
+        nanoScroller: false
+      });
+        
+      App.dashBoard();        
+     $.ajax({  
+                    type : "GET",  //提交方式  
+                    url : "http://www.estock.com:8080/stock/getClassNameList",//路径  
+                    data : {},//数据，这里使用的是Json格式进行传输  
+                    success : function(result) {//返回数据根据结果进行相应的处理  
+                        classNames =  result;
+                        $('#fh').append(formHtml);
+                    }  
+                }); 
+
+                var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
+                
+                var cols = [
+                    {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
+                        /*return '<div class="btnPrice" onclick = "openDiv(\''+item['stockCode']+'\')"></div>';*/
+                        var path = getPath(item['stockCode']);
+                        return '<img style="width:50px" src = "' +path+ '" onclick = "openDiv(\''+item['stockCode']+'\')">';
+                    }},
+                    { title:'日期', name:'date',width:80 , align:'center' ,sortable:true },
+                    { title:'股票代码', name:'stockCode' ,width:60, align:'center' },
+                    { title:'股票名称', name:'stockName' ,width:60, align:'center'},
+                    { title:'周几', name:'dayForWeek' ,width:60, align:'center',sortable:true},
+                    {title:'板块',name:'industry',width:60,sortable:true  },
+                    {title:'总市值',name:'zsz',width:70,sortable:true,renderer:moformat},
+                    /* {title:'开盘价',name:'open',width:40,sortable:true  }, */
+                   /*  {title:'收盘价',name:'close',width:40,sortable:true }, */
+                    { title:'前1涨幅',width:40, name:'upRises' , align:'right',sortable:true,renderer: fixed2percentage},
+                    { title:'涨跌幅', name:'rises',width:40 , align:'right',renderer: fixed2percentage,sortable:true},
+                    { title:'后1涨幅', name:'nextRises',width:40 , align:'right',renderer: fixed2percentage,sortable:true},
+                    { title:'连涨天数', name:'upDateNum' ,width:40, align:'right',sortable:true},
+                    {title:'macd',name:'macd',width:40,renderer: fixed2,sortable:true},
+                    {title:'j',name:'j',width:40,renderer: fixed2,sortable:true},
+                    {title:'j3',name:'j3',width:40,renderer: fixed2,sortable:true},
+                    {title:'j5',name:'j5',width:40,renderer: fixed2,sortable:true},
+                    {title:'macd连涨天数',width:60,name:'macdNum',sortable:true},
+                    {title:'成交量比',width:60,name:'volumeRises',sortable:true,renderer: fixed2percentage},
+                    {title:'5日涨幅',width:50,name:'upSumRises5',sortable:true,renderer: fixed2percentage},
+                    {title:'10日涨幅',width:50,name:'upSumRises10',sortable:true,renderer: fixed2percentage},
+                /*     {title:'10日涨幅',name:'upSumRises10',sortable:true,renderer: fixed2percentage}, */
+                    {title:'dea',name:'dea',width:40,sortable:true,renderer: fixed2percentage},
+                    {title:'diff',name:'diff',width:40,sortable:true,renderer: fixed2percentage}
+                   
+                    
+                	
+                    
+                    /* {title:'5日成交量',name:'volumeMa5',sortable:true},
+                    {title:'10日成交量',name:'volumeMa10',sortable:true} */
+
+                   /*  { title:'今开盘', name:'open', align:'right', renderer: fixed2},
+                    { title:'今收盘', name:'close' , align:'right', renderer: fixed2,sortable:true},
+                   
+                    { title:'最高价', name:'high' , align:'right', renderer: fixed2},
+                    { title:'最低价', name:'low' , align:'right', renderer: fixed2},
+                    { title:'成交额(万)', name:'volume' , align:'right', renderer: function(val){
+                        return (val / 10000).toFixed(2);
+                    }},
+                    { title:'macd', name:'macd' , align:'right', renderer: highliht} */
+                ];
+
+
+                var mmg = $('.mmg').mmGrid({
+                    height: 'auto'
+                    , cols: cols
+                    , url: 'http://www.estock.com:8080/stock/getList'
+                    , method: 'get'
+                    , remoteSort:true
+                    , sortName: 'close'
+                    , sortStatus: 'asc'
+                    , fullWidthRows: true
+                    , autoLoad: false
+                    ,showBackboard:true
+                    , plugins: [
+                        pgBar
+                    ]
+                    , params: function(){
+                        //如果这里有验证，在验证失败时返回false则不执行AJAX查询。
+                      return {
+                          datas: JSON.stringify(getDatas())
+                      }
+                    }
+                });
+
+
+                mmg.load();
+
+                $('#btnSearch').on('click',function(){
+                    //点击查询时页码置为1
+                    var str=JSON.stringify(getDatas());
+                    mmg.load({page:1,datas:str});
+                });
+
+
+            });
+
+            function addFormDiv(){
+                $('#fh').append(formHtml);
+            }
+
+            function delFormDiv(obj){
+            	if($('#fh .data').find('select').size() == 3){
+            		return;
+            	}
+                $(obj).parent().parent().remove();
+            }
+
+            function openDiv(code){
+            	$('#code').val('min');
+            	$('#imgFen').attr('src' ,getPath(code));
+            	$('#myModal').modal('show');
+            }
+
+            function huan(type){
+            	var old = $('#code').val();
+            	var imgPath = $('#imgFen').attr('src');
+            	imgPath = imgPath.replace(old , type);
+            	$('#code').val(type);
+            	$('#imgFen').attr('src' ,imgPath);
+            }
+
+            function getPath(code){
+            	var timestamp = Date.parse(new Date());
+            	var path = 'http://image.sinajs.cn/newchart/min/n/';
+            	if(code.toString().substring(0,1) == 6){
+            		path = path +  'sh'+code+'.gif';
+            	}else{
+            		path = path +  'sz'+code+'.gif';
+            	}
+            	path = path + '?'+timestamp;
+            	return path;
+            }
+            
+        </script>
+  </body>
+</html>
