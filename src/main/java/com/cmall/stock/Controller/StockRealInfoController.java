@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cmal.stock.storedata.CommonBaseStockInfo;
+import com.cmal.stock.storedata.StoreRealSet;
 import com.cmal.stock.strage.SelGetStock;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockRealBean;
@@ -41,5 +42,8 @@ public class StockRealInfoController extends BaseController{
         return fieldNames;
     }
     
-   
+    @RequestMapping("/real/getRealByCode")
+    public StockRealBean getRealByCode(String code) throws Exception {
+        return StoreRealSet.getBeanByCode(code);
+    }
 }

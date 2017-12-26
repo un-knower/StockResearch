@@ -63,7 +63,7 @@ public class StoreRealSet {
 	
 	public static StockRealBean getBeanByCode(String sat) throws ClientProtocolException, IOException{
 		String code = sat;
-		if(sat.split("")[0].equals("0") || sat.split("")[0].equals("3")){
+		if((sat.split("")[0].equals("0") || sat.split("")[0].equals("3")) && !sat.equals("000001")){
 			code = "1" + sat;
 		}else{
 			code = "0" + sat;
@@ -80,7 +80,7 @@ public class StoreRealSet {
 		for(String  sat:lstSource){
 			//StockBaseInfo info = getNextDate(sat,jestClient);
 			String code = sat;
-			if(sat.split("")[0].equals("0") || sat.split("")[0].equals("3")){
+			if((sat.split("")[0].equals("0") || sat.split("")[0].equals("3")) && !sat.equals("000001")){
 				code = "1" + sat;
 			}else{
 				code = "0" + sat;
@@ -105,9 +105,12 @@ public class StoreRealSet {
 
 	public static StockRealBean getList(String data , String code) {
 		StockRealBean bean = new StockRealBean();
+		System.out.println(data);
 		data = data.replace("_ntes_quote_callback({\""+code+"\":" , "");
 		data = data.replace("});", "");
-//		System.out.println(data);
+		if(data.indexOf("callback") > 0){
+			return null;
+		}
 		Type type = new TypeToken<StockRealBean>() {
 		}.getType();
 		Gson gson = new Gson();

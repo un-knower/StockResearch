@@ -12,30 +12,46 @@
 		<div class="container-fluid" id="pcont">
 		  <div class="cl-mcont">
         <div class="row dash-cols">
-          <div class="col-sm-4 col-md-4">
+          <div class="col-sm-5 col-md-5">
           <div class="block">
-            <div class="header no-border">
-              <h2>Sales</h2>
+            <div class="header no-border" style = "padding-left:30px !important;">
+              		<form class="form-inline">
+					  <div class="form-group">
+					    <div class="input-group pull-right">
+					      <div class="input-group-addon">实时数据:</div>
+					      <input type="text" class="form-control" id="code" value="000001">
+					    </div>
+					  </div>
+					  <button type="button" class="btn btn-default" onclick = "getReal();">查</button>
+					</form>
             </div>
-            <div class="content red-chart"  data-step="3" data-intro="<strong>Unique Styled Plugins</strong> <br/> We put love in every detail to give a great user experience!.">
-              <div id="site_statistics" style="height:180px;"></div>
+            <div class="content"  data-step="3" data-intro="">
+              <img src = "http://image.sinajs.cn/newchart/min/n/sh000001.gif" style="width:100%;" id ="imgFen"/>
             </div>
             <div class="content">
               <div class="stat-data">
-                <div class="stat-blue">
-                  <h2>1,254</h2>
-                  <span>Total Sales</span>
+                <div class="stat-red" id = "realPrice">
+                  <h2 id = "price">3000</h2>
+                  <span id = "percent">+10%</span>
                 </div>
               </div>
               <div class="stat-data">
                 <div class="stat-number">
-                  <div><h2>83</h2></div>
-                  <div>Total hits<br /><span>(Daily)</span></div>
+                  <div><h4 id = "realName">上证指数</h4></div>
                 </div>
                 <div class="stat-number">
-                  <div><h2>57</h2></div>
-                  <div>Views<br /><span>(Daily)</span></div>
+                  <div class = "col-sm-6 col-md-6">
+                  	开盘:<span id = "realOpen" style = "font-size: 16px !important;"></span>
+                  	<br/>
+                  	涨幅:<span id = "realUp" style = "font-size: 16px !important;"></span>
+                  </div>
+                  <div class = "col-sm-6 col-md-6">
+                  	最高:<span id = "realHigh" style = "font-size: 16px !important;"></span>
+                  	<br/>
+                  	最低:<span id = "realLow" style = "font-size: 16px !important;"></span>
+                  </div>
                 </div>
+               
               </div>
               <div class="clear"></div>
             </div>
@@ -53,8 +69,60 @@
         nanoScroller: false
       });
         
-      App.dashBoard();        
+      App.dashBoard();   
+      
+      getReal();   
     });
+    
+    function getReal(){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/real/getRealByCode",//路径  
+        data : {code:$('#code').val()},//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	if(result != ''){
+        		$('#imgFen').attr('src' ,getPath($('#code').val()));
+        		$('#price').html(result['price']);
+        		$('#realName').html(result['name']);
+        		$('#realOpen').html(result['open']);
+        		$('#realUp').html(getNumUp(result['updown']));
+        		$('#realHigh').html(result['high']);
+        		$('#realLow').html(result['low']);
+        		var percent = parseFloat(result['percent']) * 100;
+        		percent = percent.toFixed(2)
+        		if(percent > 0){
+        			percent = "+" + percent + "%";
+        			$('#realPrice').attr("class","stat-red");
+        		}else{
+        			percent = percent + "%";
+        			$('#realPrice').attr("class","stat-green");
+        		}
+        		$('#percent').html(percent);
+        	}else{
+        		alert('查不到数据');
+        	}
+      	}  
+      });   
+    }
+    
+    function getNumUp(num){
+    	if(num >= 0){
+    		return "+" + num;
+    	}
+    	return num;
+    }
+    
+    function getPath(code){
+            	var timestamp = Date.parse(new Date());
+            	var path = 'http://image.sinajs.cn/newchart/min/n/';
+            	if(code.toString().substring(0,1) == 6){
+            		path = path +  'sh'+code+'.gif';
+            	}else{
+            		path = path +  'sz'+code+'.gif';
+            	}
+            	path = path + '?'+timestamp;
+            	return path;
+            }
   </script>
   </body>
 </html>

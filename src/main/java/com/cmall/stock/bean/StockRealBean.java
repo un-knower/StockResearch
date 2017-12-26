@@ -76,7 +76,7 @@ public class StockRealBean implements Serializable{
 
     private int bidvol4;
 
-    private int volume;
+    private long volume;
 
     private int askvol1;
 
@@ -310,11 +310,13 @@ public class StockRealBean implements Serializable{
 		this.bidvol4 = bidvol4;
 	}
 
-	public int getVolume() {
+	
+
+	public long getVolume() {
 		return volume;
 	}
 
-	public void setVolume(int volume) {
+	public void setVolume(long volume) {
 		this.volume = volume;
 	}
 

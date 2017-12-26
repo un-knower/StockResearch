@@ -2790,6 +2790,24 @@ div.dataTables_length label select {
   color: #FFF;
   padding: 20px 10px;
 }
+.cl-mcont .block .stat-data .stat-red,
+.cl-mcont .block-flat .stat-data .stat-red {
+  background: #FF2121;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  text-align: center;
+  color: #FFF;
+  padding: 20px 10px;
+}
+.cl-mcont .block .stat-data .stat-green,
+.cl-mcont .block-flat .stat-data .stat-green {
+  background: #21A675;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  text-align: center;
+  color: #FFF;
+  padding: 20px 10px;
+}
 .cl-mcont .block .stat-data .stat-number,
 .cl-mcont .block-flat .stat-data .stat-number {
   border-bottom: 1px solid #dadada;
