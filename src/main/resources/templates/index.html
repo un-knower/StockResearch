@@ -115,7 +115,7 @@
     function getPath(code){
             	var timestamp = Date.parse(new Date());
             	var path = 'http://image.sinajs.cn/newchart/min/n/';
-            	if(code.toString().substring(0,1) == 6){
+            	if(code.toString().substring(0,1) == 6 || code == '000001'){
             		path = path +  'sh'+code+'.gif';
             	}else{
             		path = path +  'sz'+code+'.gif';
