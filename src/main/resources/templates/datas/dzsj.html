@@ -45,13 +45,15 @@
                 
                 var cols = [
                    
-                    {title:'日期', name:'rq' , align:'center' },
+                    {title:'日期', name:'rq' , align:'center',sortable:true },
                     {title:'商品', name:'productName' , align:'center' },
                    	{title:'行业', name:'productHy' , align:'center' },
                     {title:'价格',name:'monthYcPrice',sortable:true},
                     {title:'后一天价格',name:'monthYmPrice',sortable:true},   
                     {title:'涨幅比例',name:'monthRise',sortable:true,renderer: highliht},
-                    {title:'5天涨幅',name:'wtzf',sortable:true,renderer: highliht},
+                    {title:'周涨幅',name:'wtzf',sortable:true,renderer: highliht},
+                    {title:'月涨幅',name:'yfzf',sortable:true,renderer: highliht},
+                    {title:'季度涨幅',name:'jdzf',sortable:true,renderer: highliht},
                     {title:'同比增长',name:'tbRise',sortable:true,renderer: highliht},
                     {title:'单位',name:'priceDw',sortable:true}
                 ];

@@ -64,16 +64,27 @@ public class MonthsStapleData {
 					doubleList = Lists.newArrayList();
 				}
 				doubleList.add(monthYcPrice);
-				if(doubleList.size() > 5){
+				if(doubleList.size() > 90){
 					doubleList.remove(0);
 				}
 				map.put(productName, doubleList);
-				if(doubleList.size() == 5){
+				if(doubleList.size() >= 7){
 					double wtzf = 0;
+					double yfzf = 0;
+					double jdzf = 0;
 					double up = 0;
-					for (int j = 4; j >= 0; j--) {
-						if(j != 4){
-							wtzf = wtzf + (up / doubleList.get(j) - 1);
+					for (int j = doubleList.size() - 1; j >= 0; j--) {
+						if(j != doubleList.size() - 1){
+							if(j >= doubleList.size() - 7){
+								wtzf = wtzf + (up / doubleList.get(j) - 1);
+							}
+							if(j >= doubleList.size() - 30){
+								yfzf = yfzf + (up / doubleList.get(j) - 1);
+							}
+							if(j >= doubleList.size() - 90){
+								jdzf = jdzf + (up / doubleList.get(j) - 1);
+							}
+							
 						}
 						up = doubleList.get(j);
 					}
@@ -81,7 +92,20 @@ public class MonthsStapleData {
 						BigDecimal b = new BigDecimal(wtzf * 100);
 						wtzf = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 					}
+					if(yfzf != 0){
+						BigDecimal b = new BigDecimal(yfzf * 100);
+						yfzf = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+					}
+					if(jdzf != 0){
+						BigDecimal b = new BigDecimal(jdzf * 100);
+						jdzf = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+					}
+					wtzf = wtzf + stap100ppi.getMonthRise();
 					stap100ppi.setWtzf(wtzf);
+					yfzf = yfzf + stap100ppi.getMonthRise();
+					stap100ppi.setYfzf(yfzf);
+					jdzf = jdzf + stap100ppi.getMonthRise();
+					stap100ppi.setJdzf(jdzf);
 				}
 				lstSource.add(stap100ppi);
 				// }
@@ -134,7 +158,16 @@ public class MonthsStapleData {
 
 	
 	public static void main(String[] args) throws Exception {
-		//writeTextReport();
+		
+//		String fan = "";
+//    	Document document = Jsoup.parse("https://www.100ppi.com");
+//    	Elements eles = document.getElementsByClass("lnews");
+//    	if(eles.size() > 0){
+//    		fan = eles.get(0).html();
+//    	}
+//    	System.out.println(fan);
+		
+//		writeTextReport();
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
 		List<Stap100PPI> lstSource = Lists.newArrayList();
@@ -189,6 +222,7 @@ public class MonthsStapleData {
 		try {
 			for (int i = 1; i <= 12; i++) {
 				String source ="2017-"+String.valueOf(i);
+				System.out.println(source);
 				Date date = format.parse(source);
 				Calendar calendar = new GregorianCalendar();
 				calendar.setTime(date);

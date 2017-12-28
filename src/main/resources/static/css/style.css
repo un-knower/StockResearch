@@ -1025,7 +1025,19 @@ body {
 .block-flat,
 .block-wizard {
   margin-bottom: 40px;
-  padding: 20px 20px;
+  padding: 6px 20px 6px 20px;
+  background: #FFF;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-left: 1px solid #efefef;
+  border-right: 1px solid #efefef;
+  border-bottom: 1px solid #e2e2e2;
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.04);
+}
+.block-flat2,
+.block-wizard {
+  margin-bottom: 40px;
+  padding: 6px 20px 0px 20px;
   background: #FFF;
   border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -5343,7 +5355,7 @@ ul.timeline li > .date {
   border: 0;
 }
 .list-group.tickets .list-group-item {
-  padding: 13px 15px;
+  padding: 6px 15px;
 }
 .list-group.tickets .list-group-item .avatar {
   float: left;

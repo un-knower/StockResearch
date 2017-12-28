@@ -16,8 +16,12 @@ public class Stap100PPI implements Serializable{
 	private String priceDw;
 	private double monthRise;
 	private double tbRise;
-	//5天涨幅
+	//7天涨幅
 	private double wtzf;
+	//月涨幅
+	private double yfzf;
+	//季度涨幅
+	private double jdzf;
 
 	
 	public String getRq() {
@@ -107,6 +111,22 @@ public class Stap100PPI implements Serializable{
 
 	public void setWtzf(double wtzf) {
 		this.wtzf = wtzf;
+	}
+
+	public double getYfzf() {
+		return yfzf;
+	}
+
+	public void setYfzf(double yfzf) {
+		this.yfzf = yfzf;
+	}
+
+	public double getJdzf() {
+		return jdzf;
+	}
+
+	public void setJdzf(double jdzf) {
+		this.jdzf = jdzf;
 	}
 	
 	

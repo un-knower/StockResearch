@@ -3,65 +3,91 @@
   <head th:include="/common/common_head :: commonHeader('首页')"></head>
 <body>
 
-  <!-- Fixed navbar -->
-  <div id="head-nav" class="navbar navbar-default navbar-fixed-top" th:include="/common/top_nav :: nav"></div>
-
-	<div id="cl-wrapper" class="fixed-menu">
-		<div class="cl-sidebar" data-position="right" data-step="1" th:include="/common/left_menu :: menu('index')"></div>
-	
-		<div class="container-fluid" id="pcont">
-		  <div class="cl-mcont">
-        <div class="row dash-cols">
-          <div class="col-sm-5 col-md-5">
-          <div class="block">
-            <div class="header no-border" style = "padding-left:30px !important;">
-              		<form class="form-inline">
-					  <div class="form-group">
-					    <div class="input-group pull-right">
-					      <div class="input-group-addon">实时数据:</div>
-					      <input type="text" class="form-control" id="code" value="000001">
-					    </div>
-					  </div>
-					  <button type="button" class="btn btn-default" onclick = "getReal();">查</button>
-					</form>
-            </div>
-            <div class="content"  data-step="3" data-intro="">
-              <img src = "http://image.sinajs.cn/newchart/min/n/sh000001.gif" style="width:100%;" id ="imgFen"/>
-            </div>
-            <div class="content">
-              <div class="stat-data">
-                <div class="stat-red" id = "realPrice">
-                  <h2 id = "price">3000</h2>
-                  <span id = "percent">+10%</span>
-                </div>
-              </div>
-              <div class="stat-data">
-                <div class="stat-number">
-                  <div><h4 id = "realName">上证指数</h4></div>
-                </div>
-                <div class="stat-number">
-                  <div class = "col-sm-6 col-md-6">
-                  	开盘:<span id = "realOpen" style = "font-size: 16px !important;"></span>
-                  	<br/>
-                  	涨幅:<span id = "realUp" style = "font-size: 16px !important;"></span>
-                  </div>
-                  <div class = "col-sm-6 col-md-6">
-                  	最高:<span id = "realHigh" style = "font-size: 16px !important;"></span>
-                  	<br/>
-                  	最低:<span id = "realLow" style = "font-size: 16px !important;"></span>
-                  </div>
-                </div>
-               
-              </div>
-              <div class="clear"></div>
-            </div>
-          </div>
-        </div>  
-        </div>
-
-		  </div>
-		</div> 	
-	</div>
+<!-- 顶部导航 -->
+<div id="head-nav" class="navbar navbar-default navbar-fixed-top" th:include="/common/top_nav :: nav"></div>
+<!-- 左侧菜单 -->
+<div id="cl-wrapper" class="fixed-menu">
+	<div class="cl-sidebar" data-position="right" data-step="1" th:include="/common/left_menu :: menu('index')"></div>
+	<div class="container-fluid" id="pcont">
+		<div class="cl-mcont">
+			<div class="row dash-cols">
+				<!-- 内容左侧 -->
+				<div class="col-sm-6 col-md-6">
+					<div class="block">
+						<div class="header no-border" style = "padding-left:30px !important;">
+							<form class="form-inline">
+								<div class="form-group">
+									<div class="input-group pull-right">
+										<div class="input-group-addon">实时数据:</div>
+			      						<input type="text" class="form-control" id="code" value="000001">
+			    					</div>
+			  					</div>
+			  					<button type="button" class="btn btn-default" onclick = "getReal();">查</button>
+							</form>
+   						 </div>
+    					<div class="content"  data-step="3" data-intro="">
+      						<img src = "http://image.sinajs.cn/newchart/min/n/sh000001.gif" style="width:100%;" id ="imgFen"/>
+    					</div>
+    					<div class="content">
+      						<div class="stat-data">
+        						<div class="stat-red" id = "realPrice">
+          							<h2 id = "price">3000</h2>
+          							<span id = "percent">+10%</span>
+       							</div>
+      						</div>
+      						<div class="stat-data">
+        						<div class="stat-number">
+          							<div><h4 id = "realName">上证指数</h4></div>
+        						</div>
+        						<div class="stat-number">
+          							<div class = "col-sm-6 col-md-6">
+          								开盘:<span id = "realOpen" style = "font-size: 16px !important;"></span>
+          								<br/>
+          								涨幅:<span id = "realUp" style = "font-size: 16px !important;"></span>
+          							</div>
+          							<div class = "col-sm-6 col-md-6">
+          								最高:<span id = "realHigh" style = "font-size: 16px !important;"></span>
+          								<br/>
+          								最低:<span id = "realLow" style = "font-size: 16px !important;"></span>
+          							</div>
+        						</div>
+							</div>
+      						<div class="clear"></div>
+    					</div>
+  					</div>
+				</div><!-- 内容左侧end -->
+				<!-- 内容右侧 -->
+				<div class="col-sm-6 col-md-6">
+					<div class="block-flat2 pie-widget">
+			            <div class="content no-padding">
+			            	<span class="pull-right"><a href = "">更多</a></span>
+			              	<h4 class="title">大宗商品热点消息</h4>
+			              	<div class="list-group tickets" id = "dzsprd"></div>	            
+			            </div>
+			        </div>
+			        <div class="block-flat">
+						<div class="header">
+							<h4>最佳商品</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr>
+										<th>名称</th>
+										<th>周涨幅</th>
+										<th>月涨幅</th>
+										<th>季涨幅</th>
+									</tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "stapledayUp"></tbody>
+							</table>
+						</div>
+					</div>
+				</div>  <!-- 内容右侧end -->
+			</div>
+		</div>
+	</div> 	
+</div>
   <div th:include="/common/onload_js :: onloadJs"></div>
   <script type="text/javascript">
     $(document).ready(function(){
@@ -71,7 +97,8 @@
         
       App.dashBoard();   
       
-      getReal();   
+      getReal();
+      getStapleday();   
     });
     
     function getReal(){
@@ -123,6 +150,45 @@
             	path = path + '?'+timestamp;
             	return path;
             }
+            
+     function getReal(){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/stapleday/getHotspotHtml",//路径  
+        data : {code:$('#code').val()},//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	if(result != ''){
+        		$('#dzsprd').html(result);
+        	}else{
+        		alert('查不到数据');
+        	}
+      	}  
+      });
+    }
+    
+    function getStapleday(){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/stapleday/getList",//路径  
+        data : {
+        	datas:'[{"must":"must","name":"rq","type":"=","value":"2017-12-26"}]',
+        	sort:'wtzf.desc',
+        	page:1,
+        	limit:5
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var item = result['items'];
+        	var html = "";
+        	for(var i=0;i<item.length;i++){
+        		html = html + "<tr><td>"+item[i]['productName']+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['wtzf'])+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['yfzf'])+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['jdzf'])+"</td></tr>";
+        	}
+        	$('#stapledayUp').html(html);
+      	}  
+      });  
+      }
   </script>
   </body>
 </html>
