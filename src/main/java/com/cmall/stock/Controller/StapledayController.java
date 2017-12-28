@@ -20,7 +20,7 @@ import com.cmall.stock.vo.StockBasePageInfo;
 import com.kers.httpmodel.BaseConnClient;
 
 @RestController
-public class stapledayController  extends BaseController<Stap100PPI>{
+public class StapledayController  extends BaseController<Stap100PPI>{
 	
 	@RequestMapping("/stapleday/getList")
     public Map<String,Object> getList(StockBasePageInfo page, String type) throws Exception {

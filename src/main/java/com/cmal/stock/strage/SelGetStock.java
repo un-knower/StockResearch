@@ -56,12 +56,17 @@ public class SelGetStock {
 			String type) throws Exception {
 		SearchSourceBuilder ssb = new SearchSourceBuilder();
 		if (!StringUtils.isEmpty(page.getSort())) {
-			String order = page.getSort().split("\\.")[1];
-			if (order.equalsIgnoreCase("desc")) {
-				ssb.sort(page.getSort().split("\\.")[0], SortOrder.DESC);
-			} else {
-				ssb.sort(page.getSort().split("\\.")[0], SortOrder.ASC);
+			String[] sorts = page.getSort().split(",");
+			for (int i = 0; i < sorts.length; i++) {
+				String s = sorts[i];
+				String order = s.split("\\.")[1];
+				if (order.equalsIgnoreCase("desc")) {
+					ssb.sort(s.split("\\.")[0], SortOrder.DESC);
+				} else {
+					ssb.sort(s.split("\\.")[0], SortOrder.ASC);
+				}
 			}
+			
 		}
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
 		System.out.println(searchSourceBuilder.toString());
