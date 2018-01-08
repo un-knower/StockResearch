@@ -39,7 +39,7 @@ import io.searchbox.core.Search;
 public class SelGetStock {
 
 	public static Map<String, Object> getLstResult(BoolQueryBuilder query, StockBasePageInfo page) throws Exception {
-		return getCommonLstResult(query, page, "stockpcse", "2017");
+		return getCommonLstResult(query, page, "stockpcse", "");
 	}
 
 	public static Map<String, Object> getTrailerLstResult(BoolQueryBuilder query, StockBasePageInfo page, String type)

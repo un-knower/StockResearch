@@ -27,7 +27,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.kers.esmodel.BaseCommonConfig;
 
 @Configuration
-//@EnableScheduling // 启用定时任务
+@EnableScheduling // 启用定时任务
 public class SchedulingConfig {
 
 	Logger logger = Logger.getLogger("chapter07");
@@ -50,7 +50,10 @@ public class SchedulingConfig {
 		Calendar ncalendar = Calendar.getInstance();
 		int H = ncalendar.get(Calendar.HOUR_OF_DAY);
 		int M = ncalendar.get(Calendar.MINUTE);
-		int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 1;
+		int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 2;
+		System.out.println("H:"+H);
+		System.out.println("M:"+M);
+		System.out.println("w:"+w);
 		boolean k = true;
 		if(((H == 9 && M >= 30) || (H==10) || (H==11 && M <= 30) || (H==13) || (H==14)) 
 				&& w !=6 && w !=7){
@@ -71,13 +74,15 @@ public class SchedulingConfig {
 					        	  StockBaseInfo info = map.get(string);
 					        	 List<StockRealBean> list = new ArrayList<StockRealBean>();
 					        	 StockRealBean real = StoreRealSet.getBeanByCode(string);
-					        	 real.setPercent(real.getPercent() * 100);
-					        	 if(info != null){
-					        		 real.setUpRises(info.getRises());
-					        		 real.setUpVolume(info.getVolume());
-					        		 real.setVolumeRises((double)real.getVolume() / (double)info.getVolume());
+					        	 if(real != null){
+					        		 real.setPercent(real.getPercent() * 100);
+						        	 if(info != null){
+						        		 real.setUpRises(info.getRises());
+						        		 real.setUpVolume(info.getVolume());
+						        		 real.setVolumeRises((double)real.getVolume() / (double)info.getVolume());
+						        	 }
+						        	 list.add(real);
 					        	 }
-					        	 list.add(real);
 					        	 StoreRealSet.insBatchEs(list,jestClient,"stockrealinfo");
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -92,7 +97,7 @@ public class SchedulingConfig {
 		
     }
 	
-	@Scheduled(cron = "0 00 16 * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 30 15 * * ?") // 每20秒执行一次
     public void updateInfo() {
 		try {
 			wDataRealToEs();
