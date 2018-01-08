@@ -47,7 +47,7 @@ public class JsoupHelper {
 	 */
 
 	public static Map<String, String> fecthByMap(String url, String xpath) throws Exception {
-		Map<String, String> nodeMap = new LinkedHashMap<>();
+		Map<String, String> nodeMap = new LinkedHashMap<String, String>();
 
 		Object result = fecthNode(url, xpath);
 
@@ -73,7 +73,7 @@ public class JsoupHelper {
 	 * 获取xpath下的某个属性值
 	 **/
 	public static List<String> fecthAttr(String url, String xpath, String attr) throws Exception {
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 
 		Object result = fecthNode(url, xpath);
 

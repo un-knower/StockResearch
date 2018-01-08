@@ -71,6 +71,8 @@ public class StockBaseInfo implements Serializable {
 	// KDJ 指标的三个属性
 	private float k = 0;
 	private float d = 0;
+	//当是kd两个值小于5的时候 显示具体的差值，当有相交的时候金叉为0 死叉为-1
+	private float x = -10;
 	
 	// 初始需全部赋值的属性
 	private float open; // 开盘价
@@ -666,6 +668,14 @@ public class StockBaseInfo implements Serializable {
 
 	public void setMinRises10(float minRises10) {
 		this.minRises10 = minRises10;
+	}
+
+	public float getX() {
+		return x;
+	}
+
+	public void setX(float x) {
+		this.x = x;
 	}
 
 	

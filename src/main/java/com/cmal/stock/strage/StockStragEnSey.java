@@ -366,6 +366,21 @@ public class StockStragEnSey {
 						up10++;
 					}
 				}
+    			float X = -10;
+    			float upK = entries.get(i-1).getK();
+    			float upD = entries.get(i-1).getD();
+    			float K = StockBaseInfo.getK();
+    			float D = StockBaseInfo.getD();
+    			if(upK >= upD && K < D){
+    				X = -1;
+    			}else if(upK <= upD && K > D){
+    				X = 0;
+    			}else{
+    				if(K-D < 5 && K-D > -5){
+    					X = K-D;
+    				}
+    			}
+    			StockBaseInfo.setX(X);
     			StockBaseInfo.setUp5(up5);
     			StockBaseInfo.setUp10(up10);
     			StockBaseInfo.setMacdUp5(macdUp5);
