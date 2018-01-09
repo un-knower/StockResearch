@@ -57,6 +57,7 @@ public class StockBaseInfo implements Serializable {
 	private float dea = 0;
 	private float diff = 0;
 	
+	private int macdx = -10;
 
 	// macd 持续天数
 	private int macdNum = 0;

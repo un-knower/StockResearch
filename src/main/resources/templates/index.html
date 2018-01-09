@@ -96,40 +96,23 @@
 			        </div>
 			        <div class="block-flat">
 						<div class="header">
-							<h4>周榜最佳商品</h4>
+							<h4>周榜商品</h4>
 						</div>
 						<div class="content">
 							<table class="no-border">
 								<thead class="no-border">
 									<tr>
-										<th>名称</th>
-										<th>周涨幅</th>
-										<th>月涨幅</th>
-										<th>季涨幅</th>
+										<th width = "40%">名称</th>
+										<th width = "20%"><a href = "#" data1 = "wtzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">周涨幅</a></th>
+										<th width = "20%">月涨幅</th>
+										<th width = "20%">季涨幅</th>
 									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "stapledayUp"></tbody>
 							</table>
 						</div>
 					</div>
-					<div class="block-flat  pie-widget">
-						<div class="header">
-							<h4>周榜最low商品</h4>
-						</div>
-						<div class="content">
-							<table class="no-border">
-								<thead class="no-border">
-									<tr>
-										<th>名称</th>
-										<th>周涨幅</th>
-										<th>月涨幅</th>
-										<th>季涨幅</th>
-									</tr>
-								</thead>
-								<tbody class="no-border-x no-border-y" id = "stapledayLow"></tbody>
-							</table>
-						</div>
-					</div>
+					
 				</div>  <!-- 内容右侧end -->
 			</div>
 		</div>
@@ -147,8 +130,7 @@
       
       getReal();
       getHotHtml();
-      getStapledayUp();
-      getStapledayLow();
+      getStapledayUp('wtzf' , 'desc' , 'stapledayUp');
       getLongHuTable(1,1);
     });
     
@@ -217,13 +199,27 @@
       });
     }
     
-    function getStapledayUp(){
+    function getSortZ(data){
+    	var da1 = $(data).attr("data1");
+    	var da2 = $(data).attr("data2");
+    	var da3 = $(data).attr("data3");
+    	if(da2 == 'asc'){
+    		da2 = "desc";
+    		$(data).attr("data2" , da2);
+    	}else if(da2 == 'desc'){
+    		da2 = "asc";
+    		$(data).attr("data2" , da2);
+    	}
+    	getStapledayUp(da1 , da2 , da3)
+    }
+    
+    function getStapledayUp(da1 , da2 , da3){
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/stapleday/getList",//路径  
         data : {
         	datas:'',
-        	sort:'rq.desc,wtzf.desc',
+        	sort:'rq.desc,'+da1+'.'+da2,
         	page:1,
         	limit:5
         },//数据，这里使用的是Json格式进行传输  
@@ -236,7 +232,7 @@
         		html = html + "<td>"+fixed2percentage(item[i]['yfzf'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['jdzf'])+"</td></tr>";
         	}
-        	$('#stapledayUp').html(html);
+        	$('#'+da3).html(html);
       	}  
       });  
       }
