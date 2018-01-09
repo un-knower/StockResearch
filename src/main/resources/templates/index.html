@@ -55,8 +55,16 @@
       						<div class="clear"></div>
     					</div>
   					</div>
-  					<div class="block-flat  pie-widget">
+  					<div class="block-flat2 pie-widget">
 						<div class="header">
+							<span class="pull-right"><a href = "#" onclick = "longhuGo()">更多</a></span>
+							<span class="pull-right"><span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="
+								1.当日涨幅超过10% 
+								2.连续两天涨幅超过3% 
+								3.5天内三天涨幅>0 
+								4.5天内涨超过15% 
+								5.10天内涨超过15% ">
+								规则</span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 							<h4>龙虎榜</h4>
 						</div>
 						<div class="content">
@@ -129,6 +137,7 @@
 </div>
   <div th:include="/common/onload_js :: onloadJs"></div>
   <script type="text/javascript">
+  	var longhuDatas = '[{"must":"must","name":"rises","type":">=","value":"10"},{"must":"must","name":"upRisesDayNum5","type":">=","value":"3"},{"must":"must","name":"upRises","type":">=","value":"3"},{"must":"must","name":"upSumRises5","type":">=","value":"15"}]';
     $(document).ready(function(){
        App.init({
         nanoScroller: false
@@ -262,7 +271,7 @@
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/getList",//路径  
         data : {
-        	datas:'[{"must":"must","name":"rises","type":">=","value":"10"},{"must":"must","name":"upRisesDayNum5","type":">=","value":"3"},{"must":"must","name":"upRises","type":">=","value":"3"},{"must":"must","name":"upSumRises5","type":">=","value":"15"}]',
+        	datas:longhuDatas,
         	sort:'date.desc',
         	page:page,
         	limit:5
@@ -303,6 +312,10 @@
                     getLongHuTable(page , 2);
                 }
             });
+      }
+      
+      function longhuGo(){
+      	window.location.href='/stock/datas/stockinfo?datas='+longhuDatas;
       }
   </script>
   </body>

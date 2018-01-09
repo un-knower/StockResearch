@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.cmall.stock.vo.StockBasePageInfo;
+
 @Controller
 @RequestMapping("/")  
 public class HtmlController{
@@ -14,7 +16,8 @@ public class HtmlController{
     }
 	
 	@RequestMapping("/datas/stockinfo")
-    public String  dataStockInfo(Model model) throws Exception {
+    public String  dataStockInfo(Model model , StockBasePageInfo info) throws Exception {
+		model.addAttribute("info", info);
         return "/datas/stockinfo";
     }
 	
