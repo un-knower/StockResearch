@@ -105,7 +105,7 @@ public class StoreRealSet {
 
 	public static StockRealBean getList(String data , String code) {
 		StockRealBean bean = new StockRealBean();
-		System.out.println(data);
+//		System.out.println(data);
 		data = data.replace("_ntes_quote_callback({\""+code+"\":" , "");
 		data = data.replace("});", "");
 		if(data.indexOf("callback") > 0){

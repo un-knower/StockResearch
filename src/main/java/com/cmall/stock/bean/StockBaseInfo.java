@@ -27,11 +27,10 @@ public class StockBaseInfo implements Serializable {
 	private float macd = 0;
 	private float nextMacd=0;
 	// 连续上涨天数
-	
-	
-	
-	
-	
+	//股票开市天数
+	private int openNum = 1;
+	//5天内上涨天数
+	private int upRisesDayNum5 = 0;
 	
 	private float upJ = 0;
 	private float j = 0;
@@ -676,6 +675,22 @@ public class StockBaseInfo implements Serializable {
 
 	public void setX(float x) {
 		this.x = x;
+	}
+
+	public int getOpenNum() {
+		return openNum;
+	}
+
+	public void setOpenNum(int openNum) {
+		this.openNum = openNum;
+	}
+
+	public int getUpRisesDayNum5() {
+		return upRisesDayNum5;
+	}
+
+	public void setUpRisesDayNum5(int upRisesDayNum5) {
+		this.upRisesDayNum5 = upRisesDayNum5;
 	}
 
 	

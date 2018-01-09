@@ -283,6 +283,7 @@ public class StockStragEnSey {
     			float upJ = entries.get(i-1).getJ();
     			float upMacds = entries.get(i-1).getMacd();
     			float upVom = entries.get(i-1).getVolume();
+    			int openNum = entries.get(i-1).getOpenNum() + 1;
     			if(upVom != 0){
     				StockBaseInfo.setVolumeRises(StockBaseInfo.getVolume() / upVom);
     				if(StockBaseInfo.getVolumeRises() > 2){

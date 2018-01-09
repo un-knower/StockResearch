@@ -46,7 +46,7 @@ public class StoreAstockTradInfo {
 	@SuppressWarnings("all")
 	public static void getHistoryData() throws IOException {
 		  final String  sfd=new SimpleDateFormat("yyyyMMdd").format(new Date());
-
+		  System.out.println(sfd);
 		List<String> filePath =CommonBaseStockInfo.getAllAStockInfo();// FileUtils.readLines(new File(CommonBaseStockInfo.astockfilePath));
 		for (final String s : filePath) {
 
@@ -177,8 +177,11 @@ public class StoreAstockTradInfo {
 			result.add(stockBaseInfo);
 		stockStragEnSey.addStockBaseInfos(result);
 		stockStragEnSey.computeStockIndex();
-		list.add(result.get(result.size()-1));
-		list.add(result.get(result.size()-2));
+		StockBaseInfo h = result.get(result.size()-1);
+		StockBaseInfo h2 = result.get(result.size()-2);
+		h2.setNextRises(h.getRises());
+		list.add(h);
+		list.add(h2);
 		return list;
 
 	}
@@ -320,7 +323,7 @@ public class StoreAstockTradInfo {
 //		getHistoryData();
 //		getRealTimeData();
 		wDataToEs();
-//		wDataRealToEs();
+		wDataRealToEs();
 	}
 //		List<StockBaseInfo>  lstResult=getstockBaseInfoFile("000001");
 //		String output="";

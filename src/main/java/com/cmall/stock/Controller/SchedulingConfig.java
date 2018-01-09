@@ -97,10 +97,19 @@ public class SchedulingConfig {
 		
     }
 	
-	@Scheduled(cron = "0 30 15 * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 05 15 * * ?") // 每20秒执行一次
     public void updateInfo() {
 		try {
 			wDataRealToEs();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Scheduled(cron = "0 15 11 * * ?") // 每20秒执行一次
+    public void updateHisDate() {
+		try {
+			StoreAstockTradInfo.getHistoryData();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
