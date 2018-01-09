@@ -63,14 +63,17 @@
 							<table class="no-border">
 								<thead class="no-border">
 									<tr>
+										<th>日期</th>
+										<th>code</th>
 										<th>名称</th>
-										<th>周涨幅</th>
-										<th>月涨幅</th>
-										<th>季涨幅</th>
+										<th>涨幅</th>
 									</tr>
 								</thead>
-								<tbody class="no-border-x no-border-y" id = "stapledayLow"></tbody>
+								<tbody class="no-border-x no-border-y" id = "longhu"></tbody>
 							</table>
+							<nav aria-label="龙虎榜分页">
+							  <ul class="pagination" id = "longhupag"></ul>
+							</nav>
 						</div>
 					</div>
 				</div><!-- 内容左侧end -->
@@ -137,6 +140,7 @@
       getHotHtml();
       getStapledayUp();
       getStapledayLow();
+      getLongHuTable(1,1);
     });
     
     function getReal(){
@@ -242,7 +246,7 @@
         success : function(result) {//返回数据根据结果进行相应的处理  
         	var item = result['items'];
         	var html = "";
-        	for(var i=0;i<item.length;i++){
+        	for(var i=0;i<item.legngth;i++){
         		html = html + "<tr><td>"+item[i]['productName']+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['wtzf'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['yfzf'])+"</td>";
@@ -251,6 +255,54 @@
         	$('#stapledayLow').html(html);
       	}  
       });  
+      }
+      
+      function getLongHuTable(page , num){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/getList",//路径  
+        data : {
+        	datas:'[{"must":"must","name":"rises","type":">=","value":"10"},{"must":"must","name":"upRisesDayNum5","type":">=","value":"3"},{"must":"must","name":"upRises","type":">=","value":"3"},{"must":"must","name":"upSumRises5","type":">=","value":"15"}]',
+        	sort:'date.desc',
+        	page:page,
+        	limit:5
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var item = result['items'];
+        	var html = "";
+        	for(var i=0;i<item.length;i++){
+        		html = html + "<tr><td>"+item[i]['date']+"</td>";
+        		html = html + "<td>"+item[i]['stockCode']+"</td>";
+        		html = html + "<td>"+item[i]['stockName']+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td></tr>";
+        	}
+        	$('#longhu').html(html);
+        	if(num == 1){
+        		longhupag();
+        	}
+      	}  
+      });  
+      }
+      
+      function longhupag(){
+      	$('#longhupag').bootstrapPaginator({
+                bootstrapMajorVersion: 3,//bootstrap版本
+                currentPage: 1,//当前页码
+                totalPages: 100,//总页数（后台传过来的数据）
+                numberOfPages: 5,//一页显示几个按钮
+                itemTexts: function (type, page, current) {
+                    switch (type) {
+                        case "first": return "首页";
+                        case "prev": return "上一页";
+                        case "next": return "下一页";
+                        case "last": return "末页";
+                        case "page": return page;
+                    }
+                },//改写分页按钮字样
+                onPageClicked: function (event, originalEvent, type, page) {
+                    getLongHuTable(page , 2);
+                }
+            });
       }
   </script>
   </body>
