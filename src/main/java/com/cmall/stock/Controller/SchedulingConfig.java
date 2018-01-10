@@ -97,13 +97,24 @@ public class SchedulingConfig {
 		
     }
 	
+	@Scheduled(cron = "0 0/5 * * * ?") // 每20秒执行一次
+    public void updateInfo2() {
+		if(shijian()){
+			try {
+				wDataRealToEs();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	@Scheduled(cron = "0 05 15 * * ?") // 每20秒执行一次
     public void updateInfo() {
-		try {
-			wDataRealToEs();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			try {
+				wDataRealToEs();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 	}
 	
 	@Scheduled(cron = "0 15 11 * * ?") // 每20秒执行一次
@@ -146,5 +157,23 @@ public class SchedulingConfig {
 			});
 		}
 		
+	}
+	
+	public boolean shijian(){
+		Calendar ncalendar = Calendar.getInstance();
+		int H = ncalendar.get(Calendar.HOUR_OF_DAY);
+		int M = ncalendar.get(Calendar.MINUTE);
+		int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 2;
+		System.out.println("H:"+H);
+		System.out.println("M:"+M);
+		System.out.println("w:"+w);
+		boolean k = true;
+		if(((H == 9 && M >= 30) || (H==10) || (H==11 && M <= 30) || (H==13) || (H==14)) 
+				&& w !=6 && w !=7){
+			k = true;
+		}else{
+			k = false;
+		}
+		return k;
 	}
 }

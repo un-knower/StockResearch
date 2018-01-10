@@ -37,6 +37,7 @@ public class StockBaseInfo implements Serializable {
 	private float j3 = 0;
 	private float j5 = 0;
 	private float nextJ = 0;
+	
 	private String area;
 	 // 5天内上涨次数
 	private int up5 = 0;
@@ -57,7 +58,7 @@ public class StockBaseInfo implements Serializable {
 	private float dea = 0;
 	private float diff = 0;
 	
-	private int macdx = -10;
+	private float macdx = -10;
 
 	// macd 持续天数
 	private int macdNum = 0;
@@ -693,6 +694,16 @@ public class StockBaseInfo implements Serializable {
 	public void setUpRisesDayNum5(int upRisesDayNum5) {
 		this.upRisesDayNum5 = upRisesDayNum5;
 	}
+
+	public float getMacdx() {
+		return macdx;
+	}
+
+	public void setMacdx(float macdx) {
+		this.macdx = macdx;
+	}
+
+	
 
 	
 	

@@ -3,6 +3,7 @@
   <head th:include="/gridCommon/common_head :: commonHeader('股票历史数据')"></head>
 <body>
 	<input type="hidden" id = "idatas" th:value="${info.datas}"/>
+	<input type="hidden" id = "sorts" th:value="${info.sort}"/>
   <!-- Fixed navbar -->
   <div id="head-nav" class="navbar navbar-default navbar-fixed-top" th:include="/common/top_nav :: nav"></div>
 
@@ -66,11 +67,17 @@
 						  }else{
 						  	$('#fh').append(formHtml);
 						  }
-                        
+                          chushihua();
                     }  
                 }); 
 
-                var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
+                
+
+
+            });
+            
+            function chushihua(){
+            	var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
                 
                 var cols = [
                     {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
@@ -118,7 +125,15 @@
                     }},
                     { title:'macd', name:'macd' , align:'right', renderer: highliht} */
                 ];
-
+				
+				var sortName = 'close';
+				var sortStatus = 'asc';
+				
+				var sorts = $('#sorts').val();
+				if(sorts != '' && sorts!=null){
+					sortName = sorts.split(".")[0];
+					sortStatus = sorts.split(".")[1];
+				}
 
                 var mmg = $('.mmg').mmGrid({
                     height: 'auto'
@@ -126,8 +141,8 @@
                     , url: 'http://www.estock.com:8080/stock/getList'
                     , method: 'get'
                     , remoteSort:true
-                    , sortName: 'close'
-                    , sortStatus: 'asc'
+                    , sortName: sortName
+                    , sortStatus: sortStatus
                     , fullWidthRows: true
                     , autoLoad: false
                     ,showBackboard:true
@@ -150,9 +165,7 @@
                     var str=JSON.stringify(getDatas());
                     mmg.load({page:1,datas:str});
                 });
-
-
-            });
+            }
 
             function addFormDiv(){
                 $('#fh').append(formHtml);

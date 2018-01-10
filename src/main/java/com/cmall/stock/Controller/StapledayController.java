@@ -53,13 +53,19 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     	String fan = "";
     	String con = BaseConnClient.baseGetReq("http://www.100ppi.com");
     	Document document = Jsoup.parse(con);
-    	Elements eles = document.getElementsByClass("lnews");
+    	Elements eles = document.getElementsByClass("topnewslist");
     	if(eles.size() > 0){
     		Element ele = eles.get(0);
-    		Elements lis = ele.select("li");
-    		for (int i = 1; i < lis.size(); i++) {
-    			fan = fan + "<li class=\"list-group-item\" href=\"#\">";
-    			String liStr = lis.get(i).html().replace("href=\"/", "href=\"http://www.100ppi.com/");
+    		Elements lis = ele.getElementsByClass("fl");
+    		for (int i = 0; i < lis.size(); i++) {
+    			int s = lis.get(i).getElementsByClass("fl").size();
+    			if(s == 1){
+    				continue;
+    			}
+    			String ban = lis.get(i).getElementsByClass("fl").get(0).select("a").get(0).html();
+    			Element as = lis.get(i).getElementsByClass("content1").get(0);
+    			fan = fan + "<li class=\"list-group-item\" href=\"#\">" + ban;
+    			String liStr = as.html().replace("href=\"/", "href=\"http://www.100ppi.com/");
     			fan = fan + liStr + "</li>";
 			}
     	}
@@ -70,13 +76,19 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     	String fan = "";
     	String con = BaseConnClient.baseGetReq("http://www.100ppi.com");
     	Document document = Jsoup.parse(con);
-    	Elements eles = document.getElementsByClass("lnews");
+    	Elements eles = document.getElementsByClass("topnewslist");
     	if(eles.size() > 0){
     		Element ele = eles.get(0);
-    		Elements lis = ele.select("li");
-    		for (int i = 1; i < lis.size(); i++) {
-    			fan = fan + "<li class=\"list-group-item\" href=\"#\">";
-    			String liStr = lis.get(i).html().replace("href=\"/", "href=\"http://www.100ppi.com/");
+    		Elements lis = ele.getElementsByClass("fl");
+    		for (int i = 0; i < lis.size(); i++) {
+    			int s = lis.get(i).getElementsByClass("fl").size();
+    			if(s == 1){
+    				continue;
+    			}
+    			String ban = lis.get(i).getElementsByClass("fl").get(0).select("a").get(0).html();
+    			Element as = lis.get(i).getElementsByClass("content1").get(0);
+    			fan = fan + "<li class=\"list-group-item\" href=\"#\">" + ban;
+    			String liStr = as.html().replace("href=\"/", "href=\"http://www.100ppi.com/");
     			fan = fan + liStr + "</li>";
 			}
     	}

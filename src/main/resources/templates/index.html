@@ -84,12 +84,44 @@
 							</nav>
 						</div>
 					</div>
+					
+					<div class="block-flat2 pie-widget">
+						<div class="header">
+							<span class="pull-right"><a href = "#" onclick = "zhibiaoGo()">更多</a></span>
+							<span class="pull-right">
+								<select id = "zhibiaoSelect">
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]' selected>KDJ金叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]'>macd金叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;}]'>KDJ死叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;}]'>macd死叉</option>
+								</select>
+								&nbsp;&nbsp;&nbsp;&nbsp;</span>
+							<h4>指标榜</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr>
+										<th>日期</th>
+										<th>code</th>
+										<th>名称</th>
+										<th>涨幅</th>
+									</tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "zhibiao"></tbody>
+							</table>
+							<nav aria-label="指标数据分页">
+							  <ul class="pagination" id = "zhibiaopag"></ul>
+							</nav>
+						</div>
+					</div>
+					
 				</div><!-- 内容左侧end -->
 				<!-- 内容右侧 -->
 				<div class="col-sm-6 col-md-6">
 					<div class="block-flat2 pie-widget">
 			            <div class="content no-padding">
-			            	<span class="pull-right"><a href = "">更多</a></span>
+			            	<span class="pull-right"><a href = "http://www.100ppi.com/hot/" target="_blank">更多</a></span>
 			              	<h4 class="title">大宗商品热点消息</h4>
 			              	<div class="list-group tickets" id = "dzsprd"></div>	            
 			            </div>
@@ -110,7 +142,7 @@
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "stapledayUp"></tbody>
 							</table>
-						</div>
+						</div>-
 					</div>
 					
 				</div>  <!-- 内容右侧end -->
@@ -132,6 +164,12 @@
       getHotHtml();
       getStapledayUp('wtzf' , 'desc' , 'stapledayUp');
       getLongHuTable(1,1);
+      getZhiBiaoTable(1,1,'');
+      
+      $("#zhibiaoSelect").change(function(){
+      	var val = $(this).children('option:selected').val();
+      	getZhiBiaoTable(1,1,val);
+		});   
     });
     
     function getReal(){
@@ -238,30 +276,6 @@
       }
       
       
-      function getStapledayLow(){
-    	$.ajax({  
-      	type : "GET",  //提交方式  
-		url : "http://www.estock.com:8080/stock/stapleday/getList",//路径  
-        data : {
-        	datas:'',
-        	sort:'rq.desc,wtzf.asc',
-        	page:1,
-        	limit:5
-        },//数据，这里使用的是Json格式进行传输  
-        success : function(result) {//返回数据根据结果进行相应的处理  
-        	var item = result['items'];
-        	var html = "";
-        	for(var i=0;i<item.legngth;i++){
-        		html = html + "<tr><td>"+item[i]['productName']+"</td>";
-        		html = html + "<td>"+fixed2percentage(item[i]['wtzf'])+"</td>";
-        		html = html + "<td>"+fixed2percentage(item[i]['yfzf'])+"</td>";
-        		html = html + "<td>"+fixed2percentage(item[i]['jdzf'])+"</td></tr>";
-        	}
-        	$('#stapledayLow').html(html);
-      	}  
-      });  
-      }
-      
       function getLongHuTable(page , num){
     	$.ajax({  
       	type : "GET",  //提交方式  
@@ -311,8 +325,66 @@
       }
       
       function longhuGo(){
-      	window.location.href='/stock/datas/stockinfo?datas='+longhuDatas;
+      	window.location.href='/stock/datas/stockinfo?sort=date.desc&datas='+longhuDatas;
       }
+      
+      function getZhiBiaoTable(page , num , val){
+      	if(val == '' || val == null){
+      		var val = $('#zhibiaoSelect').val();
+      	}
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/getList",//路径  
+        data : {
+        	datas:val,
+        	sort:'date.desc',
+        	page:page,
+        	limit:5
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var item = result['items'];
+        	var html = "";
+        	for(var i=0;i<item.length;i++){
+        		html = html + "<tr><td>"+item[i]['date']+"</td>";
+        		html = html + "<td>"+item[i]['stockCode']+"</td>";
+        		html = html + "<td>"+item[i]['stockName']+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td></tr>";
+        	}
+        	$('#zhibiao').html(html);
+        	if(num == 1){
+        		zhibiaopag();
+        	}
+      	}  
+      });  
+      }
+      
+      function zhibiaopag(){
+      	$('#zhibiaopag').bootstrapPaginator({
+                bootstrapMajorVersion: 3,//bootstrap版本
+                currentPage: 1,//当前页码
+                totalPages: 100,//总页数（后台传过来的数据）
+                numberOfPages: 5,//一页显示几个按钮
+                itemTexts: function (type, page, current) {
+                    switch (type) {
+                        case "first": return "首页";
+                        case "prev": return "上一页";
+                        case "next": return "下一页";
+                        case "last": return "末页";
+                        case "page": return page;
+                    }
+                },//改写分页按钮字样
+                onPageClicked: function (event, originalEvent, type, page) {
+                    getZhiBiaoTable(page , 2 , '');
+                }
+            });
+      }
+      
+      
+      function zhibiaoGo(){
+      	var val = $('#zhibiaoSelect').val();
+      	window.location.href='/stock/datas/stockinfo?sort=date.desc&datas='+val;
+      }
+      
   </script>
   </body>
 </html>

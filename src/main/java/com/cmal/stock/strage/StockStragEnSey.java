@@ -385,7 +385,22 @@ public class StockStragEnSey {
     					X = K-D;
     				}
     			}
+    			float macdx = -10;
+    			float upDiff = entries.get(i-1).getDiff();
+    			float upDea = entries.get(i-1).getDea();
+    			float diff = StockBaseInfo.getDiff();
+    			float dea = StockBaseInfo.getDea();
+    			if(diff < dea && upDiff >= upDea){
+    				macdx = -1;
+    			}else if(diff > dea && upDiff <= upDea){
+    				macdx = 0;
+    			}else{
+    				if(diff-dea < 5 && diff-dea > -5){
+    					macdx = diff-dea;
+    				}
+    			}
     			StockBaseInfo.setX(X);
+    			StockBaseInfo.setMacdx(macdx);
     			StockBaseInfo.setUp5(up5);
     			StockBaseInfo.setUp10(up10);
     			StockBaseInfo.setMacdUp5(macdUp5);
