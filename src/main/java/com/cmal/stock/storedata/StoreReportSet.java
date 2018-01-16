@@ -50,7 +50,7 @@ public class StoreReportSet {
 //		lstSource=Lists.newArrayList("000001");
 //		List<EastReportBean> list = new ArrayList<EastReportBean>();
 		for(final String  sat:lstSource){
-			SchedulingConfig.executorServiceLocal.execute(new Thread(){
+			CommonBaseStockInfo.executorServiceLocal.execute(new Thread(){
 				@Override
 				public void run() {
 					try {
@@ -256,7 +256,7 @@ public class StoreReportSet {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					} catch (IOException e) {
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

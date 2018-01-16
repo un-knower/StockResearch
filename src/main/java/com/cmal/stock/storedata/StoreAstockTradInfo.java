@@ -21,6 +21,7 @@ import org.apache.http.client.ClientProtocolException;
 import com.artbulb.httpmodel.HttpClientEx;
 import com.cmal.stock.strage.StockStragEnSey;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StockFuncDetailInfo;
 import com.cmall.stock.bean.StockRealBean;
 import com.cmall.stock.utils.CsvHandUtils;
@@ -44,11 +45,12 @@ public class StoreAstockTradInfo {
 
 	
 	@SuppressWarnings("all")
-	public static void getHistoryData() throws IOException {
+	public static void getHistoryData() throws Exception {
 		  final String  sfd=new SimpleDateFormat("yyyyMMdd").format(new Date());
-		  System.out.println(sfd);
-		List<String> filePath =CommonBaseStockInfo.getAllAStockInfo();// FileUtils.readLines(new File(CommonBaseStockInfo.astockfilePath));
-		for (final String s : filePath) {
+//		List<String> filePath =CommonBaseStockInfo.getAllAStockInfo();// FileUtils.readLines(new File(CommonBaseStockInfo.astockfilePath));
+		List<StockDetailInfoBean>  lstBean =StockDetailInfoHand.getDetailForNetLst();
+		for (final StockDetailInfoBean bean : lstBean) {
+			 final String s = bean.getStockCode();
 
 			executorServiceLocal.execute(new Thread() {
 
@@ -56,7 +58,7 @@ public class StoreAstockTradInfo {
 					String code = s.split(",")[0];
 					String scode = s.startsWith("6") ? "0" + code : "1" + code;
 					 
-					String webUri = stockHisCrawUrl + scode + "&start=20170101&end="+sfd;
+					String webUri = stockHisCrawUrl + scode + "&start=20170701&end="+sfd;
 					try {
 						HttpClientEx.downloadFromUri(webUri, savePathsuff + code + ".csv");
 					} catch (Exception e) {
@@ -260,10 +262,11 @@ public class StoreAstockTradInfo {
 		 //jestClient.shutdownClient();
 	 }
 	public      static  void  wDataToEs() throws IOException{
-		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
+		List<StockDetailInfoBean> lstSource =StockDetailInfoHand.getDetailForNetLst();// CommonBaseStockInfo.getAllAStockInfo();
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		 final Map<String , StockFuncDetailInfo> map = getInfoByCsv();
-		for(final String  sat:lstSource){
+		for(final StockDetailInfoBean  bean:lstSource){
+			 final String sat=bean.getStockCode();
 //			if(sat.equals("603612")){
 			executorServiceLocal.execute(new Thread(){
 				@Override
@@ -321,6 +324,7 @@ public class StoreAstockTradInfo {
 	}
 	public static void main(String[] args) throws ClientProtocolException, IOException, Exception {
 //		getHistoryData();
+//		executorServiceLocal.shutdown();
 //		getRealTimeData();
 		wDataToEs();
 //		wDataRealToEs();

@@ -1,8 +1,10 @@
 package com.cmal.stock.storedata;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.common.collect.Maps;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -23,10 +25,9 @@ import io.searchbox.core.Search;
 
 public class StockDetailInfoHand {
 
-	public final static String DETAIL_CONNPATH = "http://file.tushare.org/tsdata/all.csv";
-
-	public static Map<String, StockDetailInfoBean> getDetailForMap() throws Exception {
-		Map<String, StockDetailInfoBean> mapSource = Maps.newConcurrentMap();
+	
+	
+	public static List<StockDetailInfoBean> getDetailForLst() throws Exception {
 		SearchSourceBuilder ssb = new SearchSourceBuilder();
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
 
@@ -35,6 +36,32 @@ public class StockDetailInfoHand {
 				CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO, 0, 3800);
 		JestResult results =  BaseCommonConfig.clientConfig().execute(selResult);
 		List<StockDetailInfoBean> lstBean = results.getSourceAsObjectList(StockDetailInfoBean.class);
+		return lstBean;
+
+	}
+	public static List<StockDetailInfoBean> getDetailForNetLst() throws ClientProtocolException, IOException  {
+		CsvHandUtils csvHandUtils = new CsvHandUtils(BaseConnClient.baseGetReqToStream(CommonBaseStockInfo.DETAIL_CONNPATH));
+		List<List<String>> lstSource = csvHandUtils.readCSVFile();
+		List<StockDetailInfoBean> list = Lists.newArrayList();
+		for (int i = 1; i < lstSource.size(); i++) {
+			List<String> lstBeanCon = lstSource.get(i);
+			StockDetailInfoBean detailInfoBean = new StockDetailInfoBean(lstBeanCon);
+			list.add(detailInfoBean);
+		}
+		return list;
+
+	}
+
+	public static Map<String, StockDetailInfoBean> getDetailForMap() throws Exception {
+		Map<String, StockDetailInfoBean> mapSource = Maps.newConcurrentMap();
+//		SearchSourceBuilder ssb = new SearchSourceBuilder();
+//		BoolQueryBuilder query = QueryBuilders.boolQuery();
+//
+//		ssb.query(query);
+//		Search selResult = UtilEs.getSearch(ssb, CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO,
+//				CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO, 0, 3800);
+//		JestResult results =  BaseCommonConfig.clientConfig().execute(selResult);
+		List<StockDetailInfoBean> lstBean =getDetailForLst();// results.getSourceAsObjectList(StockDetailInfoBean.class);
 		for (StockDetailInfoBean detailInfoBean : lstBean) {
 			mapSource.put(detailInfoBean.getStockCode(), detailInfoBean);
 		}
@@ -43,11 +70,12 @@ public class StockDetailInfoHand {
 	}
 
 	public static void main(String[] args) throws Exception {
-		getDetailForMap();
+		insBatchEsStore();
+//		getDetailForMap();
 	}
 
 	public static void insBatchEsStore() throws Exception {
-		CsvHandUtils csvHandUtils = new CsvHandUtils(BaseConnClient.baseGetReqToStream(DETAIL_CONNPATH));
+		CsvHandUtils csvHandUtils = new CsvHandUtils(BaseConnClient.baseGetReqToStream(CommonBaseStockInfo.DETAIL_CONNPATH));
 		List<List<String>> lstSource = csvHandUtils.readCSVFile();
 		List<StockDetailInfoBean> list = Lists.newArrayList();
 		for (int i = 1; i < lstSource.size(); i++) {
