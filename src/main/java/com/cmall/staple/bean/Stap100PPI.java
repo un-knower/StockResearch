@@ -8,6 +8,7 @@ public class Stap100PPI implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	// 商品 行业 月初价格 月末价格 单位 月涨跌 同比涨跌
+	private int code;
 	private String rq;
 	private String productName;
 	private String productHy;
@@ -128,7 +129,15 @@ public class Stap100PPI implements Serializable{
 	public void setJdzf(double jdzf) {
 		this.jdzf = jdzf;
 	}
-	
-	
 
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
+	
+	
+	
 }

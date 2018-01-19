@@ -10,6 +10,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
 import com.cmal.stock.storedata.StockDetailInfoHand;
+import com.cmall.staple.bean.Stap100PPI;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.jyfx.JyfxInfo;
@@ -66,7 +67,6 @@ public class SelGetStock {
 					ssb.sort(s.split("\\.")[0], SortOrder.ASC);
 				}
 			}
-			
 		}
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
 		System.out.println(searchSourceBuilder.toString());
@@ -248,199 +248,29 @@ public class SelGetStock {
 
 	}
 
-	// Map<String,Object> returnMap = Maps.newHashMap();
-	// SearchSourceBuilder ssb = new SearchSourceBuilder();
-	// if(!StringUtils.isEmpty(page.getSort())){
-	// String order = page.getSort().split("\\.")[1];
-	// if(order.equalsIgnoreCase("desc")){
-	// ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
-	// }else{
-	// ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
-	// }
-	// }
-	// SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-	// Search selResult = UtilEs.getSearch(searchSourceBuilder, "stockpcse",
-	// "2017", (page.getPage()- 1) * page.getLimit() , page.getLimit());
-	//
-	// final JestClient jestClient = BaseCommonConfig.clientConfig();
-	// JestResult results = jestClient.execute(selResult);
-	// List<StockBaseInfo> lstBean =
-	// results.getSourceAsObjectList(StockBaseInfo.class);
-	// if(lstBean!= null && lstBean.size() > 0){
-	// Map hitsMap = (Map)results.getValue("hits");
-	// if(hitsMap!=null){
-	// Number total = (Number)hitsMap.get("total");
-	// if(total!=null){
-	// returnMap.put("totalCount", total.intValue());
-	// }
-	// }
-	// }
-	// returnMap.put("items", lstBean);
-	// return returnMap;
+	
 
-	// Map<String,Object> returnMap = Maps.newHashMap();
-	// SearchSourceBuilder ssb = new SearchSourceBuilder();
-	// if(!StringUtils.isEmpty(page.getSort())){
-	// String order = page.getSort().split("\\.")[1];
-	// if(order.equalsIgnoreCase("desc")){
-	// ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
-	// }else{
-	// ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
-	// }
-	// }
-	// SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-	// Search selResult = UtilEs.getSearch(searchSourceBuilder,
-	// "storetrailer", type, (page.getPage()- 1) * page.getLimit() ,
-	// page.getLimit());
-	//
-	// final JestClient jestClient = BaseCommonConfig.clientConfig();
-	// JestResult results = jestClient.execute(selResult);
-	// List<StoreTrailer> lstBean =
-	// results.getSourceAsObjectList(StoreTrailer.class);
-	// if(lstBean!= null && lstBean.size() > 0){
-	// Map hitsMap = (Map)results.getValue("hits");
-	// if(hitsMap!=null){
-	// Number total = (Number)hitsMap.get("total");
-	// if(total!=null){
-	// returnMap.put("totalCount", total.intValue());
-	// }
-	// }
-	// }
-	// returnMap.put("items", lstBean);
-	// return returnMap;
-
-	// }
-
-	// Map<String,Object> returnMap = Maps.newHashMap();
-	// SearchSourceBuilder ssb = new SearchSourceBuilder();
-	// if(!StringUtils.isEmpty(page.getSort())){
-	// String order = page.getSort().split("\\.")[1];
-	// if(order.equalsIgnoreCase("desc")){
-	// ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
-	// }else{
-	// ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
-	// }
-	// }
-	// SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-	// Search selResult = UtilEs.getSearch(searchSourceBuilder,
-	// "storestrateinfo", type, (page.getPage()- 1) * page.getLimit() ,
-	// page.getLimit());
-	//
-	// final JestClient jestClient = BaseCommonConfig.clientConfig();
-	// JestResult results = jestClient.execute(selResult);
-	// List<StockStrategyInfo> lstBean =
-	// results.getSourceAsObjectList(StockStrategyInfo.class);
-	// if(lstBean!= null && lstBean.size() > 0){
-	// Map hitsMap = (Map)results.getValue("hits");
-	// if(hitsMap!=null){
-	// Number total = (Number)hitsMap.get("total");
-	// if(total!=null){
-	// returnMap.put("totalCount", total.intValue());
-	// }
-	// }
-	// }
-	// returnMap.put("items", lstBean);
-	// return returnMap;
-
-	// }
-
-	// public static void main(String[] args) throws Exception {
-
-	// BoolQueryBuilder query = QueryBuilders.boolQuery();
-	// query.must(QueryBuilders.rangeQuery("macd").from(0.01));
-	// query.must(QueryBuilders.termQuery("date", "2017-11-09"));
-	// List<StockBaseInfo> lstBean = getLstResult(query);
-	//
-	// query = QueryBuilders.boolQuery();
-	// // query.must(QueryBuilders.rangeQuery("macd").from(0.01));
-	// query.must(QueryBuilders.termQuery("date", "2017-11-09"));
-	// List<StockBaseInfo> lstBeanNw = getLstResult(query);
-	// Map<String, StockBaseInfo> maps =
-	// StoreAstockTradInfo.fetchKeyStockInfo(lstBean);
-	// // System.out.println(maps);
-	// System.out.println("股票代码" + "\t" + "股票名称" +"\t"+"MACD差值"+ "\t" +
-	// "成交量前一交易日增大倍数" + "\t" + "增长" + "\t" + "MACD" + "\t" + "J差值" + "\t"
-	// + "成交量5平均" + "\t" + "K" + "\t" + "D" + "\t" + "J");
-	// for (StockBaseInfo b : lstBeanNw) {
-	// if ((b.getVolume() / b.getVolumeMa5()>1.3) && b.getVolume() > 0) {
-	//
-	// // System.out.println(b.toString());
-	// // System.out.println(b.getStockCode());
-	// StockBaseInfo obj = maps.get(b.getStockCode());
-	// if (obj != null) {// 非停牌
-	// String c = (Double.parseDouble(b.getVolume()+"") /
-	// Double.parseDouble(obj.getVolume()+"") + "");
-	// c = c.substring(0, 4);
-	// String bps = maps.get(b.getStockCode()).getRises();//
-	// maps.get(b.getStockCode())==null?"
-	// //
-	// ":((maps.get(b.getStockCode()).getClose()-b.getClose())/b.getClose()*100)+"";
-	//
-	// System.out.println(b.getStockCode() + "\t" + b.getStockName()
-	// +"\t"+(b.getMacd()/obj.getMacd())+ "\t" + c + "\t" + b.getRises() + "\t"
-	// + b.getMacd() + "\t" + (b.getJ()-obj.getJ()) + "\t" +(b.getVolume() /
-	// b.getVolumeMa5())+ " \t" + b.getK() + "\t"
-	// + b.getD() + "\t" + b.getJ());
-	// }
-	// }
-	// }
-
-	// System.out.println(lstBean);
-	// System.out.println(lstBean.size());
-	// bean=results.getSourceAsObject(UnionFotoliaBean.class);
-	// if(bean!=null)
-	// return results.getSourceAsObject(UnionFotoliaBean.class);
-	// selResult.getData(gson)
-	// }
-
-	// public static Map<String,Object> getRealLstResult(BoolQueryBuilder query
-	// , StockBasePageInfo page , String type) throws Exception {
-	// Map<String,Object> returnMap = Maps.newHashMap();
-	// SearchSourceBuilder ssb = new SearchSourceBuilder();
-	// if(!StringUtils.isEmpty(page.getSort())){
-	// String order = page.getSort().split("\\.")[1];
-	// if(order.equalsIgnoreCase("desc")){
-	// ssb.sort(page.getSort().split("\\.")[0],SortOrder.DESC);
-	// }else{
-	// ssb.sort(page.getSort().split("\\.")[0],SortOrder.ASC);
-	// }
-	// }
-	// SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-	// Search selResult = UtilEs.getSearch(searchSourceBuilder, "stockrealinfo",
-	// type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
-	//
-	// final JestClient jestClient = BaseCommonConfig.clientConfig();
-	// JestResult results = jestClient.execute(selResult);
-	// List<StockRealBean> lstBean =
-	// results.getSourceAsObjectList(StockRealBean.class);
-	// if(lstBean!= null && lstBean.size() > 0){
-	// Map hitsMap = (Map)results.getValue("hits");
-	// if(hitsMap!=null){
-	// Number total = (Number)hitsMap.get("total");
-	// if(total!=null){
-	// returnMap.put("totalCount", total.intValue());
-	// }
-	// }
-	// }
-	// returnMap.put("items", lstBean);
-	// return returnMap;
-	//
-	// }
-
-	// JestResult results = jestClient.execute(selResult);
-	// List lstBean = results.getSourceAsObjectList(Object.class);
-	// if(lstBean!= null && lstBean.size() > 0){
-	// Map hitsMap = (Map)results.getValue("hits");
-	// if(hitsMap!=null){
-	// Number total = (Number)hitsMap.get("total");
-	// if(total!=null){
-	// returnMap.put("totalCount", total.intValue());
-	// }
-	// }
-	// }
-	// returnMap.put("items", lstBean);
-	// return returnMap;
-
-	// }
-
+	public static List<Stap100PPI> getList(BoolQueryBuilder query, StockBasePageInfo page,String index , String type ) throws Exception {
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
+		if (!StringUtils.isEmpty(page.getSort())) {
+			String[] sorts = page.getSort().split(",");
+			for (int i = 0; i < sorts.length; i++) {
+				String s = sorts[i];
+				String order = s.split("\\.")[1];
+				if (order.equalsIgnoreCase("desc")) {
+					ssb.sort(s.split("\\.")[0], SortOrder.DESC);
+				} else {
+					ssb.sort(s.split("\\.")[0], SortOrder.ASC);
+				}
+			}
+		}
+		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+		System.out.println(searchSourceBuilder.toString());
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, index, type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
+//		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		JestResult results = jestClient.execute(selResult);
+		List<Stap100PPI> lstBean = results.getSourceAsObjectList(Stap100PPI.class);
+		return lstBean;
+	}
 }

@@ -32,7 +32,7 @@ import com.kers.httpmodel.BaseConnClient;
 public class MonthsStapleData {
 	
 	public static Map<String, List<Double>> map = Maps.newHashMap();
-
+	
 	public  static List<Stap100PPI> getLstFromUrl(String content , String rq) throws ClientProtocolException, IOException {
 		// String url =
 		// "http://top.100ppi.com/hs/detail-month-2017-10-1-1.html";
@@ -48,6 +48,8 @@ public class MonthsStapleData {
 			if (i > 0) { // 标题
 				// 商品 行业 月初价格 月末价格 单位 月涨跌 同比涨跌
 				String productName = tds.get(0).text().replace("(市场)", "");
+				String a = tds.get(0).select("a").get(0).attr("href");
+				String code = a.split("-")[1].split("\\.")[0];
 				String productHy = tds.get(1).text();
 				double monthYcPrice = MathsUtils.parseDouble(tds.get(2).text());
 				double monthYmPrice = MathsUtils.parseDouble(tds.get(3).text());
@@ -58,6 +60,7 @@ public class MonthsStapleData {
 				Stap100PPI stap100ppi = new Stap100PPI(productName, productHy, monthYcPrice, monthYmPrice, priceDw,
 						monthRise, tbRise);
 				stap100ppi.setRq(rq);
+				stap100ppi.setCode(Integer.parseInt(code));
 				//计算前5次的涨幅
 				List<Double> doubleList = map.get(productName);
 				if(doubleList == null){
@@ -168,34 +171,48 @@ public class MonthsStapleData {
 //    	System.out.println(fan);
 		
 //		writeTextReport();
+		
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
 		List<Stap100PPI> lstSource = Lists.newArrayList();
+		Date date1 = new Date();
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(date1);
+		int nian = calendar.get(Calendar.YEAR);
+		int yue = calendar.get(Calendar.MARCH) + 1;
+		int tian = calendar.get(Calendar.DATE);
+		int startNian = 2015;
 		try {
-			for (int i = 1; i <= 12; i++) {
-				String source ="2017-"+String.valueOf(i);
-				Date date = format.parse(source);
-				Calendar calendar = new GregorianCalendar();
-				calendar.setTime(date);
-				int daynum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-				
-				for (int j = 1; j <= daynum; j++) {
-					String ss="";
-					if(j<=9){
-						ss="0";
+			quan:for( int k = startNian; k <= nian ; k ++){
+				for (int i = 1; i <= 12; i++) {
+					String source =k+"-"+String.valueOf(i);
+					Date date = format.parse(source);
+					calendar = new GregorianCalendar();
+					calendar.setTime(date);
+					int daynum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+					z:for (int j = 1; j <= daynum; j++) {
+						String ss="";
+						if(j<=9){
+							ss="0";
+						}
+						String days = source +"-"+ ss+j;
+						String content =readTextReport(days);
+						lstSource.addAll(getLstFromUrl(content , days));
+						System.out.println(days);
+						if(k == nian && i == yue && j == tian){
+							break z;
+						}
 					}
-					String days = source +"-"+ ss+j;
-					String content =readTextReport(days);
-					lstSource.addAll(getLstFromUrl(content , days));
-					System.out.println(days);
+					if(lstSource.size() > 0){
+						insBatchEs(lstSource ,jestClient  , CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY ,String.valueOf(k) );
+						lstSource = Lists.newArrayList(); 
+					}
+					if(k == nian && i == yue){
+						break quan;
+					}
+					
 				}
-				if(lstSource.size() > 0){
-					insBatchEs(lstSource ,jestClient  , CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY ,"2017" );
-					lstSource = Lists.newArrayList(); 
-				}
-				
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -219,27 +236,41 @@ public class MonthsStapleData {
 	
 	public static void writeTextReport() throws IOException{
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+		Date date1 = new Date();
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(date1);
+		int nian = calendar.get(Calendar.YEAR);
+		int yue = calendar.get(Calendar.MARCH) + 1;
+		int tian = calendar.get(Calendar.DATE);
+		int startNian = 2016;
 		try {
-			for (int i = 1; i <= 12; i++) {
-				String source ="2017-"+String.valueOf(i);
-				System.out.println(source);
-				Date date = format.parse(source);
-				Calendar calendar = new GregorianCalendar();
-				calendar.setTime(date);
-				int daynum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-				
-				for (int j = 1; j <= daynum; j++) {
-					String ss="";
-					if(j<=9){
-						ss="0";
+			quan:for( int k = startNian; k <= nian ; k ++){
+				for (int i = 1; i <= 12; i++) {
+					String source =k+"-"+String.valueOf(i);
+					System.out.println(source);
+					Date date = format.parse(source);
+					calendar = new GregorianCalendar();
+					calendar.setTime(date);
+					int daynum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+					for (int j = 1; j <= daynum; j++) {
+						String ss="";
+						if(j<=9){
+							ss="0";
+						}
+						String day = source + ss+j;
+						String days = source +"-"+ ss+j;
+						String url="http://top.100ppi.com/zdb/detail-day-"+day+"-1.html";
+						String content = BaseConnClient.baseGetReq(url);
+						TextUtil.writerTxt(FilePath.saveStapleDayPathsuff+days+".txt", content);
+						if(k == nian && i == yue){
+							System.out.println(day);
+						}
+						if(k == nian && i == yue && j == tian){
+							break quan;
+						}
 					}
-					String day = source + ss+j;
-					String days = source +"-"+ ss+j;
-					String url="http://top.100ppi.com/zdb/detail-day-"+day+"-1.html";
-					String content = BaseConnClient.baseGetReq(url);
-					TextUtil.writerTxt(FilePath.saveStapleDayPathsuff+days+".txt", content);
+					
 				}
-				
 			}
 			
 		} catch (Exception e) {

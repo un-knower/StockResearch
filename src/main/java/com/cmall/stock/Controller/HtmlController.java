@@ -1,9 +1,16 @@
 package com.cmall.stock.Controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.cmal.stock.storedata.CommonBaseStockInfo;
+import com.cmal.stock.storedata.StockOptionalSet;
+import com.cmall.stock.bean.StockOptionalInfo;
 import com.cmall.stock.vo.StockBasePageInfo;
 
 @Controller
@@ -11,13 +18,16 @@ import com.cmall.stock.vo.StockBasePageInfo;
 public class HtmlController{
 	
 	@RequestMapping("/")
-    public String  home(Model model) throws Exception {
+    public String  home(Model model , HttpSession session) throws Exception {
+		
         return "/index";
     }
 	
 	@RequestMapping("/datas/stockinfo")
     public String  dataStockInfo(Model model , StockBasePageInfo info) throws Exception {
 		model.addAttribute("info", info);
+		List<StockOptionalInfo> optionList = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
+		model.addAttribute("optionList", optionList);
         return "/datas/stockinfo";
     }
 	

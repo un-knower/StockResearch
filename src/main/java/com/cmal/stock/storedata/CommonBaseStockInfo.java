@@ -35,6 +35,8 @@ public class CommonBaseStockInfo {
 	
 	public final static String ES_INDEX_STOCK_STAPLEDAY="stapleday";
 	
+	public final static String ES_INDEX_STOCK_OPTIONAL="stockoptional";
+	
 	 // http://file.tushare.org/tsdata/all.csv
 	public static List<String> getAllAStockInfo() throws IOException {
 		CsvHandUtils csvHandUtils = new CsvHandUtils(BaseConnClient.baseGetReqToStream(DETAIL_CONNPATH));

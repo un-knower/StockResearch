@@ -61,6 +61,9 @@ public class BaseController<T> {
 	    	else if(vo.getType().equals("in")){
 	    		q=QueryBuilders.inQuery(vo.getName(), vo.getValue().split(","));
 			}
+	    	else if(vo.getType().equals("matchPhrase")){
+	    		q=QueryBuilders.matchPhraseQuery(vo.getName(), vo.getValue());
+			}
 	    	
 	    	return q;
 	    }

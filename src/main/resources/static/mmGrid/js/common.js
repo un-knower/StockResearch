@@ -3,7 +3,7 @@
                 for (var i = 0; i < classNames.length; i++) {
                     html = html + '<option>'+classNames[i]+'</option>';
                 }
-                html = html + '</select> <select style = "width:100px" class="form-control"><option>=</option><option>></option><option><</option><option>>=</option><option><=</option><option>prefix</option><option>queryStr</option><option>missing</option><option>in</option></select>';
+                html = html + '</select> <select style = "width:100px" class="form-control"><option>=</option><option>></option><option><</option><option>>=</option><option><=</option><option>prefix</option><option>queryStr</option><option>missing</option><option>in</option><option>matchPhrase</option></select>';
                 html = html + ' <input type="text" class="form-control">';
                 html = html + ' <input type="button" class="form-control" onclick = "addFormDiv()" value = " + ">';            
                 html = html + ' <input type="button" class="form-control" onclick = "delFormDiv(this)" value = " - "></div></div></from>';            

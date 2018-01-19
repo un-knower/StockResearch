@@ -37,7 +37,9 @@ public class SchedulingConfig {
 	
 	public static Map<String, StockBaseInfo> upMap;
 	
-	@Scheduled(cron = "0 0/1 * * * ?") // 每20秒执行一次
+	public static List<String> lstSource;
+	
+//	@Scheduled(cron = "0 0/1 * * * ?") // 每20秒执行一次
     public void scheduler() {
 		if(upMap == null){
 			final JestClient jestClient = BaseCommonConfig.clientConfig();
@@ -63,7 +65,9 @@ public class SchedulingConfig {
 		}
 		if(k){
 			try {
-				List<String> lstSource = TextUtil.readTxtFile(FilePath.path);
+				if(lstSource == null){
+					lstSource = TextUtil.readTxtFile(FilePath.path);
+				}
 				final JestClient jestClient = BaseCommonConfig.clientConfig();
 				final Map<String, StockBaseInfo> map = upMap;
 				 for (final String string : lstSource) {
@@ -108,7 +112,7 @@ public class SchedulingConfig {
 		}
 	}
 	
-	@Scheduled(cron = "0 05 15 * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 15 16 * * ?") // 每20秒执行一次
     public void updateInfo() {
 			try {
 				wDataRealToEs();
@@ -117,7 +121,7 @@ public class SchedulingConfig {
 			}
 	}
 	
-	@Scheduled(cron = "0 15 11 * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 10 16 * * ?") // 每20秒执行一次
     public void updateHisDate() {
 		try {
 			StoreAstockTradInfo.getHistoryData();

@@ -1,6 +1,7 @@
 package com.cmall.stock.Controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
@@ -27,6 +28,25 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     	BoolQueryBuilder query = QueryBuilders.boolQuery();
     	setQuery(query,page);
         return SelGetStock.getCommonLstResult(query,page,CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY,type);
+    }
+	
+	@RequestMapping("/stapleday/getListByName")
+    public String[][] getListByName(StockBasePageInfo page, String type) throws Exception {
+    	BoolQueryBuilder query = QueryBuilders.boolQuery();
+    	setQuery(query,page);
+    	page.setPage(1);
+    	List<Stap100PPI> list = SelGetStock.getList(query,page,CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY,type);
+//    	List<Stap100PPI> list = (List<Stap100PPI>) map.get("items");
+    	String[][] str = new String[list.size()][2];
+    	int i = 0;
+    	for (Stap100PPI stap100ppi : list) {
+    		String[] s = new String[2];
+    		s[0] = stap100ppi.getRq();
+    		s[1] = String.valueOf(stap100ppi.getMonthYcPrice());
+    		str[i] = s;
+    		i++;
+		}
+        return str;
     }
     
     @RequestMapping("/stapleday/getClassNameList")

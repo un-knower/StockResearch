@@ -46,11 +46,13 @@ public class TextUtil {
 	 */
 	public static List<String> readTxtFile(String filePath){
     	List<String> list = new ArrayList<String>();
+    	InputStreamReader read = null;
+    	File file = null;
         try {
                 String encoding="utf-8";
-                File file=new File(filePath);
+                file=new File(filePath);
                 if(file.isFile() && file.exists()){ //判断文件是否存在
-                    InputStreamReader read = new InputStreamReader(
+                    read = new InputStreamReader(
                     new FileInputStream(file),encoding);//考虑到编码格式
                     BufferedReader bufferedReader = new BufferedReader(read);
                     String lineTxt = null;
@@ -66,6 +68,15 @@ public class TextUtil {
         } catch (Exception e) {
             System.out.println("读取文件内容出错");
             e.printStackTrace();
+        }finally{
+        	if(read != null){
+        		try {
+					read.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+        	}
+        	
         }
      return list;
     }
