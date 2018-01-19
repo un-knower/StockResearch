@@ -35,16 +35,18 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     	BoolQueryBuilder query = QueryBuilders.boolQuery();
     	setQuery(query,page);
     	page.setPage(1);
+    	page.setLimit(20);
     	List<Stap100PPI> list = SelGetStock.getList(query,page,CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY,type);
 //    	List<Stap100PPI> list = (List<Stap100PPI>) map.get("items");
+    	int j = 0;
     	String[][] str = new String[list.size()][2];
-    	int i = 0;
-    	for (Stap100PPI stap100ppi : list) {
+    	for (int i = list.size() - 1; i >= 0; i--) {
+    		Stap100PPI stap100ppi = list.get(i);
     		String[] s = new String[2];
     		s[0] = stap100ppi.getRq();
     		s[1] = String.valueOf(stap100ppi.getMonthYcPrice());
-    		str[i] = s;
-    		i++;
+    		str[j] = s;
+    		j++;
 		}
         return str;
     }

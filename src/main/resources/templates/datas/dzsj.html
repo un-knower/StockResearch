@@ -21,6 +21,24 @@
 	</div>
 	
 	
+	<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">最近20天折线图</h4>
+      </div>
+      <div class="modal-body">
+        <div id="main2" style="width: 600px;height:400px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+	
   <div th:include="/gridCommon/onload_js :: onloadJs"></div>
   
   <script type="text/javascript">
@@ -46,7 +64,9 @@
                 var cols = [
                    
                     {title:'日期', name:'rq' , align:'center',sortable:true },
-                    {title:'商品', name:'productName' , align:'center' },
+                    {title:'商品', name:'productName' , align:'center' ,renderer:function(val,item,rowIndex){
+                        return '<a href = "javascript:void(0)" onclick = "tu('+item["code"]+')">'+val+'</a>';
+                    }},
                    	{title:'行业', name:'productHy' , align:'center' },
                     {title:'价格',name:'monthYcPrice',sortable:true},
                     {title:'后一天价格',name:'monthYmPrice',sortable:true},   
@@ -116,6 +136,51 @@
                 });
                 return datas;
             }
+            
+              function tu(code){
+      	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/stapleday/getListByName",//路径  
+        data : {
+			datas:'[{"must":"must","name":"code","type":"=","value":"'+code+'"}]',
+			sort:'rq.desc'
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	 var myChart = echarts.init(document.getElementById('main2'));
+        	 var data =result;
+        	 var dateList = data.map(function (item) {
+				    return item[0];
+				});
+				var valueList = data.map(function (item) {
+				    return item[1];
+				});
+				
+				option = {
+				    xAxis: {
+				        type: 'category',
+				        data: dateList
+				    },
+				    yAxis: {
+				        type: 'value'
+				    },
+				    series: [{
+				        data: valueList,
+				        type: 'line',
+				        smooth: true,
+				        label: {
+			                normal: {
+			                    show: true,
+			                    position: 'top'
+			                }
+			            }
+				    }]
+				};
+        	  myChart.setOption(option);
+        	  
+        	  $('#myModal').modal('show');
+      	}  
+      }); 
+      }
         </script>
   </body>
 </html>
