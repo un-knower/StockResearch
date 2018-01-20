@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
   <head th:include="/gridCommon/common_head :: commonHeader('jyfx')"></head>
+  <style>
+  .mmg .mmg-body{
+  width: auto; 
+  height: auto;
+  }
+  
+  element.style{
+  width: auto; 
+  height: auto;
+  }
+  
+  </style>
 <body>
 
   <!-- Fixed navbar -->
@@ -44,9 +56,9 @@
                 
                 var cols = [
                    
-                    { title:'日期', name:'rq' , align:'center' },
-                    { title:'股票代码', name:'stockCode' , align:'center' },
-                    { title:'类型', name:'type' , align:'center',renderer: function(val,item,rowIndex){
+                    { title:'日期', name:'rq' ,width:100, align:'center' },
+                    { title:'股票代码', name:'stockCode' ,width:100, align:'center' },
+                    { title:'类型', name:'type' ,width:100, align:'center',renderer: function(val,item,rowIndex){
                       if(val == 1){
                       	return '行业';
                       }
@@ -57,14 +69,14 @@
                       	return '区域';
                       }
                     }},
-                    {title:'主营构成',name:'zygc',sortable:true},
-                    {title:'主营收入(元)',name:'zysr',sortable:true,renderer: moformat},
-                    {title:'主营成本(元)',name:'srbl',sortable:true,renderer:fixed2percentage2},
-                    {title:'主营成本(元)',name:'zycb',sortable:true,renderer: moformat},
-                    {title:'成本比例',name:'cbbl',sortable:true,renderer:fixed2percentage2},
-                    {title:'主营利润(元)',name:'zylr',sortable:true,renderer: moformat},
-                    {title:'利润比例',name:'lrbl',sortable:true,renderer:fixed2percentage2},
-                    {title:'毛利率(%)',name:'mll',sortable:true,renderer:fixed2percentage2}
+                    {title:'主营构成',name:'zygc',width:100,sortable:true},
+                    {title:'主营收入(元)',name:'zysr',width:100,sortable:true,renderer: moformat},
+                    {title:'主营成本(元)',name:'srbl',width:100,sortable:true,renderer:fixed2percentage2},
+                    {title:'主营成本(元)',name:'zycb',width:100,sortable:true,renderer: moformat},
+                    {title:'成本比例',name:'cbbl',width:100,sortable:true,renderer:fixed2percentage2},
+                    {title:'主营利润(元)',name:'zylr',width:100,sortable:true,renderer: moformat},
+                    {title:'利润比例',name:'lrbl',width:100,sortable:true,renderer:fixed2percentage2},
+                    {title:'毛利率(%)',name:'mll',width:100,sortable:true,renderer:fixed2percentage2}
                 ];
 
 
@@ -76,7 +88,7 @@
                     , remoteSort:true
                     , sortName: 'close'
                     , sortStatus: 'asc'
-                    , fullWidthRows: true
+                    , fullWidthRows: false
                     , autoLoad: false
                     ,showBackboard:true
                     , plugins: [
@@ -91,6 +103,7 @@
                 });
                 
                 mmg.load();
+                
 
                 $('#btnSearch').on('click',function(){
                     //点击查询时页码置为1

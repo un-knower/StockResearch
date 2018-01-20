@@ -756,7 +756,8 @@
             }catch(error){
                 $style[0].styleSheet.cssText = styleText.join('');//IE fix
             }
-            $body.width($head.width());
+           // $body.width($head.width());
+            $body.width('100%');
             $bodyWrapper.width('100%');
             $bodyWrapper.append($body);
 
@@ -1016,7 +1017,9 @@
                 $mmGrid.width('100%');
                 $mmGrid.width($mmGrid.width() - ($mmGrid.outerWidth(true) - $mmGrid.width()));
             }else{
-                $mmGrid.width(opts.width);
+            //alert("aaaa");
+               $("#mmg").width('100%');
+                //$mmGrid.width('100%');
             }
 
             if(opts.height !== 'auto'){
