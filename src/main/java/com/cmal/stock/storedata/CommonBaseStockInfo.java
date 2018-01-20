@@ -33,7 +33,7 @@ public class CommonBaseStockInfo {
 	
 	public final static String ES_INDEX_STOCK_JYFX="jyfx";
 	
-	public final static String ES_INDEX_STOCK_STAPLEDAY="stapleday";
+	public final static String ES_INDEX_STOCK_STAPLEDAY="stapledayinfo";
 	
 	public final static String ES_INDEX_STOCK_OPTIONAL="stockoptional";
 	

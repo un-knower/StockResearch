@@ -137,6 +137,14 @@ public class Stap100PPI implements Serializable{
 	public void setCode(int code) {
 		this.code = code;
 	}
+
+	@Override
+	public String toString() {
+		return "Stap100PPI [code=" + code + ", rq=" + rq + ", productName=" + productName + ", productHy=" + productHy
+				+ ", monthYcPrice=" + monthYcPrice + ", monthYmPrice=" + monthYmPrice + ", priceDw=" + priceDw
+				+ ", monthRise=" + monthRise + ", tbRise=" + tbRise + ", wtzf=" + wtzf + ", yfzf=" + yfzf + ", jdzf="
+				+ jdzf + "]";
+	}
 	
 	
 	

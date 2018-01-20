@@ -231,6 +231,16 @@ public class StockDetailInfoBean  implements  Serializable {
 	public void setZsz(double zsz) {
 		this.zsz = zsz;
 	}
+	@Override
+	public String toString() {
+		return "StockDetailInfoBean [stockCode=" + stockCode + ", stockName=" + stockName + ", industry=" + industry
+				+ ", area=" + area + ", pe=" + pe + ", outstanding=" + outstanding + ", totals=" + totals
+				+ ", totalAssets=" + totalAssets + ", liquidAssets=" + liquidAssets + ", fixedAssets=" + fixedAssets
+				+ ", reserved=" + reserved + ", reservedPerShare=" + reservedPerShare + ", esp=" + esp + ", bvps="
+				+ bvps + ", pb=" + pb + ", timeToMarket=" + timeToMarket + ", undp=" + undp + ", perundp=" + perundp
+				+ ", rev=" + rev + ", profit=" + profit + ", gpr=" + gpr + ", npr=" + npr + ", holders=" + holders
+				+ ", zsz=" + zsz + "]";
+	}
 	
 	
 	

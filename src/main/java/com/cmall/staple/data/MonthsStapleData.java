@@ -7,8 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
@@ -23,6 +25,7 @@ import com.cmall.staple.bean.Stap100PPI;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.MathsUtils;
 import com.cmall.stock.utils.TextUtil;
+import com.cmall.stock.utils.TimeUtils;
 import com.google.common.collect.Lists;
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.httpmodel.BaseConnClient;
@@ -35,7 +38,7 @@ public class MonthsStapleData {
 
 	public static Map<String, List<Double>> map = Maps.newHashMap();
 	final static int startNian = 2014;
-
+ //  http://top.100ppi.com/zdb/detail-day---1.html
 	public static List<Stap100PPI> getLstFromUrl(String content, String rq)
 			throws ClientProtocolException, IOException {
 		// String url =
@@ -166,29 +169,61 @@ public class MonthsStapleData {
 
 	/**
 	 * 获取所需要的商品
+	 * 
 	 * @description
-	 * @return    
+	 * @return
 	 * @Exception
 	 */
 	public static List<String> getAllDataLink() throws ClientProtocolException, IOException {
 		List<String> lst = Lists.newArrayList();
 		Document document = Jsoup.parse(BaseConnClient.baseGetReq("http://www.100ppi.com/"));
 		Elements elements = document.getElementsByTag("a");
+		Set<String> set = new HashSet<String>();
 		for (Element element : elements) {
 
-			if (element.attr("href").contains("detail-day---"))
-				System.out.println(element);
+			
+			 String elattr=element.attr("href");
+			if ((!set.contains(elattr))&&elattr.contains("detail-day---")){
+				// System.out.println(element.attr("href")+";"+element.text());
+				lst.add(elattr + ";" + element.text() + "/");
+				set.add(elattr);
+			}
 		}
 		return lst;
+
+		// http://top.100ppi.com/dz/detail-day-2018-0117-1.html
+		// http://top.100ppi.com/zdb/detail-day---11.html
+
+	}
+
+	public static void getuseAllLink(String days, List<String> lstSource) throws ClientProtocolException, IOException {
+		// List<String> lstSource = getAllDataLink() ;
+		for (String source : lstSource) {
+
+			String floder = source.split(";")[1];
+			String filePath = FilePath.saveStapleDayPathsuff + floder + days + ".txt";
+			File file = new File(filePath);
+			if (!file.exists()) {
+
+				String link = source.split(";")[0];
+
+				String p1 = link;
+				if (days.equals(TimeUtils.getDate()))
+					p1 = link.replace("---", "-" + days + "-");
+
+				String content = BaseConnClient.baseGetReq(p1);
+				FileUtils.write(file, content, "utf-8");
+			}
+		}
 
 	}
 
 	public static void main(String[] args) throws Exception {
-
+		// getAllDataLink();
 		// System.out.println(elements);
 
-		// writeTextReport();
-		// wsData();
+//		writeTextReport();
+		wsData();
 
 		// String fan = "";
 		// Document document = Jsoup.parse("https://www.100ppi.com");
@@ -202,7 +237,60 @@ public class MonthsStapleData {
 
 	}
 
-	public static void wsData() {
+	public static void wsData() throws Exception {
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		List<Stap100PPI> lstSource = Lists.newArrayList();
+		List<String> lstStr = com.cmall.stock.utils.FileUtils.getFiles(FilePath.saveStapleDayPathsuff );
+		
+		for(String s:lstStr){
+//			if(s.contains("2018")){
+			File file =  new File(s);
+			if(s.endsWith(".txt")&&FileUtils.sizeOf(file )>1000){
+				 
+				String fileName=file.getName().substring(0,file.getName().lastIndexOf("."));
+				
+				if(fileName.length()==8){//2014-110.txt
+					fileName=fileName.substring(0,6)+"-"+fileName.substring(6);
+				}else if(fileName.length()==9){//2014-110.txt
+					fileName=fileName.substring(0,7)+"-"+fileName.substring(7);
+				}else{  
+					System.out.println("error"+file.getName());
+				}
+//				System.out.println(fileName);
+			String content= FileUtils.readFileToString(file);
+			lstSource.addAll(getLstFromUrl(content, fileName));
+			
+			if (lstSource.size() > 0) {
+				final  List<Stap100PPI>   lll = lstSource;
+				final String  fns= fileName;
+				String type=fns.substring(0, fns.indexOf("-"));
+//				System.out.println(type);
+//				insBatchEs(lll, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY,type
+//						);
+//				System.out.println(lll);
+				CommonBaseStockInfo.executorServiceLocal.execute(new Thread(){
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						super.run();
+						try {
+							insBatchEs(lll, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY,
+									fns.substring(0, fns.indexOf("-")));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
+				lstSource = Lists.newArrayList();
+			}
+					
+//			}
+		}
+	}
+	}
+
+	public static void wsDataRealTime() {
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
 		List<Stap100PPI> lstSource = Lists.newArrayList();
@@ -275,6 +363,7 @@ public class MonthsStapleData {
 		int nian = calendar.get(Calendar.YEAR);
 		int yue = calendar.get(Calendar.MARCH) + 1;
 		int tian = calendar.get(Calendar.DATE);
+		final List<String> lstSource = getAllDataLink();
 		try {
 			quan: for (int k = startNian; k <= nian; k++) {
 				for (int i = 1; i <= 12; i++) {
@@ -289,17 +378,26 @@ public class MonthsStapleData {
 						if (j <= 9) {
 							ss = "0";
 						}
-						String day = source + ss + j;
-						String days = source + "-" + ss + j;
-						String url = "http://top.100ppi.com/zdb/detail-day-" + day + "-1.html";
-						String content = BaseConnClient.baseGetReq(url);
+						final String day = source + ss + j;
+						// String days = source + "-" + ss + j;
 
-						FileUtils.write(new File(FilePath.saveStapleDayPathsuff + days + ".txt"), content, "utf-8");
+						CommonBaseStockInfo.executorServiceLocal.execute(new Thread() {
+							@Override
+							public void run() {
+								try {
+									getuseAllLink(day, lstSource);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+
 						// TextUtil.writerTxt(, content);
 						// if(k == nian && i == yue){
 						// System.out.println(day);
 						// }
 						if (k == nian && i == yue && j == tian) {
+							getuseAllLink(TimeUtils.getDate(TimeUtils.DEFAULT_DATEYMD_FORMAT), lstSource);
 							break quan;
 						}
 					}

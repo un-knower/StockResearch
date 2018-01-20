@@ -209,15 +209,22 @@ public class SelGetStock {
 
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
-		List<EastReportBean> lstBean = results.getSourceAsObjectList(EastReportBean.class);
+		List<EastReportBean> lstBeanInt = results.getSourceAsObjectList(EastReportBean.class);
+		List<EastReportBean> lstBean = Lists.newArrayList();//results.getSourceAsObjectList(EastReportBean.class);
 
-		for (EastReportBean bean : lstBean) {
+		for (EastReportBean bean : lstBeanInt) {
 			StockDetailInfoBean mapsBean = mapsInfo.get(bean.getStockCode());
+			
 			if (mapsBean != null) {
 				bean.setTotals(mapsBean.getTotals() * mapsBean.getEsp() * mapsBean.getPe());// mapsBean.getTotalAssets());
 				bean.setIndustry(mapsBean.getIndustry());
 				bean.setPe(mapsBean.getPe());
+				bean.setArea(mapsBean.getArea());
+				bean.setIndustry(mapsBean.getIndustry());
+//				System.out.println(mapsBean);
+				 lstBean.add(bean);
 			}
+			
 		}
 
 		List<EastReportBean> lstBean2 = Lists.newArrayList();
@@ -267,6 +274,7 @@ public class SelGetStock {
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
 		System.out.println(searchSourceBuilder.toString());
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
+//		System.out.println(page.getLimit());
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, index, type, (page.getPage()- 1) * page.getLimit() , page.getLimit());
 //		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
