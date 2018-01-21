@@ -74,7 +74,9 @@
 										<th>日期</th>
 										<th>code</th>
 										<th>名称</th>
+										<th>板块</th>
 										<th>涨幅</th>
+										<th>5天涨</th>
 									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "longhu"></tbody>
@@ -128,21 +130,25 @@
 			        </div>
 			        <div class="block-flat">
 						<div class="header">
+							<span class="pull-right"><a href = "javascript:void(0)" onclick = "stapledayUpGo()">更多</a></span>
 							<h4>周榜商品</h4>
 						</div>
 						<div class="content">
-							<table class="no-border">
+							<table class="no-border">s
 								<thead class="no-border">
 									<tr>
 										<th width = "40%">名称</th>
 										<th width = "20%"><a href = "javascript:void(0)" data1 = "wtzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">周涨幅</a></th>
-										<th width = "20%">月涨幅</th>
-										<th width = "20%">季涨幅</th>
+										<th width = "20%"><a href = "javascript:void(0)" data1 = "yfzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">月涨幅</a></th>
+										<th width = "20%"><a href = "javascript:void(0)" data1 = "jdzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">季涨幅</a></th>
 									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "stapledayUp"></tbody>
 							</table>
-						</div>-
+							<nav aria-label="周分页">
+							  <ul class="pagination" id = "StapledayUpPag"></ul>
+							</nav>
+						</div>
 					</div>
 					
 					<div class="block-flat">
@@ -161,7 +167,7 @@
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "myStock"></tbody>
 							</table>
-						</div>-
+						</div>
 					</div>
 				</div>  <!-- 内容右侧end -->
 			</div>
@@ -176,7 +182,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">最近20天折线图</h4>
+        <h4 class="modal-title" id="myModalLabel">折线图</h4>
       </div>
       <div class="modal-body">
         <div id="main2" style="width: 600px;height:400px;"></div>
@@ -201,7 +207,7 @@
       
       getReal();
       getHotHtml();
-      getStapledayUp('wtzf' , 'desc' , 'stapledayUp');
+      getStapledayUp(1,1,'wtzf' , 'desc' , 'stapledayUp');
       getLongHuTable(1,1);
       getZhiBiaoTable(1,1,'');
       getMyStock();
@@ -288,10 +294,10 @@
     		da2 = "asc";
     		$(data).attr("data2" , da2);
     	}
-    	getStapledayUp(da1 , da2 , da3)
+    	getStapledayUp(1,1,da1 , da2 , da3)
     }
     
-    function getStapledayUp(da1 , da2 , da3){
+    function getStapledayUp(page , num,da1 , da2 , da3){
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/stapleday/getList",//路径  
@@ -311,8 +317,32 @@
         		html = html + "<td>"+fixed2percentage(item[i]['jdzf'])+"</td></tr>";
         	}
         	$('#'+da3).html(html);
+        	if(num == 1){
+        		getStapledayUpPage(da1 , da2 , da3);
+        	}
       	}  
       });  
+      }
+      
+      function getStapledayUpPage(da1 , da2 , da3){
+      	$('#StapledayUpPag').bootstrapPaginator({
+                bootstrapMajorVersion: 3,//bootstrap版本
+                currentPage: 1,//当前页码
+                totalPages: 100,//总页数（后台传过来的数据）
+                numberOfPages: 5,//一页显示几个按钮
+                itemTexts: function (type, page, current) {
+                    switch (type) {
+                        case "first": return "首页";
+                        case "prev": return "上一页";
+                        case "next": return "下一页";
+                        case "last": return "末页";
+                        case "page": return page;
+                    }
+                },//改写分页按钮字样
+                onPageClicked: function (event, originalEvent, type, page) {
+                	getStapledayUp(page , 2,da1 , da2 , da3);
+                }
+            });
       }
       
       
@@ -333,7 +363,9 @@
         		html = html + "<tr><td>"+item[i]['date']+"</td>";
         		html = html + "<td>"+item[i]['stockCode']+"</td>";
         		html = html + "<td>"+item[i]['stockName']+"</td>";
-        		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td></tr>";
+        		html = html + "<td>"+item[i]['industry']+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['upSumRises5'])+"</td></tr>";
         	}
         	$('#longhu').html(html);
         	if(num == 1){
