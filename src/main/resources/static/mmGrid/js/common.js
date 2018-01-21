@@ -9,6 +9,45 @@
                 html = html + ' <input type="button" class="form-control" onclick = "delFormDiv(this)" value = " - "></div></div></from>';            
                 return html;
             }
+            
+            
+            function getDatasHtml(datas){
+            	var data = $.parseJSON(datas);  
+            	var musts = ['must' , 'must_not' , 'should'];
+            	var types = ['=' , '>' , '<' , '>=' , '<=' , 'prefix' , 'queryStr' , 'missing' , 'in'];
+            	var html = '';   
+            	for(var k = 0;k<data.length;k++){
+            		var d = data[k];
+            		html = html + '<form class="form-inline"><div class="row "><div class="data" style = "vertical-align: middle;"> <select class="form-control">';
+            		for (var i = 0; i < musts.length; i++) {
+            			if(d["must"] == musts[i]){
+            				html = html + '<option selected>'+musts[i]+'</option>';
+            			}else{
+            				html = html + '<option>'+musts[i]+'</option>';
+            			}
+            		}
+            		html = html + '</select> <select class="form-control">';
+	                for (var i = 0; i < classNames.length; i++) {
+	                	if(d["name"] == classNames[i]){
+	                		html = html + '<option selected>'+classNames[i]+'</option>';
+	                	}else{
+	                		html = html + '<option>'+classNames[i]+'</option>';
+	                	}
+	                }
+	                html = html + '</select> <select style = "width:100px" class="form-control">';
+	                for (var i = 0; i < types.length; i++) {
+	                	if(d["type"] == types[i]){
+            				html = html + '<option selected>'+types[i]+'</option>';
+            			}else{
+            				html = html + '<option>'+types[i]+'</option>';
+            			}
+	                }
+	                html = html + '</select> <input type="text" class="form-control" value = '+d["value"]+'>';
+	                html = html + ' <input type="button" class="form-control" onclick = "addFormDiv()" value = " + ">';            
+	                html = html + ' <input type="button" class="form-control" onclick = "delFormDiv(this)" value = " - "></div></div></from>';
+            	}
+            	$('#fh').html(html);
+            }
    
    //高亮
    var highliht = function(val){
