@@ -350,7 +350,7 @@
       
       function stapledayUpGo(){
       	var sorts = $('#StapledayUpText').val();
-      	window.location.href='/stock/stapleday/getList?sort=rq.desc,'+sorts;
+      	window.location.href='/stock/datas/dzsj?sort=rq.desc,'+sorts;
       }
       
       
@@ -425,10 +425,12 @@
         	var item = result['items'];
         	var html = "";
         	for(var i=0;i<item.length;i++){
-        		html = html + "<tr><td>"+item[i]['date']+"</td>";
+        			html = html + "<tr><td>"+item[i]['date']+"</td>";
         		html = html + "<td>"+item[i]['stockCode']+"</td>";
         		html = html + "<td>"+item[i]['stockName']+"</td>";
-        		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td></tr>";
+        		html = html + "<td>"+item[i]['industry']+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['upSumRises5'])+"</td></tr>";
         	}
         	$('#zhibiao').html(html);
         	if(num == 1){
