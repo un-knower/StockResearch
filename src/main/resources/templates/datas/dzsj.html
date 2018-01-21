@@ -69,7 +69,7 @@
 
             });
             
-            functiom chushihua(){
+            function chushihua(){
             	 var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
                 
                 var cols = [
@@ -89,15 +89,16 @@
                     {title:'单位',name:'priceDw',sortable:true}
                 ];
 
-
+				var sorts = $('#sorts').val();
+				if(sorts == ''){
+					sorts = "rq.desc";
+				}
                 var mmg = $('.mmg').mmGrid({
                     height: 'auto'
                     , cols: cols
                     , url: 'http://www.estock.com:8080/stock/stapleday/getList'
                     , method: 'get'
                     , remoteSort:true
-                    , sortName: 'close'
-                    , sortStatus: 'asc'
                     , fullWidthRows: true
                     , autoLoad: false
                     ,showBackboard:true
@@ -107,7 +108,8 @@
                     , params: function(){
                         //如果这里有验证，在验证失败时返回false则不执行AJAX查询。
                       return {
-                          datas: JSON.stringify(getDatas())
+                          datas: JSON.stringify(getDatas()),
+                          sort:sorts
                       }
                     }
                 });
