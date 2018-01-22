@@ -113,17 +113,23 @@
                     }  
                 }); 
 
-                var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
+                var pgBar = $('#pg').mmPaginator({"limitList":[100,200,500,1000,2000,2500,3000]});
                 
                 var cols = [
-                    { title:'公告日期', name:'startDate' , align:'center' },
-                    { title:'结束日期', name:'endDate' , align:'center' },
-                    { title:'股票代码', name:'stockCode' , align:'center' },
-                    { title:'股票名称', name:'stockName' , align:'center'},
-                    { title:'预测类型', name:'type' , align:'center',sortable:true},
-                    { title:'净利润', name:'jlr' , align:'center',sortable:true,renderer: moformat},
-                    { title:'业绩变动', name:'perChanges' , align:'center',sortable:true},
-                    { title:'变化幅度', name:'rangeability' , align:'center',sortable:true}
+                    { title:'公告日期', name:'startDate' , align:'center' ,width:60},
+                    { title:'结束日期', name:'endDate' , align:'center' ,width:60},
+                    { title:'股票代码', name:'stockCode' , align:'center' ,width:60},
+                    { title:'股票名称', name:'stockName' , align:'center',width:80},
+                    { title:'预测类型', name:'type' , align:'center',sortable:true,width:40},
+                    { title:'净利润', name:'jlr' , align:'center',sortable:true,renderer: moformat,width:80},
+                    { title:'市盈率', name:'pe' , align:'center',sortable:true,renderer: highliht,width:80},
+                    { title:'N市盈率', name:'npe' , align:'center',sortable:true,renderer: highliht,width:80},
+                    //当前使用率
+                    //财报后市盈率
+                    { title:'变化幅度', name:'rangeability' , align:'center',sortable:true},
+                    { title:'变化幅度起始', name:'startRangeability' , align:'center',sortable:true,renderer:fixed2percentage},
+                    
+                  { title:'业绩变动', name:'perChanges' , align:'center',sortable:true,width:200}
                 ];
 
 
@@ -185,6 +191,7 @@
             var fixed2percentage = function(val){
                 return highliht(val)+'%';
             }
+             
 
             var formHtml = function(){
                 var html = '<div class="row"><div class="col-md-12 data"></select> <select style = "width:100px"><option>must</option><option>must_not</option><option>should</option></select> <select>';

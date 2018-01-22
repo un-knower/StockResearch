@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
@@ -52,7 +53,7 @@ public class StoreReportSet {
 				@Override
 				public void run() {
 					String content = readTextReport(sat);
-					if(content==null)
+					if(StringUtils.isEmpty(content))
 						return ;
 					try {
 
@@ -84,9 +85,9 @@ public class StoreReportSet {
 
 						}
 
-						insBatchEs(ls, jestClient, "storereport");
+						insBatchEs(ls, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOREREPORT);
 					} catch (Exception e) {
-						System.out.println(content);
+						System.out.println("error:"+content);
 						e.printStackTrace();
 					}
 				}

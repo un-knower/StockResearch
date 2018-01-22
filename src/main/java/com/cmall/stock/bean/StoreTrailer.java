@@ -26,6 +26,10 @@ public class StoreTrailer implements Serializable{
 	private String startDate;
 	//结束时间
 	private String endDate;
+	//市盈率
+	private double pe;
+	 //财报后的市盈率
+	private double npe;
 	public String getStockCode() {
 		return stockCode;
 	}
@@ -91,6 +95,18 @@ public class StoreTrailer implements Serializable{
 	}
 	public void setJlr(double jlr) {
 		this.jlr = jlr;
+	}
+	public double getPe() {
+		return pe;
+	}
+	public void setPe(double pe) {
+		this.pe = pe;
+	}
+	public double getNpe() {
+		return npe;
+	}
+	public void setNpe(double npe) {
+		this.npe = npe;
 	}
 	
 	

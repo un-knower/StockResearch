@@ -38,12 +38,12 @@ public class StoreTrailerSet {
 	public static void main(String[] args) throws Exception {
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		// List<StoreTrailer> list= Lists.newArrayList();
-		for (int i = 0; i <= 34; i++) {
+		for (int i = 0; i <= 35; i++) {
 			// String content = StoreTrailerUrl(i);
 			// System.out.println(content);|
 			try {
 				// list.addAll(getList(StoreTrailerUrl(i)));
-				insBatchEs(getList(StoreTrailerUrl(i)), jestClient, "storetrailer");
+				insBatchEs(getList(StoreTrailerUrl(i)), jestClient,CommonBaseStockInfo.ES_INDEX_STOCK_STORETRAILER);
 			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO: handle exception
@@ -108,8 +108,8 @@ public class StoreTrailerSet {
 		for (StoreTrailer bean : list) {
 			i++;
 			// System.out.println(bean.getUnionId());
-			Index index = new Index.Builder(bean).index(indexIns).type("2017-12-31")
-					.id(bean.getStockCode() + bean.getStartDate()).build();// type("walunifolia").build();
+			Index index = new Index.Builder(bean).index(indexIns).type(bean.getEndDate())
+					.id(bean.getStockCode() + bean.getEndDate()).build();// type("walunifolia").build();
 			bulkBuilder.addAction(index);
 			if (i % 5000 == 0) {
 				jestClient.execute(bulkBuilder.build());
@@ -129,10 +129,6 @@ public class StoreTrailerSet {
 		JestResult results = jestClient.execute(selResult);
 		List<StoreTrailer> lstBean = results.getSourceAsObjectList(StoreTrailer.class);
 		for (StoreTrailer storeTrailer : lstBean) {
-//			if(storeTrailer.getStockCode().equals("000063")){
-//				System.out.println("123");
-//			}
-			//storeTrailer.setJlr(getJlr(storeTrailer.getPerChanges()));
 			map.put(storeTrailer.getStockCode(), storeTrailer);
 		}
 		return map;

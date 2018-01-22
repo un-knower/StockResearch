@@ -42,8 +42,7 @@ public class HtmlController{
     }
     
 	@RequestMapping("/datas/dzsj")
-    public String  dataDzsj(Model model , StockBasePageInfo info) throws Exception {
-		model.addAttribute("info", info);
+    public String  dataDzsj(Model model) throws Exception {
         return "/datas/dzsj";
     }
 	

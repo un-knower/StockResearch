@@ -74,6 +74,8 @@ public class EastReportBean  extends    StockDetailInfoBean   implements Seriali
 	private String tzhdcsdxjllje;
 	
 	private StockDetailInfoBean detailInfoBean;
+	
+	private double npe;
 
 
 	public String getLrfp() {
@@ -391,6 +393,14 @@ public class EastReportBean  extends    StockDetailInfoBean   implements Seriali
 
 	public void setDetailInfoBean(StockDetailInfoBean detailInfoBean) {
 		this.detailInfoBean = detailInfoBean;
+	}
+
+	public double getNpe() {
+		return npe;
+	}
+
+	public void setNpe(double npe) {
+		this.npe = npe;
 	}
 	
 

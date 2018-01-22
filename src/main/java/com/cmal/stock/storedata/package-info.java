@@ -16,3 +16,9 @@
  *     
  */
 package com.cmal.stock.storedata;
+
+
+/***
+ * 资金流向
+ * http://summary.jrj.com.cn/zjlx/lxlr.shtml
+ */

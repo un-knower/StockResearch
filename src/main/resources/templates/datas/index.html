@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+  <head th:include="/common/common_head :: commonHeader('首页')"></head>
+<body>
+
+<!-- 顶部导航 -->
+<div id="head-nav" class="navbar navbar-default navbar-fixed-top" th:include="/common/top_nav :: nav"></div>
+<!-- 左侧菜单 -->
+<div id="cl-wrapper" class="fixed-menu sb-collapsed">
+	<div class="cl-sidebar" data-position="right" data-step="1" th:include="/common/left_menu :: menu('index')"></div>
+	<div class="container-fluid" id="pcont">
+		<div class="cl-mcont">
+			<div class="row dash-cols">
+				<!-- 内容左侧 -->
+				<div class="col-sm-6 col-md-6">
+					<div class="block">
+						<div class="header no-border" style = "padding-left:30px !important;">
+							<form class="form-inline">
+								<div class="form-group">
+									<div class="input-group pull-right">
+										<div class="input-group-addon">实时数据:</div>
+			      						<input type="text" class="form-control" id="code" value="000001">
+			    					</div>
+			  					</div>
+			  					<button type="button" class="btn btn-default" onclick = "getReal();">查</button>
+							</form>
+   						 </div>
+    					<div class="content"  data-step="3" data-intro="">
+      						<img src = "http://image.sinajs.cn/newchart/min/n/sh000001.gif" style="width:100%;" id ="imgFen"/>
+    					</div>
+    					<div class="content">
+      						<div class="stat-data">
+        						<div class="stat-red" id = "realPrice">
+          							<h2 id = "price">3000</h2>
+          							<span id = "percent">+10%</span>
+       							</div>
+      						</div>
+      						<div class="stat-data">
+        						<div class="stat-number">
+          							<div><h4 id = "realName">上证指数</h4></div>
+        						</div>
+        						<div class="stat-number">
+          							<div class = "col-sm-6 col-md-6">
+          								开盘:<span id = "realOpen" style = "font-size: 16px !important;"></span>
+          								<br/>
+          								涨幅:<span id = "realUp" style = "font-size: 16px !important;"></span>
+          							</div>
+          							<div class = "col-sm-6 col-md-6">
+          								最高:<span id = "realHigh" style = "font-size: 16px !important;"></span>
+          								<br/>
+          								最低:<span id = "realLow" style = "font-size: 16px !important;"></span>
+          							</div>
+        						</div>
+							</div>
+      						<div class="clear"></div>
+    					</div>
+  					</div>
+  					<div class="block-flat2 pie-widget">
+						<div class="header">
+							<span class="pull-right"><a href = "#" onclick = "longhuGo()">更多</a></span>
+							<span class="pull-right"><span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="
+								1.当日涨幅超过10% 
+								2.连续两天涨幅超过3% 
+								3.5天内三天涨幅>0 
+								4.5天内涨超过15% 
+								5.10天内涨超过15% ">
+								规则</span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+							<h4>龙虎榜</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr>
+										<th>日期</th>
+										<th>code</th>
+										<th>名称</th>
+										<th>板块</th>
+										<th>涨幅</th>
+										<th>5天涨</th>
+									</tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "longhu"></tbody>
+							</table>
+							<nav aria-label="龙虎榜分页">
+							  <ul class="pagination" id = "longhupag"></ul>
+							</nav>
+						</div>
+					</div>
+					
+					<div class="block-flat2 pie-widget">
+						<div class="header">
+							<span class="pull-right"><a href = "#" onclick = "zhibiaoGo()">更多</a></span>
+							<span class="pull-right">
+								<select id = "zhibiaoSelect">
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]' selected>KDJ金叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]'>macd金叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;}]'>KDJ死叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;}]'>macd死叉</option>
+								</select>
+								&nbsp;&nbsp;&nbsp;&nbsp;</span>
+							<h4>指标榜</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr>
+										<th>日期</th>
+										<th>code</th>
+										<th>名称</th>
+										<th>板块</th>
+										<th>涨幅</th>
+										<th>5天涨</th>
+									</tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "zhibiao"></tbody>
+							</table>
+							<nav aria-label="指标数据分页">
+							  <ul class="pagination" id = "zhibiaopag"></ul>
+							</nav>
+						</div>
+					</div>
+					
+				</div><!-- 内容左侧end -->
+				<!-- 内容右侧 -->
+				<div class="col-sm-6 col-md-6">
+					<div class="block-flat2 pie-widget">
+			            <div class="content no-padding">
+			            	<span class="pull-right"><a href = "http://www.100ppi.com/hot/" target="_blank">更多</a></span>
+			              	<h4 class="title">大宗商品热点消息</h4>
+			              	<div class="list-group tickets" id = "dzsprd"></div>	            
+			            </div>
+			        </div>
+			        <div class="block-flat">
+						<div class="header">
+							<span class="pull-right"><a href = "javascript:void(0)" onclick = "stapledayUpGo()">更多</a></span>
+							<h4>周榜商品</h4>
+						</div>
+						<div class="content">
+							<input type = "hidden" , value = "wtzf.desc" id = "StapledayUpText">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr>
+										<th width = "40%">名称</th>
+										<th width = "20%"><a href = "javascript:void(0)" data1 = "wtzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">周涨幅</a></th>
+										<th width = "20%"><a href = "javascript:void(0)" data1 = "yfzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">月涨幅</a></th>
+										<th width = "20%"><a href = "javascript:void(0)" data1 = "jdzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">季涨幅</a></th>
+									</tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "stapledayUp"></tbody>
+							</table>
+							<nav aria-label="周分页">
+							  <ul class="pagination" id = "StapledayUpPag"></ul>
+							</nav>
+						</div>
+					</div>
+					<!--
+					<div class="block-flat">
+						<div class="header">
+							<h4>我的自选</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr>
+										<th width = "20%">code</th>
+										<th width = "20%">名称</th>
+										<th width = "20%">涨幅</th>
+										<th width = "20%">操作</th>
+									</tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "myStock"></tbody>
+							</table>
+						</div>
+					</div> -->
+				</div>  <!-- 内容右侧end -->
+			</div>
+		</div>
+	</div> 	
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">折线图</h4>
+      </div>
+      <div class="modal-body">
+        <div id="main2" style="width: 600px;height:400px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div th:include="/common/onload_js :: onloadJs"></div>
+  <script type="text/javascript">
+  	var longhuDatas = '[{"must":"must","name":"rises","type":">=","value":"10"},{"must":"must","name":"upRisesDayNum5","type":">=","value":"3"},{"must":"must","name":"upRises","type":">=","value":"3"},{"must":"must","name":"upSumRises5","type":">=","value":"15"}]';
+    $(document).ready(function(){
+       App.init({
+        nanoScroller: false
+      });
+        
+      App.dashBoard();   
+      
+      getReal();
+      getHotHtml();
+      getStapledayUp(1,1,'wtzf' , 'desc' , 'stapledayUp');
+      getLongHuTable(1,1);
+      getZhiBiaoTable(1,1,'');
+      getMyStock();
+      
+      $("#zhibiaoSelect").change(function(){
+      	var val = $(this).children('option:selected').val();
+      	getZhiBiaoTable(1,1,val);
+		});   
+    });
+    
+    function getReal(){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/real/getRealByCode",//路径  
+        data : {code:$('#code').val()},//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	if(result != ''){
+        		$('#imgFen').attr('src' ,getPath($('#code').val()));
+        		$('#price').html(result['price']);
+        		$('#realName').html(result['name']);
+        		$('#realOpen').html(result['open']);
+        		$('#realUp').html(getNumUp(result['updown']));
+        		$('#realHigh').html(result['high']);
+        		$('#realLow').html(result['low']);
+        		var percent = parseFloat(result['percent']) * 100;
+        		percent = percent.toFixed(2)
+        		if(percent > 0){
+        			percent = "+" + percent + "%";
+        			$('#realPrice').attr("class","stat-red");
+        		}else{
+        			percent = percent + "%";
+        			$('#realPrice').attr("class","stat-green");
+        		}
+        		$('#percent').html(percent);
+        	}else{
+        		alert('查不到数据');
+        	}
+      	}  
+      });   
+    }
+    
+    function getNumUp(num){
+    	if(num >= 0){
+    		return "+" + num;
+    	}
+    	return num;
+    }
+    
+    function getPath(code){
+            	var timestamp = Date.parse(new Date());
+            	var path = 'http://image.sinajs.cn/newchart/min/n/';
+            	if(code.toString().substring(0,1) == 6 || code == '000001'){
+            		path = path +  'sh'+code+'.gif';
+            	}else{
+            		path = path +  'sz'+code+'.gif';
+            	}
+            	path = path + '?'+timestamp;
+            	return path;
+            }
+            
+     function getHotHtml(){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/stapleday/getHotspotHtml",//路径  
+        data : {},//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	if(result != ''){
+        		$('#dzsprd').html(result);
+        	}else{
+        		alert('查不到数据');
+        	}
+      	}  
+      });
+    }
+    
+    function getSortZ(data){
+    	var da1 = $(data).attr("data1");
+    	var da2 = $(data).attr("data2");
+    	var da3 = $(data).attr("data3");
+    	if(da2 == 'asc'){
+    		da2 = "desc";
+    		$(data).attr("data2" , da2);
+    	}else if(da2 == 'desc'){
+    		da2 = "asc";
+    		$(data).attr("data2" , da2);
+    	}
+    	getStapledayUp(1,1,da1 , da2 , da3)
+    }
+    
+    function getStapledayUp(page , num,da1 , da2 , da3){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/stapleday/getList",//路径  
+        data : {
+        	datas:'',
+        	sort:'rq.desc,'+da1+'.'+da2,
+        	page:page,
+        	limit:5
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var item = result['items'];
+        	var html = "";
+        	for(var i=0;i<item.length;i++){
+        		html = html + "<tr><td><a href='javascript:void(0)' onclick = 'tu("+item[i]['code']+")'>"+item[i]['productName']+"</a></td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['wtzf'])+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['yfzf'])+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['jdzf'])+"</td></tr>";
+        	}
+        	$('#'+da3).html(html);
+        	if(num == 1){
+        		getStapledayUpPage(da1 , da2 , da3);
+        	}
+      	}  
+      });  
+      }
+      
+      function getStapledayUpPage(da1 , da2 , da3){
+      	$('#StapledayUpPag').bootstrapPaginator({
+                bootstrapMajorVersion: 3,//bootstrap版本
+                currentPage: 1,//当前页码
+                totalPages: 100,//总页数（后台传过来的数据）
+                numberOfPages: 5,//一页显示几个按钮
+                itemTexts: function (type, page, current) {
+                    switch (type) {
+                        case "first": return "首页";
+                        case "prev": return "上一页";
+                        case "next": return "下一页";
+                        case "last": return "末页";
+                        case "page": return page;
+                    }
+                },//改写分页按钮字样
+                onPageClicked: function (event, originalEvent, type, page) {
+                	getStapledayUp(page , 2,da1 , da2 , da3);
+                }
+            });
+      }
+      
+      function stapledayUpGo(){
+      	var sorts = $('#StapledayUpText').val();
+      	window.location.href='/stock/datas/dzsj?sort=rq.desc,'+sorts;
+      }
+      
+      
+      function getLongHuTable(page , num){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/getList",//路径  
+        data : {
+        	datas:longhuDatas,
+        	sort:'date.desc',
+        	page:page,
+        	limit:5
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var item = result['items'];
+        	var html = "";
+        	for(var i=0;i<item.length;i++){
+        		html = html + "<tr><td>"+item[i]['date']+"</td>";
+        		html = html + "<td>"+item[i]['stockCode']+"</td>";
+        		html = html + "<td>"+item[i]['stockName']+"</td>";
+        		html = html + "<td>"+item[i]['industry']+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['upSumRises5'])+"</td></tr>";
+        	}
+        	$('#longhu').html(html);
+        	if(num == 1){
+        		longhupag();
+        	}
+      	}  
+      });  
+      }
+      
+      function longhupag(){
+      	$('#longhupag').bootstrapPaginator({
+                bootstrapMajorVersion: 3,//bootstrap版本
+                currentPage: 1,//当前页码
+                totalPages: 100,//总页数（后台传过来的数据）
+                numberOfPages: 5,//一页显示几个按钮
+                itemTexts: function (type, page, current) {
+                    switch (type) {
+                        case "first": return "首页";
+                        case "prev": return "上一页";
+                        case "next": return "下一页";
+                        case "last": return "末页";
+                        case "page": return page;
+                    }
+                },//改写分页按钮字样
+                onPageClicked: function (event, originalEvent, type, page) {
+                    getLongHuTable(page , 2);
+                }
+            });
+      }
+      
+      function longhuGo(){
+      	window.location.href='/stock/datas/stockinfo?sort=date.desc&datas='+longhuDatas;
+      }
+      
+      function getZhiBiaoTable(page , num , val){
+      	if(val == '' || val == null){
+      		var val = $('#zhibiaoSelect').val();
+      	}
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/getList",//路径  
+        data : {
+        	datas:val,
+        	sort:'date.desc',
+        	page:page,
+        	limit:5
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var item = result['items'];
+        	var html = "";
+        	for(var i=0;i<item.length;i++){
+        			html = html + "<tr><td>"+item[i]['date']+"</td>";
+        		html = html + "<td>"+item[i]['stockCode']+"</td>";
+        		html = html + "<td>"+item[i]['stockName']+"</td>";
+        		html = html + "<td>"+item[i]['industry']+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['upSumRises5'])+"</td></tr>";
+        	}
+        	$('#zhibiao').html(html);
+        	if(num == 1){
+        		zhibiaopag();
+        	}
+      	}  
+      });  
+      }
+      
+      function zhibiaopag(){
+      	$('#zhibiaopag').bootstrapPaginator({
+                bootstrapMajorVersion: 3,//bootstrap版本
+                currentPage: 1,//当前页码
+                totalPages: 100,//总页数（后台传过来的数据）
+                numberOfPages: 5,//一页显示几个按钮
+                itemTexts: function (type, page, current) {
+                    switch (type) {
+                        case "first": return "首页";
+                        case "prev": return "上一页";
+                        case "next": return "下一页";
+                        case "last": return "末页";
+                        case "page": return page;
+                    }
+                },//改写分页按钮字样
+                onPageClicked: function (event, originalEvent, type, page) {
+                    getZhiBiaoTable(page , 2 , '');
+                }
+            });
+      }
+      
+      
+      function zhibiaoGo(){
+      	var val = $('#zhibiaoSelect').val();
+      	window.location.href='/stock/datas/stockinfo?sort=date.desc&datas='+val;
+      }
+      
+      
+      function getMyStock(){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/optional/getList",//路径  
+        data : {
+
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var item = result['items'];
+        	var html = "";
+        	for(var i=0;i<item.length;i++){
+        		html = html + "<tr><td>"+item[i]['stockCode']+"</td>";
+        		html = html + "<td>"+item[i]['stockName']+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['percent'])+"</td>";
+        		html = html + '<td><button type="button" class="btn btn-default" onclick = "delMyStock('+item[i]["stockCode"]+')">删除</button></td></tr>';
+        	}
+        	$('#myStock').html(html);
+      	}  
+      });  
+      }
+      
+      function delMyStock(id){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/optional/delete",//路径  
+        data : {
+			stockCode:id
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	getMyStock();
+      	}  
+      });  
+      }
+      
+      function tu(code){
+      	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/stapleday/getListByName",//路径  
+        data : {
+			datas:'[{"must":"must","name":"code","type":"=","value":"'+code+'"}]',
+			sort:'rq.desc'
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	 var myChart = echarts.init(document.getElementById('main2'));
+        	 var data =result;
+        	 var dateList = data.map(function (item) {
+				    return item[0];
+				});
+				var valueList = data.map(function (item) {
+				    return item[1];
+				});
+				
+				option = {
+				    xAxis: {
+				        type: 'category',
+				        data: dateList
+				    },
+				    yAxis: {
+				        type: 'value'
+				    },
+				    series: [{
+				        data: valueList,
+				        type: 'line',
+				        smooth: true,
+				        label: {
+			                normal: {
+			                    show: true,
+			                    position: 'top'
+			                }
+			            }
+				    }]
+				};
+        	  myChart.setOption(option);
+        	  
+        	  $('#myModal').modal('show');
+      	}  
+      }); 
+      }
+      
+  </script>
+  </body>
+</html>
