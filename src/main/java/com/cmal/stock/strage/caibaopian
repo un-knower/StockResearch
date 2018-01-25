@@ -194,3 +194,84 @@
     }
   } ]
 }
+
+
+
+
+
+
+
+
+
+
+import strange 
+
+{
+  "query" : {
+    "bool" : {
+      "must" : [ {
+        "range" : {
+          "xjlr" : {
+            "from" : "160000000",
+            "to" : null,
+            "include_lower" : true,
+            "include_upper" : true
+          }
+        }
+      }, {
+        "range" : {
+          "npe" : {
+            "from" : "0",
+            "to" : null,
+            "include_lower" : false,
+            "include_upper" : true
+          }
+        }
+      }, {
+        "range" : {
+          "jlr_ycb" : {
+            "from" : "1.2",
+            "to" : null,
+            "include_lower" : false,
+            "include_upper" : true
+          }
+        }
+      }, {
+        "range" : {
+          "jlr_tbzz_xjd" : {
+            "from" : "6",
+            "to" : null,
+            "include_lower" : false,
+            "include_upper" : true
+          }
+        }
+      }, {
+        "range" : {
+          "npe" : {
+            "from" : null,
+            "to" : "60",
+            "include_lower" : true,
+            "include_upper" : false
+          }
+        }
+      } ],
+      "must_not" : [ {
+        "prefix" : {
+          "stockCode" : {
+            "prefix" : "3"
+          }
+        }
+      }, {
+        "terms" : {
+          "stockCode" : [ "002859", "002716", "002340", "600545", "002356", "000975", "000988", "002118", "002775", "002334", "603588", "002753", "002374", "002649", "000545", "002088", "002370", "603108", "002116", "002497", "002545", "002515", "600093", "002496", "002247", "002083", "002002", "002434", "002323", "002439", "002024", "000058", "600971", "002087" ]
+        }
+      } ]
+    }
+  },
+  "sort" : [ {
+    "jdzzl" : {
+      "order" : "desc"
+    }
+  } ]
+}
+

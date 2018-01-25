@@ -25,6 +25,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockRealBean;
 import com.cmall.stock.bean.StoreTrailer;
+import com.cmall.stock.utils.MathsUtils;
 import com.cmall.stock.utils.TextUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -140,7 +141,7 @@ public class StoreRealSet {
 			}
 		}
 		tr.setType(datas[4]);
-		tr.setNetProfit(datas[5]);
+		tr.setNetProfit(MathsUtils.parseDouble(datas[5]));
 		tr.setStartDate(datas[7]);
 		tr.setEndDate(datas[8]);
 		return tr;

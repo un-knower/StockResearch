@@ -59,7 +59,7 @@
                     }  
                 }); 
 
-                var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
+                var pgBar = $('#pg').mmPaginator({"limitList":[100,500,1000,200,3000,6000]});
                 
                 var cols = [
                    
@@ -70,11 +70,11 @@
                    	{title:'行业', name:'productHy' , align:'center' },
                     {title:'价格',name:'monthYcPrice',sortable:true},
                     {title:'后一天价格',name:'monthYmPrice',sortable:true},   
-                    {title:'涨幅比例',name:'monthRise',sortable:true,renderer: highliht},
-                    {title:'周涨幅',name:'wtzf',sortable:true,renderer: highliht},
-                    {title:'月涨幅',name:'yfzf',sortable:true,renderer: highliht},
-                    {title:'季度涨幅',name:'jdzf',sortable:true,renderer: highliht},
-                    {title:'同比增长',name:'tbRise',sortable:true,renderer: highliht},
+                    {title:'涨幅比例',name:'monthRise',sortable:true,renderer: fixed2percentage},
+                    {title:'周涨幅',name:'wtzf',sortable:true,renderer: fixed2percentage},
+                    {title:'月涨幅',name:'yfzf',sortable:true,renderer: fixed2percentage},
+                    {title:'季度涨幅',name:'jdzf',sortable:true,renderer: fixed2percentage},
+                    {title:'同比增长',name:'tbRise',sortable:true,renderer: fixed2percentage},
                     {title:'单位',name:'priceDw',sortable:true}
                 ];
 

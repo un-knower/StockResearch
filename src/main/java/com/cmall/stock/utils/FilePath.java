@@ -10,4 +10,5 @@ public class FilePath {
 	public final static String stockFuncDetailInfoPath = "/opt/stock/data/cnmarket/stockFuncDetailInfo.csv";
 	public final static String saveJyfxPathsuff = "/opt/stock/data/jyfx/";
 	public final static String saveStapleDayPathsuff = "/opt/stock/data/StapleDay/";
+	public final static String saveSTORETRAILER = "/opt/stock/data/cnmarket/storetrailer/detail/";
 }

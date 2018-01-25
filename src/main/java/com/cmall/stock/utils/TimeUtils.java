@@ -16,6 +16,7 @@ public class TimeUtils {
 	public static final String DEFAULT_ERROR_DATE = "1900-11-11";
 	public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	public static final String DEFAULT_DATEYMD_FORMAT = "yyyy-MM-dd";
+	public static final String DEFAULT_DATEYMD_FORMAT2 = "yyyy-M-dd";
 	public static final String DEFAULT_DATEYM_FORMAT = "yyyy-MM";
 	public static final String DATE_FORMAT_LONG = "yyyyMMddHHmmss";
 
@@ -38,8 +39,8 @@ public class TimeUtils {
 		Date startDate = cal1.getTime();
 		Date endDate = cal2.getTime();
 
-		getDayList(startDate, endDate);
-		System.out.println(countDays(startDate, endDate));
+//		getDayList(startDate, endDate);
+//		System.out.println(countDays(startDate, endDate));
 	}
 
 	public static long countDays(Date startDate, Date endDate) {
@@ -53,26 +54,23 @@ public class TimeUtils {
 		return (endValue - startValue) / 1000L / 60L / 60L / 24L;
 	}
 
-	public static List<Date> getDayList(Date startDate, Date endDate) {
+	public static List<String> getDayList(Date startDate, Date endDate,SimpleDateFormat dateFormat) {
 		long countDays = countDays(startDate, endDate);
 
 		Calendar cal = Calendar.getInstance();
 		boolean needTurn = startDate.getTime() > endDate.getTime();
 		cal.setTime(needTurn ? endDate : startDate);
 
-		List<Date> dayList = new ArrayList<Date>();
+		List<String > dayList = new ArrayList<String>();
 
 		for (int i = 1; i < countDays; i++) {
 			cal.add(5, 1);
-			dayList.add(cal.getTime());
+			if(dateFormat!=null){
+				dayList.add( dateFormat.format(cal.getTime()));
+			}
+				
 		}
-
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd EEE");
-
-		for (Date date : dayList) {
-			System.out.println(dateFormat.format(date));
-		}
-
+ 
 		return dayList;
 	}
 

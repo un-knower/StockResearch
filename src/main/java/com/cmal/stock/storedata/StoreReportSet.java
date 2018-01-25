@@ -11,12 +11,18 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+
+import com.cmal.stock.strage.QueryComLstData;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StockReCupplement;
 import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.TextUtil;
+import com.cmall.stock.utils.TimeUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -30,7 +36,31 @@ import com.kers.httpmodel.BaseConnClient;
  *
  */
 public class StoreReportSet {
-
+//	static Map<String, StockDetailInfoBean> mapsInfo;
+//	static Map<String, StockBaseInfo> mapsInfo2;
+//
+//	static {
+//		try {
+//			mapsInfo = StockDetailInfoHand.getDetailForMap();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//		try {
+//			mapsInfo2 = Maps.newConcurrentMap();
+//			BoolQueryBuilder queryss = QueryBuilders.boolQuery();
+//			
+//			queryss.must(QueryBuilders.termQuery("date",TimeUtils.getDate("2018-01-22")));//TimeUtils.DEFAULT_DATEYMD_FORMAT)));// "2018-01-19"));
+//			List<StockBaseInfo> lstSource = CommonBaseStockInfo.getLstResult(queryss, "2018");
+//
+//			for (StockBaseInfo bean : lstSource) {
+//				mapsInfo2.put(bean.getStockCode(), bean);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
 	// static String cnFinalReportPath = "D://data//Report//";
 
 	public static void main(String[] args) throws Exception {
@@ -42,12 +72,13 @@ public class StoreReportSet {
 	}
 
 	public static void daoshuju() throws Exception {
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
-		final Map<String, StoreTrailer> map = StoreTrailerSet.getAllTrailerMap("2017-12-31");
-
+		
 		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
-		// lstSource=Lists.newArrayList("000001");
-		// List<EastReportBean> list = new ArrayList<EastReportBean>();
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		final Map<String, StoreTrailer> map = StoreTrailerSet.getAllTrailerMap(StoreTrailerSet.P_TYPE_2017_12_31);
+		final Map<String, StockDetailInfoBean> mapsInfo=QueryComLstData.getDetailInfo();
+		final  Map<String, StockBaseInfo> mapsInfo2=QueryComLstData.getStockBaseInfo();
+		
 		for (final String sat : lstSource) {
 			CommonBaseStockInfo.executorServiceLocal.execute(new Thread() {
 				@Override
@@ -63,6 +94,7 @@ public class StoreReportSet {
 							CuMap.put(stockReCupplement.getBgq(), stockReCupplement);
 						}
 						List<EastReportBean> ls = retBeanLst(new Gson().fromJson(content, PaInfo.class).getData());
+						List<EastReportBean> lstIns=Lists.newArrayList();
 						for (int i = 0; i < ls.size(); i++) {
 							EastReportBean bean = ls.get(i);
 							if (i == 0) {
@@ -82,10 +114,38 @@ public class StoreReportSet {
 								bean.setJyhdcsdxjllje(cu.getJyhdcsdxjllje());
 								bean.setTzhdcsdxjllje(cu.getTzhdcsdxjllje());
 							}
+							
+							
+							StockDetailInfoBean mapsBean = mapsInfo.get(bean.getStockCode());
+
+							StockBaseInfo baBean = mapsInfo2.get(bean.getStockCode());
+							if (baBean != null && mapsBean != null&&bean.getXjlr()!=0) {
+								double npe = baBean.getClose() / (bean.getXjlr() / mapsBean.getTotals());
+								bean.setNpe(npe);
+								//  
+								bean.setPe(baBean.getClose() / (bean.getJlr() / mapsBean.getTotals()));
+							}
+							if (mapsBean != null) {
+								// bean.setTotals(mapsBean.getTotals() * mapsBean.getEsp() *
+								// mapsBean.getPe());// mapsBean.getTotalAssets());
+								bean.setIndustry(mapsBean.getIndustry());
+								bean.setPe(mapsBean.getPe());
+								bean.setArea(mapsBean.getArea());
+								bean.setIndustry(mapsBean.getIndustry());
+								double pe= bean.getPe();
+								//System.out.println(" sss "+bean.getStockCode()+"   "+pe);
+								bean.setPe(pe==0?mapsBean.getPe():pe);
+								if(pe!=bean.getPe())
+									System.out.println(" sss "+bean.getStockCode()+"   "+pe);
+									
+								bean.setZsz((mapsBean.getPe()*mapsBean.getEsp()*mapsBean.getTotals()));
+								// System.out.println(mapsBean);
+							}
+							lstIns.add(bean);
 
 						}
 
-						insBatchEs(ls, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOREREPORT);
+						insBatchEs(lstIns, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOREREPORT);
 					} catch (Exception e) {
 						System.out.println("error:"+content);
 						e.printStackTrace();

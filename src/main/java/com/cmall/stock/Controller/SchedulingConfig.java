@@ -18,8 +18,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cmal.stock.storedata.StoreAstockTradInfo;
 import com.cmal.stock.storedata.StoreRealSet;
+import com.cmal.stock.strage.QueryComLstData;
 import com.cmall.stock.bean.StockBaseInfo;
-import com.cmall.stock.bean.StockFuncDetailInfo;
+import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StockRealBean;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.TextUtil;
@@ -143,7 +144,7 @@ public class SchedulingConfig {
 	public  static  void  wDataRealToEs() throws Exception{
 		List<String> lstSource = TextUtil.readTxtFile(FilePath.path);
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
-		 final Map<String , StockFuncDetailInfo> map = StoreAstockTradInfo.getInfoByCsv();
+		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo();
 		 
 		for(final String  sat:lstSource){
 			executorServiceLocal.execute(new Thread(){

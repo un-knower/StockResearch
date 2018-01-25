@@ -402,6 +402,18 @@ public class EastReportBean  extends    StockDetailInfoBean   implements Seriali
 	public void setNpe(double npe) {
 		this.npe = npe;
 	}
+
+	@Override
+	public String toString() {
+		return "EastReportBean [jlr=" + jlr + ", sjlr=" + sjlr + ", xjlr=" + xjlr + ", jdzzl=" + jdzzl
+				+ ", jdzzl_before=" + jdzzl_before + ", jlr_gsh=" + jlr_gsh + ", jlr_ycb=" + jlr_ycb + ", mgsy=" + mgsy
+				+ ", mgsykc=" + mgsykc + ", yysr=" + yysr + ", yysr_yw=" + yysr_yw + ", yysr_tbzz=" + yysr_tbzz
+				+ ", yysr_hbzz=" + yysr_hbzz + ", jlr_tbzz=" + jlr_tbzz + ", jlr_tbzz_xjd=" + jlr_tbzz_xjd
+				+ ", jlr_tbzz_str=" + jlr_tbzz_str + ", jlr_hbzz=" + jlr_hbzz + ", mgjzc=" + mgjzc + ", jzcsyl="
+				+ jzcsyl + ", mgxjl=" + mgxjl + ", xsmll=" + xsmll + ", lrfp=" + lrfp + ", gxl=" + gxl + ", ggrq="
+				+ ggrq + ", jzrq=" + jzrq + ", currentPrice=" + currentPrice + ", jyhdcsdxjllje=" + jyhdcsdxjllje
+				+ ", tzhdcsdxjllje=" + tzhdcsdxjllje + ", detailInfoBean=" + detailInfoBean + ", npe=" + npe + "]";
+	}
 	
 
 }

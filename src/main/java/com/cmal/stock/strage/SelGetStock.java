@@ -17,6 +17,7 @@ import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.bean.jyfx.JyfxInfo;
+import com.cmall.stock.utils.TimeUtils;
 import com.cmall.stock.vo.StockBasePageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -46,30 +47,7 @@ public class SelGetStock {
 		return getCommonLstResult(query, page, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "");
 	}
 
-	static Map<String, StockDetailInfoBean> mapsInfo;
-	static Map<String, StockBaseInfo> mapsInfo2;
-
-	static {
-		try {
-			mapsInfo = StockDetailInfoHand.getDetailForMap();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		try {
-			mapsInfo2 = Maps.newConcurrentMap();
-			BoolQueryBuilder queryss = QueryBuilders.boolQuery();
-			queryss.must(QueryBuilders.termQuery("date", "2018-01-19"));
-			List<StockBaseInfo> lstSource = CommonBaseStockInfo.getLstResult(queryss, "2018");
-
-			for (StockBaseInfo bean : lstSource) {
-				mapsInfo2.put(bean.getStockCode(), bean);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
+	
 
 	public static Map<String, Object> getTrailerLstResult(BoolQueryBuilder query, StockBasePageInfo page, String type)
 			throws Exception {
@@ -86,15 +64,18 @@ public class SelGetStock {
 		List<StoreTrailer> lstBeanInt = results.getSourceAsObjectList(StoreTrailer.class);
 
 		List<StoreTrailer> lstResult = Lists.newArrayList();
+//		System.out.println(mapsInfo);
+		Map<String, StockBaseInfo> mapsInfo2=QueryComLstData.getStockBaseInfo();
 		for (StoreTrailer bean : lstBeanInt) {
-			StockDetailInfoBean stBean = mapsInfo.get(bean.getStockCode());
-			StockBaseInfo baBean = mapsInfo2.get(bean.getStockCode());
-			if (baBean != null && stBean != null) {
-				double npe = baBean.getClose() / (bean.getJlr() / stBean.getTotals());
-				bean.setNpe(npe);
-			}
-			if (stBean != null)
-				bean.setPe(stBean.getPe());
+//			StockDetailInfoBean stBean = QueryComLstData.getDetailInfo().get(bean.getStockCode());
+//			StockBaseInfo baBean = mapsInfo2.get(bean.getStockCode());
+//			if (baBean != null && stBean != null) {
+//				double npe = baBean.getClose() / (bean.getJlr() / stBean.getTotals());
+//				bean.setNpe(npe);
+//			}
+//			if (stBean != null)
+//				bean.setPe(stBean.getPe());
+			
 			lstResult.add(bean);
 		}
 
@@ -254,15 +235,6 @@ public class SelGetStock {
 		} else {
 			types.add("2017-09-30");
 		}
-		// SearchSourceBuilder ssb = new SearchSourceBuilder();
-		// if (!StringUtils.isEmpty(page.getSort())) {
-		// String order = page.getSort().split("\\.")[1];
-		// if (order.equalsIgnoreCase("desc")) {
-		// ssb.sort(page.getSort().split("\\.")[0], SortOrder.DESC);
-		// } else {
-		// ssb.sort(page.getSort().split("\\.")[0], SortOrder.ASC);
-		// }
-		// }
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);// ssb.query(query);
 		System.out.println(searchSourceBuilder.toString());
 		// System.out.println(types);
@@ -272,29 +244,41 @@ public class SelGetStock {
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
 		List<EastReportBean> lstBeanInt = results.getSourceAsObjectList(EastReportBean.class);
-		List<EastReportBean> lstBean = Lists.newArrayList();// results.getSourceAsObjectList(EastReportBean.class);
+		List<EastReportBean> lstBean =lstBeanInt;// Lists.newArrayList();// results.getSourceAsObjectList(EastReportBean.class);
 
-		for (EastReportBean bean : lstBeanInt) {
-			StockDetailInfoBean mapsBean = mapsInfo.get(bean.getStockCode());
+//		System.out.println("mapsInfo"+mapsInfo);
+//		Map<String, StockBaseInfo> mapsInfo2=QueryComLstData.getStockBaseInfo();
+//
+//		for (EastReportBean bean : lstBeanInt) {
+			
+//			if(bean.getJlr_ycb()>0&&bean.getJdzzl()/bean.getJlr_ycb()>2){
+//				System.out.println(bean.getStockCode()+"   "+bean.getStockName()+"  "+bean.getJdzzl()+"    "+bean.getJlr_ycb());
+//				continue;
+//			}
+			
+			
+			
+//			StockDetailInfoBean mapsBean = QueryComLstData.getDetailInfo().get(bean.getStockCode());
+//
+//			StockBaseInfo baBean = mapsInfo2.get(bean.getStockCode());
+//			if (baBean != null && mapsBean != null&&bean.getXjlr()!=0) {
+//				double npe = baBean.getClose() / (bean.getXjlr() / mapsBean.getTotals());
+//				bean.setNpe(npe);
+//			}
+//			if (mapsBean != null) {
+//				// bean.setTotals(mapsBean.getTotals() * mapsBean.getEsp() *
+//				// mapsBean.getPe());// mapsBean.getTotalAssets());
+//				bean.setIndustry(mapsBean.getIndustry());
+//				bean.setPe(mapsBean.getPe());
+//				bean.setArea(mapsBean.getArea());
+//				bean.setIndustry(mapsBean.getIndustry());
+//				bean.setPe(mapsBean.getPe());
+//				// System.out.println(mapsBean);
+//				lstBean.add(bean);
+//			}
+//			lstBean.add(bean);
 
-			StockBaseInfo baBean = mapsInfo2.get(bean.getStockCode());
-			if (baBean != null && mapsBean != null&&bean.getXjlr()!=0) {
-				double npe = baBean.getClose() / (bean.getXjlr() / mapsBean.getTotals());
-				bean.setNpe(npe);
-			}
-			if (mapsBean != null) {
-				// bean.setTotals(mapsBean.getTotals() * mapsBean.getEsp() *
-				// mapsBean.getPe());// mapsBean.getTotalAssets());
-				bean.setIndustry(mapsBean.getIndustry());
-				bean.setPe(mapsBean.getPe());
-				bean.setArea(mapsBean.getArea());
-				bean.setIndustry(mapsBean.getIndustry());
-				bean.setPe(mapsBean.getPe());
-				// System.out.println(mapsBean);
-				lstBean.add(bean);
-			}
-
-		}
+//		}
 
 		List<EastReportBean> lstBean2 = Lists.newArrayList();
 		for (EastReportBean beans : lstBean) {

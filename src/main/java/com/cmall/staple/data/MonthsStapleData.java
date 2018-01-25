@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +13,10 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.common.collect.Maps;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,21 +26,25 @@ import com.cmal.stock.storedata.CommonBaseStockInfo;
 import com.cmall.staple.bean.Stap100PPI;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.MathsUtils;
-import com.cmall.stock.utils.TextUtil;
 import com.cmall.stock.utils.TimeUtils;
 import com.google.common.collect.Lists;
 import com.kers.esmodel.BaseCommonConfig;
+import com.kers.esmodel.UtilEs;
 import com.kers.httpmodel.BaseConnClient;
 
 import io.searchbox.client.JestClient;
+import io.searchbox.client.JestResult;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.Index;
+import io.searchbox.core.Search;
 
 public class MonthsStapleData {
 
 	public static Map<String, List<Double>> map = Maps.newHashMap();
 	final static int startNian = 2014;
- //  http://top.100ppi.com/zdb/detail-day---1.html
+	// http://top.100ppi.com/zdb/detail-day---1.html
+	static final String stLink = "http://top.100ppi.com/zdb/detail-day---1.html";
+
 	public static List<Stap100PPI> getLstFromUrl(String content, String rq)
 			throws ClientProtocolException, IOException {
 		// String url =
@@ -124,49 +130,6 @@ public class MonthsStapleData {
 		return lstSource;
 	}
 
-	// 大宗商品价格(月)
-	public void stapleMonths() throws ClientProtocolException, IOException {
-		List<Stap100PPI> lstSource = Lists.newArrayList();
-
-		String url = "http://top.100ppi.com/zdb/detail-month-2017-10-1.html";
-		// lstSource.addAll(getLstFromUrl(url));
-		url = "http://top.100ppi.com/zdb/detail-month-2017-11-1.html";
-		// lstSource.addAll(getLstFromUrl(url));
-
-		for (int i = 1; i <= 22; i++) {
-			String ss = "";
-			if (i < 9) {
-				ss = "0";
-			}
-			String day = "2017-12" + ss + i;
-			url = "http://top.100ppi.com/zdb/detail-day-" + day + "-1.html";
-			String content = BaseConnClient.baseGetReq(url);
-			lstSource.addAll(getLstFromUrl(content, day));
-		}
-		Map<String, Stap100PPI> mapSource = Maps.newConcurrentMap();
-		for (Stap100PPI bean : lstSource) {
-			// i++;
-
-			if (mapSource.get(bean.getProductName()) != null) {
-				double monthRises = bean.getMonthRise() + mapSource.get(bean.getProductName()).getMonthRise();
-				bean.setMonthRise(monthRises);
-				mapSource.put(bean.getProductName(), bean);
-				// if(i==lstSource.size())
-				// System.out.println(bean.getProductName()+"\t"+bean.getProductHy()+"\t"+bean.getMonthYcPrice()+"\t"+bean.getMonthYmPrice()+"\t"+monthRises+"\t"+bean.getTbRise());
-
-			}
-			mapSource.put(bean.getProductName(), bean);
-			// System.out.println(bean.getProductName());
-		}
-
-		for (Map.Entry<String, Stap100PPI> entry : mapSource.entrySet()) {
-			Stap100PPI bean = entry.getValue();
-			System.out.println(bean.getProductName() + "\t" + bean.getProductHy() + "\t" + bean.getMonthYcPrice() + "\t"
-					+ bean.getMonthYmPrice() + "\t" + bean.getMonthRise() + "\t" + bean.getTbRise());
-			// 化工在线
-		}
-	}
-
 	/**
 	 * 获取所需要的商品
 	 * 
@@ -181,9 +144,8 @@ public class MonthsStapleData {
 		Set<String> set = new HashSet<String>();
 		for (Element element : elements) {
 
-			
-			 String elattr=element.attr("href");
-			if ((!set.contains(elattr))&&elattr.contains("detail-day---")){
+			String elattr = element.attr("href");
+			if ((!set.contains(elattr)) && elattr.contains("detail-day---")) {
 				// System.out.println(element.attr("href")+";"+element.text());
 				lst.add(elattr + ";" + element.text() + "/");
 				set.add(elattr);
@@ -196,34 +158,68 @@ public class MonthsStapleData {
 
 	}
 
-	public static void getuseAllLink(String days, List<String> lstSource) throws ClientProtocolException, IOException {
-		// List<String> lstSource = getAllDataLink() ;
+	public static List<String> getuseAllLink(List<String> lstSource) throws ClientProtocolException, IOException {
+		List<String> lstResult = Lists.newArrayList();
+		if (lstSource == null)
+			lstSource = Lists.newArrayList();
+
 		for (String source : lstSource) {
 
-			String floder = source.split(";")[1];
-			String filePath = FilePath.saveStapleDayPathsuff + floder + days + ".txt";
+			// String floder = source.split(";")[1];
+			String filePath = FilePath.saveStapleDayPathsuff + "zdb/" + source + ".txt";
 			File file = new File(filePath);
-			if (!file.exists()) {
-
-				String link = source.split(";")[0];
-
-				String p1 = link;
-				if (days.equals(TimeUtils.getDate()))
-					p1 = link.replace("---", "-" + days + "-");
-
-				String content = BaseConnClient.baseGetReq(p1);
+			if (!file.exists() || FileUtils.sizeOf(file) < 1000) {
+				String link = stLink.replace("---", "-" + source + "-");
+				// http://top.100ppi.com/zdb/detail-day-2018-122-1.html
+				String content = BaseConnClient.baseGetReq(link);
 				FileUtils.write(file, content, "utf-8");
+				lstResult.add(filePath);
 			}
 		}
+		// System.out.println(lstResult);
+		return lstResult;
 
 	}
 
+	public static Stap100PPI getLastBean() {
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
+		BoolQueryBuilder query = QueryBuilders.boolQuery();
+		ssb.sort("rq", SortOrder.DESC);
+		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+		System.out.println(searchSourceBuilder.toString());
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY, "2018",
+				1, 2);
+
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		Stap100PPI bean = new Stap100PPI();
+		try {
+			JestResult results = jestClient.execute(selResult);
+			bean = results.getSourceAsObject(Stap100PPI.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return bean;
+
+	}
+
+	public static void freshEsData() throws ClientProtocolException, IOException, Exception {
+		Stap100PPI bean = getLastBean();
+		List<String> lstDate = TimeUtils.getDayList(TimeUtils.toDate(bean.getRq(), TimeUtils.DEFAULT_DATEYMD_FORMAT2),
+				new Date(), new SimpleDateFormat("yyyy-Mdd"));
+		if (lstDate != null) {
+			getuseAllLink(lstDate);
+			wsData(null);
+		}
+	}
+
 	public static void main(String[] args) throws Exception {
+		freshEsData();
+
 		// getAllDataLink();
 		// System.out.println(elements);
 
-//		writeTextReport();
-		wsData();
+		// writeTextReport();
 
 		// String fan = "";
 		// Document document = Jsoup.parse("https://www.100ppi.com");
@@ -237,106 +233,64 @@ public class MonthsStapleData {
 
 	}
 
-	public static void wsData() throws Exception {
+	public static void wsData(List<String> lstStr) throws Exception {
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		List<Stap100PPI> lstSource = Lists.newArrayList();
-		List<String> lstStr = com.cmall.stock.utils.FileUtils.getFiles(FilePath.saveStapleDayPathsuff );
-		
-		for(String s:lstStr){
-//			if(s.contains("2018")){
-			File file =  new File(s);
-			if(s.endsWith(".txt")&&FileUtils.sizeOf(file )>1000){
-				 
-				String fileName=file.getName().substring(0,file.getName().lastIndexOf("."));
-				
-				if(fileName.length()==8){//2014-110.txt
-					fileName=fileName.substring(0,6)+"-"+fileName.substring(6);
-				}else if(fileName.length()==9){//2014-110.txt
-					fileName=fileName.substring(0,7)+"-"+fileName.substring(7);
-				}else{  
-					System.out.println("error"+file.getName());
+		if (lstStr == null)
+			lstStr = com.cmall.stock.utils.FileUtils.getFiles(FilePath.saveStapleDayPathsuff+"/zdb/");
+		if (lstStr.isEmpty())
+			return;
+
+		for (String s : lstStr) {
+			// if(s.contains("2018")){
+			File file = new File(s);
+			if (s.endsWith(".txt") && FileUtils.sizeOf(file) > 1000) {
+
+				String fileName = file.getName().substring(0, file.getName().lastIndexOf("."));
+
+				if (fileName.length() == 8) {// 2014-110.txt
+					fileName = fileName.substring(0, 6) + "-" + fileName.substring(6);
+				} else if (fileName.length() == 9) {// 2014-110.txt
+					fileName = fileName.substring(0, 7) + "-" + fileName.substring(7);
+				} else {
+					System.out.println("error" + file.getName());
 				}
-//				System.out.println(fileName);
-			String content= FileUtils.readFileToString(file);
-			lstSource.addAll(getLstFromUrl(content, fileName));
-			
-			if (lstSource.size() > 0) {
-				final  List<Stap100PPI>   lll = lstSource;
-				final String  fns= fileName;
-				String type=fns.substring(0, fns.indexOf("-"));
-//				System.out.println(type);
-//				insBatchEs(lll, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY,type
-//						);
-//				System.out.println(lll);
-				CommonBaseStockInfo.executorServiceLocal.execute(new Thread(){
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						super.run();
-						try {
-							insBatchEs(lll, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY,
-									fns.substring(0, fns.indexOf("-")));
-						} catch (Exception e) {
-							e.printStackTrace();
+				// System.out.println(fileName);
+				String content = FileUtils.readFileToString(file);
+				lstSource.addAll(getLstFromUrl(content, fileName));
+
+				if (lstSource.size() > 0) {
+					final List<Stap100PPI> lll = lstSource;
+					final String fns = fileName;
+					String type = fns.substring(0, fns.indexOf("-"));
+					// System.out.println(type);
+					// insBatchEs(lll, jestClient,
+					// CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY,type
+					// );
+					// System.out.println(lll);
+					CommonBaseStockInfo.executorServiceLocal.execute(new Thread() {
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							super.run();
+							try {
+								insBatchEs(lll, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY,
+										fns.substring(0, fns.indexOf("-")));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
-					}
-				});
-				
-				lstSource = Lists.newArrayList();
+					});
+
+					lstSource = Lists.newArrayList();
+				}
+
+				// }
 			}
-					
-//			}
 		}
 	}
-	}
 
-	public static void wsDataRealTime() {
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
-		List<Stap100PPI> lstSource = Lists.newArrayList();
-		Date date1 = new Date();
-		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(date1);
-		int nian = calendar.get(Calendar.YEAR);
-		int yue = calendar.get(Calendar.MARCH) + 1;
-		int tian = calendar.get(Calendar.DATE);
-
-		try {
-			quan: for (int k = startNian; k <= nian; k++) {
-				for (int i = 1; i <= 12; i++) {
-					String source = k + "-" + String.valueOf(i);
-					Date date = format.parse(source);
-					calendar = new GregorianCalendar();
-					calendar.setTime(date);
-					int daynum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-					z: for (int j = 1; j <= daynum; j++) {
-						String ss = "";
-						if (j <= 9) {
-							ss = "0";
-						}
-						String days = source + "-" + ss + j;
-						String content = readTextReport(days);
-						lstSource.addAll(getLstFromUrl(content, days));
-						// System.out.println(days);
-						if (k == nian && i == yue && j == tian) {
-							break z;
-						}
-					}
-					if (lstSource.size() > 0) {
-						insBatchEs(lstSource, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY,
-								String.valueOf(k));
-						lstSource = Lists.newArrayList();
-					}
-					if (k == nian && i == yue) {
-						break quan;
-					}
-
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	//
 
 	public static void insBatchEs(List<Stap100PPI> list, JestClient jestClient, String indexIns, String type)
 			throws Exception {
@@ -355,68 +309,163 @@ public class MonthsStapleData {
 		jestClient.execute(bulkBuilder.build());
 	}
 
-	public static void writeTextReport() throws IOException {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
-		Date date1 = new Date();
-		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(date1);
-		int nian = calendar.get(Calendar.YEAR);
-		int yue = calendar.get(Calendar.MARCH) + 1;
-		int tian = calendar.get(Calendar.DATE);
-		final List<String> lstSource = getAllDataLink();
-		try {
-			quan: for (int k = startNian; k <= nian; k++) {
-				for (int i = 1; i <= 12; i++) {
-					String source = k + "-" + String.valueOf(i);
-					// System.out.println(source);
-					Date date = format.parse(source);
-					calendar = new GregorianCalendar();
-					calendar.setTime(date);
-					int daynum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-					for (int j = 1; j <= daynum; j++) {
-						String ss = "";
-						if (j <= 9) {
-							ss = "0";
-						}
-						final String day = source + ss + j;
-						// String days = source + "-" + ss + j;
+	// public static void writeTextReport() throws IOException {
+	// SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+	// Date date1 = new Date();
+	// Calendar calendar = new GregorianCalendar();
+	// calendar.setTime(date1);
+	// int nian = calendar.get(Calendar.YEAR);
+	// int yue = calendar.get(Calendar.MARCH) + 1;
+	// int tian = calendar.get(Calendar.DATE);
+	// final List<String> lstSource = getAllDataLink();
+	// try {
+	// quan: for (int k = startNian; k <= nian; k++) {
+	// for (int i = 1; i <= 12; i++) {
+	// String source = k + "-" + String.valueOf(i);
+	// // System.out.println(source);
+	// Date date = format.parse(source);
+	// calendar = new GregorianCalendar();
+	// calendar.setTime(date);
+	// int daynum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+	// for (int j = 1; j <= daynum; j++) {
+	// String ss = "";
+	// if (j <= 9) {
+	// ss = "0";
+	// }
+	// final String day = source + ss + j;
+	// // String days = source + "-" + ss + j;
+	//
+	// CommonBaseStockInfo.executorServiceLocal.execute(new Thread() {
+	// @Override
+	// public void run() {
+	// try {
+	// getuseAllLink(day, lstSource);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	//
+	// // TextUtil.writerTxt(, content);
+	// // if(k == nian && i == yue){
+	// // System.out.println(day);
+	// // }
+	// if (k == nian && i == yue && j == tian) {
+	// getuseAllLink(TimeUtils.getDate(TimeUtils.DEFAULT_DATEYMD_FORMAT),
+	// lstSource);
+	// break quan;
+	// }
+	// }
+	//
+	// }
+	// }
+	//
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
 
-						CommonBaseStockInfo.executorServiceLocal.execute(new Thread() {
-							@Override
-							public void run() {
-								try {
-									getuseAllLink(day, lstSource);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						});
-
-						// TextUtil.writerTxt(, content);
-						// if(k == nian && i == yue){
-						// System.out.println(day);
-						// }
-						if (k == nian && i == yue && j == tian) {
-							getuseAllLink(TimeUtils.getDate(TimeUtils.DEFAULT_DATEYMD_FORMAT), lstSource);
-							break quan;
-						}
-					}
-
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static String readTextReport(String days) {
-		String reText = "";
-		List<String> list = TextUtil.readTxtFile(FilePath.saveStapleDayPathsuff + days + ".txt");
-		for (String string : list) {
-			reText = reText + string;
-		}
-		return reText;
-	}
-
+	// public static String readTextReport(String days) {
+	// String reText = "";
+	// List<String> list = TextUtil.readTxtFile(FilePath.saveStapleDayPathsuff +
+	// days + ".txt");
+	// for (String string : list) {
+	// reText = reText + string;
+	// }
+	// return reText;
+	// }
+	// public static void wsDataRealTime() {
+	// final JestClient jestClient = BaseCommonConfig.clientConfig();
+	// SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+	// List<Stap100PPI> lstSource = Lists.newArrayList();
+	// Date date1 = new Date();
+	// Calendar calendar = new GregorianCalendar();
+	// calendar.setTime(date1);
+	// int nian = calendar.get(Calendar.YEAR);
+	// int yue = calendar.get(Calendar.MARCH) + 1;
+	// int tian = calendar.get(Calendar.DATE);
+	//
+	// try {
+	// quan: for (int k = startNian; k <= nian; k++) {
+	// for (int i = 1; i <= 12; i++) {
+	// String source = k + "-" + String.valueOf(i);
+	// Date date = format.parse(source);
+	// calendar = new GregorianCalendar();
+	// calendar.setTime(date);
+	// int daynum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+	// z: for (int j = 1; j <= daynum; j++) {
+	// String ss = "";
+	// if (j <= 9) {
+	// ss = "0";
+	// }
+	// String days = source + "-" + ss + j;
+	// String content = readTextReport(days);
+	// lstSource.addAll(getLstFromUrl(content, days));
+	// // System.out.println(days);
+	// if (k == nian && i == yue && j == tian) {
+	// break z;
+	// }
+	// }
+	// if (lstSource.size() > 0) {
+	// insBatchEs(lstSource, jestClient,
+	// CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY,
+	// String.valueOf(k));
+	// lstSource = Lists.newArrayList();
+	// }
+	// if (k == nian && i == yue) {
+	// break quan;
+	// }
+	//
+	// }
+	// }
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// 大宗商品价格(月)
+	// public void stapleMonths() throws ClientProtocolException, IOException {
+	// List<Stap100PPI> lstSource = Lists.newArrayList();
+	//
+	// String url = "http://top.100ppi.com/zdb/detail-month-2017-10-1.html";
+	// // lstSource.addAll(getLstFromUrl(url));
+	// url = "http://top.100ppi.com/zdb/detail-month-2017-11-1.html";
+	// // lstSource.addAll(getLstFromUrl(url));
+	//
+	// for (int i = 1; i <= 22; i++) {
+	// String ss = "";
+	// if (i < 9) {
+	// ss = "0";
+	// }
+	// String day = "2017-12" + ss + i;
+	// url = "http://top.100ppi.com/zdb/detail-day-" + day + "-1.html";
+	// String content = BaseConnClient.baseGetReq(url);
+	// lstSource.addAll(getLstFromUrl(content, day));
+	// }
+	// Map<String, Stap100PPI> mapSource = Maps.newConcurrentMap();
+	// for (Stap100PPI bean : lstSource) {
+	// // i++;
+	//
+	// if (mapSource.get(bean.getProductName()) != null) {
+	// double monthRises = bean.getMonthRise() +
+	// mapSource.get(bean.getProductName()).getMonthRise();
+	// bean.setMonthRise(monthRises);
+	// mapSource.put(bean.getProductName(), bean);
+	// // if(i==lstSource.size())
+	// //
+	// System.out.println(bean.getProductName()+"\t"+bean.getProductHy()+"\t"+bean.getMonthYcPrice()+"\t"+bean.getMonthYmPrice()+"\t"+monthRises+"\t"+bean.getTbRise());
+	//
+	// }
+	// mapSource.put(bean.getProductName(), bean);
+	// // System.out.println(bean.getProductName());
+	// }
+	//
+	// for (Map.Entry<String, Stap100PPI> entry : mapSource.entrySet()) {
+	// Stap100PPI bean = entry.getValue();
+	// System.out.println(bean.getProductName() + "\t" + bean.getProductHy() +
+	// "\t" + bean.getMonthYcPrice() + "\t"
+	// + bean.getMonthYmPrice() + "\t" + bean.getMonthRise() + "\t" +
+	// bean.getTbRise());
+	// // 化工在线
+	// }
+	// }
 }

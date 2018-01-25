@@ -116,11 +116,13 @@
                 var pgBar = $('#pg').mmPaginator({"limitList":[100,200,500,1000,2000,2500,3000]});
                 
                 var cols = [
-                    { title:'公告日期', name:'startDate' , align:'center' ,width:60},
-                    { title:'结束日期', name:'endDate' , align:'center' ,width:60},
+                    { title:'公告日期', name:'startDate' , align:'center' ,width:100,sortable:true},
+                    { title:'结束日期', name:'endDate' , align:'center' ,width:100},
                     { title:'股票代码', name:'stockCode' , align:'center' ,width:60},
                     { title:'股票名称', name:'stockName' , align:'center',width:80},
                     { title:'预测类型', name:'type' , align:'center',sortable:true,width:40},
+                    
+                    { title:'上年净利润', name:'netProfit' , align:'center',sortable:true,renderer: moformat,width:80},
                     { title:'净利润', name:'jlr' , align:'center',sortable:true,renderer: moformat,width:80},
                     { title:'市盈率', name:'pe' , align:'center',sortable:true,renderer: highliht,width:80},
                     { title:'N市盈率', name:'npe' , align:'center',sortable:true,renderer: highliht,width:80},
@@ -129,7 +131,7 @@
                     { title:'变化幅度', name:'rangeability' , align:'center',sortable:true},
                     { title:'变化幅度起始', name:'startRangeability' , align:'center',sortable:true,renderer:fixed2percentage},
                     
-                  { title:'业绩变动', name:'perChanges' , align:'center',sortable:true,width:200}
+                  { title:'业绩变动', name:'chagDetail' , align:'center',sortable:true,width:400}
                 ];
 
 

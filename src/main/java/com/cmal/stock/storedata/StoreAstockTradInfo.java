@@ -1,9 +1,5 @@
 package com.cmal.stock.storedata;
 
-import io.searchbox.client.JestClient;
-import io.searchbox.core.Bulk;
-import io.searchbox.core.Index;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
@@ -19,10 +15,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 
 import com.artbulb.httpmodel.HttpClientEx;
+import com.cmal.stock.strage.QueryComLstData;
 import com.cmal.stock.strage.StockStragEnSey;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
-import com.cmall.stock.bean.StockFuncDetailInfo;
 import com.cmall.stock.bean.StockRealBean;
 import com.cmall.stock.utils.CsvHandUtils;
 import com.cmall.stock.utils.FilePath;
@@ -35,9 +31,12 @@ import com.google.gson.reflect.TypeToken;
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.httpmodel.BaseConnClient;
 
+import io.searchbox.client.JestClient;
+import io.searchbox.core.Bulk;
+import io.searchbox.core.Index;
+
 public class StoreAstockTradInfo {
 
-	public final static String savePathsuff = FilePath.savePathsuff;
 	public final static String stockHisCrawUrl = "http://quotes.money.163.com/service/chddata.html?code=";
 	public final static String  stockRealTimeUrl="http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=2&num=5000&sort=symbol&asc=1&node=hs_a&symbol=&_s_r_a=init#";
 //symbol:"sz300720",code:"300720",name:"海川智能",trade:"22.510",pricechange:"2.050",changepercent:"10.020",buy:"22.510",sell:"0.000",settlement:"20.460",open:"22.510",high:"22.510",low:"22.510",volume:2300,amount:51773,ticktime:"11:35:03",per:32.157,pb:5.104,mktcap:162072,nmc:40518,turnoverratio:0.01278
@@ -60,7 +59,7 @@ public class StoreAstockTradInfo {
 					 
 					String webUri = stockHisCrawUrl + scode + "&start=20170701&end="+sfd;
 					try {
-						HttpClientEx.downloadFromUri(webUri, savePathsuff + code + ".csv");
+						HttpClientEx.downloadFromUri(webUri, FilePath.savePathsuff + code + ".csv");
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -72,9 +71,9 @@ public class StoreAstockTradInfo {
 
 	}
 
-	public static List<StockBaseInfo> getstockBaseInfoFile(String stockCode , StockFuncDetailInfo info) throws Exception {
+	public static List<StockBaseInfo> getstockBaseInfoFile(String stockCode , StockDetailInfoBean info) throws Exception {
 		  final StockStragEnSey stockStragEnSey = new StockStragEnSey();
-		String absPath = savePathsuff + stockCode + ".csv";
+		String absPath = FilePath.savePathsuff + stockCode + ".csv";
 		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
 		List<List<String>> lstSource = csvHandUtils.readCSVFile();
 //		 DecimalFormat df = new DecimalFormat("#.00");
@@ -101,6 +100,7 @@ public class StoreAstockTradInfo {
 				if(info!=null){
 					stockBaseInfo.setIndustry(info.getIndustry());
 					stockBaseInfo.setArea(info.getArea());
+					stockBaseInfo.setPe(info.getPe());
 				}
 				result.add(stockBaseInfo);
 			}
@@ -124,7 +124,7 @@ public class StoreAstockTradInfo {
 	public      static  void  wDataRealToEs() throws Exception{
 		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
-		 final Map<String , StockFuncDetailInfo> map = getInfoByCsv();
+		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo();
 		 
 		for(final String  sat:lstSource){
 //			if(sat.equals("603612")){
@@ -147,11 +147,11 @@ public class StoreAstockTradInfo {
 		
 	}
 	
-	public static List<StockBaseInfo> getstockBaseInfo(String stockCode , StockFuncDetailInfo info ) throws Exception {
+	public static List<StockBaseInfo> getstockBaseInfo(String stockCode , StockDetailInfoBean info ) throws Exception {
 		  final StockStragEnSey stockStragEnSey = new StockStragEnSey();
 		  List<StockBaseInfo> list = Lists.newArrayList();
 		  DecimalFormat df = new DecimalFormat("#.00");
-		String absPath = savePathsuff + stockCode + ".csv";
+		String absPath = FilePath.savePathsuff + stockCode + ".csv";
 		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
 		List<List<String>> lstSource = csvHandUtils.readCSVFile();
 		List<StockBaseInfo> result = Lists.newArrayList();
@@ -163,6 +163,7 @@ public class StoreAstockTradInfo {
 				if(info!=null){
 					stockBaseInfo.setIndustry(info.getIndustry());
 					stockBaseInfo.setArea(info.getArea());
+					stockBaseInfo.setPe(info.getPe());
 				}
 				result.add(stockBaseInfo);
 			}
@@ -197,7 +198,7 @@ public class StoreAstockTradInfo {
 
 	public static Map<String, StockBaseInfo> fetchKeyStockInfo(String stockCode) throws IOException, ParseException {
 		Map<String, StockBaseInfo> mapsInfo = Maps.newConcurrentMap();
-		String absPath = savePathsuff + stockCode + ".csv";
+		String absPath = FilePath.savePathsuff + stockCode + ".csv";
 		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
 		List<List<String>> lstSource = csvHandUtils.readCSVFile();
 //		List<StockBaseInfo> result = Lists.newArrayList();
@@ -264,7 +265,7 @@ public class StoreAstockTradInfo {
 	public      static  void  wDataToEs() throws IOException{
 		List<StockDetailInfoBean> lstSource =StockDetailInfoHand.getDetailForNetLst();// CommonBaseStockInfo.getAllAStockInfo();
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
-		 final Map<String , StockFuncDetailInfo> map = getInfoByCsv();
+		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo(); //getInfoByCsv();
 		for(final StockDetailInfoBean  bean:lstSource){
 			 final String sat=bean.getStockCode();
 //			if(sat.equals("603612")){
@@ -273,7 +274,7 @@ public class StoreAstockTradInfo {
 				public void run() {
 			          try {
 			        	 List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat ,  map.get(sat));
-			  			 insBatchEs(lstInfo, jestClient, "stockpcse");
+			  			 insBatchEs(lstInfo, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
 					} catch (Exception e) {
 						System.out.println(sat);
 						e.printStackTrace();
@@ -285,22 +286,22 @@ public class StoreAstockTradInfo {
 		
 	}
 	
-	public static Map<String , StockFuncDetailInfo> getInfoByCsv() throws IOException{
-		Map<String , StockFuncDetailInfo> map = Maps.newHashMap();
-		CsvHandUtils util = new CsvHandUtils(FilePath.stockFuncDetailInfoPath);
-		List<List<String>> list = util.readCSVFile();
-		for (int i = 1; i < list.size(); i++) {
-			List<String> data = list.get(i);
-			StockFuncDetailInfo info = new StockFuncDetailInfo();
-			info.setCode(data.get(0));
-			info.setName(data.get(1));
-			info.setIndustry(data.get(2));
-			info.setArea(data.get(3));
-			map.put(data.get(0), info);
-//			System.out.println("chax:"+data.get(2));
-		}
-		return map;
-	}
+//	public static Map<String , StockFuncDetailInfo> getInfoByCsv() throws IOException{
+//		Map<String , StockFuncDetailInfo> map = Maps.newHashMap();
+//		CsvHandUtils util = new CsvHandUtils(FilePath.stockFuncDetailInfoPath);
+//		List<List<String>> list = util.readCSVFile();
+//		for (int i = 1; i < list.size(); i++) {
+//			List<String> data = list.get(i);
+//			StockFuncDetailInfo info = new StockFuncDetailInfo();
+//			info.setCode(data.get(0));
+//			info.setName(data.get(1));
+//			info.setIndustry(data.get(2));
+//			info.setArea(data.get(3));
+//			map.put(data.get(0), info);
+////			System.out.println("chax:"+data.get(2));
+//		}
+//		return map;
+//	}
 	
 	public static List<StockRealBean>   getRealTimeData() throws ClientProtocolException, IOException{
 		List<StockRealBean>  lstRes= Lists.newArrayList();
@@ -458,7 +459,7 @@ public class StoreAstockTradInfo {
 	// // System.out.println(output);
 	// // System.out.println(getstockBaseInfoFile("603993"));
 	// // getHistoryData();
-	// // File[] files = new File(savePathsuff).listFiles();
+	// // File[] files = new File(FilePath.savePathsuff).listFiles();
 	// // for (File file : files) {
 	// // String absPath = file.getAbsolutePath();
 	// //

@@ -36,33 +36,34 @@ public class BaseController<T> {
 	    }
 	    
 	    public QueryBuilder getType(StockBaseInfoVo vo){
+	    	String quvalue=vo.getValue().replace(" ", "");
 	    	QueryBuilder q = null;
 	    	if(vo.getType().equals("=")){
-				q = QueryBuilders.termQuery(vo.getName(), vo.getValue());
+				q = QueryBuilders.termQuery(vo.getName(),quvalue );
 			}
 	    	else if(vo.getType().equals(">")){
-				q = QueryBuilders.rangeQuery(vo.getName()).from(vo.getValue()).includeLower(false);
+				q = QueryBuilders.rangeQuery(vo.getName()).from(quvalue).includeLower(false);
 			}
 	    	else if(vo.getType().equals("<")){
-				q = QueryBuilders.rangeQuery(vo.getName()).to(vo.getValue()).includeUpper(false);
+				q = QueryBuilders.rangeQuery(vo.getName()).to(quvalue).includeUpper(false);
 			}
 	    	else if(vo.getType().equals(">=")){
-				q = QueryBuilders.rangeQuery(vo.getName()).from(vo.getValue()).includeLower(true);
+				q = QueryBuilders.rangeQuery(vo.getName()).from(quvalue).includeLower(true);
 			}
 	    	else if(vo.getType().equals("<=")){
-				q = QueryBuilders.rangeQuery(vo.getName()).to(vo.getValue()).includeUpper(true);
+				q = QueryBuilders.rangeQuery(vo.getName()).to(quvalue).includeUpper(true);
 			}
 	    	else if(vo.getType().equals("prefix")){
-				q = QueryBuilders.prefixQuery(vo.getName(), vo.getValue());
+				q = QueryBuilders.prefixQuery(vo.getName(), quvalue);
 			}
 	    	else if(vo.getType().equals("queryStr")){
-	    		q=QueryBuilders.queryString("\""+vo.getValue()+"\"").field(vo.getName());
+	    		q=QueryBuilders.queryString("\""+quvalue+"\"").field(vo.getName());
 			}
 	    	else if(vo.getType().equals("in")){
-	    		q=QueryBuilders.inQuery(vo.getName(), vo.getValue().split(","));
+	    		q=QueryBuilders.inQuery(vo.getName(), quvalue.split(","));
 			}
 	    	else if(vo.getType().equals("matchPhrase")){
-	    		q=QueryBuilders.matchPhraseQuery(vo.getName(), vo.getValue());
+	    		q=QueryBuilders.matchPhraseQuery(vo.getName(), quvalue);
 			}
 	    	
 	    	return q;

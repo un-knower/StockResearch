@@ -107,7 +107,7 @@ public class StockBaseInfo implements Serializable {
 	private float mb = 0; // 中轨线
 	private float dn = 0; // 下轨线
 	private String dayForWeek;
-	
+	private double pe;
 	/**
 	 * 自定义分时图用的数据
 	 *
@@ -703,10 +703,13 @@ public class StockBaseInfo implements Serializable {
 		this.macdx = macdx;
 	}
 
-	
+	public double getPe() {
+		return pe;
+	}
 
-	
-	
-	
+	public void setPe(double pe) {
+		this.pe = pe;
+	}
+
 	
 }

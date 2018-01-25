@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -66,7 +67,7 @@ public class BaseConnClient {
 	 * @return
 	 * @Exception 异常对象
 	 */
-	public static String baseGetReq(String url) throws ClientProtocolException, IOException {
+	public static String baseGetReq(String url,String ...  encoding) throws ClientProtocolException, IOException {
 
 		DefaultHttpClient client = new DefaultHttpClient();
 
@@ -79,8 +80,10 @@ public class BaseConnClient {
 		getType.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "UTF-8");
 		HttpResponse response = client.execute(getType);
 		HttpEntity entity2 = response.getEntity();
-		String entityBody = EntityUtils.toString(entity2, "utf-8");
-		return entityBody;
+		if(encoding==null||encoding.length==0)
+		return  EntityUtils.toString(entity2, "utf-8");
+		else 
+			return  EntityUtils.toString(entity2,encoding[0]);
 
 	}
 	
