@@ -23,6 +23,10 @@ public class StockOptionalInfo implements Serializable{
 	
 	//加入时价格
 	private double oldPrice;
+	
+	private String tag;
+	
+	private String zb;
 
 	public String getStockCode() {
 		return stockCode;
@@ -71,6 +75,23 @@ public class StockOptionalInfo implements Serializable{
 	public void setOldPrice(double oldPrice) {
 		this.oldPrice = oldPrice;
 	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public String getZb() {
+		return zb;
+	}
+
+	public void setZb(String zb) {
+		this.zb = zb;
+	}
+	
 	
 	
 }
