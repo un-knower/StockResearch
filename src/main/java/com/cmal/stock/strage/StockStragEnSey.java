@@ -325,7 +325,7 @@ public class StockStragEnSey {
         		Float Rises10 = StockBaseInfo.getRises();
         		Float maxRises3 = Rises5;
         		Float maxRises5 = Rises5;
-        		Float maxRises10 = Rises5;
+        		Float maxRises10 = Rises10;
     			for (int j = 1; j <= 10; j++) {
 					if(i-j < 0){
 						break;
@@ -346,18 +346,18 @@ public class StockStragEnSey {
 						if(Risess > 0){
 							upRisesDayNum5++;
 						}
-						if(maxRises5 > Risess){
+						if(maxRises5 < Risess){
 							maxRises5 = Risess;
 						}
 						macd5 = macd5 + upMacd;
-						Rises5 = Rises5 + Risess;
+						//Rises5 = Rises5 + Risess;
 						j5 = j5 + js;
 					}
-					if(maxRises10 > Risess){
+					if(maxRises10 < Risess){
 						maxRises10 = Risess;
 					}
 					macd10=macd10 + upMacd;
-					Rises10 = Rises10 + Risess;
+					//Rises10 = Rises10 + Risess;
 					if(macds > 0){
 						if(j < 6){
 							macdUp5++;

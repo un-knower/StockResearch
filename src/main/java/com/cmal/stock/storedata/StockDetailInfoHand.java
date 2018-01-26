@@ -33,7 +33,7 @@ public class StockDetailInfoHand {
 
 		ssb.query(query);
 		Search selResult = UtilEs.getSearch(ssb, CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO,
-				CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO, 0, 3800);
+				CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO, 0, 4000);
 		JestResult results =  BaseCommonConfig.clientConfig().execute(selResult);
 		List<StockDetailInfoBean> lstBean = results.getSourceAsObjectList(StockDetailInfoBean.class);
 		return lstBean;
@@ -75,16 +75,16 @@ public class StockDetailInfoHand {
 	}
 
 	public static void insBatchEsStore() throws Exception {
-		CsvHandUtils csvHandUtils = new CsvHandUtils(BaseConnClient.baseGetReqToStream(CommonBaseStockInfo.DETAIL_CONNPATH));
-		List<List<String>> lstSource = csvHandUtils.readCSVFile();
-		List<StockDetailInfoBean> list = Lists.newArrayList();
-		for (int i = 1; i < lstSource.size(); i++) {
-			List<String> lstBeanCon = lstSource.get(i);
-			StockDetailInfoBean detailInfoBean = new StockDetailInfoBean(lstBeanCon);
-			list.add(detailInfoBean);
-		}
+//		CsvHandUtils csvHandUtils = new CsvHandUtils(BaseConnClient.baseGetReqToStream(CommonBaseStockInfo.DETAIL_CONNPATH));
+//		List<List<String>> lstSource = csvHandUtils.readCSVFile();
+//		List<StockDetailInfoBean> list = Lists.newArrayList();
+//		for (int i = 1; i < lstSource.size(); i++) {
+//			List<String> lstBeanCon = lstSource.get(i);
+//			StockDetailInfoBean detailInfoBean = new StockDetailInfoBean(lstBeanCon);
+//			list.add(detailInfoBean);
+//		}
 
-		insBatchEsMec(list, BaseCommonConfig.clientConfig());
+		insBatchEsMec(getDetailForNetLst(), BaseCommonConfig.clientConfig());
 		Thread.sleep(10000);
 	}
 

@@ -15,7 +15,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 
 import com.artbulb.httpmodel.HttpClientEx;
-import com.cmal.stock.strage.QueryComLstData;
 import com.cmal.stock.strage.StockStragEnSey;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
@@ -29,6 +28,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kers.esmodel.BaseCommonConfig;
+import com.kers.esmodel.QueryComLstData;
 import com.kers.httpmodel.BaseConnClient;
 
 import io.searchbox.client.JestClient;
@@ -102,6 +102,7 @@ public class StoreAstockTradInfo {
 					stockBaseInfo.setArea(info.getArea());
 					stockBaseInfo.setPe(info.getPe());
 				}
+				//002252
 				result.add(stockBaseInfo);
 			}
 			//|stockBaseInfo.getRises()))

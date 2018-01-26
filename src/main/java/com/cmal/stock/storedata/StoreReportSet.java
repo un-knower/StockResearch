@@ -1,20 +1,12 @@
 package com.cmal.stock.storedata;
 
-import io.searchbox.client.JestClient;
-import io.searchbox.core.Bulk;
-import io.searchbox.core.Index;
-
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 
-import com.cmal.stock.strage.QueryComLstData;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
@@ -22,12 +14,16 @@ import com.cmall.stock.bean.StockReCupplement;
 import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.TextUtil;
-import com.cmall.stock.utils.TimeUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.kers.esmodel.BaseCommonConfig;
+import com.kers.esmodel.QueryComLstData;
 import com.kers.httpmodel.BaseConnClient;
+
+import io.searchbox.client.JestClient;
+import io.searchbox.core.Bulk;
+import io.searchbox.core.Index;
 
 /**
  * 获取业绩报表数据
@@ -133,10 +129,8 @@ public class StoreReportSet {
 								bean.setArea(mapsBean.getArea());
 								bean.setIndustry(mapsBean.getIndustry());
 								double pe= bean.getPe();
-								//System.out.println(" sss "+bean.getStockCode()+"   "+pe);
 								bean.setPe(pe==0?mapsBean.getPe():pe);
-								if(pe!=bean.getPe())
-									System.out.println(" sss "+bean.getStockCode()+"   "+pe);
+								 
 									
 								bean.setZsz((mapsBean.getPe()*mapsBean.getEsp()*mapsBean.getTotals()));
 								// System.out.println(mapsBean);

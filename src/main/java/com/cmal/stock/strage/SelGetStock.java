@@ -10,18 +10,16 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
 import com.cmal.stock.storedata.CommonBaseStockInfo;
-import com.cmal.stock.storedata.StockDetailInfoHand;
 import com.cmall.staple.bean.Stap100PPI;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
-import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.bean.jyfx.JyfxInfo;
-import com.cmall.stock.utils.TimeUtils;
 import com.cmall.stock.vo.StockBasePageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.kers.esmodel.BaseCommonConfig;
+import com.kers.esmodel.QueryComLstData;
 import com.kers.esmodel.UtilEs;
 
 import io.searchbox.client.JestClient;
@@ -42,9 +40,42 @@ import io.searchbox.core.Search;
  *
  */
 public class SelGetStock {
+ static 			Map<String,String> mapsInfo=StockSelStrag.blckLstOfStock();
 
 	public static Map<String, Object> getLstResult(BoolQueryBuilder query, StockBasePageInfo page) throws Exception {
-		return getCommonLstResult(query, page, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "");
+		
+		
+		Map<String,Object> returnMap = Maps.newHashMap();
+		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "", page.getPage(), page.getLimit());
+			
+//			final JestClient jestClient = BaseCommonConfig.clientConfig();
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+			JestResult results = jestClient.execute(selResult);
+			List<StockBaseInfo> lstBean = results.getSourceAsObjectList(StockBaseInfo.class);
+			List<StockBaseInfo>   lstResult=Lists.newArrayList();
+			for(StockBaseInfo  baseInfo:lstBean){
+				if(mapsInfo.get(baseInfo.getStockCode())==null)
+					lstResult.add(baseInfo);
+			}
+			
+			if(lstBean!= null && lstBean.size() > 0){
+				Map hitsMap = (Map)results.getValue("hits");
+				if(hitsMap!=null){
+					Number total = (Number)hitsMap.get("total");
+					if(total!=null){
+						if(total.intValue()>lstResult.size())
+							returnMap.put("totalCount", lstResult.size());
+						else 
+						returnMap.put("totalCount", total.intValue());
+					}
+				}
+			}
+			returnMap.put("items", lstResult);
+			return  returnMap;
+			
+		
+		//return getCommonLstResult(query, page, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "");
 	}
 
 	

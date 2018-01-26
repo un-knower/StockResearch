@@ -1,4 +1,4 @@
-package com.cmal.stock.strage;
+package com.kers.esmodel;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,7 @@ import com.cmall.stock.utils.TimeUtils;
 import com.google.common.collect.Maps;
 
 public class QueryComLstData {
-	 static 	Map<String, StockBaseInfo> mapsInfo2 ;
+	 public static 	Map<String, StockBaseInfo> mapsInfo2 ;
 	static {
 		mapsInfo2 = Maps.newConcurrentMap();
 		try {

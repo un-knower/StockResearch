@@ -41,7 +41,7 @@ public class SelEsRelt<T> {
 		// BoolQueryBuilder query = QueryBuilders.boolQuery();
 		// ssb.sort("startDate", SortOrder.DESC);
 	//	SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		System.out.println(searchSourceBuilder.toString());
+		//System.out.println(searchSourceBuilder.toString());
 		Search selResult = UtilEs.getSearch(searchSourceBuilder,index,type,from,size);
 
 		final JestClient jestClient = BaseCommonConfig.clientConfig();

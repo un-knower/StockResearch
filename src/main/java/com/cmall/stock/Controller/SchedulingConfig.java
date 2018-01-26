@@ -1,11 +1,7 @@
 package com.cmall.stock.Controller;
 
-import io.searchbox.client.JestClient;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +14,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cmal.stock.storedata.StoreAstockTradInfo;
 import com.cmal.stock.storedata.StoreRealSet;
-import com.cmal.stock.strage.QueryComLstData;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StockRealBean;
@@ -26,6 +21,9 @@ import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.TextUtil;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.kers.esmodel.BaseCommonConfig;
+import com.kers.esmodel.QueryComLstData;
+
+import io.searchbox.client.JestClient;
 
 @Configuration
 @EnableScheduling // 启用定时任务

@@ -14,20 +14,16 @@ import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.sort.SortOrder;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.cmal.stock.strage.QueryComLstData;
-import com.cmal.stock.strage.SelGetStock;
-import com.cmall.staple.bean.Stap100PPI;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.MathsUtils;
 import com.kers.esmodel.BaseCommonConfig;
-import com.kers.esmodel.SelEsRelt;
+import com.kers.esmodel.QueryComLstData;
 import com.kers.esmodel.UtilEs;
 import com.kers.httpmodel.BaseConnClient;
 
@@ -114,7 +110,7 @@ public class StoreTrailerSet {
 	public static void wsData() throws InterruptedException {
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		// List<StoreTrailer> list= Lists.newArrayList();
-		for (int i = 0; i <= 2; i++) {
+		for (int i = 0; i <= 40; i++) {
 			// String content = StoreTrailerUrl(i);
 			// System.out.println(content);|
 			try {

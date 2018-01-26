@@ -24,11 +24,12 @@ public class StoreReportController  extends BaseController{
     public String[] getClassNameList() throws Exception {
     	EastReportBean info = new EastReportBean();
     	java.lang.reflect.Field[] fields=info.getClass().getDeclaredFields();
-        String[] fieldNames=new String[fields.length-1+2];  
+        String[] fieldNames=new String[fields.length-1+3];  
         fieldNames[0]="stockCode";
         fieldNames[1]="stockName";
+        fieldNames[2]="zsz";
 	    for(int i=1;i<fields.length;i++){  
-	        fieldNames[(i-1)+2]=fields[i].getName();  
+	        fieldNames[(i-1)+3]=fields[i].getName();  
 	    }  
         return fieldNames;
     }

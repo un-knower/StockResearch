@@ -139,9 +139,10 @@
                     { title:'后1涨幅', name:'nextRises',width:40 , align:'right',renderer: fixed2percentage,sortable:true},
                     { title:'连涨天数', name:'upDateNum' ,width:40, align:'right',sortable:true},
                     {title:'macd',name:'macd',width:40,renderer: fixed2,sortable:true},
-                    {title:'j',name:'j',width:40,renderer: fixed2,sortable:true},
+                   /*  {title:'j',name:'j',width:40,renderer: fixed2,sortable:true},
                     {title:'j3',name:'j3',width:40,renderer: fixed2,sortable:true},
-                    {title:'j5',name:'j5',width:40,renderer: fixed2,sortable:true},
+                    {title:'j5',name:'j5',width:40,renderer: fixed2,sortable:true}, */
+                    
                     {title:'macd连涨天数',width:60,name:'macdNum',sortable:true},
                     {title:'成交量比',width:60,name:'volumeRises',sortable:true,renderer: fixed2percentage},
                     {title:'5日涨幅',width:50,name:'upSumRises5',sortable:true,renderer: fixed2percentage},
@@ -149,6 +150,9 @@
                 /*     {title:'10日涨幅',name:'upSumRises10',sortable:true,renderer: fixed2percentage}, */
                   {title:'5/涨',width:50,name:'up5',sortable:true},
                     {title:'10/涨',width:50,name:'up10',sortable:true},
+                    
+                    {title:'10日内最大跌幅',width:50,name:'minRises10',sortable:true},
+                    {title:'5日内最大跌幅',width:50,name:'minRises5',sortable:true},
                     {title:'dea',name:'dea',width:40,sortable:true,renderer: fixed2percentage},
                     {title:'diff',name:'diff',width:40,sortable:true,renderer: fixed2percentage}
                 	
@@ -205,7 +209,7 @@
                 for (var i = 0; i < classNames.length; i++) {
                     html = html + '<option>'+classNames[i]+'</option>';
                 }
-                html = html + '</select> <select style = "width:100px"><option>=</option><option>></option><option><</option><option>>=</option><option><=</option><option>prefix</option><option>queryStr</option><option>missing</option></select>';
+                html = html + '</select> <select style = "width:100px"><option>=</option><option>></option><option><</option><option>>=</option><option><=</option><option>prefix</option><option>queryStr</option><option>missing</option><option>in</option></select>';
                 html = html + '<input type="text">';
                 html = html + '<button class="btn btn-default" onclick = "addFormDiv()">+</button>';            
                 html = html + '<button class="btn btn-default" onclick = "delFormDiv(this)">-</button></div></div>';            
