@@ -69,6 +69,11 @@ public class StockBaseInfo implements Serializable {
 	// 5天内 上涨总计
 	private float upSumRises5;
 	private float upSumRises10;
+	
+	private float minLowRises5;
+	private float minLowRises10;
+	private float minLowRises20;
+	private float minLowRises30;
 	// KDJ 指标的三个属性
 	private float k = 0;
 	private float d = 0;
@@ -709,6 +714,38 @@ public class StockBaseInfo implements Serializable {
 
 	public void setPe(double pe) {
 		this.pe = pe;
+	}
+
+	public float getMinLowRises5() {
+		return minLowRises5;
+	}
+
+	public void setMinLowRises5(float minLowRises5) {
+		this.minLowRises5 = minLowRises5;
+	}
+
+	public float getMinLowRises10() {
+		return minLowRises10;
+	}
+
+	public void setMinLowRises10(float minLowRises10) {
+		this.minLowRises10 = minLowRises10;
+	}
+
+	public float getMinLowRises20() {
+		return minLowRises20;
+	}
+
+	public void setMinLowRises20(float minLowRises20) {
+		this.minLowRises20 = minLowRises20;
+	}
+
+	public float getMinLowRises30() {
+		return minLowRises30;
+	}
+
+	public void setMinLowRises30(float minLowRises30) {
+		this.minLowRises30 = minLowRises30;
 	}
 
 	
