@@ -270,6 +270,14 @@ public class StoreAstockTradInfo {
 		for(final StockDetailInfoBean  bean:lstSource){
 			 final String sat=bean.getStockCode();
 //			if(sat.equals("603612")){
+//				try {
+//					List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat ,  map.get(sat));
+//		  			 insBatchEs(lstInfo, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
+//				} catch (Exception e) {
+//					// TODO: handle exception
+//				}
+//			
+//			}
 			executorServiceLocal.execute(new Thread(){
 				@Override
 				public void run() {
@@ -284,6 +292,7 @@ public class StoreAstockTradInfo {
 				}
 			});
 		}
+//	}
 		
 	}
 	

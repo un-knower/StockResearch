@@ -12,6 +12,7 @@ import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StockReCupplement;
 import com.cmall.stock.bean.StoreTrailer;
+import com.cmall.stock.utils.CsvHandUtils;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.TextUtil;
 import com.google.common.collect.Lists;
@@ -32,65 +33,67 @@ import io.searchbox.core.Index;
  *
  */
 public class StoreReportSet {
-//	static Map<String, StockDetailInfoBean> mapsInfo;
-//	static Map<String, StockBaseInfo> mapsInfo2;
-//
-//	static {
-//		try {
-//			mapsInfo = StockDetailInfoHand.getDetailForMap();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//
-//		try {
-//			mapsInfo2 = Maps.newConcurrentMap();
-//			BoolQueryBuilder queryss = QueryBuilders.boolQuery();
-//			
-//			queryss.must(QueryBuilders.termQuery("date",TimeUtils.getDate("2018-01-22")));//TimeUtils.DEFAULT_DATEYMD_FORMAT)));// "2018-01-19"));
-//			List<StockBaseInfo> lstSource = CommonBaseStockInfo.getLstResult(queryss, "2018");
-//
-//			for (StockBaseInfo bean : lstSource) {
-//				mapsInfo2.put(bean.getStockCode(), bean);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
+	// static Map<String, StockDetailInfoBean> mapsInfo;
+	// static Map<String, StockBaseInfo> mapsInfo2;
+	//
+	// static {
+	// try {
+	// mapsInfo = StockDetailInfoHand.getDetailForMap();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	//
+	// try {
+	// mapsInfo2 = Maps.newConcurrentMap();
+	// BoolQueryBuilder queryss = QueryBuilders.boolQuery();
+	//
+	// queryss.must(QueryBuilders.termQuery("date",TimeUtils.getDate("2018-01-22")));//TimeUtils.DEFAULT_DATEYMD_FORMAT)));//
+	// "2018-01-19"));
+	// List<StockBaseInfo> lstSource = CommonBaseStockInfo.getLstResult(queryss,
+	// "2018");
+	//
+	// for (StockBaseInfo bean : lstSource) {
+	// mapsInfo2.put(bean.getStockCode(), bean);
+	// }
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	//
+	// }
 	// static String cnFinalReportPath = "D://data//Report//";
 
 	public static void main(String[] args) throws Exception {
 		// writeTextReport();
 		// ups();
-
-		daoshuju();
+//  StoreTrailerSet.wsData();
+	 	daoshuju();
 
 	}
 
 	public static void daoshuju() throws Exception {
-		
-		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
+
+		List<String> lstSource =  CommonBaseStockInfo.getAllAStockInfo();
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		final Map<String, StoreTrailer> map = StoreTrailerSet.getAllTrailerMap(StoreTrailerSet.P_TYPE_2017_12_31);
-		final Map<String, StockDetailInfoBean> mapsInfo=QueryComLstData.getDetailInfo();
-		final  Map<String, StockBaseInfo> mapsInfo2=QueryComLstData.getStockBaseInfo();
-		
+		final Map<String, StockDetailInfoBean> mapsInfo = QueryComLstData.getDetailInfo();
+		final Map<String, StockBaseInfo> mapsInfo2 = QueryComLstData.getStockBaseInfo();
+		//lstSource.add("000055");
 		for (final String sat : lstSource) {
 			CommonBaseStockInfo.executorServiceLocal.execute(new Thread() {
 				@Override
 				public void run() {
 					String content = readTextReport(sat);
-					if(StringUtils.isEmpty(content))
-						return ;
+					if (StringUtils.isEmpty(content))
+						return;
 					try {
-
-						List<StockReCupplement> mapList = StoreAstockEnReport.readFinalReportDetail(sat);
-						Map<String, StockReCupplement> CuMap = Maps.newHashMap();
-						for (StockReCupplement stockReCupplement : mapList) {
-							CuMap.put(stockReCupplement.getBgq(), stockReCupplement);
-						}
+						// 利润来源 暂时注释
+//						List<StockReCupplement> mapList = StoreAstockEnReport.readFinalReportDetail(sat);
+//						Map<String, StockReCupplement> CuMap = Maps.newHashMap();
+//						for (StockReCupplement stockReCupplement : mapList) {
+//							CuMap.put(stockReCupplement.getBgq(), stockReCupplement);
+//						}
 						List<EastReportBean> ls = retBeanLst(new Gson().fromJson(content, PaInfo.class).getData());
-						List<EastReportBean> lstIns=Lists.newArrayList();
+						List<EastReportBean> lstIns = Lists.newArrayList();
 						for (int i = 0; i < ls.size(); i++) {
 							EastReportBean bean = ls.get(i);
 							if (i == 0) {
@@ -105,34 +108,35 @@ public class StoreReportSet {
 									bean.setJlr_tbzz_str(tr.getRangeability());
 								}
 							}
-							StockReCupplement cu = CuMap.get(bean.getJzrq());
-							if (cu != null) {
-								bean.setJyhdcsdxjllje(cu.getJyhdcsdxjllje());
-								bean.setTzhdcsdxjllje(cu.getTzhdcsdxjllje());
-							}
-							
-							
+							// 利润来源 暂时注释
+//							StockReCupplement cu = CuMap.get(bean.getJzrq());
+//							if (cu != null) {
+//								bean.setJyhdcsdxjllje(cu.getJyhdcsdxjllje());
+//								bean.setTzhdcsdxjllje(cu.getTzhdcsdxjllje());
+//							}
+
 							StockDetailInfoBean mapsBean = mapsInfo.get(bean.getStockCode());
 
 							StockBaseInfo baBean = mapsInfo2.get(bean.getStockCode());
-							if (baBean != null && mapsBean != null&&bean.getXjlr()!=0) {
+							if (baBean != null && mapsBean != null && bean.getXjlr() != 0) {
 								double npe = baBean.getClose() / (bean.getXjlr() / mapsBean.getTotals());
 								bean.setNpe(npe);
-								//  
+								//
 								bean.setPe(baBean.getClose() / (bean.getJlr() / mapsBean.getTotals()));
 							}
 							if (mapsBean != null) {
-								// bean.setTotals(mapsBean.getTotals() * mapsBean.getEsp() *
-								// mapsBean.getPe());// mapsBean.getTotalAssets());
+								// bean.setTotals(mapsBean.getTotals() *
+								// mapsBean.getEsp() *
+								// mapsBean.getPe());//
+								// mapsBean.getTotalAssets());
 								bean.setIndustry(mapsBean.getIndustry());
 								bean.setPe(mapsBean.getPe());
 								bean.setArea(mapsBean.getArea());
 								bean.setIndustry(mapsBean.getIndustry());
-								double pe= bean.getPe();
-								bean.setPe(pe==0?mapsBean.getPe():pe);
-								 
-									
-								bean.setZsz((mapsBean.getPe()*mapsBean.getEsp()*mapsBean.getTotals()));
+								double pe = bean.getPe();
+								bean.setPe(pe == 0 ? mapsBean.getPe() : pe);
+
+								bean.setZsz((mapsBean.getPe() * mapsBean.getEsp() * mapsBean.getTotals()));
 								// System.out.println(mapsBean);
 							}
 							lstIns.add(bean);
@@ -141,7 +145,7 @@ public class StoreReportSet {
 
 						insBatchEs(lstIns, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOREREPORT);
 					} catch (Exception e) {
-						System.out.println("error:"+content);
+						System.out.println("error:" + content);
 						e.printStackTrace();
 					}
 				}
@@ -187,11 +191,11 @@ public class StoreReportSet {
 				String mgsy = arrayconent[2];
 				String mgsykc = arrayconent[3];
 				String yysr = arrayconent[4];
-				String yysr_yw = StoreAstockEnReport.getFormatNum(yysr);
+				String yysr_yw = "0";//StoreAstockEnReport.getFormatNum(yysr);
 				String yysr_tbzz = arrayconent[5];
 				String yysr_hbzz = arrayconent[6];
 				String jlr = arrayconent[7];
-				String jlr_gsh = StoreAstockEnReport.getFormatNum(jlr);
+				String jlr_gsh ="0";// MathsUtils.getFormatNum(jlr);
 				String jlr_tbzz = arrayconent[8];
 				String jlr_hbzz = arrayconent[9];
 				String mgjzc = arrayconent[10];
@@ -286,7 +290,7 @@ public class StoreReportSet {
 				@Override
 				public void run() {
 					try {
-						List<StockReCupplement> list = StoreAstockEnReport.readFinalReportDetail(sat);
+						List<StockReCupplement> list = readFinalReportDetail(sat);
 						try {
 							UpsBatchEs(list, jestClient, "storereport");
 						} catch (Exception e) {
@@ -343,7 +347,7 @@ public class StoreReportSet {
 		for (String string : list) {
 			reText = reText + string;
 		}
-		if(reText.startsWith("{pages:0"))
+		if (reText.startsWith("{pages:0"))
 			return null;
 		return reText;
 	}
@@ -357,4 +361,77 @@ public class StoreReportSet {
 		}
 		return value;
 	}
+	 public static List<StockReCupplement> readFinalReportDetail(String
+		 stockCode) {
+		 List<StockReCupplement> reList = Lists.newArrayList();
+		 try {
+		
+		 String absPath = FilePath.cnFinalReportPathDetail + stockCode + ".csv";
+		 CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
+		 List<List<String>> lstSource = csvHandUtils.readCSVFile();
+		 if (lstSource.size() >= 24) {
+		 List<String> str = lstSource.get(0);
+		 for (int i = 1; i < str.size(); i++) {
+		 if (i >= lstSource.get(1).size() || i >= lstSource.get(2).size() || i >=
+		 lstSource.get(3).size()
+		 || i >= lstSource.get(4).size() || i >= lstSource.get(5).size()
+		 || i >= lstSource.get(6).size() || i >= lstSource.get(7).size()
+		 || i >= lstSource.get(8).size() || i >= lstSource.get(9).size()
+		 || i >= lstSource.get(10).size() || i >= lstSource.get(11).size()
+		 || i >= lstSource.get(12).size() || i >= lstSource.get(13).size()
+		 || i >= lstSource.get(14).size() || i >= lstSource.get(15).size()
+		 || i >= lstSource.get(16).size() || i >= lstSource.get(17).size()
+		 || i >= lstSource.get(18).size() || i >= lstSource.get(19).size()
+		 || i >= lstSource.get(20).size() || i >= lstSource.get(21).size()
+		 || i >= lstSource.get(22).size() || i >= lstSource.get(23).size()) {
+		 break;
+		 }
+		 StockReCupplement cu = new StockReCupplement(stockCode,
+		 lstSource.get(0).get(i),
+		 lstSource.get(1).get(i), lstSource.get(2).get(i),
+		 lstSource.get(3).get(i),
+		 lstSource.get(4).get(i), lstSource.get(5).get(i),
+		 lstSource.get(6).get(i),
+		 lstSource.get(7).get(i), lstSource.get(8).get(i),
+		 lstSource.get(9).get(i),
+		 lstSource.get(10).get(i), lstSource.get(11).get(i),
+		 lstSource.get(12).get(i),
+		 lstSource.get(13).get(i), lstSource.get(14).get(i),
+		 lstSource.get(15).get(i),
+		 lstSource.get(16).get(i), lstSource.get(17).get(i),
+		 lstSource.get(18).get(i),
+		 lstSource.get(19).get(i), lstSource.get(20).get(i),
+		 lstSource.get(21).get(i),
+		 lstSource.get(22).get(i), lstSource.get(23).get(i));
+		 // System.out.println(cu);
+		 reList.add(cu);
+		 }
+		 }
+		 } catch (Exception e) {
+		 e.printStackTrace();
+		 // TODO: handle exception
+		 }
+		 return reList;
+		 }
+}
+class PaInfo {
+	public String pages;
+	public String[] data;
+
+	public String getPages() {
+		return pages;
+	}
+
+	public void setPages(String pages) {
+		this.pages = pages;
+	}
+
+	public String[] getData() {
+		return data;
+	}
+
+	public void setData(String[] data) {
+		this.data = data;
+	}
+
 }

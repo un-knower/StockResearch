@@ -51,10 +51,6 @@
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body style="padding: 40px;">	
-    
-    
-    
-    
     <a href = "/stock/">首页</a> 
     	<a href = "/stock/storereport.html">storereport</a> 
     	<a href = "/stock/storetrailer.html">storetrailer</a> 
@@ -98,51 +94,6 @@
 			    </div>
 			  </div>
 			</div>
-			
-			
-			<!-- 加入自选 -->
-			<div class="modal fade" id="zxModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-			  <div class="modal-dialog" role="document">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="zxModalLabel">加入自选</h4>
-			      </div>
-			      <div class="modal-body">
-			        <form class="form-horizontal" id = "zxFrom">
-					  <div class="form-group">
-					  	<input type = "hidden" name = "stockCode" id = "stockCode">
-					    <label for="inputEmail3" class="col-sm-2 control-label">指标</label>
-					    <div class="col-sm-10">
-					      <select name = "zb">
-					      	<option value="财报">财报</option>
-					      	<option value="其他">其他</option>
-					      </select>
-					    </div>
-					  </div>
-					  <br/>
-					  <div class="form-group">
-					    <label for="inputPassword3" class="col-sm-2 control-label">原因</label>
-					    <div class="col-sm-10">
-					      <textarea rows="3"  class="form-control" name = "text"></textarea>
-					    </div>
-					  </div>
-					  
-					  <div class="form-group">
-					    <label for="inputPassword3" class="col-sm-2 control-label">Tag</label>
-					    <div class="col-sm-10">
-					      
-					    </div>
-					  </div>
-					</form>
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-			        <button type="button" class="btn btn-primary" onclick = "addzxFrom()">加入</button>
-			      </div>
-			    </div>
-			  </div>
-			</div>
         </main>
 
         <script src="js/vendor/jquery-1.9.1.min.js"></script>
@@ -166,7 +117,7 @@
                     }  
                 }); 
 
-                var pgBar = $('#pg').mmPaginator({"limitList":[100,800,1000,2000,2500,3000]});
+                var pgBar = $('#pg').mmPaginator({"limitList":[1000,2000,2500,3000,3800]});
                 
                 var cols = [
                     {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
@@ -176,13 +127,12 @@
                     }},
                     { title:'日期', name:'date',width:80 , align:'center' ,sortable:true },
                     { title:'股票代码', name:'stockCode' ,width:60, align:'center' },
-                    { title:'股票名称', name:'stockName' ,width:60, align:'center',renderer: function(val,item,rowIndex){
-                        return '<a href = "javascript:void(0)" onclick = "addzx(\''+item['stockCode']+'\')">'+val+'</a>';
-                    }},
+                    { title:'股票名称', name:'stockName' ,width:60, align:'center'},
                     //{ title:'周几', name:'dayForWeek' ,width:60, align:'center',sortable:true},
                     {title:'板块',name:'industry',width:60,sortable:true  },
                     {title:'总市值',name:'zsz',width:70,sortable:true,renderer:moformat},
                     { title:'PE',name:'pe',width:40,sortable:true ,renderer:highliht },
+                    { title:'地区',name:'area',width:40,sortable:true },
                     /* {title:'开盘价',name:'open',width:40,sortable:true  }, */
                    /*  {title:'收盘价',name:'close',width:40,sortable:true }, */
                     { title:'前1涨幅',width:40, name:'upRises' , align:'right',sortable:true,renderer: fixed2percentage},
@@ -196,14 +146,14 @@
                     
                     {title:'macd连涨天数',width:60,name:'macdNum',sortable:true},
                     {title:'成交量比',width:60,name:'volumeRises',sortable:true,renderer: fixed2percentage},
-                    {title:'5日涨幅',width:50,name:'upSumRises5',sortable:true,renderer: fixed2percentage},
-                    {title:'10日涨幅',width:50,name:'upSumRises10',sortable:true,renderer: fixed2percentage},
-                /*     {title:'10日涨幅',name:'upSumRises10',sortable:true,renderer: fixed2percentage}, */
-                  {title:'5/涨',width:50,name:'up5',sortable:true},
-                    {title:'10/涨',width:50,name:'up10',sortable:true},
+                    {title:'5/累涨',width:50,name:'upSumRises5',sortable:true,renderer: fixed2percentage},
+                    {title:'10/累涨',width:50,name:'upSumRises10',sortable:true,renderer: fixed2percentage},
+                  {title:'10日涨幅',name:'minRises10',sortable:true,renderer: fixed2percentage}, 
+                 {title:'5/涨',width:50,name:'up5',sortable:true},
+                     {title:'10/涨',width:50,name:'up10',sortable:true},
                     
-                    {title:'10日内最大跌幅',width:50,name:'minRises10',sortable:true},
-                    {title:'5日内最大跌幅',width:50,name:'minRises5',sortable:true},
+                    {title:'10/跌',width:50,name:'minLowRises10',sortable:true,renderer: fixed2percentage},
+                    {title:'5/跌',width:50,name:'minLowRises5',sortable:true,renderer: fixed2percentage},
                     {title:'dea',name:'dea',width:40,sortable:true,renderer: fixed2percentage},
                     {title:'diff',name:'diff',width:40,sortable:true,renderer: fixed2percentage}
                 	
@@ -318,24 +268,6 @@
             	path = path + '?'+timestamp;
             	return path;
             }
-            
-            function addzx(code){
-            	$('#stockCode').val(code);
-            	$('#zxModal').modal('show');
-            }
-            
-            function addzxFrom(){
-            	 $.ajax({  
-                    type : "GET",  //提交方式  
-                    url : "http://www.estock.com:8080/stock/optional/create?" + $('#zxFrom').serialize(),//路径  
-                    data : {},//数据，这里使用的是Json格式进行传输  
-                    success : function(result) {//返回数据根据结果进行相应的处理  
-                        alert("成功");
-                        $('#zxModal').modal('hide');
-                    }  
-                }); 
-            }
-            
 			</script>
 								
 								

@@ -266,7 +266,7 @@ public class StockStragEnSey {
     	for (int i = 0; i < entries.size(); i++) {
     		StockBaseInfo StockBaseInfo = entries.get(i);
     		if(i == 0){
-    			if(StockBaseInfo.getMacd() >= 0){
+    			if((StockBaseInfo.getMacd()>=0)||(StockBaseInfo.getDiff()>0&&StockBaseInfo.getDea()>0&&StockBaseInfo.getMacd() >=-0.01&&StockBaseInfo.getRises()>-0.5)){
     				StockBaseInfo.setMacdNum(1);
     			}
     		}
@@ -302,7 +302,7 @@ public class StockStragEnSey {
     			StockBaseInfo.setUpJ(upJ);
     			StockBaseInfo.setUpMacd(upMacds);
     			int m = entries.get(i-1).getMacdNum();
-    			if(StockBaseInfo.getMacd() >= 0){
+    			if((StockBaseInfo.getMacd()>=0)||(StockBaseInfo.getDiff()>0&&StockBaseInfo.getDea()>0&&StockBaseInfo.getMacd() >=-0.01&&StockBaseInfo.getRises()>-0.5)){
     				StockBaseInfo.setMacdNum(m+1);
     			}
     			float upClose = entries.get(i-1).getClose();
@@ -338,13 +338,21 @@ public class StockStragEnSey {
         			if(j <= 5){
         				if(Risess < minLowRises5){
         					minLowRises5 = Risess;
+        				}else if (Risess > maxRises5){
+        					maxRises5 = Risess;
         				}
         			}
         			if(j <= 10){
         				if(Risess < minLowRises10){
         					minLowRises10 = Risess;
+        				}else if (Risess > maxRises10){
+        					maxRises10 = Risess;
         				}
+        				
+        				
         			}
+        			
+        			 
         			if(j <= 20){
         				if(Risess < minLowRises20){
         					minLowRises20 = Risess;
@@ -374,16 +382,12 @@ public class StockStragEnSey {
 						if(Risess > 0){
 							upRisesDayNum5++;
 						}
-						if(maxRises5 < Risess){
-							maxRises5 = Risess;
-						}
+						
 						macd5 = macd5 + upMacd;
 						//Rises5 = Rises5 + Risess;
 						j5 = j5 + js;
 					}
-					if(maxRises10 < Risess){
-						maxRises10 = Risess;
-					}
+					
 					macd10=macd10 + upMacd;
 					//Rises10 = Rises10 + Risess;
 					if(macds > 0){
@@ -435,8 +439,20 @@ public class StockStragEnSey {
     			StockBaseInfo.setMacdUp10(macdUp10);
     			StockBaseInfo.setSumMacdUp5(macd5);
     			StockBaseInfo.setSumMacdUp10(macd10);
-    			StockBaseInfo.setUpSumRises5(Rises5);
-    			StockBaseInfo.setUpSumRises10(Rises10);
+//    			StockBaseInfo.setUpSumRises5(Rises5);
+//    			StockBaseInfo.setUpSumRises10(Rises10);
+       			if(i>=5)
+        			StockBaseInfo.setUpSumRises5(((StockBaseInfo.getClose()-entries.get(i-5).getClose())/entries.get(i-5).getClose())*100);
+        			
+        			
+        			if(i>=10)
+        			StockBaseInfo.setUpSumRises10(((StockBaseInfo.getClose()-entries.get(i-10).getClose())/entries.get(i-10).getClose())*100);
+        			
+        			if(i>=20)
+            			StockBaseInfo.setUpSumRises20(((StockBaseInfo.getClose()-entries.get(i-20).getClose())/entries.get(i-20).getClose())*100);
+        			
+        			if(i>=30)
+            			StockBaseInfo.setUpSumRises30(((StockBaseInfo.getClose()-entries.get(i-30).getClose())/entries.get(i-30).getClose())*100);
     			StockBaseInfo.setJ3(j3);
     			StockBaseInfo.setJ5(j5);
     			StockBaseInfo.setMinRises5(maxRises5);

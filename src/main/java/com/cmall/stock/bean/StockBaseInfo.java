@@ -69,6 +69,8 @@ public class StockBaseInfo implements Serializable {
 	// 5天内 上涨总计
 	private float upSumRises5;
 	private float upSumRises10;
+	private float upSumRises20;
+	private float upSumRises30;
 	
 	private float minLowRises5;
 	private float minLowRises10;
@@ -746,6 +748,22 @@ public class StockBaseInfo implements Serializable {
 
 	public void setMinLowRises30(float minLowRises30) {
 		this.minLowRises30 = minLowRises30;
+	}
+
+	public float getUpSumRises20() {
+		return upSumRises20;
+	}
+
+	public void setUpSumRises20(float upSumRises20) {
+		this.upSumRises20 = upSumRises20;
+	}
+
+	public float getUpSumRises30() {
+		return upSumRises30;
+	}
+
+	public void setUpSumRises30(float upSumRises30) {
+		this.upSumRises30 = upSumRises30;
 	}
 
 	
