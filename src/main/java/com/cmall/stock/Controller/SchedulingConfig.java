@@ -1,5 +1,6 @@
 package com.cmall.stock.Controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -7,15 +8,20 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import com.cmal.stock.storedata.CommonBaseStockInfo;
+import com.cmal.stock.storedata.StockOptionalSet;
 import com.cmal.stock.storedata.StoreAstockTradInfo;
 import com.cmal.stock.storedata.StoreRealSet;
+import com.cmall.staple.data.MonthsStapleData;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
+import com.cmall.stock.bean.StockOptionalInfo;
 import com.cmall.stock.bean.StockRealBean;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.TextUtil;
@@ -37,68 +43,58 @@ public class SchedulingConfig {
 	public static Map<String, StockBaseInfo> upMap;
 	
 	public static List<String> lstSource;
+		
+	/**
+	 * 每日同步大宗商品
+	 */
+	@Scheduled(cron = "0 0 0/1 * * ?") // 每20秒执行一次
+    public void updateDzsp() {
+		try {
+			System.out.println("开始同步大宗商品");
+			MonthsStapleData.freshEsData();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
-//	@Scheduled(cron = "0 0/1 * * * ?") // 每20秒执行一次
-    public void scheduler() {
-		if(upMap == null){
-			final JestClient jestClient = BaseCommonConfig.clientConfig();
+	/**
+	 * 更新自选
+	 */
+	@Scheduled(cron = "0 0/5 * * * ?") // 每20秒执行一次
+    public void updateOption() {
+		if(shijian()){
 			try {
-				upMap = StoreRealSet.getUpMap(jestClient);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		Calendar ncalendar = Calendar.getInstance();
-		int H = ncalendar.get(Calendar.HOUR_OF_DAY);
-		int M = ncalendar.get(Calendar.MINUTE);
-		int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 2;
-		System.out.println("H:"+H);
-		System.out.println("M:"+M);
-		System.out.println("w:"+w);
-		boolean k = true;
-		if(((H == 9 && M >= 30) || (H==10) || (H==11 && M <= 30) || (H==13) || (H==14)) 
-				&& w !=6 && w !=7){
-			k = true;
-		}else{
-			k = false;
-		}
-		if(k){
-			try {
-				if(lstSource == null){
-					lstSource = TextUtil.readTxtFile(FilePath.path);
-				}
-				final JestClient jestClient = BaseCommonConfig.clientConfig();
-				final Map<String, StockBaseInfo> map = upMap;
-				 for (final String string : lstSource) {
+				final JestClient  jestClient =BaseCommonConfig.clientConfig();
+				List<StockOptionalInfo> list = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
+				for(final StockOptionalInfo  info:list){
 					executorServiceLocal.execute(new Thread(){
 						@Override
 						public void run() {
 					          try {
-					        	  StockBaseInfo info = map.get(string);
-					        	 List<StockRealBean> list = new ArrayList<StockRealBean>();
-					        	 StockRealBean real = StoreRealSet.getBeanByCode(string);
-					        	 if(real != null){
-					        		 real.setPercent(real.getPercent() * 100);
-						        	 if(info != null){
-						        		 real.setUpRises(info.getRises());
-						        		 real.setUpVolume(info.getVolume());
-						        		 real.setVolumeRises((double)real.getVolume() / (double)info.getVolume());
-						        	 }
-						        	 list.add(real);
-					        	 }
-					        	 StoreRealSet.insBatchEs(list,jestClient,"stockrealinfo");
+					        	  System.out.println("zixuan=="+info.getStockName());
+					        	  StockRealBean bean = StoreRealSet.getBeanByCode(info.getStockCode());
+					        	  info.setPrice(bean.getPrice());
+					        	  StockOptionalSet.insBatchBean(info, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
+								
 						}
 					});
-				}			
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		
-    }
+	}
+	
 	
 	@Scheduled(cron = "0 0/5 * * * ?") // 每20秒执行一次
     public void updateInfo2() {

@@ -208,15 +208,16 @@ public class MonthsStapleData {
 		List<String> lstDate = TimeUtils.getDayList(TimeUtils.toDate(bean.getRq(), TimeUtils.DEFAULT_DATEYMD_FORMAT2),
 				new Date(), new SimpleDateFormat("yyyy-Mdd"));
 		if (lstDate != null) {
+			System.out.println("获取数据==="+lstDate.size());
 			getuseAllLink(lstDate);
 			wsData(null);
 		}
 	}
 
 	public static void main(String[] args) throws Exception {
-		freshEsData();
+//		freshEsData();
 
-		// getAllDataLink();
+		 getAllDataLink();
 		// System.out.println(elements);
 
 		// writeTextReport();
