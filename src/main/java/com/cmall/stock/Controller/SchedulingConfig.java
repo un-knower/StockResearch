@@ -16,8 +16,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cmal.stock.storedata.CommonBaseStockInfo;
 import com.cmal.stock.storedata.StockOptionalSet;
+import com.cmal.stock.storedata.StoreAstockEnReport;
 import com.cmal.stock.storedata.StoreAstockTradInfo;
 import com.cmal.stock.storedata.StoreRealSet;
+import com.cmal.stock.storedata.StoreReportSet;
+import com.cmal.stock.storedata.StoreTrailerSet;
 import com.cmall.staple.data.MonthsStapleData;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
@@ -60,6 +63,45 @@ public class SchedulingConfig {
 			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 每日预报更新
+	 */
+	@Scheduled(cron = "0 0 0/1 * * ?") // 每20秒执行一次
+    public void updateyubao() {
+		try {
+			StoreTrailerSet.wsData();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 每日财报更新
+	 */
+	@Scheduled(cron = "0 0 15 * * ?") // 每20秒执行一次
+    public void updateCaoSc() {
+		try {
+			StoreAstockEnReport.downReportInfofromUrl("report");
+			StoreAstockEnReport.downReportInfofromUrl("reportDetail");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 每日财报更新
+	 */
+	@Scheduled(cron = "0 30 15 * * ?") // 每20秒执行一次
+    public void updateCaoScData() {
+		try {
+			StoreReportSet.daoshuju();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
