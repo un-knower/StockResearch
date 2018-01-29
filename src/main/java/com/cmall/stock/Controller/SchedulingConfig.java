@@ -140,7 +140,7 @@ public class SchedulingConfig {
 	
 	@Scheduled(cron = "0 0/5 * * * ?") // 每20秒执行一次
     public void updateInfo2() {
-		if(shijian()){
+		if(true){
 			try {
 				wDataRealToEs();
 			} catch (Exception e) {

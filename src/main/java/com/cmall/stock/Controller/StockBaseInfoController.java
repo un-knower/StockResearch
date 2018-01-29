@@ -39,4 +39,24 @@ public class StockBaseInfoController extends BaseController {
         return fieldNames;
     }
     
+    @RequestMapping("/focDays/getList")
+    public Map<String,Object> getfocDaysList(StockBasePageInfo page) throws Exception {
+    	BoolQueryBuilder query = QueryBuilders.boolQuery();
+    	
+    	setQuery(query,page);
+        return SelGetStock.getfocDaysLstResult(query,page);
+    }
+    
+    @RequestMapping("/focDays/getClassNameList")
+    public String[] getClassfocDaysNameList() throws Exception {
+    	StockBaseInfo info = new StockBaseInfo();
+    	java.lang.reflect.Field[] fields=info.getClass().getDeclaredFields();  
+        String[] fieldNames=new String[fields.length-1];  
+	    for(int i=1;i<fields.length;i++){  
+	        fieldNames[i-1]=fields[i].getName();  
+	    }  
+        return fieldNames;
+    }
+    
+    
 }

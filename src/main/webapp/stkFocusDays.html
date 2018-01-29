@@ -13,30 +13,58 @@
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <link rel="stylesheet" href="css/normalize.css">
+          <link rel="stylesheet" href="css/common.css">
         <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
         <link rel="stylesheet" href="src/mmGrid.css">
         <link rel="stylesheet" href="src/theme/bootstrap/mmGrid-bootstrap.css">
         <link rel="stylesheet" href="src/mmPaginator.css">
         <link rel="stylesheet" href="src/theme/bootstrap/mmPaginator-bootstrap.css">
-        <link rel="stylesheet" href="css/common.css">
-        
+        <style>
+            html,
+            body{
+                font-family: 'Helvetica Neue',helvetica, "Hiragino Sans GB",'Microsoft YaHei', "WenQuanYi Micro Hei", sans-serif;
+                font-size: 12px;
+                color: #444;
+            }
+            .data select,input{
+            	margin-top:10px; 
+            	margin-right: 2px;
+            }
+            .btn{
+                font-size: 12px;
+            }
+            .btnPrice {
+                display: block;
+                width: 16px;
+                height: 16px;
+                margin: 0px auto;
+                background: url(img/botton_g1.gif) no-repeat;
+            }
+
+            .btnPrice:hover {
+                background: url(img/botton_g2.gif) no-repeat;
+            }
+        </style>
         <!--[if lt IE 9]>
         <script src="js/vendor/html5shiv.js"></script>
         <![endif]-->
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
-    <body style="padding: 40px;">
-        <a href = "/stock/">stockpcse</a> <a href = "/stock/storetrailer.html">storetrailer</a>
+    <body style="padding: 40px;">	
+    <a href = "/stock/">首页</a> 
+    	<a href = "/stock/storereport.html">storereport</a> 
+    	<a href = "/stock/storetrailer.html">storetrailer</a> 
+    	<a href = "/stock/storesta.html">查看策略</a> 
+    	<a href = "/stock/realindex.html">实时数据</a> 
+    	<a href = "/stock/jyfx.html">jyfx</a> 
+    	<a href = "/stock/stapleday.html">大宗商品</a>
         <main>
             <div style="margin-bottom: 5px;">
                 <div style="text-align: center;">
                     <div id = "fh"></div>
                 </div>
             </div>
-            <div style="text-align: center;margin-bottom: 5px;">
-            	<input type = "text" id = "type"> <!-- value = "2017-09-30" -->
-            	<button id="btnSearch" class="btn" >搜索</button>
-            </div>
+            <div style="text-align: center;margin-bottom: 5px;"><button id="btnSearch" class="btn" >搜索</button></div>
             <table id="mmg" class="mmg">
                 <tr>
                     <th rowspan="" colspan=""></th>
@@ -70,7 +98,7 @@
 
         <script src="js/vendor/jquery-1.9.1.min.js"></script>
         <script src="js/plugins.js"></script>
-        <script src="js/common.js"></script>
+         <script src="js/common.js"></script>
         <script src="js/vendor/json2.js"></script>
         <script src="src/mmGrid.js"></script>
         <script src="src/mmPaginator.js"></script>
@@ -81,7 +109,7 @@
             $(document).ready(function(){
                 $.ajax({  
                     type : "GET",  //提交方式  
-                    url : "http://www.estock.com:8080/stock/report/getClassNameList",//路径  
+                    url : "http://www.estock.com:8080/stock/focDays/getClassNameList",//路径  
                     data : {},//数据，这里使用的是Json格式进行传输  
                     success : function(result) {//返回数据根据结果进行相应的处理  
                         classNames =  result;
@@ -89,44 +117,66 @@
                     }  
                 }); 
 
-                var pgBar = $('#pg').mmPaginator({"limitList":[60,200,500,1000,2000,2500,3000]});
+                var pgBar = $('#pg').mmPaginator({"limitList":[1000,2000,2500,3000,3800]});
                 
                 var cols = [
-                            /* { title:'公告日期', name:'ggrq' , align:'center' ,width:80,sortable:true},  */
-                            { title:'结束日期', name:'jzrq' , align:'center' ,width:80,sortable:true}, 
-                             { title:'股票代码', name:'stockCode' , align:'center',width:60 }, 
-                            { title:'股票名称', name:'stockName' , align:'center',width:60},
-                           /*  { title:'行业', name:'industry' , align:'center',sortable:true,width:60},
-                            { title:'总市值', name:'totals' , align:'center',sortable:true,width:60,renderer:moformat}, */
-                            { title:'行业', name:'industry' , align:'center',width:60,sortable:true},
-                            { title:'地区', name:'area' , align:'center',width:60},
-                            { title:'总市值', name:'zsz' , align:'center',sortable:true,width:60,renderer: moformat},
-                           { title:'净资产收益率', name:'jzcsyl' , align:'center',sortable:true,width:60,renderer: fixed2percentage},  
-                           // { title:'上净利润', name:'sjlr' , align:'center',renderer: moformat,sortable:true,width:60},
-                            { title:'净利润', name:'jlr' , align:'center',renderer: moformat,sortable:true,width:60},
-                            { title:'下净利润', name:'xjlr' , align:'center',renderer: moformat,sortable:true,width:60}, 
-                             { title:'上季度利润增长率', name:'jdzzl_before' , align:'center',renderer: fixed2percentage,sortable:true,width:80},
-                            { title:'净利润增长率', name:'jdzzl' , align:'center',renderer: fixed2percentage,sortable:true,width:80},
-                            { title:'下季度利润增长率', name:'jlr_ycb' , align:'center',renderer: fixed2percentage,sortable:true,width:80} ,
-                            { title:'市盈率', name:'pe' , align:'center',sortable:true,renderer: highliht,width:60},
-                            { title:'N市盈率', name:'npe' , align:'center',sortable:true,renderer: highliht,width:60},
-                           // { title:'同比增长值', name:'jlr_tbzz' , align:'center',renderer: fixed2percentage,sortable:true,width:60} ,
-                            { title:'下季度同比增长', name:'jlr_tbzz_str' , align:'center',sortable:true,width:80} ,
-                           
-                          
-                        /*     { title:'利润投资比', name:'tzhdcsdxjllje' , align:'center',renderer: function(){
-                            	
-                            },sortable:true,width:80} , */
-                            //{ title:'投资利润', name:'tzhdcsdxjllje' , align:'center',renderer: moformat2,sortable:true,width:80} ,
-                            //{ title:'业务利润', name:'jyhdcsdxjllje' , align:'center',renderer: moformat2,sortable:true,width:80} ,
-                            { title:'下季度增长', name:'jlr_tbzz_xjd' , align:'center',renderer: fixed2percentage,sortable:true,width:80} 
-                        ];
+                    {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
+                        /*return '<div class="btnPrice" onclick = "openDiv(\''+item['stockCode']+'\')"></div>';*/
+                        var path = getPath(item['stockCode']);
+                        return '<img src = "' +path+ '" onclick = "openDiv(\''+item['stockCode']+'\')">';
+                    }},
+                    { title:'日期', name:'date',width:80 , align:'center' ,sortable:true },
+                    { title:'股票代码', name:'stockCode' ,width:60, align:'center' },
+                    { title:'股票名称', name:'stockName' ,width:60, align:'center'},
+                    //{ title:'周几', name:'dayForWeek' ,width:60, align:'center',sortable:true},
+                    {title:'板块',name:'industry',width:60,sortable:true  },
+                    {title:'总市值',name:'zsz',width:70,sortable:true,renderer:moformat},
+                    { title:'PE',name:'pe',width:40,sortable:true ,renderer:highliht },
+                    //{ title:'地区',name:'area',width:40,sortable:true ,renderer:highliht },
+                    /* {title:'开盘价',name:'open',width:40,sortable:true  }, */
+                   /*  {title:'收盘价',name:'close',width:40,sortable:true }, */
+                    { title:'前1涨幅',width:40, name:'upRises' , align:'right',sortable:true,renderer: fixed2percentage},
+                    { title:'涨跌幅', name:'rises',width:40 , align:'right',renderer: fixed2percentage,sortable:true},
+                    { title:'后1涨幅', name:'nextRises',width:40 , align:'right',renderer: fixed2percentage,sortable:true},
+                    { title:'连涨天数', name:'upDateNum' ,width:40, align:'right',sortable:true},
+                    {title:'macd',name:'macd',width:40,renderer: fixed2,sortable:true},
+                   /*  {title:'j',name:'j',width:40,renderer: fixed2,sortable:true},
+                    {title:'j3',name:'j3',width:40,renderer: fixed2,sortable:true},
+                    {title:'j5',name:'j5',width:40,renderer: fixed2,sortable:true}, */
+                    
+                    {title:'macd连涨天数',width:60,name:'macdNum',sortable:true},
+                    {title:'成交量比',width:60,name:'volumeRises',sortable:true,renderer: fixed2percentage},
+                    {title:'5/累涨',width:50,name:'upSumRises5',sortable:true,renderer: fixed2percentage},
+                    {title:'10/累涨',width:50,name:'upSumRises10',sortable:true,renderer: fixed2percentage},
+                  {title:'10日涨幅',name:'minRises10',sortable:true,renderer: fixed2percentage}, 
+                 {title:'5/涨',width:50,name:'up5',sortable:true},
+                     {title:'10/涨',width:50,name:'up10',sortable:true},
+                    
+                    {title:'10/跌',width:50,name:'minLowRises10',sortable:true,renderer: fixed2percentage},
+                    {title:'5/跌',width:50,name:'minLowRises5',sortable:true,renderer: fixed2percentage},
+                    {title:'dea',name:'dea',width:40,sortable:true,renderer: fixed2percentage},
+                    {title:'diff',name:'diff',width:40,sortable:true,renderer: fixed2percentage}
+                	
+                    
+                    /* {title:'5日成交量',name:'volumeMa5',sortable:true},
+                    {title:'10日成交量',name:'volumeMa10',sortable:true} */
+
+                   /*  { title:'今开盘', name:'open', align:'right', renderer: fixed2},
+                    { title:'今收盘', name:'close' , align:'right', renderer: fixed2,sortable:true},
+                   
+                    { title:'最高价', name:'high' , align:'right', renderer: fixed2},
+                    { title:'最低价', name:'low' , align:'right', renderer: fixed2},
+                    { title:'成交额(万)', name:'volume' , align:'right', renderer: function(val){
+                        return (val / 10000).toFixed(2);
+                    }},
+                    { title:'macd', name:'macd' , align:'right', renderer: highliht} */
+                ];
 
 
                 var mmg = $('.mmg').mmGrid({
                     height: 'auto'
                     , cols: cols
-                    , url: 'http://www.estock.com:8080/stock/report/getList?aaa=b&type='+ $('#type').val()
+                    , url: 'http://www.estock.com:8080/stock/focDays/getList'
                     , method: 'get'
                     , remoteSort:true
                     , sortName: 'close'
@@ -140,35 +190,27 @@
                     , params: function(){
                         //如果这里有验证，在验证失败时返回false则不执行AJAX查询。
                       return {
-                          datas: JSON.stringify(getDatas()),
-                          type:$('#type').val()
+                          datas: JSON.stringify(getDatas())
                       }
                     }
                 });
-
-
                 mmg.load();
 
                 $('#btnSearch').on('click',function(){
                     //点击查询时页码置为1
                     var str=JSON.stringify(getDatas());
-                    var type = $('#type').val();
-                    mmg.load({page:1,datas:str,type:type});
+                    mmg.load({page:1,datas:str});
                 });
-
-
-
-
             });
 
-         
+           
 
             var formHtml = function(){
                 var html = '<div class="row"><div class="col-md-12 data"></select> <select style = "width:100px"><option>must</option><option>must_not</option><option>should</option></select> <select>';
                 for (var i = 0; i < classNames.length; i++) {
                     html = html + '<option>'+classNames[i]+'</option>';
                 }
-                html = html + '</select> <select style = "width:100px"><option>=</option><option>></option><option><</option><option>>=</option><option><=</option><option>prefix</option><option>queryStr</option><option>missing</option><option>in</option><option>focuSck</option><option>selSck</option></select>';
+                html = html + '</select> <select style = "width:100px"><option>=</option><option>></option><option><</option><option>>=</option><option><=</option><option>prefix</option><option>queryStr</option><option>missing</option><option>in</option></select>';
                 html = html + '<input type="text">';
                 html = html + '<button class="btn btn-default" onclick = "addFormDiv()">+</button>';            
                 html = html + '<button class="btn btn-default" onclick = "delFormDiv(this)">-</button></div></div>';            
@@ -226,6 +268,8 @@
             	path = path + '?'+timestamp;
             	return path;
             }
-        </script>
+			</script>
+								
+								
     </body>
 </html>

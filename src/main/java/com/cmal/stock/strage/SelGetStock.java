@@ -42,12 +42,126 @@ public class SelGetStock {
 	static Map<String, String> mapsInfo = StockSelStrag.blckLstOfStock();
 	static Map<String, String> mapsSelStock = StockSelStrag.getAllChkStock();
 
+	public  static void  revtmpMap(Map<String, String> mapsSelStockTmp ){//临时剔除一些 走势不好股
+		//短时间内会剔除一批走势不好数据
+				mapsSelStockTmp.remove("603993");
+				mapsSelStockTmp.remove("300146");
+				mapsSelStockTmp.remove("002460");
+				mapsSelStockTmp.remove("300274");
+				mapsSelStockTmp.remove("000780");
+				mapsSelStockTmp.remove("000100");
+				mapsSelStockTmp.remove("600050");
+				mapsSelStockTmp.remove("600362"); //江西铜业
+				mapsSelStockTmp.remove("002042");  // 市值太小 华孚时尚	  127 亿
+				mapsSelStockTmp.remove("002404");// 市值太小 
+				mapsSelStockTmp.remove("600325");// 房地产 竞争差
+				mapsSelStockTmp.remove("000790");// 财报不是特别耀眼
+				//mapsSelStockTmp.remove("600449");/// 宁夏建材	600449 水泥板块竞争性不强
+				mapsSelStockTmp.remove("000822");///000822 山东海化 收益率太低
+				mapsSelStockTmp.remove("600681");//收益率太低
+				mapsSelStockTmp.remove("002385");//收益率太低
+				mapsSelStockTmp.remove("002466");//锂电池
+				mapsSelStockTmp.remove("601992");//无竞争优势
+				mapsSelStockTmp.remove("002558");	  //近期走势差
+				mapsSelStockTmp.remove("300676");	  //近期走势差
+				mapsSelStockTmp.remove("601390");//收益率太低
+				mapsSelStockTmp.remove("601766");//收益率太低
+				mapsSelStockTmp.remove("600816");//收益率太低
+				mapsSelStockTmp.remove("601881");//收益率太低  证券太多
+				mapsSelStockTmp.remove("600958");//收益率太低  证券太多
+				mapsSelStockTmp.remove("601377");//收益率太低  证券太多
+				mapsSelStockTmp.remove("601633");//同比收益大幅度下降
+				mapsSelStockTmp.remove("002019");//大热后没效益
+				mapsSelStockTmp.remove("000050");//竞争效益弱
+				mapsSelStockTmp.remove("002352");//顺丰
+				mapsSelStockTmp.remove("600919");//600919  江苏银行	  收益低 无竞争优势
+				mapsSelStockTmp.remove("601997");//   贵阳银行	  收益低 无竞争优势
+				mapsSelStockTmp.remove("600000");//  浦发银行	  收益低 无竞争优势
+				mapsSelStockTmp.remove("603589");//  口子窖		  收益低 无竞争优势
+				mapsSelStockTmp.remove("300498");// 走势下行 且净利润下降
+				mapsSelStockTmp.remove("601231");  // 环旭电子  同行业无竞争优势
+				mapsSelStockTmp.remove("600291");  //  西水股份竞争弱 且一时增长因为财报问题不稳定
+				mapsSelStockTmp.remove("300355"); //收益低 无竞争优势
+				mapsSelStockTmp.remove("600596"); // 新安股份 同行业无竞争优势
+				mapsSelStockTmp.remove("601336");//  保险	 同行业无竞争优势
+				mapsSelStockTmp.remove("601336");//002573 收益不稳定
+				mapsSelStockTmp.remove("002408");//齐翔腾达	 收益不稳定 市值低  无竞争优势
+				mapsSelStockTmp.remove("002032");//苏 泊 尔	   家电行业  市值低  无竞争优势
+				mapsSelStockTmp.remove("600177");//	雅戈尔	  收益低
+				
+				mapsSelStockTmp.remove("000063");//短暂移除        前期炒作
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+	}
+	public static Map<String, Object> getfocDaysLstResult(BoolQueryBuilder query, StockBasePageInfo page) throws Exception {
+        //002597 002311  000039
+		Map<String, Object> returnMap = Maps.newHashMap();
+		Map<String, String> mapsSelStockTmp=mapsSelStock;
+		
+		revtmpMap(mapsSelStockTmp);
+		query.must(QueryBuilders.inQuery("stockCode", mapsSelStockTmp.keySet()));
+		
+		
+		
+		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "",
+				(page.getPage() - 1) * page.getLimit(), page.getLimit());
+
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		JestResult results = jestClient.execute(selResult);
+		List<StockBaseInfo> lstBean = results.getSourceAsObjectList(StockBaseInfo.class); 
+		List<StockBaseInfo> lstResult = Lists.newArrayList();
+		for (StockBaseInfo baseInfo : lstBean) {
+			lstResult.add(baseInfo);
+ 
+
+		}
+
+		if (lstBean != null && lstBean.size() > 0) {
+			Map hitsMap = (Map) results.getValue("hits");
+			if (hitsMap != null) {
+				Number total = (Number) hitsMap.get("total");
+				if (total != null) {
+					if (total.intValue() > lstResult.size())
+						returnMap.put("totalCount", lstResult.size());
+					else
+						returnMap.put("totalCount", total.intValue());
+				}
+			}
+		}
+		returnMap.put("items", lstResult);
+		return returnMap;
+
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static Map<String, Object> getLstResult(BoolQueryBuilder query, StockBasePageInfo page) throws Exception {
 
 		Map<String, Object> returnMap = Maps.newHashMap();
 
-		//query.must(QueryBuilders.inQuery("stockCode", mapsSelStock.keySet()));
 		query.mustNot(QueryBuilders.inQuery("stockCode", mapsInfo.keySet()));
+		 // query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "",
 				(page.getPage() - 1) * page.getLimit(), page.getLimit());
@@ -60,7 +174,7 @@ public class SelGetStock {
 																							// results.getSourceAsObjectList(StockBaseInfo.class);
 		List<StockBaseInfo> lstResult = Lists.newArrayList();
 		for (StockBaseInfo baseInfo : lstBean) {
-
+		//	if(baseInfo.getJ()>baseInfo.getUpJ())
 			lstResult.add(baseInfo);
 
 			// if (mapsInfo.get(baseInfo.getStockCode()) == null &&
@@ -112,7 +226,6 @@ public class SelGetStock {
 		// return getCommonLstResult(query, page,
 		// CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "");
 	}
-
 	public static Map<String, Object> getTrailerLstResult(BoolQueryBuilder query, StockBasePageInfo page, String type)
 			throws Exception {
 
@@ -183,7 +296,7 @@ public class SelGetStock {
 			}
 		}
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		System.out.println(searchSourceBuilder.toString());
+		//System.out.println(searchSourceBuilder.toString());
 		return searchSourceBuilder;
 	}
 
@@ -209,7 +322,8 @@ public class SelGetStock {
 		} else {
 			types.add("2017-09-30");
 		}
-	   //query.must(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
+	    query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
+		//query.mustNot(QueryBuilders.inQuery("stockCode", mapsInfo.keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);// ssb.query(query);
 		System.out.println(searchSourceBuilder.toString());
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOREREPORT, types,
