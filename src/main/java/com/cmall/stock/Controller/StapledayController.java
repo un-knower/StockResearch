@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
+import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.jsoup.Jsoup;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cmal.stock.storedata.CommonBaseStockInfo;
 import com.cmal.stock.strage.SelGetStock;
 import com.cmall.staple.bean.Stap100PPI;
+import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.vo.StockBasePageInfo;
 import com.kers.httpmodel.BaseConnClient;
 
@@ -94,27 +96,49 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     	return fan;
     }
     
-    public static void main(String[] args) throws ClientProtocolException, IOException {
-    	String fan = "";
-    	String con = BaseConnClient.baseGetReq("http://www.100ppi.com");
-    	Document document = Jsoup.parse(con);
-    	Elements eles = document.getElementsByClass("topnewslist");
-    	if(eles.size() > 0){
-    		Element ele = eles.get(0);
-    		Elements lis = ele.getElementsByClass("fl");
-    		for (int i = 0; i < lis.size(); i++) {
-    			int s = lis.get(i).getElementsByClass("fl").size();
-    			if(s == 1){
-    				continue;
-    			}
-    			String ban = lis.get(i).getElementsByClass("fl").get(0).select("a").get(0).html();
-    			Element as = lis.get(i).getElementsByClass("content1").get(0);
-    			fan = fan + "<li class=\"list-group-item\" href=\"#\">" + ban;
-    			String liStr = as.html().replace("href=\"/", "href=\"http://www.100ppi.com/");
-    			fan = fan + liStr + "</li>";
+    /**
+     * 获取全球大盘数据
+     * @return
+     * @throws IOException 
+     * @throws ClientProtocolException 
+     */
+    @RequestMapping("/stapleday/getAll")
+    public List<StockBaseInfo> getAll() throws ClientProtocolException, IOException{
+    	//泸深http://hq.sinajs.cn/rn=151730262502396&list=s_sh000001,s_sz399001,s_sh000300,CFF_IC0,s_sz399006
+    	//亚太http://hq.sinajs.cn/rn=1517303034135&list=hkHSI,b_NKY,b_TWSE,b_AS30,b_FSSTI
+    	//欧洲http://hq.sinajs.cn/rn=1517303057897&list=EURUSD,b_UKX,b_DAX,b_CAC,b_FTSEMIB
+    	//美股http://hq.sinajs.cn/rn=1517303070978&list=gb_dji,gb_ixic,gb_inx,hf_DJS,hf_NAS
+    	String con = BaseConnClient.baseGetReq("http://hq.sinajs.cn/rn=151730262502396&list=s_sh000001,s_sz399001,s_sz399006,gb_dji,gb_ixic");
+    	List<StockBaseInfo> list = Lists.newArrayList();
+    	con = con.replace("\"", "");
+    	String[] datas = con.split("\\;");
+    	int i = 0;
+    	for (String string : datas) {
+			if(string.split("\\=").length > 1){
+				String[] ds = string.split("\\=")[1].split(",");
+				if(ds.length > 3){
+					StockBaseInfo info = new StockBaseInfo();
+					if(i <= 2){
+						info.setStockName(ds[0]);
+						info.setMb(Float.parseFloat(ds[1]));
+						info.setPe(Double.parseDouble(ds[2]));
+						info.setRises(Float.parseFloat(ds[3]));
+					}
+					if(i > 2){
+						info.setStockName(ds[0]);
+						info.setMb(Float.parseFloat(ds[1]));
+						info.setRises(Float.parseFloat(ds[2]));
+					}
+					list.add(info);
+				}
 			}
-    	}
-    	System.out.println(fan);
+			i++;
+		}
+    	return list;
+    }
+    
+    public static void main(String[] args) throws ClientProtocolException, IOException {
+    	
 	}
    
 }

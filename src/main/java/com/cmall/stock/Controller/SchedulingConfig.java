@@ -50,7 +50,7 @@ public class SchedulingConfig {
 	/**
 	 * 每日同步大宗商品
 	 */
-	@Scheduled(cron = "0 0 0/1 * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 03 12 * * ?") 
     public void updateDzsp() {
 		try {
 			System.out.println("开始同步大宗商品");
@@ -71,7 +71,7 @@ public class SchedulingConfig {
 	/**
 	 * 每日预报更新
 	 */
-	@Scheduled(cron = "0 0 0/1 * * ?") // 每20秒执行一次
+//	@Scheduled(cron = "0 0 0/1 * * ?") // 每20秒执行一次
     public void updateyubao() {
 		try {
 			StoreTrailerSet.wsData();
@@ -84,7 +84,7 @@ public class SchedulingConfig {
 	/**
 	 * 每日财报更新
 	 */
-	@Scheduled(cron = "0 0 15 * * ?") // 每20秒执行一次
+//	@Scheduled(cron = "0 0 15 * * ?") // 每20秒执行一次
     public void updateCaoSc() {
 		try {
 			StoreAstockEnReport.downReportInfofromUrl("report");
@@ -97,7 +97,7 @@ public class SchedulingConfig {
 	/**
 	 * 每日财报更新
 	 */
-	@Scheduled(cron = "0 30 15 * * ?") // 每20秒执行一次
+//	@Scheduled(cron = "0 30 15 * * ?") // 每20秒执行一次
     public void updateCaoScData() {
 		try {
 			StoreReportSet.daoshuju();
@@ -109,7 +109,7 @@ public class SchedulingConfig {
 	/**
 	 * 更新自选
 	 */
-	@Scheduled(cron = "0 0/5 * * * ?") // 每20秒执行一次
+//	@Scheduled(cron = "0 0/5 * * * ?") // 每20秒执行一次
     public void updateOption() {
 		if(shijian()){
 			try {
@@ -138,9 +138,9 @@ public class SchedulingConfig {
 	}
 	
 	
-	@Scheduled(cron = "0 0/5 * * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 0/5 * * * ?") 
     public void updateInfo2() {
-		if(true){
+		if(shijian()){
 			try {
 				wDataRealToEs();
 			} catch (Exception e) {
@@ -149,16 +149,17 @@ public class SchedulingConfig {
 		}
 	}
 	
-	@Scheduled(cron = "0 15 16 * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 11 10 * * ?") 
     public void updateInfo() {
 			try {
+				System.out.println("开始同步数据");
 				wDataRealToEs();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 	}
 	
-	@Scheduled(cron = "0 10 16 * * ?") // 每20秒执行一次
+//	@Scheduled(cron = "0 10 16 * * ?") // 每20秒执行一次
     public void updateHisDate() {
 		try {
 			StoreAstockTradInfo.getHistoryData();
@@ -167,12 +168,27 @@ public class SchedulingConfig {
 		}
 	}
 	
-	@Scheduled(cron = "0 55 15 * * ?") // 每天9点20初始化数据
+//	@Scheduled(cron = "0 55 15 * * ?") // 每天9点20初始化数据
     public void setMap() {
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		try {
 			upMap = StoreRealSet.getUpMap(jestClient);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+    
+    public static void main(String[] args) {
+    	try {
+			MonthsStapleData.freshEsData();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -187,8 +203,14 @@ public class SchedulingConfig {
 				@Override
 				public void run() {
 			          try {
+			        	  
 			        	  List<StockBaseInfo> lstInfo = StoreAstockTradInfo.getstockBaseInfo(sat ,  map.get(sat));
-			        	  StoreAstockTradInfo.insBatchEs(lstInfo, jestClient, "stockpcse");
+			        	  if(lstInfo.size() > 0){
+			        		  if(!Double.isInfinite(lstInfo.get(0).getK()) &&
+			        				  !Double.isInfinite(lstInfo.get(0).getD())){
+			        			  StoreAstockTradInfo.insBatchEs(lstInfo, jestClient, "stockpcse");
+			        		  }
+			        	  }
 					} catch (Exception e) {
 						System.out.println(sat);
 						e.printStackTrace();
@@ -215,6 +237,7 @@ public class SchedulingConfig {
 		}else{
 			k = false;
 		}
+		System.out.println("k:"+k);
 		return k;
 	}
 }

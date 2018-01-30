@@ -10,6 +10,7 @@
 	<div class="cl-sidebar" data-position="right" data-step="1" th:include="/common/left_menu :: menu('index')"></div>
 	<div class="container-fluid" id="pcont">
 		<div class="cl-mcont">
+			<div class="stats_bar" id = "startHtml"></div>
 			<div class="row dash-cols">
 				<!-- 内容左侧 -->
 				<div class="col-sm-6 col-md-6">
@@ -197,6 +198,24 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="startModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">大盘日k图</h4>
+      </div>
+      <div class="modal-body">
+        <img src = "" style="width:100%;" id ="imgStart"/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <div th:include="/common/onload_js :: onloadJs"></div>
   <script type="text/javascript">
@@ -208,6 +227,7 @@
         
       App.dashBoard();   
       
+      getAllList();
       getReal();
       getHotHtml();
       getStapledayUp(1,1,'wtzf' , 'desc' , 'stapledayUp');
@@ -222,6 +242,7 @@
     });
     
     function getReal(){
+    	
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/real/getRealByCode",//路径  
@@ -547,6 +568,77 @@
       }); 
       }
       
+      function changeImg(text){
+      	var imgPath = "";
+      	if(text == '上证指数'){
+      		imgPath = "http://image.sinajs.cn/newchart/min/n/sh000001.gif";
+      	}
+      	if(text == '深证成指'){
+      		imgPath = "http://image.sinajs.cn/newchart/bd/small/nsz399001.gif";
+      	}
+      	if(text == 103){
+      		imgPath = "http://image.sinajs.cn/newchart/bd/small/nsh000300.gif";
+      	}
+      	if(text == '创业板指'){
+      		imgPath = "http://image.sinajs.cn/newchart/bd/small/nsz399006.gif";
+      	}
+      	if(text == 201){
+      		imgPath = "http://image.sinajs.cn/newchart/hk_stock/min_hollow_290/HSI.gif";
+      	}
+      	if(text == 202){
+      		imgPath = "http://image.sinajs.cn/newchart/futures/forex/min5_m_hollow/NIXI.gif";
+      	}
+      	if(text == 301){
+      		imgPath = "http://image.sinajs.cn/newchart/futures/forex/min30_hollow/EURUSD.gif";
+      	}
+      	if(text == 302){
+      		imgPath = "http://image.sinajs.cn/newchart/futures/forex/min5_m_hollow/FT100.gif";
+      	}
+      	if(text == 303){
+      		imgPath = "http://image.sinajs.cn/newchart/futures/forex/min5_m_hollow/DAX.gif";
+      	}
+      	if(text == 304){
+      		imgPath = "http://image.sinajs.cn/newchart/futures/forex/min5_m_hollow/CAC.gif";
+      	}
+      	if(text == '道琼斯'){
+      		imgPath = "http://image.sinajs.cn/newchart/usstock/min_idx_py/290/dji.gif";
+      	}
+      	if(text == '纳斯达克'){
+      		imgPath = "http://image.sinajs.cn/newchart/usstock/min_idx_py/290/ixic.gif";
+      	}
+      	if(text == 403){
+      		imgPath = "http://image.sinajs.cn/newchart/usstock/min_idx_py/290/inx.gif";
+      	}
+      	if(text == 500){
+      		imgPath = "http://image.sinajs.cn/newchart/futures/global/mins_hollow/GC.gif";
+      	}
+      	var timestamp = Date.parse(new Date());
+      	imgPath = imgPath + "?"+timestamp;
+      	$('#imgStart').attr("src",imgPath);
+      	$('#startModal').modal('show');
+      }
+      
+      function getAllList(){
+      	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock//stapleday/getAll",//路径  
+        data : {},//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var html = "";
+        	for(var i=0;i<result.length;i++){
+        			html = html + '<div class="butpro butstyle" onclick = "changeImg(\''+result[i]['stockName']+'\')"><div class="sub">';
+        			html = html + '<h2>'+result[i]['stockName']+'</h2><span>'+result[i]['mb']+'</span></div>';
+        			if(result[i]['rises'] < 0){
+        				html = html + '<div class="stat"><span style = "color:#21A675">↓ '+result[i]['rises']+'%</span></div></div>';
+        			}else{
+        				html = html + '<div class="stat"><span style = "color:#FF2121">↑ '+result[i]['rises']+'%</span></div></div>';
+        			}
+					
+        	}
+        	$('#startHtml').html(html);
+      	}  
+      }); 
+      }
   </script>
   </body>
 </html>

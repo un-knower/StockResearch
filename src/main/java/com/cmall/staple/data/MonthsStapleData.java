@@ -194,17 +194,21 @@ public class MonthsStapleData {
 		Stap100PPI bean = new Stap100PPI();
 		try {
 			JestResult results = jestClient.execute(selResult);
-			bean = results.getSourceAsObject(Stap100PPI.class);
+			if(results.isSucceeded()){
+				bean = results.getSourceAsObject(Stap100PPI.class);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return bean;
 
 	}
 
 	public static void freshEsData() throws ClientProtocolException, IOException, Exception {
 		Stap100PPI bean = getLastBean();
+		if(null == bean.getRq() || bean.getRq().equals("")){
+			bean.setRq("2014-01-01");
+		}
 		List<String> lstDate = TimeUtils.getDayList(TimeUtils.toDate(bean.getRq(), TimeUtils.DEFAULT_DATEYMD_FORMAT2),
 				new Date(), new SimpleDateFormat("yyyy-Mdd"));
 		if (lstDate != null) {

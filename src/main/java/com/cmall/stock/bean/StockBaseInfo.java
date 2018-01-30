@@ -16,12 +16,12 @@ public class StockBaseInfo implements Serializable {
 	private String industry;
 	
 	private String date;
-	private float upRises; //上一天涨幅
-	private float rises;
-	private float nextRises; // 下一天涨幅
-	private float minRises3; //5日内最大涨幅
-	private float minRises5; //5日内最大涨幅
-	private float minRises10; //10日内最大涨幅
+	private float upRises = 0; //上一天涨幅
+	private float rises = 0;
+	private float nextRises = 0; // 下一天涨幅
+	private float minRises3 = 0; //5日内最大涨幅
+	private float minRises5 = 0; //5日内最大涨幅
+	private float minRises10 = 0; //10日内最大涨幅
 	private int upDateNum = 0;
 	private float upMacd=0;
 	private float macd = 0;
@@ -49,7 +49,7 @@ public class StockBaseInfo implements Serializable {
 	// 成交金额
 	private String cjje;
 	// 总市值
-	private double zsz;
+	private double zsz = 0;
 	// 流通市值
 	private String ltsz;
 	// 成交笔数
@@ -63,19 +63,19 @@ public class StockBaseInfo implements Serializable {
 	// macd 持续天数
 	private int macdNum = 0;
 	private int macdUp5 = 0;
-	private int macdUp10;
-	private float sumMacdUp5;
-	private float sumMacdUp10;
+	private int macdUp10  = 0;
+	private float sumMacdUp5 = 0;
+	private float sumMacdUp10 = 0;
 	// 5天内 上涨总计
-	private float upSumRises5;
-	private float upSumRises10;
-	private float upSumRises20;
-	private float upSumRises30;
+	private float upSumRises5 = 0;
+	private float upSumRises10 = 0;
+	private float upSumRises20 = 0;
+	private float upSumRises30 = 0;
 	
-	private float minLowRises5;
-	private float minLowRises10;
-	private float minLowRises20;
-	private float minLowRises30;
+	private float minLowRises5 = 0;
+	private float minLowRises10 = 0;
+	private float minLowRises20 = 0;
+	private float minLowRises30 = 0;
 	// KDJ 指标的三个属性
 	private float k = 0;
 	private float d = 0;
@@ -83,15 +83,15 @@ public class StockBaseInfo implements Serializable {
 	private float x = -10;
 	
 	// 初始需全部赋值的属性
-	private float open; // 开盘价
-	private float high; // 最高价
-	private float low; // 最低价
-	private float close; // 收盘价
+	private float open = 0; // 开盘价
+	private float high = 0; // 最高价
+	private float low = 0; // 最低价
+	private float close = 0; // 收盘价
 	
 	
-	private long volume; // 量
+	private long volume = 0; // 量
 	//量的增长比
-	private double volumeRises;
+	private double volumeRises = 0;
 	// private String xLabel; // X 轴标签
 
 	// MA 指标的三个属性
@@ -114,7 +114,7 @@ public class StockBaseInfo implements Serializable {
 	private float mb = 0; // 中轨线
 	private float dn = 0; // 下轨线
 	private String dayForWeek;
-	private double pe;
+	private double pe = 0;
 	/**
 	 * 自定义分时图用的数据
 	 *
@@ -433,22 +433,28 @@ public class StockBaseInfo implements Serializable {
 				+ nextRises + ", minRises3=" + minRises3 + ", minRises5="
 				+ minRises5 + ", minRises10=" + minRises10 + ", upDateNum="
 				+ upDateNum + ", upMacd=" + upMacd + ", macd=" + macd
-				+ ", nextMacd=" + nextMacd + ", upJ=" + upJ + ", j=" + j
-				+ ", j3=" + j3 + ", j5=" + j5 + ", nextJ=" + nextJ + ", area="
-				+ area + ", up5=" + up5 + ", up10=" + up10 + ", hslv=" + hslv
-				+ ", cjje=" + cjje + ", zsz=" + zsz + ", ltsz=" + ltsz
-				+ ", cjbs=" + cjbs + ", dea=" + dea + ", diff=" + diff
-				+ ", macdNum=" + macdNum + ", macdUp5=" + macdUp5
-				+ ", macdUp10=" + macdUp10 + ", sumMacdUp5=" + sumMacdUp5
-				+ ", sumMacdUp10=" + sumMacdUp10 + ", upSumRises5="
-				+ upSumRises5 + ", upSumRises10=" + upSumRises10 + ", k=" + k
-				+ ", d=" + d + ", open=" + open + ", high=" + high + ", low="
-				+ low + ", close=" + close + ", volume=" + volume
-				+ ", volumeRises=" + volumeRises + ", ma5=" + ma5 + ", ma10="
-				+ ma10 + ", ma20=" + ma20 + ", volumeMa5=" + volumeMa5
-				+ ", volumeMa10=" + volumeMa10 + ", rsi1=" + rsi1 + ", rsi2="
-				+ rsi2 + ", rsi3=" + rsi3 + ", up=" + up + ", mb=" + mb
-				+ ", dn=" + dn + ", dayForWeek=" + dayForWeek + "]";
+				+ ", nextMacd=" + nextMacd + ", openNum=" + openNum
+				+ ", upRisesDayNum5=" + upRisesDayNum5 + ", upJ=" + upJ
+				+ ", j=" + j + ", j3=" + j3 + ", j5=" + j5 + ", nextJ=" + nextJ
+				+ ", area=" + area + ", up5=" + up5 + ", up10=" + up10
+				+ ", hslv=" + hslv + ", cjje=" + cjje + ", zsz=" + zsz
+				+ ", ltsz=" + ltsz + ", cjbs=" + cjbs + ", dea=" + dea
+				+ ", diff=" + diff + ", macdx=" + macdx + ", macdNum="
+				+ macdNum + ", macdUp5=" + macdUp5 + ", macdUp10=" + macdUp10
+				+ ", sumMacdUp5=" + sumMacdUp5 + ", sumMacdUp10=" + sumMacdUp10
+				+ ", upSumRises5=" + upSumRises5 + ", upSumRises10="
+				+ upSumRises10 + ", upSumRises20=" + upSumRises20
+				+ ", upSumRises30=" + upSumRises30 + ", minLowRises5="
+				+ minLowRises5 + ", minLowRises10=" + minLowRises10
+				+ ", minLowRises20=" + minLowRises20 + ", minLowRises30="
+				+ minLowRises30 + ", k=" + k + ", d=" + d + ", x=" + x
+				+ ", open=" + open + ", high=" + high + ", low=" + low
+				+ ", close=" + close + ", volume=" + volume + ", volumeRises="
+				+ volumeRises + ", ma5=" + ma5 + ", ma10=" + ma10 + ", ma20="
+				+ ma20 + ", volumeMa5=" + volumeMa5 + ", volumeMa10="
+				+ volumeMa10 + ", rsi1=" + rsi1 + ", rsi2=" + rsi2 + ", rsi3="
+				+ rsi3 + ", up=" + up + ", mb=" + mb + ", dn=" + dn
+				+ ", dayForWeek=" + dayForWeek + ", pe=" + pe + "]";
 	}
 
 	public float retERRNAN(float num) {
