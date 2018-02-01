@@ -16,6 +16,7 @@ public class StockBaseInfo implements Serializable {
 	private String industry;
 	
 	private String date;
+	private float up2Rises;//上上一天涨幅
 	private float upRises = 0; //上一天涨幅
 	private float rises = 0;
 	private float nextRises = 0; // 下一天涨幅
@@ -23,6 +24,7 @@ public class StockBaseInfo implements Serializable {
 	private float minRises5 = 0; //5日内最大涨幅
 	private float minRises10 = 0; //10日内最大涨幅
 	private int upDateNum = 0;
+	private float up2Macd;//上上一天涨幅
 	private float upMacd=0;
 	private float macd = 0;
 	private float nextMacd=0;
@@ -32,6 +34,7 @@ public class StockBaseInfo implements Serializable {
 	//5天内上涨天数
 	private int upRisesDayNum5 = 0;
 	
+	private float up2J = 0;
 	private float upJ = 0;
 	private float j = 0;
 	private float j3 = 0;
@@ -49,7 +52,7 @@ public class StockBaseInfo implements Serializable {
 	// 成交金额
 	private String cjje;
 	// 总市值
-	private double zsz = 0;
+	private double zsz;
 	// 流通市值
 	private String ltsz;
 	// 成交笔数
@@ -66,12 +69,10 @@ public class StockBaseInfo implements Serializable {
 	private int macdUp10  = 0;
 	private float sumMacdUp5 = 0;
 	private float sumMacdUp10 = 0;
-	// 5天内 上涨总计
-	private float upSumRises5 = 0;
+		private float upSumRises5 = 0;
 	private float upSumRises10 = 0;
 	private float upSumRises20 = 0;
-	private float upSumRises30 = 0;
-	
+	private float upSumRises30=0;	
 	private float minLowRises5 = 0;
 	private float minLowRises10 = 0;
 	private float minLowRises20 = 0;
@@ -80,6 +81,8 @@ public class StockBaseInfo implements Serializable {
 	private float k = 0;
 	private float d = 0;
 	//当是kd两个值小于5的时候 显示具体的差值，当有相交的时候金叉为0 死叉为-1
+	private float upx=-10;
+	private float up2x=-10;
 	private float x = -10;
 	
 	// 初始需全部赋值的属性
@@ -90,9 +93,8 @@ public class StockBaseInfo implements Serializable {
 	
 	
 	private long volume = 0; // 量
-	//量的增长比
-	private double volumeRises = 0;
-	// private String xLabel; // X 轴标签
+   private double volumeRises = 0;
+//Label; // X 轴标签
 
 	// MA 指标的三个属性
 	private float ma5 = 0;
@@ -433,28 +435,22 @@ public class StockBaseInfo implements Serializable {
 				+ nextRises + ", minRises3=" + minRises3 + ", minRises5="
 				+ minRises5 + ", minRises10=" + minRises10 + ", upDateNum="
 				+ upDateNum + ", upMacd=" + upMacd + ", macd=" + macd
-				+ ", nextMacd=" + nextMacd + ", openNum=" + openNum
-				+ ", upRisesDayNum5=" + upRisesDayNum5 + ", upJ=" + upJ
-				+ ", j=" + j + ", j3=" + j3 + ", j5=" + j5 + ", nextJ=" + nextJ
-				+ ", area=" + area + ", up5=" + up5 + ", up10=" + up10
-				+ ", hslv=" + hslv + ", cjje=" + cjje + ", zsz=" + zsz
-				+ ", ltsz=" + ltsz + ", cjbs=" + cjbs + ", dea=" + dea
-				+ ", diff=" + diff + ", macdx=" + macdx + ", macdNum="
-				+ macdNum + ", macdUp5=" + macdUp5 + ", macdUp10=" + macdUp10
-				+ ", sumMacdUp5=" + sumMacdUp5 + ", sumMacdUp10=" + sumMacdUp10
-				+ ", upSumRises5=" + upSumRises5 + ", upSumRises10="
-				+ upSumRises10 + ", upSumRises20=" + upSumRises20
-				+ ", upSumRises30=" + upSumRises30 + ", minLowRises5="
-				+ minLowRises5 + ", minLowRises10=" + minLowRises10
-				+ ", minLowRises20=" + minLowRises20 + ", minLowRises30="
-				+ minLowRises30 + ", k=" + k + ", d=" + d + ", x=" + x
-				+ ", open=" + open + ", high=" + high + ", low=" + low
-				+ ", close=" + close + ", volume=" + volume + ", volumeRises="
-				+ volumeRises + ", ma5=" + ma5 + ", ma10=" + ma10 + ", ma20="
-				+ ma20 + ", volumeMa5=" + volumeMa5 + ", volumeMa10="
-				+ volumeMa10 + ", rsi1=" + rsi1 + ", rsi2=" + rsi2 + ", rsi3="
-				+ rsi3 + ", up=" + up + ", mb=" + mb + ", dn=" + dn
-				+ ", dayForWeek=" + dayForWeek + ", pe=" + pe + "]";
+				+ ", nextMacd=" + nextMacd + ", upJ=" + upJ + ", j=" + j
+				+ ", j3=" + j3 + ", j5=" + j5 + ", nextJ=" + nextJ + ", area="
+				+ area + ", up5=" + up5 + ", up10=" + up10 + ", hslv=" + hslv
+				+ ", cjje=" + cjje + ", zsz=" + zsz + ", ltsz=" + ltsz
+				+ ", cjbs=" + cjbs + ", dea=" + dea + ", diff=" + diff
+				+ ", macdNum=" + macdNum + ", macdUp5=" + macdUp5
+				+ ", macdUp10=" + macdUp10 + ", sumMacdUp5=" + sumMacdUp5
+				+ ", sumMacdUp10=" + sumMacdUp10 + ", upSumRises5="
+				+ upSumRises5 + ", upSumRises10=" + upSumRises10 + ", k=" + k
+				+ ", d=" + d + ", open=" + open + ", high=" + high + ", low="
+				+ low + ", close=" + close + ", volume=" + volume
+				+ ", volumeRises=" + volumeRises + ", ma5=" + ma5 + ", ma10="
+				+ ma10 + ", ma20=" + ma20 + ", volumeMa5=" + volumeMa5
+				+ ", volumeMa10=" + volumeMa10 + ", rsi1=" + rsi1 + ", rsi2="
+				+ rsi2 + ", rsi3=" + rsi3 + ", up=" + up + ", mb=" + mb
+				+ ", dn=" + dn + ", dayForWeek=" + dayForWeek + "]";
 	}
 
 	public float retERRNAN(float num) {
@@ -770,6 +766,45 @@ public class StockBaseInfo implements Serializable {
 
 	public void setUpSumRises30(float upSumRises30) {
 		this.upSumRises30 = upSumRises30;
+	}
+
+	public float getUp2Rises() {
+		return up2Rises;
+	}
+
+	public void setUp2Rises(float up2Rises) {
+		this.up2Rises = up2Rises;
+	}
+
+	public float getUp2Macd() {
+		return up2Macd;
+	}
+
+	public void setUp2Macd(float up2Macd) {
+		this.up2Macd = up2Macd;
+	}
+
+	public float getUp2J() {
+		return up2J;
+	}
+
+	public void setUp2J(float up2j) {
+		up2J = up2j;
+	}
+
+	public float getUpx() {
+		return upx;
+	}
+
+	public void setUpx(float upx) {
+		this.upx = upx;
+	}
+	public float getUp2x() {
+		return up2x;
+	}
+
+	public void setUp2x(float up2x) {
+		this.up2x = up2x;
 	}
 
 	

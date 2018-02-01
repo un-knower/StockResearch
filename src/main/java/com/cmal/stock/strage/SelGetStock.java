@@ -42,87 +42,150 @@ public class SelGetStock {
 	static Map<String, String> mapsInfo = StockSelStrag.blckLstOfStock();
 	static Map<String, String> mapsSelStock = StockSelStrag.getAllChkStock();
 
-	public  static void  revtmpMap(Map<String, String> mapsSelStockTmp ){//临时剔除一些 走势不好股
-		//短时间内会剔除一批走势不好数据
-				mapsSelStockTmp.remove("603993");
-				mapsSelStockTmp.remove("300146");
-				mapsSelStockTmp.remove("002460");
-				mapsSelStockTmp.remove("300274");
-				mapsSelStockTmp.remove("000780");
-				mapsSelStockTmp.remove("000100");
-				mapsSelStockTmp.remove("600050");
-				mapsSelStockTmp.remove("600362"); //江西铜业
-				mapsSelStockTmp.remove("002042");  // 市值太小 华孚时尚	  127 亿
-				mapsSelStockTmp.remove("002404");// 市值太小 
-				mapsSelStockTmp.remove("600325");// 房地产 竞争差
-				mapsSelStockTmp.remove("000790");// 财报不是特别耀眼
-				//mapsSelStockTmp.remove("600449");/// 宁夏建材	600449 水泥板块竞争性不强
-				mapsSelStockTmp.remove("000822");///000822 山东海化 收益率太低
-				mapsSelStockTmp.remove("600681");//收益率太低
-				mapsSelStockTmp.remove("002385");//收益率太低
-				mapsSelStockTmp.remove("002466");//锂电池
-				mapsSelStockTmp.remove("601992");//无竞争优势
-				mapsSelStockTmp.remove("002558");	  //近期走势差
-				mapsSelStockTmp.remove("300676");	  //近期走势差
-				mapsSelStockTmp.remove("601390");//收益率太低
-				mapsSelStockTmp.remove("601766");//收益率太低
-				mapsSelStockTmp.remove("600816");//收益率太低
-				mapsSelStockTmp.remove("601881");//收益率太低  证券太多
-				mapsSelStockTmp.remove("600958");//收益率太低  证券太多
-				mapsSelStockTmp.remove("601377");//收益率太低  证券太多
-				mapsSelStockTmp.remove("601633");//同比收益大幅度下降
-				mapsSelStockTmp.remove("002019");//大热后没效益
-				mapsSelStockTmp.remove("000050");//竞争效益弱
-				mapsSelStockTmp.remove("002352");//顺丰
-				mapsSelStockTmp.remove("600919");//600919  江苏银行	  收益低 无竞争优势
-				mapsSelStockTmp.remove("601997");//   贵阳银行	  收益低 无竞争优势
-				mapsSelStockTmp.remove("600000");//  浦发银行	  收益低 无竞争优势
-				mapsSelStockTmp.remove("603589");//  口子窖		  收益低 无竞争优势
-				mapsSelStockTmp.remove("300498");// 走势下行 且净利润下降
-				mapsSelStockTmp.remove("601231");  // 环旭电子  同行业无竞争优势
-				mapsSelStockTmp.remove("600291");  //  西水股份竞争弱 且一时增长因为财报问题不稳定
-				mapsSelStockTmp.remove("300355"); //收益低 无竞争优势
-				mapsSelStockTmp.remove("600596"); // 新安股份 同行业无竞争优势
-				mapsSelStockTmp.remove("601336");//  保险	 同行业无竞争优势
-				mapsSelStockTmp.remove("601336");//002573 收益不稳定
-				mapsSelStockTmp.remove("002408");//齐翔腾达	 收益不稳定 市值低  无竞争优势
-				mapsSelStockTmp.remove("002032");//苏 泊 尔	   家电行业  市值低  无竞争优势
-				mapsSelStockTmp.remove("600177");//	雅戈尔	  收益低
-				
-				mapsSelStockTmp.remove("000063");//短暂移除        前期炒作
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-	}
-	public static Map<String, Object> getfocDaysLstResult(BoolQueryBuilder query, StockBasePageInfo page) throws Exception {
-        //002597 002311  000039
-		Map<String, Object> returnMap = Maps.newHashMap();
-		Map<String, String> mapsSelStockTmp=mapsSelStock;
+	public static void revtmpMap(Map<String, String> mapsSelStockTmp) {// 临时剔除一些
+																		// 走势不好股
+
+		mapsSelStockTmp.remove("600518"); // 曾经财务问题
+		// 短时间内会剔除一批走势不好数据
+		mapsSelStockTmp.remove("603993");
+		mapsSelStockTmp.remove("300146");
+		mapsSelStockTmp.remove("002460");
+		mapsSelStockTmp.remove("300274");
+		mapsSelStockTmp.remove("000780");
+		mapsSelStockTmp.remove("000100");
+		mapsSelStockTmp.remove("600050");
+		mapsSelStockTmp.remove("600362"); // 江西铜业
+		mapsSelStockTmp.remove("002042"); // 市值太小 华孚时尚 127 亿
+		mapsSelStockTmp.remove("002404");// 市值太小
+		mapsSelStockTmp.remove("600325");// 房地产 竞争差
+		mapsSelStockTmp.remove("000790");// 财报不是特别耀眼
+		// mapsSelStockTmp.remove("600449");/// 宁夏建材 600449 水泥板块竞争性不强
+		mapsSelStockTmp.remove("000822");/// 000822 山东海化 收益率太低
+		mapsSelStockTmp.remove("600681");// 收益率太低
+		mapsSelStockTmp.remove("002385");// 收益率太低
+		mapsSelStockTmp.remove("002466");// 锂电池
+		mapsSelStockTmp.remove("601992");// 无竞争优势
+		mapsSelStockTmp.remove("002558"); // 近期走势差
+		mapsSelStockTmp.remove("300676"); // 近期走势差
+		mapsSelStockTmp.remove("601390");// 收益率太低
+		mapsSelStockTmp.remove("601766");// 收益率太低
+		mapsSelStockTmp.remove("600816");// 收益率太低
+		mapsSelStockTmp.remove("601881");// 收益率太低 证券太多
+		mapsSelStockTmp.remove("600958");// 收益率太低 证券太多
+		mapsSelStockTmp.remove("601377");// 收益率太低 证券太多
+		mapsSelStockTmp.remove("601633");// 同比收益大幅度下降
+		mapsSelStockTmp.remove("002019");// 大热后没效益
+		mapsSelStockTmp.remove("000050");// 竞争效益弱
+		mapsSelStockTmp.remove("002352");// 顺丰
+		mapsSelStockTmp.remove("600919");// 600919 江苏银行 收益低 无竞争优势
+		mapsSelStockTmp.remove("601997");// 贵阳银行 收益低 无竞争优势
+		mapsSelStockTmp.remove("600000");// 浦发银行 收益低 无竞争优势
+		mapsSelStockTmp.remove("603589");// 口子窖 收益低 无竞争优势
+		mapsSelStockTmp.remove("300498");// 走势下行 且净利润下降
+		mapsSelStockTmp.remove("601231"); // 环旭电子 同行业无竞争优势
+		mapsSelStockTmp.remove("600291"); // 西水股份竞争弱 且一时增长因为财报问题不稳定
+		mapsSelStockTmp.remove("300355"); // 收益低 无竞争优势
+		mapsSelStockTmp.remove("600596"); // 新安股份 同行业无竞争优势
+		mapsSelStockTmp.remove("601336");// 保险 同行业无竞争优势
+		mapsSelStockTmp.remove("601336");// 002573 收益不稳定
+		mapsSelStockTmp.remove("002408");// 齐翔腾达 收益不稳定 市值低 无竞争优势
+		mapsSelStockTmp.remove("002032");// 苏 泊 尔 家电行业 市值低 无竞争优势
+		mapsSelStockTmp.remove("600177");// 雅戈尔 收益低
+
+		mapsSelStockTmp.remove("000063");// 短暂移除 前期炒作
+		mapsSelStockTmp.remove("002555");// 长期处于震荡下行
+		mapsSelStockTmp.remove("002573"); // 动荡
+		mapsSelStockTmp.remove("603886"); // 元祖股份 不活跃
+		mapsSelStockTmp.remove("002536"); //市值小  成长下滑 收益不稳定
 		
+		
+
+		mapsSelStockTmp.remove("600444"); // 第四季度政府赔款
+		mapsSelStockTmp.remove("600449");// 宁夏建材 相比水泥板块无竞争优势
+
+		mapsSelStockTmp.remove("600173");// 卧龙地产 相比之下并无太大优势
+		mapsSelStockTmp.remove("600208");// 新湖中宝 暂时排除 相比之下并无太大优势 且下季财报不明
+		mapsSelStockTmp.remove("002736");// /证券 相比无太大竞争优势
+		mapsSelStockTmp.remove("601788");// 证券 相比无太大竞争优势
+
+		mapsSelStockTmp.remove("601898");// 煤炭 无太大竞争优势
+		mapsSelStockTmp.remove("002128");// 短暂移除 相比优势不太明显
+		mapsSelStockTmp.remove("000932"); // ST 钢铁行业无优势
+		mapsSelStockTmp.remove("600566"); // 济川药业 收益率太低
+		mapsSelStockTmp.remove("600062"); // 华润双鹤 化学制药 收益率太低 且震荡
+		mapsSelStockTmp.remove("600062"); // 南方航空 竞争无太大优势603885
+
+		mapsSelStockTmp.remove("002067");// 景兴纸业 002067 短暂移除 相比优势不太明显
+		mapsSelStockTmp.remove("000625"); // 财报 走势稳定下滑
+		mapsSelStockTmp.remove("601800"); // 整体成下滑趋势 中国交建 相比优势不太明显
+		mapsSelStockTmp.remove("601169"); // 北京银行 收益太低
+		mapsSelStockTmp.remove("600015"); // 华夏银行 收益太低
+		mapsSelStockTmp.remove("601229"); // 上海银行 收益太低 次新
+		mapsSelStockTmp.remove("601166"); // 兴业银行 收益太低
+		mapsSelStockTmp.remove("601288"); // 农业银行 收益太低 （相比工 建行）
+		mapsSelStockTmp.remove("601818"); // 光大银行 收益太低
+
+		//
+
+	}
+
+	public static Map<String, Object> getfocDaysLstResult(BoolQueryBuilder query, StockBasePageInfo page)
+			throws Exception {
+		// 002597 002311 000039
+		Map<String, Object> returnMap = Maps.newHashMap();
+		Map<String, String> mapsSelStockTmp = mapsSelStock;
+
 		revtmpMap(mapsSelStockTmp);
 		query.must(QueryBuilders.inQuery("stockCode", mapsSelStockTmp.keySet()));
-		
-		
-		
+
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "",
 				(page.getPage() - 1) * page.getLimit(), page.getLimit());
 
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
-		List<StockBaseInfo> lstBean = results.getSourceAsObjectList(StockBaseInfo.class); 
+		List<StockBaseInfo> lstBean = results.getSourceAsObjectList(StockBaseInfo.class);
 		List<StockBaseInfo> lstResult = Lists.newArrayList();
 		for (StockBaseInfo baseInfo : lstBean) {
-			lstResult.add(baseInfo);
- 
+			
+//			if(baseInfo.getUp2J()>baseInfo.getJ()&&baseInfo.getJ()>0)
+				lstResult.add(baseInfo);
+		//	if ((baseInfo.getUp10() > 4 || baseInfo.getUp5() >= 2)) {// &&(baseInfo.getUpSumRises5()>0&&baseInfo.getUpSumRises10()>0)){
+				// // //最近走势比较好的股
+
+				// //macd 出于下滑状态
+
+//				if ((baseInfo.getUpSumRises5() > 0 || baseInfo.getUpSumRises10() > 0)
+//						&& (baseInfo.getMinLowRises5() >= -4.99 && baseInfo.getMinLowRises10() >= -4.99)) {
+//					
+//					if (baseInfo.getMacdNum() < -3) {
+//						if (baseInfo.getMacd() > baseInfo.getUpMacd() && baseInfo.getUpMacd() > baseInfo.getUp2Macd())
+//							lstResult.add(baseInfo);
+//						if (baseInfo.getStockCode().equals("002016")) {
+//							System.out.println("bbb");
+//						}
+//					} else if (baseInfo.getMacdNum() < 0 && baseInfo.getMacd() > -3) {
+//						if ((baseInfo.getUp2Rises() + baseInfo.getUpRises() + baseInfo.getRises()) >= -5)
+//
+//							lstResult.add(baseInfo);
+//
+//						if (baseInfo.getStockCode().equals("002016")) {
+//							System.out.println("ccc");
+//						}
+//					} else
+//						lstResult.add(baseInfo);
+//				}
+			//}
+			 
+
+			// }&&(baseInfo.getMacd()>=baseInfo.getUp2Macd())))//&&baseInfo.getMacd()<=baseInfo.getUpMacd()&&
+			// lstResult.add(baseInfo);
+			// if(baseInfo.getStockCode().equals("002493"))
+			// System.out.println(baseInfo.getMacdNum()+" "+baseInfo.getMacd()+"
+			// "+baseInfo.getUpMacd()+" "+baseInfo.getUp2Macd());
+			// if(baseInfo.getUpSumRises5()>0||baseInfo.getUpSumRises10()>0)
+			// //最低条件5天或者10天涨幅>0
+			// lstResult.add(baseInfo);
 
 		}
 
@@ -143,25 +206,13 @@ public class SelGetStock {
 
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public static Map<String, Object> getLstResult(BoolQueryBuilder query, StockBasePageInfo page) throws Exception {
 
 		Map<String, Object> returnMap = Maps.newHashMap();
 
 		query.mustNot(QueryBuilders.inQuery("stockCode", mapsInfo.keySet()));
-		 // query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
+		// query.mustNot(QueryBuilders.inQuery("stockCode",
+		// StockSelStrag.blckLstOfStock().keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "",
 				(page.getPage() - 1) * page.getLimit(), page.getLimit());
@@ -174,7 +225,7 @@ public class SelGetStock {
 																							// results.getSourceAsObjectList(StockBaseInfo.class);
 		List<StockBaseInfo> lstResult = Lists.newArrayList();
 		for (StockBaseInfo baseInfo : lstBean) {
-		//	if(baseInfo.getJ()>baseInfo.getUpJ())
+			// if(baseInfo.getJ()>baseInfo.getUpJ())
 			lstResult.add(baseInfo);
 
 			// if (mapsInfo.get(baseInfo.getStockCode()) == null &&
@@ -226,6 +277,7 @@ public class SelGetStock {
 		// return getCommonLstResult(query, page,
 		// CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "");
 	}
+
 	public static Map<String, Object> getTrailerLstResult(BoolQueryBuilder query, StockBasePageInfo page, String type)
 			throws Exception {
 
@@ -296,7 +348,7 @@ public class SelGetStock {
 			}
 		}
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		//System.out.println(searchSourceBuilder.toString());
+		// System.out.println(searchSourceBuilder.toString());
 		return searchSourceBuilder;
 	}
 
@@ -310,20 +362,19 @@ public class SelGetStock {
 		return UtilEs.getSearchRsult(searchSourceBuilder, index, type, page.getPage(), page.getLimit(), jestClient);
 	}
 
-	
-
 	public static Map<String, Object> getReportLstResult(BoolQueryBuilder query, StockBasePageInfo page, String type)
 			throws Exception {
 		Map<String, Object> returnMap = Maps.newHashMap();
 		List<String> types = Lists.newArrayList();
 
 		if (type.equals(",all")) {
-           types.addAll(getAllyearsInx());
+			types.addAll(getAllyearsInx());
 		} else {
 			types.add("2017-09-30");
 		}
-	    query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
-		//query.mustNot(QueryBuilders.inQuery("stockCode", mapsInfo.keySet()));
+		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
+//		 query.must(QueryBuilders.inQuery("stockCode",
+//		 mapsSelStock.keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);// ssb.query(query);
 		System.out.println(searchSourceBuilder.toString());
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOREREPORT, types,
@@ -331,7 +382,9 @@ public class SelGetStock {
 
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
-		List<EastReportBean> lstBeanInt =results.getSourceAsObjectList(EastReportBean.class);//StockSelStrag.queryEarningsStock();// results.getSourceAsObjectList(EastReportBean.class);// results.getSourceAsObjectList(EastReportBean.class);
+		List<EastReportBean> lstBeanInt = results.getSourceAsObjectList(EastReportBean.class);// StockSelStrag.queryEarningsStock();//
+																								// results.getSourceAsObjectList(EastReportBean.class);//
+																								// results.getSourceAsObjectList(EastReportBean.class);
 		List<EastReportBean> lstBean = lstBeanInt;
 
 		if (lstBean != null && lstBean.size() > 0) {

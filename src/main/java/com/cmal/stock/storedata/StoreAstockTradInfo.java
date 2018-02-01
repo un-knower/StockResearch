@@ -263,8 +263,8 @@ public class StoreAstockTradInfo {
 		 jestClient.execute(bulkBuilder.build());
 		 //jestClient.shutdownClient();
 	 }
-	public      static  void  wDataToEs() throws IOException{
-		List<StockDetailInfoBean> lstSource =StockDetailInfoHand.getDetailForNetLst();// CommonBaseStockInfo.getAllAStockInfo();
+	public      static  void  wDataToEs() throws Exception{
+		List<StockDetailInfoBean> lstSource =StockDetailInfoHand.getDetailForLst();// CommonBaseStockInfo.getAllAStockInfo();
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo(); //getInfoByCsv();
 		for(final StockDetailInfoBean  bean:lstSource){

@@ -268,7 +268,9 @@ public class StockStragEnSey {
     		if(i == 0){
     			if((StockBaseInfo.getMacd()>=0)||(StockBaseInfo.getDiff()>0&&StockBaseInfo.getDea()>0&&StockBaseInfo.getMacd() >=-0.01&&StockBaseInfo.getRises()>-0.5)){
     				StockBaseInfo.setMacdNum(1);
-    			}
+    			}else
+    				StockBaseInfo.setMacdNum(-1);
+    				
     		}
     		if(i != entries.size() - 1){
     			float nextRises = entries.get(i+1).getRises();
@@ -303,13 +305,52 @@ public class StockStragEnSey {
     			StockBaseInfo.setUpMacd(upMacds);
     			int m = entries.get(i-1).getMacdNum();
     			if((StockBaseInfo.getMacd()>=0)||(StockBaseInfo.getDiff()>0&&StockBaseInfo.getDea()>0&&StockBaseInfo.getMacd() >=-0.01&&StockBaseInfo.getRises()>-0.5)){
+    				if(StockBaseInfo.getMacdNum()<0)
+    					StockBaseInfo.setMacdNum(1);
+    				else
     				StockBaseInfo.setMacdNum(m+1);
-    			}
+    				 
+    				if(StockBaseInfo.getMacdNum()<=0)
+    					StockBaseInfo.setMacdNum(1);
+    			}else{
+    				if(StockBaseInfo.getMacdNum()>0)
+    					StockBaseInfo.setMacdNum(-1);  // macd >0的时候先置0
+    				else 
+    					StockBaseInfo.setMacdNum(m-1);
+    				
+    				
+    				if(StockBaseInfo.getMacdNum()>=0)
+    					StockBaseInfo.setMacdNum(-1);
+    				
+    				if(StockBaseInfo.getStockCode().equals("000963"))
+    					System.out.println(StockBaseInfo.getDate()+"  "+StockBaseInfo.getMacdNum());
+    			} 
+    			
+    			
     			float upClose = entries.get(i-1).getClose();
     			float close = StockBaseInfo.getClose();
     			if(close >= upClose){
-    				int n = entries.get(i-1).getUpDateNum() + 1;
-    				StockBaseInfo.setUpDateNum(n);
+    				int n = entries.get(i-1).getUpDateNum() ;
+    				if(n>0)
+    					StockBaseInfo.setUpDateNum((n+1));
+    				else 
+    					StockBaseInfo.setUpDateNum(n);
+    				
+    				
+    				if(StockBaseInfo.getUpDateNum()<0)
+    					StockBaseInfo.setUpDateNum(1);
+    			}else{  //  连涨天数为负
+    				int n = entries.get(i-1).getUpDateNum() ;
+    				if(  n>0)
+    					StockBaseInfo.setUpDateNum(-1);
+    				else 
+    					StockBaseInfo.setUpDateNum((n-1));
+    				
+    				
+    				if(StockBaseInfo.getUpDateNum()>0)
+    					StockBaseInfo.setUpDateNum(-1);
+    					
+    				
     			}
     			int up5 = 0;
     			int up10 = 0;
@@ -415,7 +456,8 @@ public class StockStragEnSey {
     			}else{
     				if(K-D < 5 && K-D > -5){
     					X = K-D;
-    				}
+    				}else 
+    					X=StockBaseInfo.getJ()-K;
     			}
     			float macdx = -10;
     			float upDiff = entries.get(i-1).getDiff();
@@ -441,6 +483,12 @@ public class StockStragEnSey {
     			StockBaseInfo.setSumMacdUp10(macd10);
 //    			StockBaseInfo.setUpSumRises5(Rises5);
 //    			StockBaseInfo.setUpSumRises10(Rises10);
+    			if(i>=1){
+    				StockBaseInfo.setUpx(entries.get(i-1).getX());
+    			}
+    			if(i>=2){
+    				StockBaseInfo.setUp2x(entries.get(i-2).getX());
+    			}
        			if(i>=5)
         			StockBaseInfo.setUpSumRises5(((StockBaseInfo.getClose()-entries.get(i-5).getClose())/entries.get(i-5).getClose())*100);
         			
@@ -453,6 +501,11 @@ public class StockStragEnSey {
         			
         			if(i>=30)
             			StockBaseInfo.setUpSumRises30(((StockBaseInfo.getClose()-entries.get(i-30).getClose())/entries.get(i-30).getClose())*100);
+        			if(i>=2){
+        				StockBaseInfo.setUp2J(entries.get(i-2).getJ());
+        				StockBaseInfo.setUp2Rises(entries.get(i-2).getRises());
+        				StockBaseInfo.setUp2Macd(entries.get(i-2).getMacd());
+        			}
     			StockBaseInfo.setJ3(j3);
     			StockBaseInfo.setJ5(j5);
     			StockBaseInfo.setMinRises5(maxRises5);
@@ -470,14 +523,14 @@ public class StockStragEnSey {
 //    		System.out.println(StockBaseInfo.getDate()+" 当天涨幅：" + StockBaseInfo.getRises() 
 //					+ " 上一天涨幅：" + StockBaseInfo.getNextRises());
     	}
-    	if(list.size() > 0){
-    		try {
-				StoreStrategySet.insBatchEs(list, jestClient, "storestrateinfo");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
+//    	if(list.size() > 0){
+//    		try {
+//				StoreStrategySet.insBatchEs(list, jestClient, "storestrateinfo");
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//    	}
     }
     
     /**

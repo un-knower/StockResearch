@@ -23,7 +23,7 @@ public class StockSelStrag {
 
 	public final static String STRA_TYPE_DEF = "003";
 
-	public final static String execStockDefined = "002323,002925,601828,001965,300433"; //次新股 
+	public final static String execStockDefined = "002323,002925,601828,001965,300433"; // 次新股
 	public final static String excStockBchipStock = "600025,600900,300072,600011,601018,000166,600061,601991,601985,000617,601919,601618,600795,600297,601669,601238,600688,601186,000938,601727,600663,601901,601006,600547,600406,002252,600893,601108,601808,601989,300059,002044,601878,002024,601857,300104,600028,002010,300015";
 	public final static String excGrowUpStock = ",600926,000937,002608,000750,002662,002247,600079,600153,600393,601128,600240,000060,000983,600060,600649,600970,601117,601555,603323,002092,601555,603323,601021,601666,000783,600885,002440,600598,600066,600477,600109,600835,600823,600908,000423,000686,000761,600649,000581,600068,600859,000090,000990,600299,000402,600525,601019,002354,000550,601000,600633,002217,600409,000921,002048,600258,603444,002271,600498,002195,300182,000559,000012,600376,002839,000883,000539,601179,000826,000999,600260,600236,600236,600415,600827,002065,600522,601326,000685,600269,600400,601811,601801,601139,000598,000778,000709,000902,600528,000587,000541,600873,002007,601158,600674,600271,600611,600804,600219,600160,002203,600739,600373,600012,002372,002221,603113,002434,600705,600535,600350,000623,002091,002074,002051,600978,002002,601333,000959,000027,600231,000933,002241,000887,600699,000723,000525,600612,000501,002701,600642,600483,600886,601107,002831,600548,600377,600056,002468,600390,601866,601872,000951,300144,601966,600161,000157,600338,300156,600998,600618,000666,600026,603369,002477,601588,000059,600704,000591,600511,600170,603858,600820,600089,601098,601928,603766,000429,002242,000656,600201,601877,002624,600332,600717,000869,000028,002223";//
 	// 白名单股票
@@ -102,7 +102,7 @@ public class StockSelStrag {
 		// String xjlr = "160000000";
 		// String excStock =
 		// "";//"000629,002427,002075,002398,002484,002859,002716,002340,600545,002356,000975,000988,002118,002775,002334,603588,002753,002374,002649,000545,002088,002370,603108,002116,002497,002545,002515,600093,002496,002247,002083,002002,002434,002323,002439,002024,000058,600971,002087";
-		String execRepStock = ",600736,601216,603518,002448,002564,002283,002564,002071,002454,000683,002152,000926,000011";
+		String execRepStock = ",000780,300146,300274,002536,603886,600444,002404,603018,300121,002327,000042,600491,600736,601216,603518,002448,002564,002283,002564,002071,002454,000683,002152,000926,000011";
 		SelEsRelt<EastReportBean> selBaseInfo = new SelEsRelt<EastReportBean>(new EastReportBean());
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
 		// query.must(QueryBuilders.rangeQuery("xjlr").gte(xjlr));
@@ -112,8 +112,9 @@ public class StockSelStrag {
 		query.mustNot(QueryBuilders.inQuery("stockCode",
 				(execStockDefined + "," + excStockBchipStock + "," + excGrowUpStock + execRepStock).split(",")));
 		// query.mustNot(QueryBuilders.prefixQuery("stockCode", "3"));
-		query.should(QueryBuilders.rangeQuery("pe").gt("0").lte("30"));
-		query.should(QueryBuilders.rangeQuery("npe").gt("0").lte("30"));
+		query.should(QueryBuilders.rangeQuery("pe").gt("0").lte("25"));
+		query.should(QueryBuilders.rangeQuery("npe").gt("0").lte("25"));
+//		query.should(QueryBuilders.rangeQuery("npe").gt("0").lte("15"));
 
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().query(query);
 		List<EastReportBean> lstResult = selBaseInfo.getResultFromQuery(searchSourceBuilder, "2017-09-30",
@@ -121,20 +122,25 @@ public class StockSelStrag {
 		List<EastReportBean> lstReRet = Lists.newArrayList();
 		for (EastReportBean bean : lstResult) {
 
-			if (bean.getJlr_ycb() >= 0 && bean.getJlr_tbzz_xjd() > 0
-					|| (bean.getJlr_ycb() > 0 && bean.getJlr_tbzz_xjd() >= 0)) {
+			 
+				if (bean.getJlr_ycb() >= 0 && bean.getJlr_tbzz_xjd() > 0
+						|| (bean.getJlr_ycb() > 0 && bean.getJlr_tbzz_xjd() >= 0)) {
 
-				if (bean.getPe() > 0 && bean.getPe() <= 20 || (bean.getNpe() > 0 && bean.getNpe() <= 20)) {
+					if (bean.getPe() > 0 && bean.getPe() <= 22 || (bean.getNpe() > 0 && bean.getNpe() <= 22)) {
 
-					if (!((bean.getJdzzl_before() > bean.getJdzzl() && bean.getJdzzl() > bean.getJlr_ycb()
-							&& bean.getPe() < bean.getNpe()))) {
-						if (!(bean.getJdzzl() < 1.5 && bean.getJlr_ycb() < 1.5))
-							lstReRet.add(bean);
+						if (!((bean.getJdzzl_before() > bean.getJdzzl() && bean.getJdzzl() > bean.getJlr_ycb()
+								&& bean.getPe() < bean.getNpe()))) {
+							if (!(bean.getJdzzl() < 1.5 && bean.getJlr_ycb() < 1.5))
+								lstReRet.add(bean);
+//							if(bean.getNpe()>15){
+//								lstReRet.add(bean);
+//							}
+						}
+						
+						
 					}
+
 				}
-
-			}
-
 		}
 
 		return lstReRet;
@@ -176,7 +182,7 @@ public class StockSelStrag {
 			// System.out.println(bean.getPe()+" "+bean.getNpe() );
 			// }
 
-			if (!(bean.getStockName().contains("*ST")||bean.getNpe()>200||bean.getPe()>1000)) {
+			if (!(bean.getStockName().contains("*ST") || bean.getNpe() > 200 || bean.getPe() > 1000)) {
 				if ((bean.getPe() > 0 && bean.getNpe() > 0 && bean.getNpe() < 60)) {
 					if (bean.getPe() > 0) {
 						if (bean.getPe() < 200 && bean.getNpe() < 50)
@@ -190,14 +196,14 @@ public class StockSelStrag {
 				} // new BigDecimal(bean.getXjlr()).compareTo(new
 					// BigDecimal("500000000"))>0)
 
-				if (new BigDecimal(bean.getXjlr()).compareTo(new BigDecimal("300000000")) > 0){
+				if (new BigDecimal(bean.getXjlr()).compareTo(new BigDecimal("300000000")) > 0) {
 					if (bean.getPe() > 0 || bean.getNpe() > 0)
-								mapsInfo.remove(bean.getStockCode());
+						mapsInfo.remove(bean.getStockCode());
 				}
-					
 
 				if (new BigDecimal(bean.getXjlr()).compareTo(new BigDecimal("100000000")) > 0
-						&& (bean.getNpe() < bean.getPe())&&(bean.getNpe()>0&&bean.getNpe()<200)&&bean.getPe()<500)
+						&& (bean.getNpe() < bean.getPe()) && (bean.getNpe() > 0 && bean.getNpe() < 200)
+						&& bean.getPe() < 500)
 					mapsInfo.remove(bean.getStockCode());
 
 			}
@@ -329,7 +335,7 @@ public class StockSelStrag {
 		for (StockBaseInfo bean : queryGrowUpStock()) {
 			mapSource.put(bean.getStockCode(), "queryGrowUpStock");
 		}
-
+		// bug1 遗漏阳光城 第四季度 财报增长强劲
 		mapSource.put(whStock, "whStock");
 		return mapSource;
 

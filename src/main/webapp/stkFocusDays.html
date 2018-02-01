@@ -120,11 +120,11 @@
                 var pgBar = $('#pg').mmPaginator({"limitList":[1000,2000,2500,3000,3800]});
                 
                 var cols = [
-                    {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
-                        /*return '<div class="btnPrice" onclick = "openDiv(\''+item['stockCode']+'\')"></div>';*/
+                   /*  {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
+                        //return '<div class="btnPrice" onclick = "openDiv(\''+item['stockCode']+'\')"></div>';
                         var path = getPath(item['stockCode']);
                         return '<img src = "' +path+ '" onclick = "openDiv(\''+item['stockCode']+'\')">';
-                    }},
+                    }}, */
                     { title:'日期', name:'date',width:80 , align:'center' ,sortable:true },
                     { title:'股票代码', name:'stockCode' ,width:60, align:'center' },
                     { title:'股票名称', name:'stockName' ,width:60, align:'center'},
@@ -140,8 +140,12 @@
                     { title:'后1涨幅', name:'nextRises',width:40 , align:'right',renderer: fixed2percentage,sortable:true},
                     { title:'连涨天数', name:'upDateNum' ,width:40, align:'right',sortable:true},
                     {title:'macd',name:'macd',width:40,renderer: fixed2,sortable:true},
-                   /*  {title:'j',name:'j',width:40,renderer: fixed2,sortable:true},
-                    {title:'j3',name:'j3',width:40,renderer: fixed2,sortable:true},
+                   {title:'j',name:'j',width:40,renderer: fixed2,sortable:true},
+                   {title:'up2x',name:'up2x',width:40,renderer: fixed2,sortable:true},
+                   {title:'upx',name:'upx',width:40,renderer: fixed2,sortable:true},
+                   {title:'x',name:'x',width:40,renderer: fixed2,sortable:true},
+                   
+                   /*  {title:'j3',name:'j3',width:40,renderer: fixed2,sortable:true},
                     {title:'j5',name:'j5',width:40,renderer: fixed2,sortable:true}, */
                     
                     {title:'macd连涨天数',width:60,name:'macdNum',sortable:true},
@@ -151,6 +155,10 @@
                   {title:'10日涨幅',name:'minRises10',sortable:true,renderer: fixed2percentage}, 
                  {title:'5/涨',width:50,name:'up5',sortable:true},
                      {title:'10/涨',width:50,name:'up10',sortable:true},
+                     
+                    /*  {title:'上轨线',width:50,name:'up',sortable:true},
+                     {title:'中轨线',width:50,name:'mb',sortable:true},
+                     {title:'下轨线',width:50,name:'dn',sortable:true}, */
                     
                     {title:'10/跌',width:50,name:'minLowRises10',sortable:true,renderer: fixed2percentage},
                     {title:'5/跌',width:50,name:'minLowRises5',sortable:true,renderer: fixed2percentage},
