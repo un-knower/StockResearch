@@ -172,6 +172,9 @@ public class StoreAstockTradInfo {
 		
 		//增加今天的实时数据
 			StockRealBean bean = StoreRealSet.getBeanByCode(stockCode);
+			if(null == bean || bean.getOpen() ==0){
+				return list;
+			}
 			StockBaseInfo stockBaseInfo = new StockBaseInfo(bean.getUpdate().split("[ ]")[0].replace("/", "-"), bean.getOpen()+"", bean.getHigh()+"",
 					bean.getLow()+"", bean.getPrice()+"", bean.getVolume()+"", df.format((bean.getPrice()-bean.getYestclose()) /bean.getYestclose() * 100) +"", stockCode, bean.getName(),"","","","","","");
 			if(info!=null){
@@ -339,10 +342,10 @@ public class StoreAstockTradInfo {
 		
 	}
 	public static void main(String[] args) throws ClientProtocolException, IOException, Exception {
-//		getHistoryData();
+		getHistoryData();
 //		executorServiceLocal.shutdown();
 //		getRealTimeData();
-		wDataToEs();
+//		wDataToEs();
 //		wDataRealToEs();
 	}
 //		List<StockBaseInfo>  lstResult=getstockBaseInfoFile("000001");

@@ -377,6 +377,9 @@ public class StockBaseInfo implements Serializable {
 		this.low = Float.parseFloat(low);
 		this.close = Float.parseFloat(close);
 		this.volume = Long.parseLong(volume);
+		if(stockCode.equals("603156")){
+			System.out.println(stockCode);
+		}
 		this.rises = Float.parseFloat(rises);
 		this.stockCode = stockCode;
 		this.stockName = stockName;

@@ -431,6 +431,26 @@ public class StockRealBean implements Serializable{
 	public void setVolumeRises(Double volumeRises) {
 		this.volumeRises = volumeRises;
 	}
+
+	@Override
+	public String toString() {
+		return "StockRealBean [code=" + code + ", percent=" + percent
+				+ ", high=" + high + ", askvol3=" + askvol3 + ", askvol2="
+				+ askvol2 + ", askvol5=" + askvol5 + ", askvol4=" + askvol4
+				+ ", price=" + price + ", open=" + open + ", bid5=" + bid5
+				+ ", bid4=" + bid4 + ", bid3=" + bid3 + ", bid2=" + bid2
+				+ ", bid1=" + bid1 + ", low=" + low + ", updown=" + updown
+				+ ", type=" + type + ", bidvol1=" + bidvol1 + ", status="
+				+ status + ", bidvol3=" + bidvol3 + ", bidvol2=" + bidvol2
+				+ ", symbol=" + symbol + ", update=" + update + ", bidvol5="
+				+ bidvol5 + ", bidvol4=" + bidvol4 + ", volume=" + volume
+				+ ", askvol1=" + askvol1 + ", ask5=" + ask5 + ", ask4=" + ask4
+				+ ", ask1=" + ask1 + ", name=" + name + ", ask3=" + ask3
+				+ ", ask2=" + ask2 + ", arrow=" + arrow + ", time=" + time
+				+ ", yestclose=" + yestclose + ", turnover=" + turnover
+				+ ", upRises=" + upRises + ", upVolume=" + upVolume
+				+ ", volumeRises=" + volumeRises + "]";
+	}
     
     
 	

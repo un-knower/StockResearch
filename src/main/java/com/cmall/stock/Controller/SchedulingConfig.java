@@ -3,8 +3,10 @@ package com.cmall.stock.Controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,6 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cmal.stock.storedata.CommonBaseStockInfo;
+import com.cmal.stock.storedata.StockDetailInfoHand;
 import com.cmal.stock.storedata.StockOptionalSet;
 import com.cmal.stock.storedata.StoreAstockEnReport;
 import com.cmal.stock.storedata.StoreAstockTradInfo;
@@ -138,6 +141,7 @@ public class SchedulingConfig {
     public void updateInfo2() {
 		if(shijian()){
 			try {
+				//这里加上一个本地
 				wDataRealToEs();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -174,24 +178,17 @@ public class SchedulingConfig {
 		}
 	}
     
-    public static void main(String[] args) {
-    	try {
-			MonthsStapleData.freshEsData();
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    public static void main(String[] args) throws Exception {
+    	wDataRealToEs();
 	}
 	
 	public  static  void  wDataRealToEs() throws Exception{
-		List<String> lstSource = TextUtil.readTxtFile(FilePath.path);
+		List<StockDetailInfoBean> lstSource =StockDetailInfoHand.getDetailForLst();
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo();
 		 
-		for(final String  sat:lstSource){
+		 for(final StockDetailInfoBean  bean:lstSource){
+			 final String sat=bean.getStockCode();
 			executorServiceLocal.execute(new Thread(){
 				@Override
 				public void run() {
@@ -215,11 +212,15 @@ public class SchedulingConfig {
 		
 	}
 	
+	
+	
 	public boolean shijian(){
-		Calendar ncalendar = Calendar.getInstance();
+		Calendar ncalendar = new GregorianCalendar();
+		TimeZone tz = TimeZone.getTimeZone("GMT+8");
+		ncalendar.setTimeZone(tz);
 		int H = ncalendar.get(Calendar.HOUR_OF_DAY);
 		int M = ncalendar.get(Calendar.MINUTE);
-		int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 2;
+		int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 1;
 		System.out.println("H:"+H);
 		System.out.println("M:"+M);
 		System.out.println("w:"+w);
