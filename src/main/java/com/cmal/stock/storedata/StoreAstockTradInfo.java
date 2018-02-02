@@ -181,11 +181,16 @@ public class StoreAstockTradInfo {
 			result.add(stockBaseInfo);
 		stockStragEnSey.addStockBaseInfos(result);
 		stockStragEnSey.computeStockIndex();
-		StockBaseInfo h = result.get(result.size()-1);
-		StockBaseInfo h2 = result.get(result.size()-2);
-		h2.setNextRises(h.getRises());
-		list.add(h);
-		list.add(h2);
+		if(result.size() > 0){
+			
+			StockBaseInfo h = result.get(result.size()-1);
+			if(result.size() > 1){
+				StockBaseInfo h2 = result.get(result.size()-2);
+				h2.setNextRises(h.getRises());
+				list.add(h2);
+			}
+			list.add(h);
+		}
 		return list;
 
 	}

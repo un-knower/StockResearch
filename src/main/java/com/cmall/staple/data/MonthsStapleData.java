@@ -186,7 +186,6 @@ public class MonthsStapleData {
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
 		ssb.sort("rq", SortOrder.DESC);
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		System.out.println(searchSourceBuilder.toString());
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STAPLEDAY, "2018",
 				1, 2);
 
@@ -201,7 +200,30 @@ public class MonthsStapleData {
 			e.printStackTrace();
 		}
 		return bean;
+	}
+	
+	public static String getLastDate(String dateStr , String index) {
+		String re = "";
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
+		BoolQueryBuilder query = QueryBuilders.boolQuery();
+		ssb.sort(dateStr, SortOrder.DESC);
+		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, index, "",
+				1, 2);
 
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		try {
+			JestResult results = jestClient.execute(selResult);
+			if(results.isSucceeded()){
+				String json = results.getJsonString();
+				if(json.indexOf(dateStr) > 0){
+					re = json.split(dateStr)[1].split(",")[0].replace("\"", "").replace(":", "");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return re;
 	}
 
 	public static void freshEsData() throws ClientProtocolException, IOException, Exception {

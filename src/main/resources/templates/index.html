@@ -97,6 +97,8 @@
 									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]'>macd金叉</option>
 									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;}]'>KDJ死叉</option>
 									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;}]'>macd死叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;volumeRises&quot;,&quot;type&quot;:&quot;>&quot;,&quot;value&quot;:&quot;2&quot;}]'>成交量翻倍</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdNum&quot;,&quot;type&quot;:&quot;>=&quot;,&quot;value&quot;:&quot;8&quot;}]'>macd涨超8天</option>
 								</select>
 								&nbsp;&nbsp;&nbsp;&nbsp;</span>
 							<h4>指标榜</h4>
@@ -219,7 +221,7 @@
 
   <div th:include="/common/onload_js :: onloadJs"></div>
   <script type="text/javascript">
-  	var longhuDatas = '[{"must":"must","name":"rises","type":">=","value":"10"},{"must":"must","name":"upRisesDayNum5","type":">=","value":"3"},{"must":"must","name":"upRises","type":">=","value":"3"},{"must":"must","name":"upSumRises5","type":">=","value":"15"}]';
+  	var longhuDatas = '[{"must":"must","name":"rises","type":">=","value":"10"},{"must":"must","name":"upRisesDayNum5","type":">=","value":"3"},{"must":"must","name":"upRises","type":">=","value":"3"},{"must":"must","name":"upSumRises5","type":">=","value":"15"},{"must":"must","name":"openNum","type":">=","value":"90"}]';
     $(document).ready(function(){
        App.init({
         nanoScroller: false

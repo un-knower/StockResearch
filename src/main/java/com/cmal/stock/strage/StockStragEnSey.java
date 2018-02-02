@@ -305,52 +305,28 @@ public class StockStragEnSey {
     			StockBaseInfo.setUpMacd(upMacds);
     			int m = entries.get(i-1).getMacdNum();
     			if((StockBaseInfo.getMacd()>=0)||(StockBaseInfo.getDiff()>0&&StockBaseInfo.getDea()>0&&StockBaseInfo.getMacd() >=-0.01&&StockBaseInfo.getRises()>-0.5)){
-    				if(StockBaseInfo.getMacdNum()<0)
-    					StockBaseInfo.setMacdNum(1);
-    				else
+    				if(m < 0) m = 0;
     				StockBaseInfo.setMacdNum(m+1);
-    				 
-    				if(StockBaseInfo.getMacdNum()<=0)
-    					StockBaseInfo.setMacdNum(1);
     			}else{
-    				if(StockBaseInfo.getMacdNum()>0)
-    					StockBaseInfo.setMacdNum(-1);  // macd >0的时候先置0
-    				else 
+    				if(m <= 0){
     					StockBaseInfo.setMacdNum(m-1);
-    				
-    				
-    				if(StockBaseInfo.getMacdNum()>=0)
+    				}else{
     					StockBaseInfo.setMacdNum(-1);
-    				
-    				if(StockBaseInfo.getStockCode().equals("000963"))
-    					System.out.println(StockBaseInfo.getDate()+"  "+StockBaseInfo.getMacdNum());
-    			} 
-    			
-    			
+    				}
+    			}
     			float upClose = entries.get(i-1).getClose();
     			float close = StockBaseInfo.getClose();
+    			int n = entries.get(i-1).getUpDateNum();
     			if(close >= upClose){
-    				int n = entries.get(i-1).getUpDateNum() ;
-    				if(n>0)
-    					StockBaseInfo.setUpDateNum((n+1));
-    				else 
-    					StockBaseInfo.setUpDateNum(n);
-    				
-    				
-    				if(StockBaseInfo.getUpDateNum()<0)
-    					StockBaseInfo.setUpDateNum(1);
-    			}else{  //  连涨天数为负
-    				int n = entries.get(i-1).getUpDateNum() ;
-    				if(  n>0)
+    				if(n < 0) n = 0;
+    				n++;
+    				StockBaseInfo.setUpDateNum(n);
+    			}else{
+    				if(n <= 0){
+    					StockBaseInfo.setUpDateNum(n-1);
+    				}else{
     					StockBaseInfo.setUpDateNum(-1);
-    				else 
-    					StockBaseInfo.setUpDateNum((n-1));
-    				
-    				
-    				if(StockBaseInfo.getUpDateNum()>0)
-    					StockBaseInfo.setUpDateNum(-1);
-    					
-    				
+    				}
     			}
     			int up5 = 0;
     			int up10 = 0;

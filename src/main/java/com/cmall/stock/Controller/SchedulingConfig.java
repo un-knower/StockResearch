@@ -50,19 +50,16 @@ public class SchedulingConfig {
 	/**
 	 * 每日同步大宗商品
 	 */
-	@Scheduled(cron = "0 03 12 * * ?") 
+	@Scheduled(cron = "0 00 17 * * ?") 
     public void updateDzsp() {
 		try {
 			System.out.println("开始同步大宗商品");
 			MonthsStapleData.freshEsData();
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -71,12 +68,11 @@ public class SchedulingConfig {
 	/**
 	 * 每日预报更新
 	 */
-//	@Scheduled(cron = "0 0 0/1 * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 0 0/1 * * ?") // 每20秒执行一次
     public void updateyubao() {
 		try {
 			StoreTrailerSet.wsData();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -84,7 +80,7 @@ public class SchedulingConfig {
 	/**
 	 * 每日财报更新
 	 */
-//	@Scheduled(cron = "0 0 15 * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 30 12 * * ?") // 每20秒执行一次
     public void updateCaoSc() {
 		try {
 			StoreAstockEnReport.downReportInfofromUrl("report");
@@ -109,7 +105,7 @@ public class SchedulingConfig {
 	/**
 	 * 更新自选
 	 */
-//	@Scheduled(cron = "0 0/5 * * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 0/5 * * * ?") // 每20秒执行一次
     public void updateOption() {
 		if(shijian()){
 			try {
@@ -149,7 +145,7 @@ public class SchedulingConfig {
 		}
 	}
 	
-	@Scheduled(cron = "0 11 10 * * ?") 
+	@Scheduled(cron = "0 10 15 * * ?") 
     public void updateInfo() {
 			try {
 				System.out.println("开始同步数据");
@@ -159,7 +155,7 @@ public class SchedulingConfig {
 			}
 	}
 	
-//	@Scheduled(cron = "0 10 16 * * ?") // 每20秒执行一次
+	@Scheduled(cron = "0 00 09 * * ?") // 每20秒执行一次
     public void updateHisDate() {
 		try {
 			StoreAstockTradInfo.getHistoryData();
@@ -182,13 +178,10 @@ public class SchedulingConfig {
     	try {
 			MonthsStapleData.freshEsData();
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

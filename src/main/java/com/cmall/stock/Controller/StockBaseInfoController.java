@@ -11,7 +11,9 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cmal.stock.storedata.CommonBaseStockInfo;
 import com.cmal.stock.strage.SelGetStock;
+import com.cmall.staple.data.MonthsStapleData;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.vo.StockBaseInfoVo;
 import com.cmall.stock.vo.StockBasePageInfo;
@@ -58,5 +60,10 @@ public class StockBaseInfoController extends BaseController {
         return fieldNames;
     }
     
+    @RequestMapping("/getAllCount")
+    public String getAllCount(StockBasePageInfo page) throws Exception {
+    	String endDate = MonthsStapleData.getLastDate("date", CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
+        return "";
+    }
     
 }
