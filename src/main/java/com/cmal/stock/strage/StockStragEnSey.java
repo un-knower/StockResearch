@@ -322,8 +322,6 @@ public class StockStragEnSey {
     				if(StockBaseInfo.getMacdNum()>=0)
     					StockBaseInfo.setMacdNum(-1);
     				
-    				if(StockBaseInfo.getStockCode().equals("000963"))
-    					System.out.println(StockBaseInfo.getDate()+"  "+StockBaseInfo.getMacdNum());
     			} 
     			
     			

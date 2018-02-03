@@ -117,6 +117,7 @@ public class StockBaseInfo implements Serializable {
 	private float dn = 0; // 下轨线
 	private String dayForWeek;
 	private double pe = 0;
+	private double npe=0;
 	/**
 	 * 自定义分时图用的数据
 	 *
@@ -377,6 +378,9 @@ public class StockBaseInfo implements Serializable {
 		this.low = Float.parseFloat(low);
 		this.close = Float.parseFloat(close);
 		this.volume = Long.parseLong(volume);
+		if(stockCode.equals("603156")){
+			System.out.println(stockCode);
+		}
 		this.rises = Float.parseFloat(rises);
 		this.stockCode = stockCode;
 		this.stockName = stockName;
@@ -805,6 +809,14 @@ public class StockBaseInfo implements Serializable {
 
 	public void setUp2x(float up2x) {
 		this.up2x = up2x;
+	}
+
+	public double getNpe() {
+		return npe;
+	}
+
+	public void setNpe(double npe) {
+		this.npe = npe;
 	}
 
 	

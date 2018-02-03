@@ -19,6 +19,7 @@ import com.cmal.stock.strage.StockStragEnSey;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StockRealBean;
+import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.utils.CsvHandUtils;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.TimeUtils;
@@ -71,7 +72,7 @@ public class StoreAstockTradInfo {
 
 	}
 
-	public static List<StockBaseInfo> getstockBaseInfoFile(String stockCode , StockDetailInfoBean info) throws Exception {
+	public static List<StockBaseInfo> getstockBaseInfoFile(String stockCode , StockDetailInfoBean info,StoreTrailer  storeTrailer) throws Exception {
 		  final StockStragEnSey stockStragEnSey = new StockStragEnSey();
 		String absPath = FilePath.savePathsuff + stockCode + ".csv";
 		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
@@ -101,6 +102,9 @@ public class StoreAstockTradInfo {
 					stockBaseInfo.setIndustry(info.getIndustry());
 					stockBaseInfo.setArea(info.getArea());
 					stockBaseInfo.setPe(info.getPe());
+				}
+				if(storeTrailer!=null){
+					stockBaseInfo.setNpe(storeTrailer.getNpe());
 				}
 				//002252
 				result.add(stockBaseInfo);
@@ -172,6 +176,9 @@ public class StoreAstockTradInfo {
 		
 		//增加今天的实时数据
 			StockRealBean bean = StoreRealSet.getBeanByCode(stockCode);
+			if(null == bean || bean.getOpen() ==0){
+				return list;
+			}
 			StockBaseInfo stockBaseInfo = new StockBaseInfo(bean.getUpdate().split("[ ]")[0].replace("/", "-"), bean.getOpen()+"", bean.getHigh()+"",
 					bean.getLow()+"", bean.getPrice()+"", bean.getVolume()+"", df.format((bean.getPrice()-bean.getYestclose()) /bean.getYestclose() * 100) +"", stockCode, bean.getName(),"","","","","","");
 			if(info!=null){
@@ -181,11 +188,16 @@ public class StoreAstockTradInfo {
 			result.add(stockBaseInfo);
 		stockStragEnSey.addStockBaseInfos(result);
 		stockStragEnSey.computeStockIndex();
-		StockBaseInfo h = result.get(result.size()-1);
-		StockBaseInfo h2 = result.get(result.size()-2);
-		h2.setNextRises(h.getRises());
-		list.add(h);
-		list.add(h2);
+		if(result.size() > 0){
+			
+			StockBaseInfo h = result.get(result.size()-1);
+			if(result.size() > 1){
+				StockBaseInfo h2 = result.get(result.size()-2);
+				h2.setNextRises(h.getRises());
+				list.add(h2);
+			}
+			list.add(h);
+		}
 		return list;
 
 	}
@@ -267,6 +279,7 @@ public class StoreAstockTradInfo {
 		List<StockDetailInfoBean> lstSource =StockDetailInfoHand.getDetailForLst();// CommonBaseStockInfo.getAllAStockInfo();
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo(); //getInfoByCsv();
+		 final Map<String , StoreTrailer> mapStoreTrailer =QueryComLstData.getStoreTrailerMapsInfo(); //getInfoByCsv();
 		for(final StockDetailInfoBean  bean:lstSource){
 			 final String sat=bean.getStockCode();
 //			if(sat.equals("603612")){
@@ -282,7 +295,7 @@ public class StoreAstockTradInfo {
 				@Override
 				public void run() {
 			          try {
-			        	 List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat ,  map.get(sat));
+			        	 List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat ,  map.get(sat),mapStoreTrailer.get(sat));
 			  			 insBatchEs(lstInfo, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
 					} catch (Exception e) {
 						System.out.println(sat);
@@ -334,10 +347,10 @@ public class StoreAstockTradInfo {
 		
 	}
 	public static void main(String[] args) throws ClientProtocolException, IOException, Exception {
-//		getHistoryData();
+		getHistoryData();
 //		executorServiceLocal.shutdown();
 //		getRealTimeData();
-		wDataToEs();
+//		wDataToEs();
 //		wDataRealToEs();
 	}
 //		List<StockBaseInfo>  lstResult=getstockBaseInfoFile("000001");
