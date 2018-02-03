@@ -426,8 +426,8 @@ public class SelGetStock {
 			throws Exception {
 		Map<String, Object> returnMap = Maps.newHashMap();
 		List<String> types = Lists.newArrayList();
-
-		if (type.equals(",all")) {
+		
+		if (type.equals(",all") || type.equals("all")) {
 			types.addAll(getAllyearsInx());
 		} else {
 			types.add("2017-09-30");
