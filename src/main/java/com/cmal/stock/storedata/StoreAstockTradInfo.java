@@ -19,6 +19,7 @@ import com.cmal.stock.strage.StockStragEnSey;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StockRealBean;
+import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.utils.CsvHandUtils;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.TimeUtils;
@@ -71,7 +72,7 @@ public class StoreAstockTradInfo {
 
 	}
 
-	public static List<StockBaseInfo> getstockBaseInfoFile(String stockCode , StockDetailInfoBean info) throws Exception {
+	public static List<StockBaseInfo> getstockBaseInfoFile(String stockCode , StockDetailInfoBean info,StoreTrailer  storeTrailer) throws Exception {
 		  final StockStragEnSey stockStragEnSey = new StockStragEnSey();
 		String absPath = FilePath.savePathsuff + stockCode + ".csv";
 		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
@@ -101,6 +102,9 @@ public class StoreAstockTradInfo {
 					stockBaseInfo.setIndustry(info.getIndustry());
 					stockBaseInfo.setArea(info.getArea());
 					stockBaseInfo.setPe(info.getPe());
+				}
+				if(storeTrailer!=null){
+					stockBaseInfo.setNpe(storeTrailer.getNpe());
 				}
 				//002252
 				result.add(stockBaseInfo);
@@ -267,6 +271,7 @@ public class StoreAstockTradInfo {
 		List<StockDetailInfoBean> lstSource =StockDetailInfoHand.getDetailForLst();// CommonBaseStockInfo.getAllAStockInfo();
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo(); //getInfoByCsv();
+		 final Map<String , StoreTrailer> mapStoreTrailer =QueryComLstData.getStoreTrailerMapsInfo(); //getInfoByCsv();
 		for(final StockDetailInfoBean  bean:lstSource){
 			 final String sat=bean.getStockCode();
 //			if(sat.equals("603612")){
@@ -282,7 +287,7 @@ public class StoreAstockTradInfo {
 				@Override
 				public void run() {
 			          try {
-			        	 List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat ,  map.get(sat));
+			        	 List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat ,  map.get(sat),mapStoreTrailer.get(sat));
 			  			 insBatchEs(lstInfo, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
 					} catch (Exception e) {
 						System.out.println(sat);

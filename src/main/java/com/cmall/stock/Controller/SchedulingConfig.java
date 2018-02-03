@@ -138,7 +138,7 @@ public class SchedulingConfig {
 	}
 	
 	
-	@Scheduled(cron = "0 0/5 * * * ?") 
+	//@Scheduled(cron = "0 0/5 * * * ?") 
     public void updateInfo2() {
 		if(shijian()){
 			try {
@@ -149,7 +149,7 @@ public class SchedulingConfig {
 		}
 	}
 	
-	@Scheduled(cron = "0 11 10 * * ?") 
+	//@Scheduled(cron = "0 11 10 * * ?") 
     public void updateInfo() {
 			try {
 				System.out.println("开始同步数据");

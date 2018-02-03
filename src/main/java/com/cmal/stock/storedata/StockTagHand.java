@@ -10,7 +10,19 @@ import com.kers.esmodel.SelEsRelt;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.Index;
-
+/**
+ * http://data.eastmoney.com/gstc/
+ *       
+ * ClassName：StockTagHand    
+ * Description：    
+ * author ：admin    
+ * date ：2018年2月3日 上午8:56:20    
+ * Modified   person：admin    
+ * Modified date：2018年2月3日 上午8:56:20    
+ * Modify remarks：    
+ * @version     V1.0
+ *
+ */
 public class StockTagHand {
 	
 	public static void main(String[] args) {

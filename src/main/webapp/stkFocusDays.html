@@ -120,11 +120,11 @@
                 var pgBar = $('#pg').mmPaginator({"limitList":[1000,2000,2500,3000,3800]});
                 
                 var cols = [
-                   /*  {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
+                   {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
                         //return '<div class="btnPrice" onclick = "openDiv(\''+item['stockCode']+'\')"></div>';
                         var path = getPath(item['stockCode']);
                         return '<img src = "' +path+ '" onclick = "openDiv(\''+item['stockCode']+'\')">';
-                    }}, */
+                    }}, 
                     { title:'日期', name:'date',width:80 , align:'center' ,sortable:true },
                     { title:'股票代码', name:'stockCode' ,width:60, align:'center' },
                     { title:'股票名称', name:'stockName' ,width:60, align:'center'},
@@ -132,6 +132,7 @@
                     {title:'板块',name:'industry',width:60,sortable:true  },
                     {title:'总市值',name:'zsz',width:70,sortable:true,renderer:moformat},
                     { title:'PE',name:'pe',width:40,sortable:true ,renderer:highliht },
+                    { title:'NPE',name:'npe',width:40,sortable:true ,renderer:highliht },
                     //{ title:'地区',name:'area',width:40,sortable:true ,renderer:highliht },
                     /* {title:'开盘价',name:'open',width:40,sortable:true  }, */
                    /*  {title:'收盘价',name:'close',width:40,sortable:true }, */

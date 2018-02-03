@@ -110,7 +110,7 @@ public class StoreTrailerSet {
 	public static void wsData() throws InterruptedException {
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		// List<StoreTrailer> list= Lists.newArrayList();
-		for (int i = 0; i <=3; i++) {
+		for (int i = 0; i <=50; i++) {
 			// String content = StoreTrailerUrl(i);
 			// System.out.println(content);|
 			try {

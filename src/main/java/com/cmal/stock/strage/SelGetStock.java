@@ -49,15 +49,14 @@ public class SelGetStock {
 		// 短时间内会剔除一批走势不好数据
 		mapsSelStockTmp.remove("603993");
 		mapsSelStockTmp.remove("300146");
-		mapsSelStockTmp.remove("002460");
+		mapsSelStockTmp.remove("002460");//赣锋锂业	
 		mapsSelStockTmp.remove("300274");
-		mapsSelStockTmp.remove("000780");
-		mapsSelStockTmp.remove("000100");
-		mapsSelStockTmp.remove("600050");
+		mapsSelStockTmp.remove("000780");//*ST平能	
+		mapsSelStockTmp.remove("000100");//TCL集团	
+		mapsSelStockTmp.remove("600050");//中国联通
 		mapsSelStockTmp.remove("600362"); // 江西铜业
 		mapsSelStockTmp.remove("002042"); // 市值太小 华孚时尚 127 亿
 		mapsSelStockTmp.remove("002404");// 市值太小
-		mapsSelStockTmp.remove("600325");// 房地产 竞争差
 		mapsSelStockTmp.remove("000790");// 财报不是特别耀眼
 		// mapsSelStockTmp.remove("600449");/// 宁夏建材 600449 水泥板块竞争性不强
 		mapsSelStockTmp.remove("000822");/// 000822 山东海化 收益率太低
@@ -79,6 +78,7 @@ public class SelGetStock {
 		mapsSelStockTmp.remove("002352");// 顺丰
 		mapsSelStockTmp.remove("600919");// 600919 江苏银行 收益低 无竞争优势
 		mapsSelStockTmp.remove("601997");// 贵阳银行 收益低 无竞争优势
+		mapsSelStockTmp.remove("601998");// 中信银行 收益低 无竞争优势		
 		mapsSelStockTmp.remove("600000");// 浦发银行 收益低 无竞争优势
 		mapsSelStockTmp.remove("603589");// 口子窖 收益低 无竞争优势
 		mapsSelStockTmp.remove("300498");// 走势下行 且净利润下降
@@ -103,17 +103,15 @@ public class SelGetStock {
 		mapsSelStockTmp.remove("600444"); // 第四季度政府赔款
 		mapsSelStockTmp.remove("600449");// 宁夏建材 相比水泥板块无竞争优势
 
-		mapsSelStockTmp.remove("600173");// 卧龙地产 相比之下并无太大优势
-		mapsSelStockTmp.remove("600208");// 新湖中宝 暂时排除 相比之下并无太大优势 且下季财报不明
+	
 		mapsSelStockTmp.remove("002736");// /证券 相比无太大竞争优势
 		mapsSelStockTmp.remove("601788");// 证券 相比无太大竞争优势
+		mapsSelStockTmp.remove("600999");// 证券 相比无太大竞争优势
+		
 
-		mapsSelStockTmp.remove("601898");// 煤炭 无太大竞争优势
-		mapsSelStockTmp.remove("002128");// 短暂移除 相比优势不太明显
-		mapsSelStockTmp.remove("000932"); // ST 钢铁行业无优势
+		
 		mapsSelStockTmp.remove("600566"); // 济川药业 收益率太低
 		mapsSelStockTmp.remove("600062"); // 华润双鹤 化学制药 收益率太低 且震荡
-		mapsSelStockTmp.remove("600062"); // 南方航空 竞争无太大优势603885
 
 		mapsSelStockTmp.remove("002067");// 景兴纸业 002067 短暂移除 相比优势不太明显
 		mapsSelStockTmp.remove("000625"); // 财报 走势稳定下滑
@@ -124,8 +122,68 @@ public class SelGetStock {
 		mapsSelStockTmp.remove("601166"); // 兴业银行 收益太低
 		mapsSelStockTmp.remove("601288"); // 农业银行 收益太低 （相比工 建行）
 		mapsSelStockTmp.remove("601818"); // 光大银行 收益太低
+		mapsSelStockTmp.remove("600023"); //   收益太低
+		mapsSelStockTmp.remove("600853");
+		
+		mapsSelStockTmp.remove("603179");
+		mapsSelStockTmp.remove("603612");
+		mapsSelStockTmp.remove("600837");
+		mapsSelStockTmp.remove("002562");
+		mapsSelStockTmp.remove("600686");//财报不突出
+		mapsSelStockTmp.remove("600438");//
+	
+		mapsSelStockTmp.remove("300070");
+		mapsSelStockTmp.remove("000001");//中国平安
+		mapsSelStockTmp.remove("601328");//交通银行
+		mapsSelStockTmp.remove("600016");//民生银行   对标中国银行
+		mapsSelStockTmp.remove("000553");//000553  四季度出现亏损
+
+		
+		
+		
+		
+		
+		//中国国航》南方航空》东方航空
+		mapsSelStockTmp.remove("603885");//吉祥航空
+		mapsSelStockTmp.remove("600062"); // 南方航空 竞争无太大优势603885
+
+		
+		//山鹰纸业	||晨鸣纸业	||太阳纸业》博汇纸业	》景兴纸业	》荣晟环保	  002067
+		mapsSelStockTmp.remove("603165");//荣晟环保	  无竞争优势|次新股前期操作过度
+		
+		
+   // 化纤板块      桐昆股份	》= 恒力股份	》新凤鸣	
+		mapsSelStockTmp.remove("002493"); //增长不是很明显 市盈率相对较高
+		//化工原料	       万华化学	》金禾实业	》康得新	》龙蟒佰利	  （滨化股份	|黑猫股份	）
+		mapsSelStockTmp.remove("002648"); //无竞争优势
+		mapsSelStockTmp.remove("002068"); //无竞争优势
+		//化学制药	
+		mapsSelStockTmp.remove("002294"); //无竞争优势
+		//房地产  002147 000981  第四季度增长猛   没查出来 检查算法 
+		mapsSelStockTmp.remove("000732"); //  泰禾集团	 炒作过头
+		mapsSelStockTmp.remove("000043"); //无竞争优势
+		mapsSelStockTmp.remove("000965"); //天保基建	 无太大竞争优势
+		mapsSelStockTmp.remove("002244");//房地产中收益率低的
+		mapsSelStockTmp.remove("600173");// 卧龙地产 相比之下并无太大优势
+		mapsSelStockTmp.remove("600208");// 新湖中宝 暂时排除 相比之下并无太大优势 且下季财报不明
+		mapsSelStockTmp.remove("600325");// 房地产 竞争差
+
+		
+		
+		
+    //煤炭   601898  当板块大热的时候暂时移除关注
+
+		mapsSelStockTmp.remove("601898");// 煤炭 无太大竞争优势
+		//mapsSelStockTmp.remove("002128");// 短暂移除 相比优势不太明显
+		
+		mapsSelStockTmp.put("600971", StockSelStrag.whStock);//最近煤炭板块大热加入 恒源煤电	
+		//钢铁   目前各种指标下来   山东钢铁相对较弱
+       //  柳钢股份	>杭钢股份	>韶钢松山	          *ST华菱>新钢股份	>山东钢铁	   
+		
 
 		//
+		
+		// 002061 值得关注
 
 	}
 
@@ -134,6 +192,7 @@ public class SelGetStock {
 		// 002597 002311 000039
 		Map<String, Object> returnMap = Maps.newHashMap();
 		Map<String, String> mapsSelStockTmp = mapsSelStock;
+		
 
 		revtmpMap(mapsSelStockTmp);
 		query.must(QueryBuilders.inQuery("stockCode", mapsSelStockTmp.keySet()));
@@ -226,6 +285,7 @@ public class SelGetStock {
 		List<StockBaseInfo> lstResult = Lists.newArrayList();
 		for (StockBaseInfo baseInfo : lstBean) {
 			// if(baseInfo.getJ()>baseInfo.getUpJ())
+			if(baseInfo.getUp2J()<baseInfo.getJ())
 			lstResult.add(baseInfo);
 
 			// if (mapsInfo.get(baseInfo.getStockCode()) == null &&
@@ -372,9 +432,9 @@ public class SelGetStock {
 		} else {
 			types.add("2017-09-30");
 		}
-		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
-//		 query.must(QueryBuilders.inQuery("stockCode",
-//		 mapsSelStock.keySet()));
+//		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
+		 query.must(QueryBuilders.inQuery("stockCode",
+		 mapsSelStock.keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);// ssb.query(query);
 		System.out.println(searchSourceBuilder.toString());
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOREREPORT, types,
