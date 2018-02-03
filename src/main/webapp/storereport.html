@@ -76,9 +76,15 @@
         <script src="src/mmPaginator.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script>
-            var classNames = [];
+             var classNames = [];
+			var stockCode;
+			var num = 1;
 
             $(document).ready(function(){
+            	stockCode= getRequest().stockCode;
+            	if(stockCode != null){
+            		$('#type').val("all");
+            	}
                 $.ajax({  
                     type : "GET",  //提交方式  
                     url : "http://www.estock.com:8080/stock/report/getClassNameList",//路径  
@@ -86,16 +92,22 @@
                     success : function(result) {//返回数据根据结果进行相应的处理  
                         classNames =  result;
                         $('#fh').append(formHtml);
+                        start();
                     }  
                 }); 
 
-                var pgBar = $('#pg').mmPaginator({"limitList":[500,1000,2000,2500,3000]});
+            });
+
+         	function start(){
+         		var pgBar = $('#pg').mmPaginator({"limitList":[500,1000,2000,2500,3000]});
                 
                 var cols = [
                             /* { title:'公告日期', name:'ggrq' , align:'center' ,width:80,sortable:true},  */
                             { title:'结束日期', name:'jzrq' , align:'center' ,width:80,sortable:true}, 
                              { title:'股票代码', name:'stockCode' , align:'center',width:60 }, 
-                            { title:'股票名称', name:'stockName' , align:'center',width:60},
+                           { title:'股票名称', name:'stockName' , align:'center',width:60, renderer: function(val,item,rowIndex){
+		                        return '<a href = "" onclick = "goMe(\''+item['stockCode']+'\')">'+val+'</a>';
+		                    }},
                            /*  { title:'行业', name:'industry' , align:'center',sortable:true,width:60},
                             { title:'总市值', name:'totals' , align:'center',sortable:true,width:60,renderer:moformat}, */
                             { title:'行业', name:'industry' , align:'center',width:60,sortable:true},
@@ -155,21 +167,20 @@
                     var type = $('#type').val();
                     mmg.load({page:1,datas:str,type:type});
                 });
+         	}
 
-
-
-
-            });
-
-         
-
-            var formHtml = function(){
+             var formHtml = function(){
                 var html = '<div class="row"><div class="col-md-12 data"></select> <select style = "width:100px"><option>must</option><option>must_not</option><option>should</option></select> <select>';
                 for (var i = 0; i < classNames.length; i++) {
                     html = html + '<option>'+classNames[i]+'</option>';
                 }
                 html = html + '</select> <select style = "width:100px"><option>=</option><option>></option><option><</option><option>>=</option><option><=</option><option>prefix</option><option>queryStr</option><option>missing</option><option>in</option><option>focuSck</option><option>selSck</option></select>';
-                html = html + '<input type="text">';
+                if(stockCode != null && num == 1){
+                	html = html + '<input type="text" value = "'+stockCode+'">';
+                }else{
+                	html = html + '<input type="text">';
+                }
+                num = num + 1;
                 html = html + '<button class="btn btn-default" onclick = "addFormDiv()">+</button>';            
                 html = html + '<button class="btn btn-default" onclick = "delFormDiv(this)">-</button></div></div>';            
                 return html;
@@ -226,6 +237,25 @@
             	path = path + '?'+timestamp;
             	return path;
             }
+            
+            function goMe(code){
+            	window.open("http://www.estock.com:8080/stock/storereport.html?stockCode="+code);
+            }
+            
+            function getRequest() {
+			  var url = window.location.search; //获取url中"?"符后的字串
+			  var theRequest = new Object();
+			  if (url.indexOf("?") != -1) {
+			    var str = url.substr(1);
+			    strs = str.split("&");
+			    for(var i = 0; i < strs.length; i ++) {
+			       
+			      theRequest[strs[i].split("=")[0]]=decodeURI(strs[i].split("=")[1]);
+			       
+			    }
+			  }
+			  return theRequest;
+			}
         </script>
     </body>
 </html>
