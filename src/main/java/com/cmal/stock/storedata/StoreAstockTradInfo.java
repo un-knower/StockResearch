@@ -350,7 +350,7 @@ public class StoreAstockTradInfo {
 		getHistoryData();
 //		executorServiceLocal.shutdown();
 //		getRealTimeData();
-//		wDataToEs();
+		wDataToEs();
 //		wDataRealToEs();
 	}
 //		List<StockBaseInfo>  lstResult=getstockBaseInfoFile("000001");

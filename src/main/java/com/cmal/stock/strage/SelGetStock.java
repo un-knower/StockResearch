@@ -54,7 +54,7 @@ public class SelGetStock {
 		mapsSelStockTmp.remove("000780");//*ST平能	
 		mapsSelStockTmp.remove("000100");//TCL集团	
 		mapsSelStockTmp.remove("600050");//中国联通
-		mapsSelStockTmp.remove("600362"); // 江西铜业
+		//mapsSelStockTmp.remove("600362"); // 江西铜业
 		mapsSelStockTmp.remove("002042"); // 市值太小 华孚时尚 127 亿
 		mapsSelStockTmp.remove("002404");// 市值太小
 		mapsSelStockTmp.remove("000790");// 财报不是特别耀眼
@@ -102,7 +102,7 @@ public class SelGetStock {
 
 		mapsSelStockTmp.remove("600444"); // 第四季度政府赔款
 		mapsSelStockTmp.remove("600449");// 宁夏建材 相比水泥板块无竞争优势
-
+		mapsSelStockTmp.remove("600881");// 亚泰集团 相比水泥板块无竞争优势
 	
 		mapsSelStockTmp.remove("002736");// /证券 相比无太大竞争优势
 		mapsSelStockTmp.remove("601788");// 证券 相比无太大竞争优势
@@ -138,27 +138,6 @@ public class SelGetStock {
 		mapsSelStockTmp.remove("600016");//民生银行   对标中国银行
 		mapsSelStockTmp.remove("000553");//000553  四季度出现亏损
 
-		
-		
-		
-		
-		
-		//中国国航》南方航空》东方航空
-		mapsSelStockTmp.remove("603885");//吉祥航空
-		mapsSelStockTmp.remove("600062"); // 南方航空 竞争无太大优势603885
-
-		
-		//山鹰纸业	||晨鸣纸业	||太阳纸业》博汇纸业	》景兴纸业	》荣晟环保	  002067
-		mapsSelStockTmp.remove("603165");//荣晟环保	  无竞争优势|次新股前期操作过度
-		
-		
-   // 化纤板块      桐昆股份	》= 恒力股份	》新凤鸣	
-		mapsSelStockTmp.remove("002493"); //增长不是很明显 市盈率相对较高
-		//化工原料	       万华化学	》金禾实业	》康得新	》龙蟒佰利	  （滨化股份	|黑猫股份	）
-		mapsSelStockTmp.remove("002648"); //无竞争优势
-		mapsSelStockTmp.remove("002068"); //无竞争优势
-		//化学制药	
-		mapsSelStockTmp.remove("002294"); //无竞争优势
 		//房地产  002147 000981  第四季度增长猛   没查出来 检查算法 
 		mapsSelStockTmp.remove("000732"); //  泰禾集团	 炒作过头
 		mapsSelStockTmp.remove("000043"); //无竞争优势
@@ -167,23 +146,49 @@ public class SelGetStock {
 		mapsSelStockTmp.remove("600173");// 卧龙地产 相比之下并无太大优势
 		mapsSelStockTmp.remove("600208");// 新湖中宝 暂时排除 相比之下并无太大优势 且下季财报不明
 		mapsSelStockTmp.remove("600325");// 房地产 竞争差
+		
+		
+		
+		
+		//中国国航》南方航空》东方航空
+		mapsSelStockTmp.remove("603885");//吉祥航空
+		mapsSelStockTmp.remove("600062"); // 南方航空 竞争无太大优势603885
 
+		//晨鸣纸业(219)||山鹰纸业(162)	》太阳纸业(226)》博汇纸业	》景兴纸业	》荣晟环保	  002067
+		mapsSelStockTmp.remove("603165");//荣晟环保	  无竞争优势|次新股前期操作过度
+		mapsSelStockTmp.remove("600966");//景兴纸业无竞争优势
 		
+   // 化纤板块      桐昆股份	》= 恒力股份	》新凤鸣	
+		mapsSelStockTmp.remove("002493"); //增长不是很明显 市盈率相对较高
+		//化工原料	       万华化学	》金禾实业	》康得新	》龙蟒佰利	  （滨化股份	|黑猫股份	）
+		mapsSelStockTmp.remove("002648"); //无竞争优势
+		mapsSelStockTmp.remove("002068"); //无竞争优势
+		//化学制药	
+		mapsSelStockTmp.remove("002294"); //无竞争优势
+	
 		
-		
-    //煤炭   601898  当板块大热的时候暂时移除关注
-
+	       //煤炭      中国神华(3774)	   陕西煤业(736)》兖州煤业(635)      潞安环能(263)》阳泉煤业(136)》平煤股份(119)	》露天煤业(139)
+		//601898  ,601666   当板块大热的时候暂时移除关注
 		mapsSelStockTmp.remove("601898");// 煤炭 无太大竞争优势
-		//mapsSelStockTmp.remove("002128");// 短暂移除 相比优势不太明显
-		
 		mapsSelStockTmp.put("600971", StockSelStrag.whStock);//最近煤炭板块大热加入 恒源煤电	
-		//钢铁   目前各种指标下来   山东钢铁相对较弱
-       //  柳钢股份	>杭钢股份	>韶钢松山	          *ST华菱>新钢股份	>山东钢铁	   
+		//mapsSelStockTmp.remove("002128");// 短暂移除 相比优势不太明显
+			// 阳泉煤业  成交量放大 macd稳步上升 kdj刚触百
+			// 露天煤业  成交量相对放大  macd 平缓上升   kdj50左右向上
 		
-
-		//
+		
+		
+		//钢铁   目前各种指标下来   山东钢铁(第四季度大幅度增长)  杭钢股份  相对较弱
+		//  宝钢股份(1640)>>> 鞍钢股份 (385)  				 太钢不锈(227) >三钢闽光(241)>=马钢股份(250)
+		// *ST华菱(208)>南钢股份(174)>新钢股份(204)	>山东钢铁(205)	
+       //  柳钢股份(140亿)	>韶钢松山(148)>方大特钢(156)>杭钢股份(138)	               安阳钢铁（92）》八一钢铁（82）
+	
+		// 方大特刚  空中加油   且j向上交叉    || 能买 柳钢就不买杭钢     柳钢即将macd金叉  kdj已经金叉   南刚行情启动（成交量放大 macd二次平行爆发 kdj向上交叉） 新钢 比较舒适的位置
+		//     八一  安阳 处于早期  关注   太钢不锈（可入手） 量走势起来  非常值得关注    马钢股份(可入手)
+		//  鞍钢股份 好行情（可入手）量走势起来    宝钢股份 创新高
 		
 		// 002061 值得关注
+		//水泥板块    海螺水泥(1382亿)     》华新水泥(168)》上峰水泥(76)  》(同力水泥65)>=万年青(60)
+		// 海螺水泥（创新高）  macd  kdj均向上  上峰水泥（成交量前期被放大，近期有望突破新高）  空中加油 kdj向上交叉60方向  华新水泥 macd kdj均向上 指标暂时不如上峰水泥（成交量也不大）
 
 	}
 
@@ -198,6 +203,7 @@ public class SelGetStock {
 		query.must(QueryBuilders.inQuery("stockCode", mapsSelStockTmp.keySet()));
 
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
+//		System.out.println(searchSourceBuilder.toString());
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "",
 				(page.getPage() - 1) * page.getLimit(), page.getLimit());
 
@@ -208,6 +214,7 @@ public class SelGetStock {
 		for (StockBaseInfo baseInfo : lstBean) {
 			
 //			if(baseInfo.getUp2J()>baseInfo.getJ()&&baseInfo.getJ()>0)
+			//if(baseInfo.)
 				lstResult.add(baseInfo);
 		//	if ((baseInfo.getUp10() > 4 || baseInfo.getUp5() >= 2)) {// &&(baseInfo.getUpSumRises5()>0&&baseInfo.getUpSumRises10()>0)){
 				// // //最近走势比较好的股
@@ -344,7 +351,7 @@ public class SelGetStock {
 		Map<String, Object> mapSource = Maps.newConcurrentMap();
 
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);// ssb.query(query);
-		System.out.println(searchSourceBuilder.toString());
+//		System.out.println(searchSourceBuilder.toString());
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STORETRAILER, type,
 				(page.getPage() - 1) * page.getLimit(), page.getLimit());
 

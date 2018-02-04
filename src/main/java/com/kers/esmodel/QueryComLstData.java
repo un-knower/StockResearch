@@ -32,7 +32,7 @@ public class QueryComLstData {
 		try {
 			BoolQueryBuilder queryss = QueryBuilders.boolQuery();
 
-			queryss.must(QueryBuilders.termQuery("date", TimeUtils.getDate("2018-02-01")));// TimeUtils.DEFAULT_DATEYMD_FORMAT)));//
+			queryss.must(QueryBuilders.termQuery("date", TimeUtils.getDate("2018-02-02")));// TimeUtils.DEFAULT_DATEYMD_FORMAT)));//
 																							// "2018-01-19"));
 			List<StockBaseInfo> lstSource = CommonBaseStockInfo.getLstResult(queryss, "2018");
 

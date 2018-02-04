@@ -4,7 +4,7 @@ package com.cmall.stock.vo;
 public class StockBasePageInfo {
 	private String sort;
 	private int page = 1;
-	private int limit = 10;
+	private int limit = 8000;
 	private String datas;
 	public String getSort() {
 		return sort;
