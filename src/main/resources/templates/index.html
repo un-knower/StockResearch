@@ -76,8 +76,9 @@
 										<th>code</th>
 										<th>名称</th>
 										<th>板块</th>
-										<th>涨幅</th>
-										<th>5天涨</th>
+										<th>type</th>
+										<th><a href = "javascript:void(0)" data1 = "rises" data2 = "desc" data3= "longhu" onclick = "getLonghuSort(this)">涨幅</a></th>
+										<th><a href = "javascript:void(0)" data1 = "upSumRises5" data2 = "desc" data3= "longhu" onclick = "getLonghuSort(this)">5天涨</a></th>
 									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "longhu"></tbody>
@@ -219,7 +220,8 @@
 
   <div th:include="/common/onload_js :: onloadJs"></div>
   <script type="text/javascript">
-  	var longhuDatas = '[{"must":"must","name":"rises","type":">=","value":"10"},{"must":"must","name":"upRisesDayNum5","type":">=","value":"3"},{"must":"must","name":"upRises","type":">=","value":"3"},{"must":"must","name":"upSumRises5","type":">=","value":"15"}]';
+  	//var longhuDatas = '[{"must":"must","name":"rises","type":">=","value":"10"},{"must":"must","name":"upRisesDayNum5","type":">=","value":"3"},{"must":"must","name":"upRises","type":">=","value":"3"},{"must":"must","name":"upSumRises5","type":">=","value":"15"}]';
+    var longhuDatas = '[{"must":"must_not","name":"type","type":"=","value":"null"}]';
     $(document).ready(function(){
        App.init({
         nanoScroller: false
@@ -231,7 +233,7 @@
       getReal();
       getHotHtml();
       getStapledayUp(1,1,'wtzf' , 'desc' , 'stapledayUp');
-      getLongHuTable(1,1);
+      getLongHuTable(1,1,'rises','desc');
       getZhiBiaoTable(1,1,'');
       getMyStock();
       
@@ -321,6 +323,20 @@
     	getStapledayUp(1,1,da1 , da2 , da3)
     }
     
+    function getLonghuSort(data){
+    	var da1 = $(data).attr("data1");
+    	var da2 = $(data).attr("data2");
+    	var da3 = $(data).attr("data3");
+    	if(da2 == 'asc'){
+    		da2 = "desc";
+    		$(data).attr("data2" , da2);
+    	}else if(da2 == 'desc'){
+    		da2 = "asc";
+    		$(data).attr("data2" , da2);
+    	}
+    	getLongHuTable(1,1,da1 , da2 )
+    }
+    
     function getStapledayUp(page , num,da1 , da2 , da3){
     	$.ajax({  
       	type : "GET",  //提交方式  
@@ -375,13 +391,13 @@
       }
       
       
-      function getLongHuTable(page , num){
+      function getLongHuTable(page , num,da1,da2){
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/getListLonghu",//路径  
         data : {
         	datas:longhuDatas,
-        	sort:'date.desc',
+        	sort:da1+'.'+da2,
         	page:page,
         	limit:5
         },//数据，这里使用的是Json格式进行传输  
@@ -393,18 +409,19 @@
         		html = html + "<td>"+item[i]['stockCode']+"</td>";
         		html = html + "<td>"+item[i]['stockName']+"</td>";
         		html = html + "<td>"+item[i]['industry']+"</td>";
+        		html = html + "<td>"+item[i]['type']+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['upSumRises5'])+"</td></tr>";
         	}
         	$('#longhu').html(html);
         	if(num == 1){
-        		longhupag();
+        		longhupag(da1,da2);
         	}
       	}  
       });  
       }
       
-      function longhupag(){
+      function longhupag(da1,da2){
       	$('#longhupag').bootstrapPaginator({
                 bootstrapMajorVersion: 3,//bootstrap版本
                 currentPage: 1,//当前页码
@@ -420,7 +437,7 @@
                     }
                 },//改写分页按钮字样
                 onPageClicked: function (event, originalEvent, type, page) {
-                    getLongHuTable(page , 2);
+                    getLongHuTable(page , 2,da1,da2);
                 }
             });
       }

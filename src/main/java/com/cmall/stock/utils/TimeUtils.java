@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.springframework.util.StringUtils;
 
@@ -27,8 +28,8 @@ public class TimeUtils {
 	
 	public static void main(String[] args) {
 		
-		System.out.println(TimeUtils.toString(TimeUtils.addDay(new Date(), -180), TimeUtils.DEFAULT_DATEYMD_FORMAT));
-
+//		System.out.println(TimeUtils.toString(TimeUtils.addDay(new Date(), -180), TimeUtils.DEFAULT_DATEYMD_FORMAT));
+		System.out.println(TimeUtils.getStockDate());
 //		Calendar cal1 = Calendar.getInstance();
 //		cal1.set(1, 2010);
 //		cal1.set(2, 0);
@@ -1276,5 +1277,27 @@ public class TimeUtils {
     	 return  dayForWeek;  
     	}  
     
-
+    
+    /**
+     * 获取最后开盘时间(下午3点前取前一天，周末取星期五，不包含特殊节假日)
+     * @return
+     */
+    public static String getStockDate(){
+    	SimpleDateFormat  format = new  SimpleDateFormat("yyyy-MM-dd" );  
+    	Calendar ncalendar = new GregorianCalendar();
+    	TimeZone tz = TimeZone.getTimeZone("GMT+8");
+    	ncalendar.setTimeZone(tz);
+    	int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 1;
+    	if(w > 5){
+    		ncalendar.add(Calendar.DATE, 5-w);
+    		return format.format(ncalendar.getTime());
+    	}
+    	int H = ncalendar.get(Calendar.HOUR_OF_DAY);
+    	if(H < 15 && w == 1){
+    		ncalendar.add(Calendar.DATE,-3);
+    	}else if(H < 15 && w != 1){
+    		ncalendar.add(Calendar.DATE,-1);
+    	}
+    	return format.format(ncalendar.getTime());
+    }
 }

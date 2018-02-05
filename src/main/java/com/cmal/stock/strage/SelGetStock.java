@@ -323,7 +323,7 @@ public class SelGetStock {
 			// }
 
 			// }
-			// lstResult.add(baseInfo);
+			 lstResult.add(baseInfo);
 
 		}
 

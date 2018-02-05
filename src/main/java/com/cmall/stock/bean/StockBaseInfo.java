@@ -69,7 +69,8 @@ public class StockBaseInfo implements Serializable {
 	private int macdUp10  = 0;
 	private float sumMacdUp5 = 0;
 	private float sumMacdUp10 = 0;
-		private float upSumRises5 = 0;
+	private float upSumRises2 = 0;
+	private float upSumRises5 = 0;
 	private float upSumRises10 = 0;
 	private float upSumRises20 = 0;
 	private float upSumRises30=0;	
@@ -118,6 +119,8 @@ public class StockBaseInfo implements Serializable {
 	private String dayForWeek;
 	private double pe = 0;
 	private double npe=0;
+	
+	private String type;
 	/**
 	 * 自定义分时图用的数据
 	 *
@@ -814,6 +817,22 @@ public class StockBaseInfo implements Serializable {
 
 	public void setNpe(double npe) {
 		this.npe = npe;
+	}
+
+	public float getUpSumRises2() {
+		return upSumRises2;
+	}
+
+	public void setUpSumRises2(float upSumRises2) {
+		this.upSumRises2 = upSumRises2;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	

@@ -1,5 +1,6 @@
 package com.cmall.stock.Controller;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,9 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cmal.stock.strage.SelGetStock;
 import com.cmall.staple.bean.Stap100PPI;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.utils.TimeUtils;
+import com.cmall.stock.vo.StockBaseInfoVo;
 import com.cmall.stock.vo.StockBasePageInfo;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 @RestController
 public class StockBaseInfoController extends BaseController<StockBaseInfo> {
@@ -44,6 +49,15 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 	 */
 	@RequestMapping("/getListLonghu")
 	public Map<String, Object> getListLonghu(StockBasePageInfo page) throws Exception {
+		//获取查询时间
+		String date = TimeUtils.getStockDate();
+		String dateJson = "{\"must\":\"must\",\"name\":\"date\",\"type\":\"=\",\"value\":\""+date+"\"}]";
+		String json = page.getDatas();
+		if(json.length() > 10){
+			dateJson = "," + dateJson;
+		}
+		json = json.replace("]", dateJson);
+		page.setDatas(json);
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
 		setQuery(query, page);
 		return SelGetStock.getLstResult(query, page);
