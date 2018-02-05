@@ -15,6 +15,8 @@ package com.cmal.stock.strage;
  */
 public class TcSelstrategy {
     //1.kdj 直线上升到100  macd接近金叉
+	//前一天涨幅 -0.3-0.3 之前的股票展示出来
+	
 
 
 }

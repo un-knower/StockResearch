@@ -33,7 +33,7 @@ public class StockDetailInfoHand {
 
 		ssb.query(query);
 		Search selResult = UtilEs.getSearch(ssb, CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO,
-				CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO, 0, 4000);
+				CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO, 0, 5000);
 		JestResult results =  BaseCommonConfig.clientConfig().execute(selResult);
 		List<StockDetailInfoBean> lstBean = results.getSourceAsObjectList(StockDetailInfoBean.class);
 		return lstBean;

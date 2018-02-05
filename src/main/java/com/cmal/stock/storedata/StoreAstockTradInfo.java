@@ -107,6 +107,7 @@ public class StoreAstockTradInfo {
 					stockBaseInfo.setNpe(storeTrailer.getNpe());
 				}
 				//002252
+				if(stockBaseInfo.getZsz()>0)//排除停牌情况
 				result.add(stockBaseInfo);
 			}
 			//|stockBaseInfo.getRises()))

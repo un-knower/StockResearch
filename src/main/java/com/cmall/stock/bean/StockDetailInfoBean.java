@@ -1,7 +1,10 @@
 package com.cmall.stock.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
+
+import com.cmall.stock.utils.TimeUtils;
 
 public class StockDetailInfoBean  implements  Serializable {
 	private  String  stockCode;//代码
@@ -212,7 +215,7 @@ public class StockDetailInfoBean  implements  Serializable {
 		this.esp = Double.parseDouble(lstBean.get(12));
 		this.bvps =Double.parseDouble( lstBean.get(13));
 		this.pb = Double.parseDouble(lstBean.get(14));
-		this.timeToMarket = lstBean.get(15);
+		this.timeToMarket = lstBean.get(15).equals("0")?TimeUtils.toString(new Date(), "yyyyMMdd"):lstBean.get(15);
 		this.undp = Double.parseDouble(lstBean.get(16));
 		this.perundp = Double.parseDouble(lstBean.get(17));
 		this.rev = Double.parseDouble(lstBean.get(18));

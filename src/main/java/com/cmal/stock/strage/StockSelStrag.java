@@ -1,6 +1,7 @@
 package com.cmal.stock.strage;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import com.cmal.stock.storedata.CommonBaseStockInfo;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.bean.StockDetailInfoBean;
+import com.cmall.stock.utils.TimeUtils;
 import com.kers.esmodel.SelEsRelt;
 
 public class StockSelStrag {
@@ -346,10 +349,36 @@ public class StockSelStrag {
 		return mapSource;
 
 	}
+	
+	//次新股  对于次新股的定义  上市时间<6个月的股票
+	
+	public  static Map<String, StockDetailInfoBean>  getSubnewStock(int  days){
+		SelEsRelt<StockDetailInfoBean>  stck =  new SelEsRelt<StockDetailInfoBean>(new StockDetailInfoBean());
+		String startTime = 		TimeUtils.toString(TimeUtils.addDay(new Date(), days), "yyyyMMdd");
+		
+		
+		BoolQueryBuilder queryss = QueryBuilders.boolQuery();
+
+		queryss.must(QueryBuilders.rangeQuery("timeToMarket").gt(startTime));//("date", TimeUtils.getDate("2018-02-02")));// TimeUtils.DEFAULT_DATEYMD_FORMAT)));//
+																						// "2018-01-19"));
+		//queryss.should(QueryBuilders.termQuery("timeToMarket", "0"));
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder.query(queryss);
+		List<StockDetailInfoBean> lstSource=stck.getResultFromQuery(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO,  CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO, 1, 4000);
+		
+		Map<String, StockDetailInfoBean>  mapSource = Maps.newConcurrentMap();
+		for(StockDetailInfoBean  bean:lstSource){
+			mapSource.put(bean.getStockCode(), bean);
+		}
+		return mapSource;
+	}
+	
+	
 
 	public static void main(String[] args) {
+		System.out.println(getSubnewStock(-60));
 
-		System.out.println(getAllChkStock());
+//		System.out.println(getAllChkStock());
 
 		// List<StockBaseInfo> beans= queryBchipStock();
 		//

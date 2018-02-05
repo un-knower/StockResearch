@@ -261,7 +261,7 @@ public class StockStragEnSey {
      * 计算连续上涨天数
      */
     private void computeUpDateNum(){
-    	final JestClient jestClient = BaseCommonConfig.clientConfig();
+//    	final JestClient jestClient = BaseCommonConfig.clientConfig();
     	List<StockStrategyInfo> list = Lists.newArrayList();
     	for (int i = 0; i < entries.size(); i++) {
     		StockBaseInfo StockBaseInfo = entries.get(i);

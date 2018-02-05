@@ -26,6 +26,41 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		setQuery(query, page);
 		return SelGetStock.getLstResult(query, page);
 	}
+	
+	/**
+	 * 
+	 * @description
+	 * 	1.当日涨幅>=10% 或0
+			2.两天涨幅超过15% 
+			3.5天涨幅超过3天
+			4.成交量大于前一日交易量2倍
+			5.j值=0   》=2
+			
+			//3.5天内三天涨幅>0 
+			//4.5天内涨超过15% 
+			//5.10天内涨超过15% "
+								
+				次新股除外（上市时间超过6个月）   三点前查前一天数据（注意周六周日 向前减1,2天）				
+	 */
+	@RequestMapping("/getListLonghu")
+	public Map<String, Object> getListLonghu(StockBasePageInfo page) throws Exception {
+		BoolQueryBuilder query = QueryBuilders.boolQuery();
+		setQuery(query, page);
+		return SelGetStock.getLstResult(query, page);
+	}
+	/**
+	 * 指标榜
+	 *     1. kdj 金叉  (kdj)
+	 *     2.macd 金叉
+	 *    3.5日内涨幅》-2  十日内涨幅》=-4且 macd大于0趋势向上
+	 */
+	@RequestMapping("/getListZhibiao")
+	public Map<String, Object> getListZhibiao(StockBasePageInfo page) throws Exception {
+		BoolQueryBuilder query = QueryBuilders.boolQuery();
+		setQuery(query, page);
+		return SelGetStock.getLstResult(query, page);
+	}
+	
 
 	@RequestMapping("/getClassNameList")
 	public String[] getClassNameList() throws Exception {

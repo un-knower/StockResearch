@@ -26,18 +26,21 @@ public class TimeUtils {
 	// SimpleDateFormat("yyyyMMddHHmmss");
 	
 	public static void main(String[] args) {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.set(1, 2010);
-		cal1.set(2, 0);
-		cal1.set(5, 9);
+		
+		System.out.println(TimeUtils.toString(TimeUtils.addDay(new Date(), -180), TimeUtils.DEFAULT_DATEYMD_FORMAT));
 
-		Calendar cal2 = Calendar.getInstance();
-		cal2.set(1, 2010);
-		cal2.set(2, 0);
-		cal2.set(5, 13);
-
-		Date startDate = cal1.getTime();
-		Date endDate = cal2.getTime();
+//		Calendar cal1 = Calendar.getInstance();
+//		cal1.set(1, 2010);
+//		cal1.set(2, 0);
+//		cal1.set(5, 9);
+//
+//		Calendar cal2 = Calendar.getInstance();
+//		cal2.set(1, 2010);
+//		cal2.set(2, 0);
+//		cal2.set(5, 13);
+//
+//		Date startDate = cal1.getTime();
+//		Date endDate = cal2.getTime();
 
 //		getDayList(startDate, endDate);
 //		System.out.println(countDays(startDate, endDate));

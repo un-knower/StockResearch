@@ -133,6 +133,7 @@ public class SelGetStock {
 		mapsSelStockTmp.remove("600438");//
 	
 		mapsSelStockTmp.remove("300070");
+		mapsSelStockTmp.remove("300306");
 		mapsSelStockTmp.remove("000001");//中国平安
 		mapsSelStockTmp.remove("601328");//交通银行
 		mapsSelStockTmp.remove("600016");//民生银行   对标中国银行
@@ -292,8 +293,8 @@ public class SelGetStock {
 		List<StockBaseInfo> lstResult = Lists.newArrayList();
 		for (StockBaseInfo baseInfo : lstBean) {
 			// if(baseInfo.getJ()>baseInfo.getUpJ())
-			if(baseInfo.getUp2J()<baseInfo.getJ())
-			lstResult.add(baseInfo);
+			//if(baseInfo.getUp2J()<baseInfo.getJ())
+			//lstResult.add(baseInfo);
 
 			// if (mapsInfo.get(baseInfo.getStockCode()) == null &&
 			// (!baseInfo.getStockCode().startsWith("3"))) {//
