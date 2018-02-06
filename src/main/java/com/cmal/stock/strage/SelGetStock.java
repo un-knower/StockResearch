@@ -13,6 +13,7 @@ import com.cmal.stock.storedata.CommonBaseStockInfo;
 import com.cmall.staple.bean.Stap100PPI;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StoreTrailer;
 import com.cmall.stock.vo.StockBasePageInfo;
 import com.google.common.collect.Lists;
@@ -40,6 +41,7 @@ import io.searchbox.core.Search;
  */
 public class SelGetStock {
 	static Map<String, String> mapsInfo = StockSelStrag.blckLstOfStock();
+	static Map<String, StockDetailInfoBean> mapsSubnewStock = 	StockSelStrag.getSubnewStock(-60);
 	static Map<String, String> mapsSelStock = StockSelStrag.getAllChkStock();
 
 	public static void revtmpMap(Map<String, String> mapsSelStockTmp) {// 临时剔除一些
@@ -202,6 +204,7 @@ public class SelGetStock {
 
 		revtmpMap(mapsSelStockTmp);
 		query.must(QueryBuilders.inQuery("stockCode", mapsSelStockTmp.keySet()));
+		query.mustNot(QueryBuilders.inQuery("stockCode", mapsSubnewStock.keySet()));//排除次新股
 
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
 //		System.out.println(searchSourceBuilder.toString());
@@ -276,8 +279,10 @@ public class SelGetStock {
 	public static Map<String, Object> getLstResult(BoolQueryBuilder query, StockBasePageInfo page) throws Exception {
 
 		Map<String, Object> returnMap = Maps.newHashMap();
-
+        
 		query.mustNot(QueryBuilders.inQuery("stockCode", mapsInfo.keySet()));
+		query.mustNot(QueryBuilders.inQuery("stockCode", mapsSubnewStock.keySet()));
+
 		// query.mustNot(QueryBuilders.inQuery("stockCode",
 		// StockSelStrag.blckLstOfStock().keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);

@@ -48,7 +48,17 @@ public class StoreAstockTradInfo {
 	public static void getHistoryData() throws Exception {
 		  final String  sfd=new SimpleDateFormat("yyyyMMdd").format(new Date());
 //		List<String> filePath =CommonBaseStockInfo.getAllAStockInfo();// FileUtils.readLines(new File(CommonBaseStockInfo.astockfilePath));
-		List<StockDetailInfoBean>  lstBean =StockDetailInfoHand.getDetailForNetLst();
+		List<StockDetailInfoBean>  lstBean =Lists.newArrayList();//StockDetailInfoHand.getDetailForNetLst();
+		StockDetailInfoBean  stbean = new StockDetailInfoBean();
+		stbean.setStockCode("0000001,");
+		stbean.setStockName("上证指数");
+		StockDetailInfoBean  stbean2 = new StockDetailInfoBean();
+		stbean2.setStockCode("1399001,");
+		stbean2.setStockName("上证指数");
+		lstBean.add(stbean);
+		lstBean.add(stbean2);
+		//深证成指
+		
 		for (final StockDetailInfoBean bean : lstBean) {
 			 final String s = bean.getStockCode();
 
@@ -57,6 +67,9 @@ public class StoreAstockTradInfo {
 				public void run() {
 					String code = s.split(",")[0];
 					String scode = s.startsWith("6") ? "0" + code : "1" + code;
+					if(code.equals(CommonBaseStockInfo.SPEC_STOCK_CODE_SH)||code.equals(CommonBaseStockInfo.SPEC_STOCK_CODE_SZ))
+						scode=code;
+					//String scode = s.startsWith("6") ? "0" + code : "1" + code;
 					 
 					String webUri = stockHisCrawUrl + scode + "&start=20170701&end="+sfd;
 					try {
@@ -349,7 +362,7 @@ public class StoreAstockTradInfo {
 	}
 	public static void main(String[] args) throws ClientProtocolException, IOException, Exception {
 //		getHistoryData();
-//		executorServiceLocal.shutdown();
+//		executorServiceLocal.shutdown();f
 //		getRealTimeData();
 		wDataToEs();
 //		wDataRealToEs();

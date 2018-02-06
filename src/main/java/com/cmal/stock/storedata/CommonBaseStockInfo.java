@@ -37,6 +37,9 @@ public class CommonBaseStockInfo {
 	public final static String ES_INDEX_STOCK_STORETRAILER="storetrailer";
 	public final static String ES_INDEX_STOCK_STOCKPCSE="stockpcse";
 	public final static String ES_INDEX_STOCK_STOREREPORT="storereport"; 
+	public final static String SPEC_STOCK_CODE_SH="0000001"; 
+	public final static String SPEC_STOCK_CODE_SZ="1399001"; 
+
 
 	
 
