@@ -58,6 +58,10 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		}
 		json = json.replace("]", dateJson);
 		page.setDatas(json);
+//		int pageStart = page.getPage();
+//		int limit = page.getLimit();
+//		page.setLimit(5000);
+//		page.setPage(0);
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
 		setQuery(query, page);
 		return SelGetStock.getLstResult(query, page);
@@ -150,6 +154,40 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 			fieldNames[i - 1] = fields[i].getName();
 		}
 		return fieldNames;
+	}
+	
+	
+	@RequestMapping("/getKDJ")
+	public Map<String, Object> getKDJ(StockBasePageInfo page) throws Exception {
+		Map<String, Object> map = Maps.newHashMap();
+		BoolQueryBuilder query = QueryBuilders.boolQuery();
+		setQuery(query, page);
+		List<StockBaseInfo> list = (List<StockBaseInfo>) SelGetStock.getLstResult(query, page).get("items");
+		String[] dates = new String[list.size()];
+		Float[] ks = new Float[list.size()];
+		Float[] ds = new Float[list.size()];
+		Float[] js = new Float[list.size()];
+		Float[] diffs = new Float[list.size()];
+		Float[] daes = new Float[list.size()];
+		int j = 0;
+		for (int i = list.size() - 1; i >= 0; i--) {
+			StockBaseInfo bean = list.get(i);
+			dates[j] = bean.getDate();
+			ks[j] = bean.getK();
+			ds[j] = bean.getD();
+			js[j] = bean.getJ();
+			diffs[j] = bean.getDiff();
+			daes[j] = bean.getDea();
+			j++;
+		}
+		map.put("date", dates);
+		map.put("K", ks);
+		map.put("D", ds);
+		map.put("J", js);
+		map.put("DIFF", diffs);
+		map.put("DAE", daes);
+		return map;
+
 	}
 
 }

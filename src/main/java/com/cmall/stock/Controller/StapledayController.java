@@ -108,7 +108,12 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     	//亚太http://hq.sinajs.cn/rn=1517303034135&list=hkHSI,b_NKY,b_TWSE,b_AS30,b_FSSTI
     	//欧洲http://hq.sinajs.cn/rn=1517303057897&list=EURUSD,b_UKX,b_DAX,b_CAC,b_FTSEMIB
     	//美股http://hq.sinajs.cn/rn=1517303070978&list=gb_dji,gb_ixic,gb_inx,hf_DJS,hf_NAS
-    	String con = BaseConnClient.baseGetReq("http://hq.sinajs.cn/rn=151730262502396&list=s_sh000001,s_sz399001,s_sz399006,gb_dji,gb_ixic");
+    	String[][] urlStr = {{"s_sh000001","0"},{"s_sz399006","0"},{"b_NKY","0"},{"b_NKY","0"},{"gb_dji","2"},{"gb_ixic","2"}};
+    	String url = "http://hq.sinajs.cn/rn=151730262502396&list=";
+    	for (int i = 0; i < urlStr.length; i++) {
+    		url = url + urlStr[i][0] + ",";
+		}
+    	String con = BaseConnClient.baseGetReq(url);
     	List<StockBaseInfo> list = Lists.newArrayList();
     	con = con.replace("\"", "");
     	String[] datas = con.split("\\;");
@@ -118,13 +123,13 @@ public class StapledayController  extends BaseController<Stap100PPI>{
 				String[] ds = string.split("\\=")[1].split(",");
 				if(ds.length > 3){
 					StockBaseInfo info = new StockBaseInfo();
-					if(i <= 2){
+					if(urlStr[i][1].equals("0")){
 						info.setStockName(ds[0]);
 						info.setMb(Float.parseFloat(ds[1]));
 						info.setPe(Double.parseDouble(ds[2]));
 						info.setRises(Float.parseFloat(ds[3]));
 					}
-					if(i > 2){
+					if(urlStr[i][1].equals("2")){
 						info.setStockName(ds[0]);
 						info.setMb(Float.parseFloat(ds[1]));
 						info.setRises(Float.parseFloat(ds[2]));

@@ -11,31 +11,21 @@
 	<div class="container-fluid" id="pcont">
 		<div class="cl-mcont">
 			<div class="stats_bar" id = "startHtml"></div>
-			<div class="row dash-cols">
-				<!-- 内容左侧 -->
-				<div class="col-sm-6 col-md-6">
-					<div class="block">
-						<div class="header no-border" style = "padding-left:30px !important;">
-							<form class="form-inline">
-								<div class="form-group">
-									<div class="input-group pull-right">
-										<div class="input-group-addon">实时数据:</div>
-			      						<input type="text" class="form-control" id="code" value="000001">
-			    					</div>
-			  					</div>
-			  					<button type="button" class="btn btn-default" onclick = "getReal();">查</button>
-							</form>
-   						 </div>
+			<div class="stats_bar">
+				<div class="col-sm-4 col-md-4">
+				<div id="main3" style="width: 600px;height:400px;"></div>
+				</div>
+				<div class="col-sm-4 col-md-4">
+				<div id="main4" style="width: 600px;height:400px;"></div>
+				</div>
+				<div class="col-sm-4 col-md-4">
+				<div class="block">
+						<input type="hidden" class="form-control" id="code" value="000001" >
     					<div class="content"  data-step="3" data-intro="">
       						<img src = "http://image.sinajs.cn/newchart/min/n/sh000001.gif" style="width:100%;" id ="imgFen"/>
     					</div>
     					<div class="content">
-      						<div class="stat-data">
-        						<div class="stat-red" id = "realPrice">
-          							<h2 id = "price">3000</h2>
-          							<span id = "percent">+10%</span>
-       							</div>
-      						</div>
+
       						<div class="stat-data">
         						<div class="stat-number">
           							<div><h4 id = "realName">上证指数</h4></div>
@@ -56,6 +46,12 @@
       						<div class="clear"></div>
     					</div>
   					</div>
+				</div>
+			</div>
+			<div class="row dash-cols">
+				<!-- 内容左侧 -->
+				<div class="col-sm-6 col-md-6">
+					
   					<div class="block-flat2 pie-widget">
 						<div class="header">
 							<span class="pull-right"><a href = "#" onclick = "longhuGo()">更多</a></span>
@@ -143,6 +139,7 @@
 								<thead class="no-border">
 									<tr>
 										<th width = "40%">名称</th>
+										<th width = "20%"><a href = "javascript:void(0)" data1 = "monthRise" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">涨幅</a></th>
 										<th width = "20%"><a href = "javascript:void(0)" data1 = "wtzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">周涨幅</a></th>
 										<th width = "20%"><a href = "javascript:void(0)" data1 = "yfzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">月涨幅</a></th>
 										<th width = "20%"><a href = "javascript:void(0)" data1 = "jdzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">季涨幅</a></th>
@@ -230,6 +227,7 @@
       App.dashBoard();   
       
       getAllList();
+      kdj('600874');
       getReal();
       getHotHtml();
       getStapledayUp(1,1,'wtzf' , 'desc' , 'stapledayUp');
@@ -352,6 +350,7 @@
         	var html = "";
         	for(var i=0;i<item.length;i++){
         		html = html + "<tr><td><a href='javascript:void(0)' onclick = 'tu("+item[i]['code']+")'>"+item[i]['productName']+"</a></td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['monthRise'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['wtzf'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['yfzf'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['jdzf'])+"</td></tr>";
@@ -581,6 +580,126 @@
         	  myChart.setOption(option);
         	  
         	  $('#myModal').modal('show');
+      	}  
+      }); 
+      }
+      
+      
+      function kdj(code){
+      	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/getKDJ",//路径  
+        data : {
+			datas:'[{"must":"must","name":"stockCode","type":"=","value":"'+code+'"}]',
+			sort:'date.desc',
+			page:1,
+			limit:50
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	 var myChart = echarts.init(document.getElementById('main3'));
+        	 var data =result;
+        	 
+				
+				option = {
+			    title: {
+			        text: '指标图化',
+			        subtext: 'KDJ'
+			    },
+			    tooltip: {
+			        trigger: 'axis'
+			    },
+			    legend: {
+			        data:['K','D','J']
+			    },
+			    toolbox: {
+			        show: true,
+			        feature: {
+			            dataZoom: {
+			                yAxisIndex: 'none'
+			            },
+			            dataView: {readOnly: false},
+			            magicType: {type: ['line', 'bar']},
+			            restore: {},
+			            saveAsImage: {}
+			        }
+			    },
+			    xAxis:  {
+			        type: 'category',
+			        boundaryGap: false,
+			        data: data["date"]
+			    },
+			    yAxis: {
+			        type: 'value'
+			    },
+			    series: [
+			        {
+			            name:'K',
+			            type:'line',
+			            data:data["K"]
+			        },
+			        {
+			            name:'D',
+			            type:'line',
+			            data:data["D"]
+			        },
+			        {
+			            name:'J',
+			            type:'line',
+			            data:data["J"]
+			        }
+			    ]
+			};
+        	  myChart.setOption(option);
+        	  
+        	  
+        	  var myChart2 = echarts.init(document.getElementById('main4'));
+        	 
+				
+				option2 = {
+			    title: {
+			        text: '指标图化',
+			        subtext: 'MACD'
+			    },
+			    tooltip: {
+			        trigger: 'axis'
+			    },
+			    legend: {
+			        data:['diff','dae']
+			    },
+			    toolbox: {
+			        show: true,
+			        feature: {
+			            dataZoom: {
+			                yAxisIndex: 'none'
+			            },
+			            dataView: {readOnly: false},
+			            magicType: {type: ['line', 'bar']},
+			            restore: {},
+			            saveAsImage: {}
+			        }
+			    },
+			    xAxis:  {
+			        type: 'category',
+			        boundaryGap: false,
+			        data: data["date"]
+			    },
+			    yAxis: {
+			        type: 'value'
+			    },
+			    series: [
+			        {
+			            name:'DIFF',
+			            type:'line',
+			            data:data["DIFF"]
+			        },
+			        {
+			            name:'DAE',
+			            type:'line',
+			            data:data["DAE"]
+			        }
+			    ]
+			};
+        	  myChart2.setOption(option2);
       	}  
       }); 
       }

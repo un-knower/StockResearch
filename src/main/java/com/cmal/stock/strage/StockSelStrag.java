@@ -370,11 +370,12 @@ public class StockSelStrag {
 		
 		Map<String, StockDetailInfoBean>  mapSource = Maps.newConcurrentMap();
 		for(StockDetailInfoBean  bean:lstSource){
-			  long    cdays=TimeUtils.countDays(TimeUtils.toDate(bean.getTimeToMarket(), "yyyyMMdd"),new Date());
-			
+			if(!bean.getTimeToMarket().equals("0") ){
+				long    cdays=TimeUtils.countDays(TimeUtils.toDate(bean.getTimeToMarket(), "yyyyMMdd"),new Date());
+				  if(cdays<Math.abs(days))
+				mapSource.put(bean.getStockCode(), bean);
+			}
 			  
-			  if(cdays<Math.abs(days))
-			mapSource.put(bean.getStockCode(), bean);
 		}
 		return mapSource;
 	}
