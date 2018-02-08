@@ -13,24 +13,17 @@
 			<div class="stats_bar" id = "startHtml"></div>
 			<div class="stats_bar">
 				<div class="col-sm-4 col-md-4">
-				<div id="main3" style="width: 600px;height:400px;"></div>
+				<div id="main3" style="width: 400px;height:300px;"></div>
 				</div>
 				<div class="col-sm-4 col-md-4">
-				<div id="main4" style="width: 600px;height:400px;"></div>
+				<div id="main4" style="width: 400px;height:300px;"></div>
 				</div>
-				<div class="col-sm-4 col-md-4">
-				<div class="block">
+				<div class="col-sm-4 col-md-4" >
+				<div class="block"  style="width: 400px;height:300px;">
 						<input type="hidden" class="form-control" id="code" value="000001" >
-    					<div class="content"  data-step="3" data-intro="">
-      						<img src = "http://image.sinajs.cn/newchart/min/n/sh000001.gif" style="width:100%;" id ="imgFen"/>
-    					</div>
-    					<div class="content">
-
-      						<div class="stat-data">
-        						<div class="stat-number">
-          							<div><h4 id = "realName">上证指数</h4></div>
-        						</div>
-        						<div class="stat-number">
+    					<div class="content"  data-step="3" data-intro="" style="width: 300px;height:200px;">
+      						<img src = "http://image.sinajs.cn/newchart/min/n/sh000001.gif" style="width: 300px;height:200px;" id ="imgFen"/>
+      							<div class="stat-number">
           							<div class = "col-sm-6 col-md-6">
           								开盘:<span id = "realOpen" style = "font-size: 16px !important;"></span>
           								<br/>
@@ -42,9 +35,15 @@
           								最低:<span id = "realLow" style = "font-size: 16px !important;"></span>
           							</div>
         						</div>
+    					</div>
+    				<!-- 	<div class="content">
+
+      						<div class="stat-data">
+        						
+        					
 							</div>
       						<div class="clear"></div>
-    					</div>
+    					</div> -->
   					</div>
 				</div>
 			</div>
@@ -227,7 +226,7 @@
       App.dashBoard();   
       
       getAllList();
-      kdj('600874');
+      kdj('0000001');
       getReal();
       getHotHtml();
       getStapledayUp(1,1,'wtzf' , 'desc' , 'stapledayUp');
@@ -602,7 +601,7 @@
 				
 				option = {
 			    title: {
-			        text: '指标图化',
+			        //text: '指标图化',
 			        subtext: 'KDJ'
 			    },
 			    tooltip: {
@@ -653,12 +652,13 @@
         	  
         	  
         	  var myChart2 = echarts.init(document.getElementById('main4'));
-        	 
+        	  var upColor = '#00da3c';
+        	  var downColor = '#ec0000';
 				
 				option2 = {
 			    title: {
-			        text: '指标图化',
-			        subtext: 'MACD'
+			      //  text: '指标图化',
+			        subtext: '			       MACD'
 			    },
 			    tooltip: {
 			        trigger: 'axis'
@@ -690,12 +690,28 @@
 			        {
 			            name:'DIFF',
 			            type:'line',
-			            data:data["DIFF"]
+			            data:data["DIFF"],
+			            itemStyle: {
+		                    normal: {
+		                        color: '#ffff00'
+		                    /*     color0: downColor,
+		                        borderColor: null,
+		                        borderColor0: null */
+		                    }
+		                }
 			        },
 			        {
 			            name:'DAE',
 			            type:'line',
-			            data:data["DAE"]
+			            data:data["DAE"],
+			            itemStyle: {
+		                    normal: {
+		                        color: '#ffffff'
+		                    /*     color0: downColor,
+		                        borderColor: null,
+		                        borderColor0: null */
+		                    }
+		                }
 			        }
 			    ]
 			};

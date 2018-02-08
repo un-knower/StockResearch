@@ -103,14 +103,14 @@ public class StoreTrailerSet {
 		// savetrailerDetailInfo(bean.getStockCode());
 		//
 		// }
-		wsData();
+		wsData(5);
 
 	}
 
-	public static void wsData() throws InterruptedException {
+	public static void wsData(int  endi) throws InterruptedException {
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		// List<StoreTrailer> list= Lists.newArrayList();
-		for (int i = 0; i <=50; i++) {
+		for (int i = 0; i <=endi; i++) {
 			// String content = StoreTrailerUrl(i);
 			// System.out.println(content);|
 			try {

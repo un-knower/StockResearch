@@ -18,18 +18,11 @@
 
 package com.cmal.stock.strage;
 
-import io.searchbox.client.JestClient;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import com.cmal.stock.storedata.StoreStrategySet;
 import com.cmall.stock.bean.StockBaseInfo;
-import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StockStrategyInfo;
 import com.google.common.collect.Lists;
-import com.kers.esmodel.BaseCommonConfig;
 
 /**
  * <p>StockBaseInfoSet</p>
@@ -263,8 +256,8 @@ public class StockStragEnSey {
      * 计算连续上涨天数
      */
     private void computeUpDateNum(){
-    	Map<String, StockDetailInfoBean> ci = StockSelStrag.getSubnewStock(-60);
-    	Map<String, String> hei = StockSelStrag.blckLstOfStock();
+    	//Map<String, StockDetailInfoBean> ci = StockSelStrag.getSubnewStock(-60);
+    	//Map<String, String> hei = StockSelStrag.blckLstOfStock();
 //    	final JestClient jestClient = BaseCommonConfig.clientConfig();
     	List<StockStrategyInfo> list = Lists.newArrayList();
     	for (int i = 0; i < entries.size(); i++) {
@@ -520,30 +513,30 @@ public class StockStragEnSey {
     			StockBaseInfo.setMinLowRises10(minLowRises10);
     			StockBaseInfo.setMinLowRises20(minLowRises20);
     			StockBaseInfo.setMinLowRises30(minLowRises30);
-    			StringBuffer type = new StringBuffer();
-    			if(null != ci && null == ci.get(StockBaseInfo.getStockCode()) 
-    					&& null != hei && null == hei.get(StockBaseInfo.getStockCode())){
-    				if(StockBaseInfo.getRises() > 10){
-    					type.append("1").append(",");
-    				}
-    				if(StockBaseInfo.getUpSumRises2() > 15){
-    					type.append("2").append(",");
-    				}
-    				if(StockBaseInfo.getUpRisesDayNum5() > 3){
-    					type.append("3").append(",");
-    				}
-    				if(StockBaseInfo.getVolumeRises() > 2){
-    					type.append("4").append(",");
-    				}
-    				if(StockBaseInfo.getJ() == 0 && StockBaseInfo.getUpJ() == 0){
-    					type.append("5").append(",");
-    				}
-    			}
-    			if(type.length() > 0){
-					StockBaseInfo.setType(type.toString());
-				}else{
-					StockBaseInfo.setType("null");
-				}
+//    			StringBuffer type = new StringBuffer();
+//    			if(null != ci && null == ci.get(StockBaseInfo.getStockCode()) 
+//    					&& null != hei && null == hei.get(StockBaseInfo.getStockCode())){
+//    				if(StockBaseInfo.getRises() > 10){
+//    					type.append("1").append(",");
+//    				}
+//    				if(StockBaseInfo.getUpSumRises2() > 15){
+//    					type.append("2").append(",");
+//    				}
+//    				if(StockBaseInfo.getUpRisesDayNum5() > 3){
+//    					type.append("3").append(",");
+//    				}
+//    				if(StockBaseInfo.getVolumeRises() > 2){
+//    					type.append("4").append(",");
+//    				}
+//    				if(StockBaseInfo.getJ() == 0 && StockBaseInfo.getUpJ() == 0){
+//    					type.append("5").append(",");
+//    				}
+//    			}
+//    			if(type.length() > 0){
+//					StockBaseInfo.setType(type.toString());
+//				}else{
+//					StockBaseInfo.setType("null");
+//				}
 //    			System.out.println(StockBaseInfo.getStockCode() + StockBaseInfo.getDate() +" 收盘价:" +
 //    					StockBaseInfo.getRises() + " 前5天涨的次数" + StockBaseInfo.getUp5() + " 前10天涨的次数：" + StockBaseInfo.getUp10());
     		}

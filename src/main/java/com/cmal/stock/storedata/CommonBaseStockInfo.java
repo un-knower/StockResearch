@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import com.cmall.stock.bean.StockBaseInfo;
@@ -39,6 +38,7 @@ public class CommonBaseStockInfo {
 	public final static String ES_INDEX_STOCK_STOREREPORT="storereport"; 
 	public final static String SPEC_STOCK_CODE_SH="0000001"; 
 	public final static String SPEC_STOCK_CODE_SZ="1399001"; 
+	public final static String FIDUCIAL_TIME="2018-02-07";
 
 
 	

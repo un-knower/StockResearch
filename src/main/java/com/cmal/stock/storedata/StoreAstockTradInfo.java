@@ -48,15 +48,8 @@ public class StoreAstockTradInfo {
 	public static void getHistoryData() throws Exception {
 		  final String  sfd=new SimpleDateFormat("yyyyMMdd").format(new Date());
 //		List<String> filePath =CommonBaseStockInfo.getAllAStockInfo();// FileUtils.readLines(new File(CommonBaseStockInfo.astockfilePath));
-		List<StockDetailInfoBean>  lstBean =Lists.newArrayList();//StockDetailInfoHand.getDetailForNetLst();
-		StockDetailInfoBean  stbean = new StockDetailInfoBean();
-		stbean.setStockCode("0000001,");
-		stbean.setStockName("上证指数");
-		StockDetailInfoBean  stbean2 = new StockDetailInfoBean();
-		stbean2.setStockCode("1399001,");
-		stbean2.setStockName("上证指数");
-		lstBean.add(stbean);
-		lstBean.add(stbean2);
+		List<StockDetailInfoBean>  lstBean =StockDetailInfoHand.getDetailForLst();//Lists.newArrayList();//
+		
 		//深证成指
 		
 		for (final StockDetailInfoBean bean : lstBean) {
@@ -120,7 +113,7 @@ public class StoreAstockTradInfo {
 					stockBaseInfo.setNpe(storeTrailer.getNpe());
 				}
 				//002252
-				if(stockBaseInfo.getZsz()>0)//排除停牌情况
+				if(stockBaseInfo.getZsz()>0||((CommonBaseStockInfo.SPEC_STOCK_CODE_SH.equals(stockCode)||CommonBaseStockInfo.SPEC_STOCK_CODE_SZ.equals(stockCode))))//排除停牌情况
 				result.add(stockBaseInfo);
 			}
 			//|stockBaseInfo.getRises()))
@@ -291,18 +284,23 @@ public class StoreAstockTradInfo {
 	 }
 	public      static  void  wDataToEs() throws Exception{
 		List<StockDetailInfoBean> lstSource =StockDetailInfoHand.getDetailForLst();// CommonBaseStockInfo.getAllAStockInfo();
+		
+		
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo(); //getInfoByCsv();
 		 final Map<String , StoreTrailer> mapStoreTrailer =QueryComLstData.getStoreTrailerMapsInfo(); //getInfoByCsv();
+		 
+		 
 		for(final StockDetailInfoBean  bean:lstSource){
 			 final String sat=bean.getStockCode();
-//			if(sat.equals("603612")){
+		//	if(sat.equals("0000001")||sat.equals(CommonBaseStockInfo.SPEC_STOCK_CODE_SZ)){
+			//	System.out.println(sat);
 //				try {
 //					List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat ,  map.get(sat));
 //		  			 insBatchEs(lstInfo, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
 //				} catch (Exception e) {
 //					// TODO: handle exception
-//				}
+				
 //			
 //			}
 			executorServiceLocal.execute(new Thread(){
@@ -310,6 +308,7 @@ public class StoreAstockTradInfo {
 				public void run() {
 			          try {
 			        	 List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat ,  map.get(sat),mapStoreTrailer.get(sat));
+			     //   	 System.out.println(lstInfo);
 			  			 insBatchEs(lstInfo, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
 					} catch (Exception e) {
 						System.out.println(sat);
@@ -318,6 +317,7 @@ public class StoreAstockTradInfo {
 						
 				}
 			});
+		//	}
 		}
 //	}
 		

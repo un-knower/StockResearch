@@ -445,9 +445,9 @@ public class SelGetStock {
 		} else {
 			types.add("2017-09-30");
 		}
-//		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
-		 query.must(QueryBuilders.inQuery("stockCode",
-		 mapsSelStock.keySet()));
+		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
+//		 query.must(QueryBuilders.inQuery("stockCode",
+//		 mapsSelStock.keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);// ssb.query(query);
 		System.out.println(searchSourceBuilder.toString());
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOREREPORT, types,

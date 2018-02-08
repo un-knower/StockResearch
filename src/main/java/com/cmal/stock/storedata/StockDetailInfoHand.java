@@ -48,6 +48,14 @@ public class StockDetailInfoHand {
 			StockDetailInfoBean detailInfoBean = new StockDetailInfoBean(lstBeanCon);
 			list.add(detailInfoBean);
 		}
+		StockDetailInfoBean  stbean = new StockDetailInfoBean();
+		stbean.setStockCode("0000001");
+		stbean.setStockName("上证指数");
+		StockDetailInfoBean  stbean2 = new StockDetailInfoBean();
+		stbean2.setStockCode("1399001");
+		stbean2.setStockName("上证指数");
+		list.add(stbean);
+		list.add(stbean2);
 		return list;
 
 	}
