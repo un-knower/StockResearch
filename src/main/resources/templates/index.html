@@ -22,7 +22,8 @@
 				<div class="block"  style="width: 400px;height:300px;">
 						<input type="hidden" class="form-control" id="code" value="000001" >
     					<div class="content"  data-step="3" data-intro="" style="width: 300px;height:200px;">
-      						<img src = "http://image.sinajs.cn/newchart/min/n/sh000001.gif" style="width: 300px;height:200px;" id ="imgFen"/>
+    						<div id="main5" style="width: 400px;height:300px;"></div>
+      						<!-- <img src = "http://image.sinajs.cn/newchart/min/n/sh000001.gif" style="width: 300px;height:200px;" id ="imgFen"/> -->
       							<div class="stat-number">
           							<div class = "col-sm-6 col-md-6">
           								开盘:<span id = "realOpen" style = "font-size: 16px !important;"></span>
@@ -89,7 +90,7 @@
 							<span class="pull-right"><a href = "#" onclick = "zhibiaoGo()">更多</a></span>
 							<span class="pull-right">
 								<select id = "zhibiaoSelect">
-									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]' selected>KDJ金叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;},{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;j&quot;,&quot;type&quot;:&quot;<&quot;,&quot;value&quot;:&quot;25&quot;}]' selected>KDJ金叉</option>
 									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]'>macd金叉</option>
 									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;}]'>KDJ死叉</option>
 									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;}]'>macd死叉</option>
@@ -227,6 +228,7 @@
       
       getAllList();
       kdj('0000001');
+
       getReal();
       getHotHtml();
       getStapledayUp(1,1,'wtzf' , 'desc' , 'stapledayUp');
@@ -583,6 +585,34 @@
       }); 
       }
       
+      function splitData(rawData) {
+		    var categoryData = [];
+		    var values = []
+		    for (var i = 0; i < rawData.length; i++) {
+		        categoryData.push(rawData[i].splice(0, 1)[0]);
+		        values.push(rawData[i])
+		    }
+		    return {
+		        categoryData: categoryData,
+		        values: values
+		    };
+		}
+
+		function calculateMA(dayCount , data0) {
+		    var result = [];
+		    for (var i = 0, len = data0.values.length; i < len; i++) {
+		        if (i < dayCount) {
+		            result.push('-');
+		            continue;
+		        }
+		        var sum = 0;
+		        for (var j = 0; j < dayCount; j++) {
+		            sum += data0.values[i - j][1];
+		        }
+		        result.push(sum / dayCount);
+		    }
+		    return result;
+		}
       
       function kdj(code){
       	$.ajax({  
@@ -716,6 +746,201 @@
 			    ]
 			};
         	  myChart2.setOption(option2);
+        	  
+        	  
+        	   var myChart3 = echarts.init(document.getElementById('main5'));
+
+				var upColor = '#ec0000';
+		var upBorderColor = '#8A0000';
+		var downColor = '#00da3c';
+		var downBorderColor = '#008F28';
+		
+		
+		// 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
+		var obj = data["obj"];
+		var data0 = splitData(obj);
+		option3 = {
+		    title: {
+		        text: '上证指数',
+		        left: 0
+		    },
+		    tooltip: {
+		        trigger: 'axis',
+		        axisPointer: {
+		            type: 'cross'
+		        }
+		    },
+		    legend: {
+		        data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30']
+		    },
+		    grid: {
+		        left: '10%',
+		        right: '10%',
+		        bottom: '15%'
+		    },
+		    xAxis: {
+		        type: 'category',
+		        data: data0.categoryData,
+		        scale: true,
+		        boundaryGap : false,
+		        axisLine: {onZero: false},
+		        splitLine: {show: false},
+		        splitNumber: 20,
+		        min: 'dataMin',
+		        max: 'dataMax'
+		    },
+		    yAxis: {
+		        scale: true,
+		        splitArea: {
+		            show: true
+		        }
+		    },
+		    dataZoom: [
+		        {
+		            type: 'inside',
+		            start: 50,
+		            end: 100
+		        },
+		        {
+		            show: true,
+		            type: 'slider',
+		            y: '90%',
+		            start: 50,
+		            end: 100
+		        }
+		    ],
+		    series: [
+		        {
+		            name: '日K',
+		            type: 'candlestick',
+		            data: data0.values,
+		            itemStyle: {
+		                normal: {
+		                    color: upColor,
+		                    color0: downColor,
+		                    borderColor: upBorderColor,
+		                    borderColor0: downBorderColor
+		                }
+		            },
+		            markPoint: {
+		                label: {
+		                    normal: {
+		                        formatter: function (param) {
+		                            return param != null ? Math.round(param.value) : '';
+		                        }
+		                    }
+		                },
+		                data: [
+		                    {
+		                        name: 'XX标点',
+		                        coord: ['2013/5/31', 2300],
+		                        value: 2300,
+		                        itemStyle: {
+		                            normal: {color: 'rgb(41,60,85)'}
+		                        }
+		                    },
+		                    {
+		                        name: 'highest value',
+		                        type: 'max',
+		                        valueDim: 'highest'
+		                    },
+		                    {
+		                        name: 'lowest value',
+		                        type: 'min',
+		                        valueDim: 'lowest'
+		                    },
+		                    {
+		                        name: 'average value on close',
+		                        type: 'average',
+		                        valueDim: 'close'
+		                    }
+		                ],
+		                tooltip: {
+		                    formatter: function (param) {
+		                        return param.name + '<br>' + (param.data.coord || '');
+		                    }
+		                }
+		            },
+		            markLine: {
+		                symbol: ['none', 'none'],
+		                data: [
+		                    [
+		                        {
+		                            name: 'from lowest to highest',
+		                            type: 'min',
+		                            valueDim: 'lowest',
+		                            symbol: 'circle',
+		                            symbolSize: 10,
+		                            label: {
+		                                normal: {show: false},
+		                                emphasis: {show: false}
+		                            }
+		                        },
+		                        {
+		                            type: 'max',
+		                            valueDim: 'highest',
+		                            symbol: 'circle',
+		                            symbolSize: 10,
+		                            label: {
+		                                normal: {show: false},
+		                                emphasis: {show: false}
+		                            }
+		                        }
+		                    ],
+		                    {
+		                        name: 'min line on close',
+		                        type: 'min',
+		                        valueDim: 'close'
+		                    },
+		                    {
+		                        name: 'max line on close',
+		                        type: 'max',
+		                        valueDim: 'close'
+		                    }
+		                ]
+		            }
+		        },
+		        {
+		            name: 'MA5',
+		            type: 'line',
+		            data: calculateMA(5,data0),
+		            smooth: true,
+		            lineStyle: {
+		                normal: {opacity: 0.5}
+		            }
+		        },
+		        {
+		            name: 'MA10',
+		            type: 'line',
+		            data: calculateMA(10,data0),
+		            smooth: true,
+		            lineStyle: {
+		                normal: {opacity: 0.5}
+		            }
+		        },
+		        {
+		            name: 'MA20',
+		            type: 'line',
+		            data: calculateMA(20,data0),
+		            smooth: true,
+		            lineStyle: {
+		                normal: {opacity: 0.5}
+		            }
+		        },
+		        {
+		            name: 'MA30',
+		            type: 'line',
+		            data: calculateMA(30,data0),
+		            smooth: true,
+		            lineStyle: {
+		                normal: {opacity: 0.5}
+		            }
+		        },
+		
+		    ]
+		};
+				
+        	  myChart3.setOption(option3);
       	}  
       }); 
       }
@@ -773,10 +998,13 @@
       function getAllList(){
       	$.ajax({  
       	type : "GET",  //提交方式  
-		url : "http://www.estock.com:8080/stock//stapleday/getAll",//路径  
+		url : "http://www.estock.com:8080/stock/stapleday/getAll",//路径  
         data : {},//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
         	var html = "";
+        	html = html + '<div class="butpro butstyle"><div class="sub">';
+        	html = html + '<h2>风险指数</h2><span id="fx1">待实现</span></div>';
+			html = html + '<div class="stat"><span style = "color:#21A675" id="fx2">待实现</span></div></div>';
         	for(var i=0;i<result.length;i++){
         			html = html + '<div class="butpro butstyle" onclick = "changeImg(\''+result[i]['stockName']+'\')"><div class="sub">';
         			html = html + '<h2>'+result[i]['stockName']+'</h2><span>'+result[i]['mb']+'</span></div>';
@@ -788,9 +1016,23 @@
 					
         	}
         	$('#startHtml').html(html);
+        	getFx();
       	}  
       }); 
       }
+      
+      function getFx(){
+      	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/getFx",//路径  
+        data : {},//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	$('#fx1').html('待实现');
+        	$('#fx2').html('待实现');
+      	}  
+      }); 
+      }
+      
   </script>
   </body>
 </html>

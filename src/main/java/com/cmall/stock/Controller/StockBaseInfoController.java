@@ -79,6 +79,19 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		return SelGetStock.getLstResult(query, page);
 	}
 	
+	/**
+	 * 查询风险指数(待实现逻辑)
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getFx")
+	public Map<String, Object> getFx(StockBasePageInfo page) throws Exception {
+		BoolQueryBuilder query = QueryBuilders.boolQuery();
+		setQuery(query, page);
+		return SelGetStock.getLstResult(query, page);
+	}
+	
 
 	@RequestMapping("/getClassNameList")
 	public String[] getClassNameList() throws Exception {
@@ -169,8 +182,10 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		Float[] js = new Float[list.size()];
 		Float[] diffs = new Float[list.size()];
 		Float[] daes = new Float[list.size()];
+		Object[][] object = new Object[list.size()][5];
 		int j = 0;
 		for (int i = list.size() - 1; i >= 0; i--) {
+			Object[] ob = new Object[5];
 			StockBaseInfo bean = list.get(i);
 			dates[j] = bean.getDate();
 			ks[j] = bean.getK();
@@ -178,6 +193,12 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 			js[j] = bean.getJ();
 			diffs[j] = bean.getDiff();
 			daes[j] = bean.getDea();
+			ob[0] = bean.getDate();
+			ob[1] = bean.getOpen();
+			ob[2] = bean.getClose();
+			ob[3] = bean.getLow();
+			ob[4] = bean.getHigh();
+			object[j] = ob;
 			j++;
 		}
 		map.put("date", dates);
@@ -186,6 +207,7 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		map.put("J", js);
 		map.put("DIFF", diffs);
 		map.put("DAE", daes);
+		map.put("obj", object);
 		return map;
 
 	}
