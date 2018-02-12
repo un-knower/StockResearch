@@ -204,7 +204,7 @@ public class SelGetStock {
 
 		revtmpMap(mapsSelStockTmp);
 		query.must(QueryBuilders.inQuery("stockCode", mapsSelStockTmp.keySet()));
-		query.mustNot(QueryBuilders.inQuery("stockCode", mapsSubnewStock.keySet()));//排除次新股
+		//query.mustNot(QueryBuilders.inQuery("stockCode", mapsSubnewStock.keySet()));//排除次新股
 
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
 //		System.out.println(searchSourceBuilder.toString());
@@ -280,8 +280,8 @@ public class SelGetStock {
 
 		Map<String, Object> returnMap = Maps.newHashMap();
         
-		query.mustNot(QueryBuilders.inQuery("stockCode", mapsInfo.keySet()));
-		query.mustNot(QueryBuilders.inQuery("stockCode", mapsSubnewStock.keySet()));
+		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
+		//query.mustNot(QueryBuilders.inQuery("stockCode", mapsSubnewStock.keySet()));
 
 		// query.mustNot(QueryBuilders.inQuery("stockCode",
 		// StockSelStrag.blckLstOfStock().keySet()));
@@ -445,7 +445,7 @@ public class SelGetStock {
 		} else {
 			types.add("2017-09-30");
 		}
-		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
+//		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.blckLstOfStock().keySet()));
 //		 query.must(QueryBuilders.inQuery("stockCode",
 //		 mapsSelStock.keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);// ssb.query(query);

@@ -219,9 +219,9 @@ public class MonthsStapleData {
 	}
 
 	public static void main(String[] args) throws Exception {
-//		freshEsData();
+		freshEsData();
 
-		 getAllDataLink();
+//		 getAllDataLink();
 		// System.out.println(elements);
 
 		// writeTextReport();

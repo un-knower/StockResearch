@@ -190,7 +190,7 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 			dates[j] = bean.getDate();
 			ks[j] = bean.getK();
 			ds[j] = bean.getD();
-			js[j] = bean.getJ();
+			js[j] = bean.getJ()>100?100:bean.getJ();
 			diffs[j] = bean.getDiff();
 			daes[j] = bean.getDea();
 			ob[0] = bean.getDate();

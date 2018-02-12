@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.common.collect.Maps;
+import org.elasticsearch.common.collect.Sets;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -380,6 +382,12 @@ public class StockSelStrag {
 		return mapSource;
 	}
 	
+	
+	public  static Set<String> allBlckStockLst(){
+		 Set<String> setsResult= Sets.newHashSet(blckLstOfStock().keySet());
+		 setsResult .addAll(getSubnewStock(-60).keySet());
+		return setsResult;
+	}
 	
 
 	public static void main(String[] args) {
