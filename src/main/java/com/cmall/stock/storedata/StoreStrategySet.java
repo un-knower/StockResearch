@@ -1,4 +1,4 @@
-package com.cmal.stock.storedata;
+package com.cmall.stock.storedata;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Bulk;

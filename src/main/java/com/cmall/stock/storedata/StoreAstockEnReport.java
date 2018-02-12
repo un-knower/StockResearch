@@ -1,4 +1,4 @@
-package com.cmal.stock.storedata;
+package com.cmall.stock.storedata;
 
 import java.io.File;
 import java.io.IOException;

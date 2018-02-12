@@ -1,4 +1,4 @@
-package com.cmal.stock.storedata;
+package com.cmall.stock.storedata;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -15,11 +15,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 
 import com.artbulb.httpmodel.HttpClientEx;
-import com.cmal.stock.strage.StockStragEnSey;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StockRealBean;
 import com.cmall.stock.bean.StoreTrailer;
+import com.cmall.stock.strage.StockStragEnSey;
 import com.cmall.stock.utils.CsvHandUtils;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.TimeUtils;

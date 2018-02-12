@@ -1,4 +1,4 @@
-package com.cmal.stock.storedata;
+package com.cmall.stock.storedata;
 
 import java.io.IOException;
 import java.math.BigDecimal;

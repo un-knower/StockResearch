@@ -6,8 +6,9 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.cmal.stock.strage.SelGetStock;
+
 import com.cmall.stock.bean.EastReportBean;
+import com.cmall.stock.strage.SelGetStock;
 import com.cmall.stock.vo.StockBasePageInfo;
 
 @RestController

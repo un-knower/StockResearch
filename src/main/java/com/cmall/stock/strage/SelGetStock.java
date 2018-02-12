@@ -1,4 +1,4 @@
-package com.cmal.stock.strage;
+package com.cmall.stock.strage;
 
 import java.util.List;
 import java.util.Map;
@@ -9,12 +9,12 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
-import com.cmal.stock.storedata.CommonBaseStockInfo;
 import com.cmall.staple.bean.Stap100PPI;
 import com.cmall.stock.bean.EastReportBean;
 import com.cmall.stock.bean.StockBaseInfo;
 import com.cmall.stock.bean.StockDetailInfoBean;
 import com.cmall.stock.bean.StoreTrailer;
+import com.cmall.stock.storedata.CommonBaseStockInfo;
 import com.cmall.stock.vo.StockBasePageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -51,7 +51,8 @@ public class SelGetStock {
 		// 短时间内会剔除一批走势不好数据
 		mapsSelStockTmp.remove("603993");
 		mapsSelStockTmp.remove("300146");
-		mapsSelStockTmp.remove("002460");//赣锋锂业	
+		//mapsSelStockTmp.remove("002460");//赣锋锂业	
+		//mapsSelStockTmp.remove("002466");// 锂电池   天齐锂业
 		mapsSelStockTmp.remove("300274");
 		mapsSelStockTmp.remove("000780");//*ST平能	
 		mapsSelStockTmp.remove("000100");//TCL集团	
@@ -64,7 +65,7 @@ public class SelGetStock {
 		mapsSelStockTmp.remove("000822");/// 000822 山东海化 收益率太低
 		mapsSelStockTmp.remove("600681");// 收益率太低
 		mapsSelStockTmp.remove("002385");// 收益率太低
-		mapsSelStockTmp.remove("002466");// 锂电池
+	
 		mapsSelStockTmp.remove("601992");// 无竞争优势
 		mapsSelStockTmp.remove("002558"); // 近期走势差
 		mapsSelStockTmp.remove("300676"); // 近期走势差

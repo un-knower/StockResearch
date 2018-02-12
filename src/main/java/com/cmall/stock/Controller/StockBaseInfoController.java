@@ -11,9 +11,9 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cmal.stock.strage.SelGetStock;
 import com.cmall.staple.bean.Stap100PPI;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.strage.SelGetStock;
 import com.cmall.stock.utils.TimeUtils;
 import com.cmall.stock.vo.StockBaseInfoVo;
 import com.cmall.stock.vo.StockBasePageInfo;

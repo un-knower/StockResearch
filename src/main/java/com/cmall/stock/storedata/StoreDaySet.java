@@ -1,4 +1,4 @@
-package com.cmal.stock.storedata;
+package com.cmall.stock.storedata;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
@@ -17,8 +17,8 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import com.cmal.stock.strage.StockStragEnSey;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.strage.StockStragEnSey;
 import com.cmall.stock.utils.CsvHandUtils;
 import com.cmall.stock.utils.TimeUtils;
 import com.google.common.collect.Lists;

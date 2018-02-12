@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.cmal.stock.strage;
+package com.cmall.stock.strage;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -15,7 +15,7 @@
  * @version     V1.0
  *     
  */
-package com.cmal.stock.strage;
+package com.cmall.stock.strage;
 
 /**
  *

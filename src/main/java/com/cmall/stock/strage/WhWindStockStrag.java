@@ -1,4 +1,4 @@
-package com.cmal.stock.strage;
+package com.cmall.stock.strage;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import com.cmal.stock.storedata.CommonBaseStockInfo;
 import com.cmall.stock.bean.StockBaseInfo;
+import com.cmall.stock.storedata.CommonBaseStockInfo;
 import com.kers.esmodel.SelEsRelt;
 
 /**

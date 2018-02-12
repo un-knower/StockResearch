@@ -1,4 +1,4 @@
-package com.cmal.stock.strage;
+package com.cmall.stock.strage;
 
 /**
  * 

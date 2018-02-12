@@ -1,4 +1,4 @@
-package com.cmal.stock.storedata;
+package com.cmall.stock.storedata;
 
 import com.cmall.stock.bean.CnInvRoot;
 import com.google.gson.Gson;

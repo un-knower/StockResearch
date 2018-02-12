@@ -22,8 +22,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.cmal.stock.storedata.CommonBaseStockInfo;
 import com.cmall.staple.bean.Stap100PPI;
+import com.cmall.stock.storedata.CommonBaseStockInfo;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.MathsUtils;
 import com.cmall.stock.utils.TimeUtils;

@@ -15,7 +15,7 @@
  * @version     V1.0
  *     
  */
-package com.cmal.stock.storedata;
+package com.cmall.stock.storedata;
 
 
 /***

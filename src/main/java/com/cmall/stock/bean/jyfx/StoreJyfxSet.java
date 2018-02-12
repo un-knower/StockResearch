@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.common.collect.Lists;
 
-import com.cmal.stock.storedata.CommonBaseStockInfo;
+import com.cmall.stock.storedata.CommonBaseStockInfo;
 import com.cmall.stock.utils.FilePath;
 import com.cmall.stock.utils.MathsUtils;
 import com.cmall.stock.utils.StockCodeTransUtil;
