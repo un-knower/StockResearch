@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import com.cmall.stock.bean.CnInvRoot;
 import com.google.gson.Gson;
 import com.kers.httpmodel.BaseConnClient;
+import com.kers.stock.bean.CnInvRoot;
 
 public class InfoUtils {
 	

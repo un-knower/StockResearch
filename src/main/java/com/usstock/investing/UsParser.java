@@ -15,11 +15,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.cmall.stock.bean.CnInvRoot;
-import com.cmall.stock.bean.StockBaseInfo;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.kers.httpmodel.BaseConnClient;
+import com.kers.stock.bean.CnInvRoot;
+import com.kers.stock.bean.StockBaseInfo;
 import com.tuchaoshi.base.utils.TimeUtils;
 
 public class UsParser {

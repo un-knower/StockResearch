@@ -6,14 +6,14 @@ import java.util.Map;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
-import com.cmall.stock.bean.StockBaseInfo;
-import com.cmall.stock.bean.StockDetailInfoBean;
-import com.cmall.stock.bean.StoreTrailer;
-import com.cmall.stock.storedata.CommonBaseStockInfo;
-import com.cmall.stock.storedata.StockDetailInfoHand;
-import com.cmall.stock.storedata.StoreTrailerSet;
-import com.cmall.stock.utils.TimeUtils;
 import com.google.common.collect.Maps;
+import com.kers.stock.bean.StockBaseInfo;
+import com.kers.stock.bean.StockDetailInfoBean;
+import com.kers.stock.bean.StoreTrailer;
+import com.kers.stock.storedata.CommonBaseStockInfo;
+import com.kers.stock.storedata.StockDetailInfoHand;
+import com.kers.stock.storedata.StoreTrailerSet;
+import com.kers.stock.utils.TimeUtils;
 
 public class QueryComLstData {
 	public static Map<String, StockBaseInfo> mapsInfo2;

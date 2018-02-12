@@ -10,8 +10,8 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import com.cmall.stock.bean.jyfx.JyfxInfo;
 import com.google.common.collect.Lists;
+import com.kers.stock.bean.jyfx.JyfxInfo;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
