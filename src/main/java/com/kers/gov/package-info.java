@@ -20,7 +20,7 @@ Shibor ↑上升，意味着央行上调存准率或者有上调预期。
 
  * 
  */
-package com.kers.shibor;
+package com.kers.gov;
 
 /***
  * http://www.shibor.org/shibor/web/html/downLoad.html?nameNew=

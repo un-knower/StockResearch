@@ -132,6 +132,7 @@
                     {title:'板块',name:'industry',width:60,sortable:true  },
                     {title:'总市值',name:'zsz',width:70,sortable:true,renderer:moformat},
                     { title:'PE',name:'pe',width:40,sortable:true ,renderer:highliht },
+                    { title:'NPE',name:'npe',width:40,sortable:true ,renderer:highliht },
                     //{ title:'地区',name:'area',width:40,sortable:true ,renderer:highliht },
                     /* {title:'开盘价',name:'open',width:40,sortable:true  }, */
                    /*  {title:'收盘价',name:'close',width:40,sortable:true }, */
@@ -145,7 +146,9 @@
                     {title:'j5',name:'j5',width:40,renderer: fixed2,sortable:true}, */
                     
                     {title:'macd连涨天数',width:60,name:'macdNum',sortable:true},
+                    {title:'成交量',width:60,name:'volume',sortable:true,renderer: moformat},
                     {title:'成交量比',width:60,name:'volumeRises',sortable:true,renderer: fixed2percentage},
+                    {title:'换手率',width:60,name:'hslv',sortable:true,renderer: fixed2percentage},
                     {title:'5/累涨',width:50,name:'upSumRises5',sortable:true,renderer: fixed2percentage},
                     {title:'10/累涨',width:50,name:'upSumRises10',sortable:true,renderer: fixed2percentage},
                   {title:'10日涨幅',name:'minRises10',sortable:true,renderer: fixed2percentage}, 

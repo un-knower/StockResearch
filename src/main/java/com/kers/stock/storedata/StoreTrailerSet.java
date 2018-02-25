@@ -103,7 +103,7 @@ public class StoreTrailerSet {
 		// savetrailerDetailInfo(bean.getStockCode());
 		//
 		// }
-		wsData(5);
+		wsData(50);
 
 	}
 
@@ -115,7 +115,11 @@ public class StoreTrailerSet {
 			// System.out.println(content);|
 			try {
 				// list.addAll(getList(StoreTrailerUrl(i)));
-				insBatchEs(getList(StoreTrailerUrl(i)), jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STORETRAILER);
+				String url = "http://datainterface.eastmoney.com/EM_DataCenter/JS.aspx?type=SR&sty="
+						+ "YJYG&fd=2017-12-31&st=4&sr=-1&p=" +  i+ "&ps=50&js={pages:(pc),data:[(x)]}&stat=0&rt=50342803";
+				String content = BaseConnClient.baseGetReq(url);
+				
+				insBatchEs(getList(content), jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STORETRAILER);
 			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO: handle exception
@@ -128,10 +132,10 @@ public class StoreTrailerSet {
 
 		// System.out.println(content);
 	}
-
+	 static Map<String, StockBaseInfo> mapsInfo2 = QueryComLstData.getStockBaseInfo();
 	public static List<StoreTrailer> getList(String data) {
 		List<StoreTrailer> list = new ArrayList<StoreTrailer>();
-		Map<String, StockBaseInfo> mapsInfo2 = QueryComLstData.getStockBaseInfo();
+	
 
 		if (StringUtils.isNotBlank(data)) {
 			JSONObject obj = (JSONObject) JSONObject.parse(data);
@@ -173,13 +177,7 @@ public class StoreTrailerSet {
 		return list;
 	}
 
-	public static String StoreTrailerUrl(int index) throws ClientProtocolException, IOException {
-		String url = "http://datainterface.eastmoney.com/EM_DataCenter/JS.aspx?type=SR&sty="
-				+ "YJYG&fd=2017-12-31&st=4&sr=-1&p=" + index + "&ps=50&js={pages:(pc),data:[(x)]}&stat=0&rt=50342803";
-		String content = BaseConnClient.baseGetReq(url);
-		// System.out.println(content);
-		return content;
-	}
+ 
 
 	public static StoreTrailer getDate(String date) {
 		StoreTrailer tr = new StoreTrailer();

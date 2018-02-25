@@ -150,9 +150,11 @@
                         pgBar
                     ]
                     , params: function(){
+                    	var type = $('#type').val();
                         //如果这里有验证，在验证失败时返回false则不执行AJAX查询。
                       return {
                           datas: JSON.stringify(getDatas())
+                          ,type:type
                       }
                     }
                 });

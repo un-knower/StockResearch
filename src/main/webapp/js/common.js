@@ -21,6 +21,16 @@
        return fixed2(val);
    };
    
+   var highlihtNor = function(val){
+	   	val=parseFloat(val);
+	       if(val > 0){
+	           return '<span style="color: #b00">' + val + '</span>';
+	       }else if(val < 0){
+	           return '<span style="color: #0b0">' + val + '</span>';
+	       }
+	       return val;
+	   };
+   
    var   moformat=function(val){
    	val=parseFloat(val);
    	  if(typeof val != 'number'){

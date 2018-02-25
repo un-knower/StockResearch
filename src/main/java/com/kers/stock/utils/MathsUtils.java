@@ -10,6 +10,32 @@ public class MathsUtils {
 		try {
 			return Double.parseDouble(input);
 		} catch (Exception e) {
+			//e.printStackTrace();
+			// TODO: handle exception
+		}
+		return 0;
+	}
+	
+	public  static double parseDoubleStockWy(Object input){
+		try {
+			return Double.parseDouble(input.toString())*10000;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return 0;
+	}
+	
+	public  static double parseDoubleStockWyFormat(Object input){
+		try {
+			if( input.toString().contains("万")){
+				return Double.parseDouble(input.toString().replace("万", ""))*10000;
+			}else if ( input.toString().contains("亿")){
+				return Double.parseDouble(input.toString().replace("亿", ""))*100000000;
+			}else 
+				return Double.parseDouble(input.toString());
+			
+		} catch (Exception e) {
+			//e.printStackTrace();
 			// TODO: handle exception
 		}
 		return 0;

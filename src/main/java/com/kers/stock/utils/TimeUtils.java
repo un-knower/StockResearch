@@ -29,7 +29,7 @@ public class TimeUtils {
 	public static void main(String[] args) {
 		
 //		System.out.println(TimeUtils.toString(TimeUtils.addDay(new Date(), -180), TimeUtils.DEFAULT_DATEYMD_FORMAT));
-		System.out.println(TimeUtils.getStockDate());
+//		System.out.println(TimeUtils.getStockDate());
 //		Calendar cal1 = Calendar.getInstance();
 //		cal1.set(1, 2010);
 //		cal1.set(2, 0);

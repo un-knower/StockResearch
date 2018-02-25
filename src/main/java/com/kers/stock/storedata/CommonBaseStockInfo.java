@@ -37,13 +37,17 @@ public class CommonBaseStockInfo {
 	public final static String ES_INDEX_STOCK_STOCKPCSE="stockpcse";
 	public final static String ES_INDEX_STOCK_STOREREPORT="storereport"; 
 	public final static String ES_INDEX_STOCK_ZJLX="zjlx"; 
+	
+	
+	
+	public final static String ES_INDEX_GOV_OMO="gbomo";
 
 	
 	
 	
 	public final static String SPEC_STOCK_CODE_SH="0000001"; 
 	public final static String SPEC_STOCK_CODE_SZ="1399001"; 
-	public final static String FIDUCIAL_TIME="2018-02-07";
+	public final static String FIDUCIAL_TIME="2018-02-23";
 
 
 	

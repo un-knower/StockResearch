@@ -47,6 +47,30 @@ public class SelGetStock {
 	public static void revtmpMap(Map<String, String> mapsSelStockTmp) {// 临时剔除一些
 																		// 走势不好股
 
+		
+		  //算法问题
+		
+		mapsSelStockTmp.remove("600844"); 
+		mapsSelStockTmp.remove("002595"); 
+		mapsSelStockTmp.remove("600120"); 
+		mapsSelStockTmp.remove("000582"); 
+		mapsSelStockTmp.remove("002233"); 
+		mapsSelStockTmp.remove("600252"); 
+		mapsSelStockTmp.remove("002152"); 
+		mapsSelStockTmp.remove("002174"); 
+		mapsSelStockTmp.remove("600582"); 
+		mapsSelStockTmp.remove("002920"); 
+		mapsSelStockTmp.remove("603816"); 
+		mapsSelStockTmp.remove("300029"); 
+		mapsSelStockTmp.remove("600293"); 
+		mapsSelStockTmp.remove("000676"); 
+		mapsSelStockTmp.remove("000662"); 
+		
+		
+		
+		
+		
+		
 		mapsSelStockTmp.remove("600518"); // 曾经财务问题
 		// 短时间内会剔除一批走势不好数据
 		mapsSelStockTmp.remove("603993");
@@ -54,7 +78,6 @@ public class SelGetStock {
 		//mapsSelStockTmp.remove("002460");//赣锋锂业	
 		//mapsSelStockTmp.remove("002466");// 锂电池   天齐锂业
 		mapsSelStockTmp.remove("300274");
-		mapsSelStockTmp.remove("000780");//*ST平能	
 		mapsSelStockTmp.remove("000100");//TCL集团	
 		mapsSelStockTmp.remove("600050");//中国联通
 		//mapsSelStockTmp.remove("600362"); // 江西铜业
@@ -106,7 +129,8 @@ public class SelGetStock {
 		mapsSelStockTmp.remove("600444"); // 第四季度政府赔款
 		mapsSelStockTmp.remove("600449");// 宁夏建材 相比水泥板块无竞争优势
 		mapsSelStockTmp.remove("600881");// 亚泰集团 相比水泥板块无竞争优势
-	
+		mapsSelStockTmp.remove("000039");
+		
 		mapsSelStockTmp.remove("002736");// /证券 相比无太大竞争优势
 		mapsSelStockTmp.remove("601788");// 证券 相比无太大竞争优势
 		mapsSelStockTmp.remove("600999");// 证券 相比无太大竞争优势
@@ -174,7 +198,9 @@ public class SelGetStock {
 	       //煤炭      中国神华(3774)	   陕西煤业(736)》兖州煤业(635)      潞安环能(263)》阳泉煤业(136)》平煤股份(119)	》露天煤业(139)
 		//601898  ,601666   当板块大热的时候暂时移除关注
 		mapsSelStockTmp.remove("601898");// 煤炭 无太大竞争优势
-		mapsSelStockTmp.put("600971", StockSelStrag.whStock);//最近煤炭板块大热加入 恒源煤电	
+		mapsSelStockTmp.remove("601666"); //平煤股份 煤炭 无太大竞争优势
+		
+		//mapsSelStockTmp.put("600971", StockSelStrag.whStock);//最近煤炭板块大热加入 恒源煤电	
 		//mapsSelStockTmp.remove("002128");// 短暂移除 相比优势不太明显
 			// 阳泉煤业  成交量放大 macd稳步上升 kdj刚触百
 			// 露天煤业  成交量相对放大  macd 平缓上升   kdj50左右向上
@@ -203,7 +229,7 @@ public class SelGetStock {
 		Map<String, String> mapsSelStockTmp = mapsSelStock;
 		
 
-		revtmpMap(mapsSelStockTmp);
+		//revtmpMap(mapsSelStockTmp);
 		query.must(QueryBuilders.inQuery("stockCode", mapsSelStockTmp.keySet()));
 		//query.mustNot(QueryBuilders.inQuery("stockCode", mapsSubnewStock.keySet()));//排除次新股
 
@@ -428,6 +454,10 @@ public class SelGetStock {
 
 	public static Map<String, Object> getCommonLstResult(BoolQueryBuilder query, StockBasePageInfo page, String index,
 			String type) throws Exception {
+		
+		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
+//		revtmpMap(mapsSelStock);
+	 	//query.must(QueryBuilders.inQuery("stockCode",mapsSelStock.keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
 		System.out.println(searchSourceBuilder.toString());
 		final JestClient jestClient = BaseCommonConfig.clientConfig();

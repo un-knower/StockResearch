@@ -9,8 +9,10 @@ public class StockZjlx   implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	
+	private String stockCode;
+	private String stockName;
 	private  String date;
-	 private String close;
+	 private double close;
 	 private double rises;
 	 private double zlNum;
 	 private double zlRatio;
@@ -22,16 +24,25 @@ public class StockZjlx   implements Serializable{
 	 private double zdRatio;
 	 private double xdNum;
 	 private double xdRatio;
+	 private int up3;
+	 private int up5;
+	 private int up10;
+	 private int  upNum;//连涨天数 
+	 private double up3NumAvg;  //3天平均量
+	 private double up5NumAvg;  //3天平均量
+	 private double up10NumAvg;  //3天平均量
+	 
+	 private int   type ;//0 大盘  1 板块   2 个股 
 	public String getDate() {
 		return date;
 	}
 	public void setDate(String date) {
 		this.date = date;
 	}
-	public String getClose() {
+	public double getClose() {
 		return close;
 	}
-	public void setClose(String close) {
+	public void setClose(double close) {
 		this.close = close;
 	}
 	public double getRises() {
@@ -99,6 +110,87 @@ public class StockZjlx   implements Serializable{
 	}
 	public void setXdRatio(double xdRatio) {
 		this.xdRatio = xdRatio;
+	}
+	public StockZjlx(String date, double close, double rises, double zlNum, double zlRatio, double cddNum,
+			double cddRatio, double ddNum, double ddRatio, double zdNum, double zdRatio, double xdNum, double xdRatio) {
+		super();
+		this.date = date;
+		this.close = close;
+		this.rises = rises;
+		this.zlNum = zlNum;
+		this.zlRatio = zlRatio;
+		this.cddNum = cddNum;
+		this.cddRatio = cddRatio;
+		this.ddNum = ddNum;
+		this.ddRatio = ddRatio;
+		this.zdNum = zdNum;
+		this.zdRatio = zdRatio;
+		this.xdNum = xdNum;
+		this.xdRatio = xdRatio;
+	}
+	public StockZjlx() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public String getStockCode() {
+		return stockCode;
+	}
+	public void setStockCode(String stockCode) {
+		this.stockCode = stockCode;
+	}
+	public String getStockName() {
+		return stockName;
+	}
+	public void setStockName(String stockName) {
+		this.stockName = stockName;
+	}
+	public int getUp3() {
+		return up3;
+	}
+	public void setUp3(int up3) {
+		this.up3 = up3;
+	}
+	public int getUp5() {
+		return up5;
+	}
+	public void setUp5(int up5) {
+		this.up5 = up5;
+	}
+	public int getUp10() {
+		return up10;
+	}
+	public void setUp10(int up10) {
+		this.up10 = up10;
+	}
+	public int getUpNum() {
+		return upNum;
+	}
+	public void setUpNum(int upNum) {
+		this.upNum = upNum;
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
+	public double getUp3NumAvg() {
+		return up3NumAvg;
+	}
+	public void setUp3NumAvg(double up3NumAvg) {
+		this.up3NumAvg = up3NumAvg;
+	}
+	public double getUp5NumAvg() {
+		return up5NumAvg;
+	}
+	public void setUp5NumAvg(double up5NumAvg) {
+		this.up5NumAvg = up5NumAvg;
+	}
+	public double getUp10NumAvg() {
+		return up10NumAvg;
+	}
+	public void setUp10NumAvg(double up10NumAvg) {
+		this.up10NumAvg = up10NumAvg;
 	}
 	 
 	

@@ -102,15 +102,27 @@ public class StoreAstockTradInfo {
 			
 			//System.out.println(stockBaseInfo.toString());
 			if(!(objIsEmpty(objdata.get(6))||objIsEmpty(objdata.get(3))||objIsEmpty(objdata.get(4))||objIsEmpty(objdata.get(5))||objdata.get(9).equals("None"))){///|StringUtils.isBlank(stockBaseInfo.getCjbs()))){//!(stockBaseInfo.getOpen()==0||stockBaseInfo.getClose()==0||stockBaseInfo.getHigh()==0||stockBaseInfo.getLow()==0||StringUtils.isBlank(stockBaseInfo.getCjbs()))){
+				String volumn=objdata.get(11);
+				
+				if(stockCode.length()==6){  //排除深市  上证
+					Long  vnm = Long.parseLong(volumn)/100;
+					volumn=vnm+"";
+					
+				}
 				StockBaseInfo stockBaseInfo = new StockBaseInfo(objdata.get(0), objdata.get(6), objdata.get(4),
-						objdata.get(5), objdata.get(3), objdata.get(11), objdata.get(9), stockCode, objdata.get(2),objdata.get(10),objdata.get(12),objdata.get(13),objdata.get(14),objdata.size()<15?null: objdata.get(14),TimeUtils.dayForWeek(objdata.get(0))+"");
+						objdata.get(5), objdata.get(3), volumn, objdata.get(9), stockCode, objdata.get(2),objdata.get(10),objdata.get(12),objdata.get(13),objdata.get(14),objdata.size()<15?null: objdata.get(14),TimeUtils.dayForWeek(objdata.get(0))+"");
 				if(info!=null){
 					stockBaseInfo.setIndustry(info.getIndustry());
 					stockBaseInfo.setArea(info.getArea());
 					stockBaseInfo.setPe(info.getPe());
 				}
+			
 				if(storeTrailer!=null){
-					stockBaseInfo.setNpe(storeTrailer.getNpe());
+					double npe=storeTrailer.getNpe();
+					if( info.getTotals()!=0&&storeTrailer.getJlr()!=0)
+					  npe = stockBaseInfo.getClose() / (storeTrailer.getJlr() / info.getTotals());
+					
+					stockBaseInfo.setNpe(npe);
 				}
 				//002252
 				if(stockBaseInfo.getZsz()>0||((CommonBaseStockInfo.SPEC_STOCK_CODE_SH.equals(stockCode)||CommonBaseStockInfo.SPEC_STOCK_CODE_SZ.equals(stockCode))))//排除停牌情况
