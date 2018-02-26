@@ -166,7 +166,7 @@ public class StockZjlxHand {
 							stockZjlx.setUpNum(-1);
 
 					}
-					double  zzRises=((zlNum-lstStockZljx.getZlNum())/(lstStockZljx.getZlNum()==0?1:lstStockZljx.getZlNum()))*100;
+					double  zzRises=zlNum-(lstStockZljx.getZlNum()<0?Math.abs(lstStockZljx.getZlNum()):lstStockZljx.getZlNum());//((zlNum-lstStockZljx.getZlNum())/Math.abs((lstStockZljx.getZlNum()==0?10000:lstStockZljx.getZlNum())))*100;
 					stockZjlx.setZzRises(zzRises);
 
 				}
@@ -228,28 +228,28 @@ public class StockZjlxHand {
 	public static void impGguData() throws Exception {
 		List<StockDetailInfoBean> lstSource = StockDetailInfoHand.getDetailForLst();// StockDetailInfoHand.getDetailForLst();//
 																					// CommonBaseStockInfo.getAllAStockInfo();
-		for (StockDetailInfoBean bean : lstSource) {
-			try {
+		for (final StockDetailInfoBean bean : lstSource) {
 
-				String stockCode = bean.getStockCode();
-				List<StockZjlx> lstResult = Lists.newArrayList();
-				if (stockCode.startsWith("0") || stockCode.startsWith("6") || stockCode.startsWith("3")) {
-					lstResult = parseGgZjlxFromUrl(bean.getStockCode(), bean.getStockName());
-				}
-				// } else{
-				// lstResult = parseBKZjlxFromUrl(bean.getStockCode(),
-				// bean.getStockName());
-				// System.out.println("bk");
-				// }
+				final String stockCode = bean.getStockCode();
+				
+				CommonBaseStockInfo.executorServiceLocal.execute(new Thread(){
+					
+					@Override
+					public void run() {
+						  try {
+								List<StockZjlx> lstResult = Lists.newArrayList();
+								if (stockCode.startsWith("0") || stockCode.startsWith("6") || stockCode.startsWith("3")) {
+									lstResult = parseGgZjlxFromUrl(bean.getStockCode(), bean.getStockName());
+								}
 
-				insBatchEs(lstResult, jClient, CommonBaseStockInfo.ES_INDEX_STOCK_ZJLX);
+								insBatchEs(lstResult, jClient, CommonBaseStockInfo.ES_INDEX_STOCK_ZJLX);
+						} catch (ConnectException e1) {
+							logger.error("connectException:" + bean.getStockCode() + " ");
+						}catch (Exception e) {
+						}
+					}
+				});
 
-			} catch (ConnectException e1) {
-				logger.error("connectException:" + bean.getStockCode() + " ");
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 
 	}
@@ -451,7 +451,7 @@ class TvaSet {
 						stockZjlx.setUpNum(-1);
 
 				}
-				double  zzRises=((zlNum-lstStockZljx.getZlNum())/lstStockZljx.getZlNum())*100;
+				double  zzRises=zlNum-(lstStockZljx.getZlNum()<0?Math.abs(lstStockZljx.getZlNum()):lstStockZljx.getZlNum());//((zlNum-lstStockZljx.getZlNum())/Math.abs((lstStockZljx.getZlNum()==0?10000:lstStockZljx.getZlNum())))*100;
 				stockZjlx.setZzRises(zzRises);
 			}
 
