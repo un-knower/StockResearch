@@ -2,6 +2,7 @@ package com.kers.gov;
 
 
 //http://www.chinamoney.com.cn/fe/jsp/CN/chinamoney/notice/ticketHandleMoreList.jsp?pagingPage_il_=37
+//http://www.chinamoney.com.cn/fe/Channel/5491
 public class GovBankOMOBean {
 	
 	private String date;// 操作日期	

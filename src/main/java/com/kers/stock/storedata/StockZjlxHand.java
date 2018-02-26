@@ -146,8 +146,9 @@ public class StockZjlxHand {
 				stockZjlx.setUp10(up10);
 				stockZjlx.setUp10NumAvg((up10NumAvg / 10));
 
-				if (i > 1) {
-					int lstUpNm = lstRet.get(i - 1).getUpNum();
+				if (i >=1) {
+					StockZjlx lstStockZljx= lstRet.get(i - 1);
+					int lstUpNm = lstStockZljx.getUpNum();
 
 					if (zlNum > 0) {
 
@@ -165,8 +166,12 @@ public class StockZjlxHand {
 							stockZjlx.setUpNum(-1);
 
 					}
+					double  zzRises=((zlNum-lstStockZljx.getZlNum())/(lstStockZljx.getZlNum()==0?1:lstStockZljx.getZlNum()))*100;
+					stockZjlx.setZzRises(zzRises);
 
 				}
+				
+			
 
 				lstRet.add(stockZjlx);
 			}
@@ -426,8 +431,9 @@ class TvaSet {
 			stockZjlx.setUp10(up10);
 			stockZjlx.setUp10NumAvg((up10NumAvg / 10));
 
-			if (i > 1) {
-				int lstUpNm = lstRet.get(i - 1).getUpNum();
+			if (i >=1) {
+				StockZjlx   lstStockZljx =  lstRet.get(i - 1);
+				int lstUpNm =lstStockZljx.getUpNum();
 
 				if (zlNum > 0) {
 
@@ -445,7 +451,8 @@ class TvaSet {
 						stockZjlx.setUpNum(-1);
 
 				}
-
+				double  zzRises=((zlNum-lstStockZljx.getZlNum())/lstStockZljx.getZlNum())*100;
+				stockZjlx.setZzRises(zzRises);
 			}
 
 			lstRet.add(stockZjlx);

@@ -24,6 +24,7 @@ public class StockBaseInfo implements Serializable {
 	private float minRises5 = 0; //5日内最大涨幅
 	private float minRises10 = 0; //10日内最大涨幅
 	private int upDateNum = 0;
+	private float upRisesDay=0; //连续上涨幅度
 	private float up2Macd;//上上一天涨幅
 	private float upMacd=0;
 	private float macd = 0;
@@ -70,6 +71,7 @@ public class StockBaseInfo implements Serializable {
 	private float sumMacdUp5 = 0;
 	private float sumMacdUp10 = 0;
 	private float upSumRises2 = 0;
+	private float upSumRises3 = 0;
 	private float upSumRises5 = 0;
 	private float upSumRises10 = 0;
 	private float upSumRises20 = 0;
@@ -833,6 +835,22 @@ public class StockBaseInfo implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public float getUpSumRises3() {
+		return upSumRises3;
+	}
+
+	public void setUpSumRises3(float upSumRises3) {
+		this.upSumRises3 = upSumRises3;
+	}
+
+	public float getUpRisesDay() {
+		return upRisesDay;
+	}
+
+	public void setUpRisesDay(float upRisesDay) {
+		this.upRisesDay = upRisesDay;
 	}
 
 	

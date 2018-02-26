@@ -348,6 +348,17 @@ public class StockStragEnSey {
     					
     				
     			}
+    			int updateNum = Math.abs(StockBaseInfo.getUpDateNum());
+    			if(updateNum==1){
+    				StockBaseInfo.setUpRisesDay(StockBaseInfo.getRises());
+    			}else{
+    				 float  lastRise = entries.get(i-updateNum).getClose();
+    				
+    				StockBaseInfo.setUpRisesDay((((StockBaseInfo.getClose()-lastRise)/lastRise)*100));
+    				
+    				
+    			}
+    			
     			int up5 = 0;
     			int up10 = 0;
     			int macdUp5 = 0;
@@ -487,6 +498,9 @@ public class StockStragEnSey {
     			}
        			if(i>=5)
         			StockBaseInfo.setUpSumRises5(((StockBaseInfo.getClose()-entries.get(i-5).getClose())/entries.get(i-5).getClose())*100);
+       			
+       			if(i>=3)
+        			StockBaseInfo.setUpSumRises5(((StockBaseInfo.getClose()-entries.get(i-3).getClose())/entries.get(i-3).getClose())*100);
         			
         			
         			if(i>=10)
