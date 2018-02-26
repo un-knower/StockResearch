@@ -142,6 +142,30 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     	return list;
     }
     
+    @RequestMapping("/stapleday/getShiborTable")
+    public String getShiborTable(){
+    	String html = "";
+		try {
+			String con = BaseConnClient.baseGetReq("http://www.chinamoney.com.cn/fe/static/html/column/basecurve/benchmarks/shibor/latestShibor.html");
+			Document document = Jsoup.parse(con);
+			Elements tables = document.select("table");
+			Elements trs = tables.get(0).select("tr");
+			for (int i = 4; i < 7; i++) {
+				html = html + "<tr>";
+				Elements tds = trs.get(i).select("td");
+				html = html + "<td>" + tds.get(0).select("a").get(0).html() + "</td>";
+				html = html + "<td>" + tds.get(1).html() + "</td>";
+				html = html + "<td>" + tds.get(2).select("span").get(0).html() + "</td>";
+				html = html + "</tr>";
+			}
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return html;
+    }
+    
     public static void main(String[] args) throws ClientProtocolException, IOException {
     	
 	}

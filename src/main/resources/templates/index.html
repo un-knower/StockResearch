@@ -11,6 +11,100 @@
 	<div class="container-fluid" id="pcont">
 		<div class="cl-mcont">
 			<div class="stats_bar" id = "startHtml"></div>
+			
+			<div class="row dash-cols">
+				<div class="col-sm-3 col-md-3">
+					<div class="block-flat2 pie-widget">
+						<div class="header">
+							<h4>融资融券</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr>
+										<th>日期</th>
+										<th>收盘</th>
+										<th>涨幅</th>
+									</tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "rzrq"></tbody>
+							</table>
+							<nav aria-label="龙虎榜分页">
+							  <ul class="pagination" id = "rzrq"></ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-3 col-md-3">
+					<div class="block-flat2 pie-widget">
+						<div class="header">
+							<h4>资金流向</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr>
+										<th>代码</th>
+										<th>名称</th>
+										<th>主力流入</th>
+										<th>占比</th>
+									</tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "zjlx"></tbody>
+							</table>
+							<nav aria-label="龙虎榜分页">
+							  <ul class="pagination" id = "zjlxPag"></ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-sm-3 col-md-3">
+					<div class="block-flat2 pie-widget">
+						<div class="header">
+							<h4>shibor</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr>
+										<th>期限</th>
+										<th>Shibor(%)</th>
+										<th>涨跌(BP)</th>
+									</tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "shibor"></tbody>
+							</table>
+							<nav aria-label="龙虎榜分页">
+							  <ul class="pagination" id = "shiborPag"></ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-sm-3 col-md-3">
+					<div class="block-flat2 pie-widget">
+						<div class="header">
+							<h4>逆回购</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr>
+										<th>到期时间(星期)</th>
+										<th>金额(亿)</th>
+									</tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "mom"></tbody>
+							</table>
+							<nav aria-label="龙虎榜分页">
+							  <ul class="pagination" id = "momPag"></ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+			
 			<div class="stats_bar">
 				<div class="col-sm-4 col-md-4">
 				<div id="main3" style="width: 400px;height:300px;"></div>
@@ -48,6 +142,10 @@
   					</div>
 				</div>
 			</div>
+			
+			
+			
+			
 			<div class="row dash-cols">
 				<!-- 内容左侧 -->
 				<div class="col-sm-6 col-md-6">
@@ -235,6 +333,10 @@
       getLongHuTable(1,1,'rises','desc');
       getZhiBiaoTable(1,1,'');
       getMyStock();
+      getMom();
+      getShibor();
+      getRzrq();
+      getZjlx();
       
       $("#zhibiaoSelect").change(function(){
       	var val = $(this).children('option:selected').val();
@@ -1032,6 +1134,99 @@
       	}  
       }); 
       }
+      
+      function getMom(){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/govomo/getDateList",//路径  
+        data : {
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var item = result['items'];
+        	var html = "";
+        	for(var i=0;i<item.length;i++){
+        		html = html + "<tr><td>"+item[i]['expDate']+"</td>";
+        		html = html + "<td>"+item[i]['jyl']+"</td></tr>";
+        	}
+        	$('#mom').html(html);
+      	}  
+      	});  
+      }
+      
+      function getShibor(){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/stapleday/getShiborTable",//路径  
+        data : {
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	$('#shibor').html(result);
+      	}  
+      	});  
+      }
+      
+      function getZjlx(){
+      	var date = new Date().Format("yyyy-MM-dd");
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/zjlx/getList",//路径  
+        data : {
+        	datas:'[{"must":"must","name":"date","type":"=","value":"'+date+'"}]',
+			sort:'zlNum.desc',
+			limit:5
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var item = result['items'];
+        	var html = "";
+        	for(var i=0;i<item.length;i++){
+        		html = html + "<tr><td>"+item[i]['stockCode']+"</td>";
+        		html = html + "<td>"+item[i]['stockName']+"</td>";
+        		html = html + "<td>"+moformat(item[i]['zlNum'])+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['zlRatio'])+"</td></tr>";
+        	}
+        	$('#zjlx').html(html);
+      	}  
+      	});  
+      }
+      
+      function getRzrq(){
+      	
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/rzrq/getList",//路径  
+        data : {
+        	datas:'',
+			sort:'tdate.desc',
+			limit:5
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var item = result['items'];
+        	var html = "";
+        	for(var i=0;i<item.length;i++){
+        		html = html + "<tr><td>"+item[i]['tdate']+"</td>";
+        		html = html + "<td>"+item[i]['close']+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['zdf'])+"</td></tr>";
+        	}
+        	$('#rzrq').html(html);
+      	}  
+      	});  
+      }
+      
+      Date.prototype.Format = function (fmt) {    
+    var o = {    
+        "M+": this.getMonth() + 1, //月份     
+        "d+": this.getDate(), //日     
+        "H+": this.getHours(), //小时     
+        "m+": this.getMinutes(), //分     
+        "s+": this.getSeconds(), //秒     
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度     
+        "S": this.getMilliseconds() //毫秒     
+    };    
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));    
+    for (var k in o)    
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));    
+    return fmt;    
+}    
       
   </script>
   </body>

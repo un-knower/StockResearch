@@ -38,6 +38,7 @@ public class CommonBaseStockInfo {
 	public final static String ES_INDEX_STOCK_STOREREPORT="storereport"; 
 	public final static String ES_INDEX_STOCK_ZJLX="zjlx"; 
 	
+	public final static String ES_INDEX_STOCK_RZRQ="rzrq"; 
 	
 	
 	public final static String ES_INDEX_GOV_OMO="gbomo";
