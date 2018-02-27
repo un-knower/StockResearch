@@ -22,6 +22,13 @@ public class ZjlxController  extends BaseController<StockZjlx>{
     	setQuery(query,page);
         return SelGetStock.getCommonLstResult(query,page,CommonBaseStockInfo.ES_INDEX_STOCK_ZJLX,type);
     }
+	
+	@RequestMapping("/dpzjlx/getDpList")
+    public Map<String,Object> getDpList(StockBasePageInfo page, String type) throws Exception {
+    	BoolQueryBuilder query = QueryBuilders.boolQuery();
+    	setQuery(query,page);
+        return SelGetStock.getCommonLstResult(query,page,CommonBaseStockInfo.ES_INDEX_STOCK_DPZJLX,type);
+    }
     
     @RequestMapping("/zjlx/getClassNameList")
     public String[] getClassNameList() throws Exception {

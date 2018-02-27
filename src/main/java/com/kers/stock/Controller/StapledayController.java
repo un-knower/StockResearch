@@ -75,11 +75,28 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     @RequestMapping("/stapleday/getHotspotHtml")
     public String getHotspotHtml() throws ClientProtocolException, IOException{
     	String fan = "";
-    	String con = BaseConnClient.baseGetReq("http://www.100ppi.com");
-    	Document document = Jsoup.parse(con);
-    	Elements eles = document.getElementsByClass("topnewslist");
-    	if(eles.size() > 0){
-    		Element ele = eles.get(0);
+    	
+    	
+    	String con = BaseConnClient.baseGetReq("http://www.chinamoney.com.cn/fe/Channel/5491");
+		Document document = Jsoup.parse(con);
+		Element eles = document.getElementById("tabcont1");
+		Elements tds = eles.select("tr");
+		for (int i = 0; i < 3; i++) {
+			String url = "http://www.chinamoney.com.cn" + tds.get(i).select("td").get(0).select("a").get(0).attr("href");
+			String name = tds.get(i).select("td").get(0).select("a").get(0).html().replace("公开市场业务交易公告", "");
+			con = BaseConnClient.baseGetReq(url);
+			Document documents = Jsoup.parse(con);
+			Element content = documents.getElementById("content");
+			String value = content.select("p").get(1).html().split("，")[0];
+			fan = fan + "<li class=\"list-group-item\" href=\"#\">["+name+"]<a href=\""+url+"\" target=\"_blank\" title=\""+value+"\">"+value+"</a></li>";
+		}
+    	
+    	
+    	con = BaseConnClient.baseGetReq("http://www.100ppi.com");
+    	document = Jsoup.parse(con);
+    	Elements eless = document.getElementsByClass("topnewslist");
+    	if(eless.size() > 0){
+    		Element ele = eless.get(0);
     		Elements lis = ele.getElementsByClass("fl");
     		for (int i = 0; i < lis.size(); i++) {
     			int s = lis.get(i).getElementsByClass("fl").size();
@@ -95,6 +112,7 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     	}
     	return fan;
     }
+    
     
     /**
      * 获取全球大盘数据
@@ -176,7 +194,20 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     }
     
     public static void main(String[] args) throws ClientProtocolException, IOException {
-    	
+    	//<li class="list-group-item" href="#">[农副]<a href="http://www.100ppi.com/news/detail-20180227-1209511.html" target="_blank" title="年后猪肉价格继续回落 分析师：降幅不会大">年后猪肉价格继续回落 分析师：降幅不会大</a></li>
+    	String con = BaseConnClient.baseGetReq("http://www.chinamoney.com.cn/fe/Channel/5491");
+		Document document = Jsoup.parse(con);
+		Element eles = document.getElementById("tabcont1");
+		Elements tds = eles.select("tr");
+		for (int i = 0; i < 3; i++) {
+			String url = "http://www.chinamoney.com.cn" + tds.get(i).select("td").get(0).select("a").get(0).attr("href");
+			String name = tds.get(i).select("td").get(0).select("a").get(0).html().replace("公开市场业务交易公告", "");
+			con = BaseConnClient.baseGetReq(url);
+			Document documents = Jsoup.parse(con);
+			Element content = documents.getElementById("content");
+			String value = content.select("p").get(1).html().split("，")[0];
+			String html = "<li class=\"list-group-item\" href=\"#\">["+name+"]<a href=\""+url+"\" target=\"_blank\" title=\""+value+"\">"+value+"</a></li>";
+		}
 	}
    
 }

@@ -37,6 +37,7 @@ public class CommonBaseStockInfo {
 	public final static String ES_INDEX_STOCK_STOCKPCSE="stockpcse";
 	public final static String ES_INDEX_STOCK_STOREREPORT="storereport"; 
 	public final static String ES_INDEX_STOCK_ZJLX="zjlx"; 
+	public final static String ES_INDEX_STOCK_DPZJLX="dpzjlx"; 
 	
 	public final static String ES_INDEX_STOCK_RZRQ="rzrq"; 
 	

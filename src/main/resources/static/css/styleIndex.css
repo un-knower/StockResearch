@@ -2335,7 +2335,7 @@ div.dataTables_length label select {
   margin-right: 1.8%;
   //margin-bottom: 15px;
   width: 14.2%;
-  padding: 6px 9px 4px;
+  padding: 2px 2px 2px;
   transition: border-color 0.21s ease-out 0s;
 }
 .butstyle.flat {
@@ -2354,7 +2354,7 @@ div.dataTables_length label select {
   border-color: #4D90FE;
 }
 .butpro .sub h2 {
-  margin: 0 0 5px 0;
+  margin: 0 0 0px 0;
   font-size: 11px;
   font-weight: normal;
   text-align: center;
@@ -2363,13 +2363,13 @@ div.dataTables_length label select {
 .butpro .sub span {
   color: #434D55;
   display: block;
-  font-size: 18px;
+  font-size: 11px;
   font-weight: 400;
   text-align: center;
-  line-height: 26px;
+  //line-height: 26px;
 }
 .butpro .stat {
-  padding: 4px 0;
+  //padding: 4px 0;
   text-align: center;
 }
 .butpro .stat .equal {
@@ -2388,7 +2388,7 @@ div.dataTables_length label select {
   padding: 0 0 0 19px;
 }
 .butpro .sub {
-  padding-top: 4px;
+  //padding-top: 4px;
 }
 /*Flot Charts*/
 .blue-chart .flot-text,
