@@ -28,6 +28,7 @@ public class StockZjlx   implements Serializable{
 	 private int up5;
 	 private int up10;
 	 private int  upNum;//连涨天数 
+	 private double ljlrNum;//累计流入资金
 	 private double up3NumAvg;  //3天平均量
 	 private double up5NumAvg;  //3天平均量
 	 private double up10NumAvg;  //3天平均量
@@ -198,6 +199,12 @@ public class StockZjlx   implements Serializable{
 	}
 	public void setZzRises(double zzRises) {
 		this.zzRises = zzRises;
+	}
+	public double getLjlrNum() {
+		return ljlrNum;
+	}
+	public void setLjlrNum(double ljlrNum) {
+		this.ljlrNum = ljlrNum;
 	}
 	 
 	

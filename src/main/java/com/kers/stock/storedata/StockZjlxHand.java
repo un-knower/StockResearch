@@ -171,6 +171,21 @@ public class StockZjlxHand {
 
 				}
 				
+				 int   upabsNum=Math.abs(stockZjlx.getUpNum());
+				  double ljlrNum = 0;
+				 for (int j = 0; j < upabsNum; j++) {
+					 
+					 int index = i - j;
+						if (index < 0)
+							break;
+						
+						ljlrNum+=MathsUtils
+								.parseDoubleStockWy(arr.get(index).toString().replace("\"", "").split(",")[1].toString());
+						
+					
+				}
+				 stockZjlx.setLjlrNum(ljlrNum);
+				
 			
 
 				lstRet.add(stockZjlx);
@@ -454,6 +469,20 @@ class TvaSet {
 				double  zzRises=zlNum-(lstStockZljx.getZlNum()<0?Math.abs(lstStockZljx.getZlNum()):lstStockZljx.getZlNum());//((zlNum-lstStockZljx.getZlNum())/Math.abs((lstStockZljx.getZlNum()==0?10000:lstStockZljx.getZlNum())))*100;
 				stockZjlx.setZzRises(zzRises);
 			}
+			 int   upabsNum=Math.abs(stockZjlx.getUpNum());
+			  double ljlrNum = 0;
+			 for (int j = 0; j < upabsNum; j++) {
+				 
+				 int index = i - j;
+					if (index < 0)
+						break;
+					
+					ljlrNum+= MathsUtils.parseDoubleStockWyFormat(trs.get(index).select("td").get(1).text());
+					
+				
+			}
+			 stockZjlx.setLjlrNum(ljlrNum);
+
 
 			lstRet.add(stockZjlx);
 		}

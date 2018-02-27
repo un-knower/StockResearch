@@ -441,9 +441,10 @@ public class SelGetStock {
 				String s = sorts[i];
 				String order = s.split("\\.")[1];
 				if (order.equalsIgnoreCase("desc")) {
-					ssb.sort(s.split("\\.")[0], SortOrder.DESC);
-				} else {
 					ssb.sort(s.split("\\.")[0], SortOrder.ASC);
+				} else {
+					ssb.sort(s.split("\\.")[0], SortOrder.DESC);
+					
 				}
 			}
 		}
@@ -455,7 +456,7 @@ public class SelGetStock {
 	public static Map<String, Object> getCommonLstResult(BoolQueryBuilder query, StockBasePageInfo page, String index,
 			String type) throws Exception {
 		
-		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
+		//query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
 //		revtmpMap(mapsSelStock);
 	 	//query.must(QueryBuilders.inQuery("stockCode",mapsSelStock.keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
@@ -515,9 +516,10 @@ public class SelGetStock {
 				String s = sorts[i];
 				String order = s.split("\\.")[1];
 				if (order.equalsIgnoreCase("desc")) {
-					ssb.sort(s.split("\\.")[0], SortOrder.DESC);
-				} else {
 					ssb.sort(s.split("\\.")[0], SortOrder.ASC);
+				} else {
+					ssb.sort(s.split("\\.")[0], SortOrder.DESC);
+					
 				}
 			}
 		}

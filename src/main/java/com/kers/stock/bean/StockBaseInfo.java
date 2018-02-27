@@ -76,6 +76,17 @@ public class StockBaseInfo implements Serializable {
 	private float upSumRises10 = 0;
 	private float upSumRises20 = 0;
 	private float upSumRises30=0;	
+	private float upSumRises50=0;	
+	private float upSumRises60=0;	
+	private float upSumRises90=0;	
+	private float upSumRises120=0;	
+	private float upSumRises160=0;	
+	private float upSumRises180=0;	
+
+
+
+
+
 	private float minLowRises5 = 0;
 	private float minLowRises10 = 0;
 	private float minLowRises20 = 0;
@@ -851,6 +862,54 @@ public class StockBaseInfo implements Serializable {
 
 	public void setUpRisesDay(float upRisesDay) {
 		this.upRisesDay = upRisesDay;
+	}
+
+	public float getUpSumRises50() {
+		return upSumRises50;
+	}
+
+	public void setUpSumRises50(float upSumRises50) {
+		this.upSumRises50 = upSumRises50;
+	}
+
+	public float getUpSumRises60() {
+		return upSumRises60;
+	}
+
+	public void setUpSumRises60(float upSumRises60) {
+		this.upSumRises60 = upSumRises60;
+	}
+
+	public float getUpSumRises90() {
+		return upSumRises90;
+	}
+
+	public void setUpSumRises90(float upSumRises90) {
+		this.upSumRises90 = upSumRises90;
+	}
+
+	public float getUpSumRises120() {
+		return upSumRises120;
+	}
+
+	public void setUpSumRises120(float upSumRises120) {
+		this.upSumRises120 = upSumRises120;
+	}
+
+	public float getUpSumRises160() {
+		return upSumRises160;
+	}
+
+	public void setUpSumRises160(float upSumRises160) {
+		this.upSumRises160 = upSumRises160;
+	}
+
+	public float getUpSumRises180() {
+		return upSumRises180;
+	}
+
+	public void setUpSumRises180(float upSumRises180) {
+		this.upSumRises180 = upSumRises180;
 	}
 
 	
