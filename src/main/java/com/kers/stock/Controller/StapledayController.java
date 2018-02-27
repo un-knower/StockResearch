@@ -108,7 +108,7 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     	//亚太http://hq.sinajs.cn/rn=1517303034135&list=hkHSI,b_NKY,b_TWSE,b_AS30,b_FSSTI
     	//欧洲http://hq.sinajs.cn/rn=1517303057897&list=EURUSD,b_UKX,b_DAX,b_CAC,b_FTSEMIB
     	//美股http://hq.sinajs.cn/rn=1517303070978&list=gb_dji,gb_ixic,gb_inx,hf_DJS,hf_NAS
-    	String[][] urlStr = {{"s_sh000001","0"},{"s_sz399006","0"},{"b_NKY","0"},{"gb_dji","2"},{"gb_ixic","2"}};
+    	String[][] urlStr = {{"s_sh000001","0"},{"s_sz399006","0"},{"hkHSI","1"},{"b_NKY","0"},{"gb_dji","2"},{"gb_ixic","2"}};
     	String url = "http://hq.sinajs.cn/rn=151730262502396&list=";
     	for (int i = 0; i < urlStr.length; i++) {
     		url = url + urlStr[i][0] + ",";
@@ -134,6 +134,11 @@ public class StapledayController  extends BaseController<Stap100PPI>{
 						info.setMb(Float.parseFloat(ds[1]));
 						info.setRises(Float.parseFloat(ds[2]));
 					}
+					if(urlStr[i][1].equals("1")){
+						info.setStockName(ds[1]);
+						info.setMb(Float.parseFloat(ds[2]));
+						info.setRises(Float.parseFloat(ds[8]));
+					}
 					list.add(info);
 				}
 			}
@@ -155,7 +160,11 @@ public class StapledayController  extends BaseController<Stap100PPI>{
 				Elements tds = trs.get(i).select("td");
 				html = html + "<td>" + tds.get(0).select("a").get(0).html() + "</td>";
 				html = html + "<td>" + tds.get(1).html() + "</td>";
-				html = html + "<td>" + tds.get(2).select("span").get(0).html() + "</td>";
+				if(Float.parseFloat(tds.get(2).select("span").get(0).html()) >= 1){
+					html = html + "<td><span style=\"color: #b00\">" + tds.get(2).select("span").get(0).html() + "</span></td>";
+				}else{
+					html = html + "<td><span style=\"color: #0b0\">" + tds.get(2).select("span").get(0).html() + "</span></td>";
+				}
 				html = html + "</tr>";
 			}
 		} catch (ClientProtocolException e) {

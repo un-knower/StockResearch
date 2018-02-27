@@ -4,7 +4,7 @@
 <body>
 
 <!-- 顶部导航 -->
-<div id="head-nav" class="navbar navbar-default navbar-fixed-top" th:include="/common/top_nav :: nav"></div>
+<div style="display:none" id="head-nav" class="navbar navbar-default navbar-fixed-top" th:include="/common/top_nav :: nav"></div>
 <!-- 左侧菜单 -->
 <div id="cl-wrapper" class="fixed-menu sb-collapsed">
 	<div class="cl-sidebar" data-position="right" data-step="1" th:include="/common/left_menu :: menu('index')"></div>
@@ -36,8 +36,14 @@
 					</div>
 				</div>
 				<div class="col-sm-3 col-md-3">
-					<div class="block-flat2 pie-widget">
+					<div class="block-flat2 pie-widget"  style = "height:300px;overflow:auto">
 						<div class="header">
+							<span class="pull-right">
+								<div class="btn-group" role="group" >
+								  <button type="button" class="btn btn-primary btn-xs" onclick = "changeZjlx(1)" id = "bankuai">板块</button>
+								  <button type="button" class="btn btn-default btn-xs" onclick = "changeZjlx(2)" id = "gegu">个股</button>
+								</div>
+							</span>
 							<h4>资金流向</h4>
 						</div>
 						<div class="content">
@@ -93,6 +99,7 @@
 									<tr>
 										<th>到期时间(星期)</th>
 										<th>金额(亿)</th>
+										<th>类型</th>
 									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "mom"></tbody>
@@ -336,7 +343,7 @@
       getMom();
       getShibor();
       getRzrq();
-      getZjlx();
+      getZjlx(1);
       
       $("#zhibiaoSelect").change(function(){
       	var val = $(this).children('option:selected').val();
@@ -1061,7 +1068,7 @@
       	if(text == '创业板指'){
       		imgPath = "http://image.sinajs.cn/newchart/bd/small/nsz399006.gif";
       	}
-      	if(text == 201){
+      	if(text == '恒生指数'){
       		imgPath = "http://image.sinajs.cn/newchart/hk_stock/min_hollow_290/HSI.gif";
       	}
       	if(text == 202){
@@ -1104,9 +1111,9 @@
         data : {},//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
         	var html = "";
-        	html = html + '<div class="butpro butstyle"><div class="sub">';
-        	html = html + '<h2>风险指数</h2><span id="fx1">待实现</span></div>';
-			html = html + '<div class="stat"><span style = "color:#21A675" id="fx2">待实现</span></div></div>';
+        	//html = html + '<div class="butpro butstyle"><div class="sub">';
+        	//html = html + '<h2>风险指数</h2><span id="fx1">待实现</span></div>';
+			//html = html + '<div class="stat"><span style = "color:#21A675" id="fx2">待实现</span></div></div>';
         	for(var i=0;i<result.length;i++){
         			html = html + '<div class="butpro butstyle" onclick = "changeImg(\''+result[i]['stockName']+'\')"><div class="sub">';
         			html = html + '<h2>'+result[i]['stockName']+'</h2><span>'+result[i]['mb']+'</span></div>';
@@ -1118,35 +1125,48 @@
 					
         	}
         	$('#startHtml').html(html);
-        	getFx();
+        	//getFx();
       	}  
       }); 
       }
       
       function getFx(){
-      	$.ajax({  
-      	type : "GET",  //提交方式  
-		url : "http://www.estock.com:8080/stock/getFx",//路径  
-        data : {},//数据，这里使用的是Json格式进行传输  
-        success : function(result) {//返回数据根据结果进行相应的处理  
-        	$('#fx1').html('待实现');
-        	$('#fx2').html('待实现');
-      	}  
-      }); 
+      	
       }
       
       function getMom(){
+      	$('#mom').html(getShuaHtml(3));
     	$.ajax({  
       	type : "GET",  //提交方式  
-		url : "http://www.estock.com:8080/stock/govomo/getDateList",//路径  
+		url : "http://www.estock.com:8080/stock/govomo/getDateList2",//路径  
         data : {
         },//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
         	var item = result['items'];
+        	getMom2(item);
+      	}  
+      	});  
+      }
+      
+      function getMom2(item2){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/govomo/getDateList",//路径  
+        data : {
+        	sort:'expDate.asc'
+        },//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	var item = result['items'];
         	var html = "";
+        	for(var i=0;i<item2.length;i++){
+        		html = html + "<tr><td>"+item2[i]['date']+"("+item2[i]['dateWeek']+")</td>";
+        		html = html + "<td>"+item2[i]['jyl']+"</td>";
+        		html = html + "<td><span style=\"color: #b00\">投放</span></td></tr>";
+        	}
         	for(var i=0;i<item.length;i++){
-        		html = html + "<tr><td>"+item[i]['expDate']+"</td>";
-        		html = html + "<td>"+item[i]['jyl']+"</td></tr>";
+        		html = html + "<tr><td>"+item[i]['expDate']+"("+item[i]['expWeek']+")</td>";
+        		html = html + "<td>"+item[i]['jyl']+"</td>";
+        		html = html + "<td><span style=\"color: #0b0\">回购</span></td></tr>";
         	}
         	$('#mom').html(html);
       	}  
@@ -1154,24 +1174,26 @@
       }
       
       function getShibor(){
+      	$('#shibor').html(getShuaHtml(3));
     	$.ajax({  
-      	type : "GET",  //提交方式  
-		url : "http://www.estock.com:8080/stock/stapleday/getShiborTable",//路径  
-        data : {
-        },//数据，这里使用的是Json格式进行传输  
-        success : function(result) {//返回数据根据结果进行相应的处理  
-        	$('#shibor').html(result);
-      	}  
+	      	type : "GET",  //提交方式  
+			url : "http://www.estock.com:8080/stock/stapleday/getShiborTable",//路径  
+	        data : {
+	        },//数据，这里使用的是Json格式进行传输  
+	        success : function(result) {//返回数据根据结果进行相应的处理  
+	        	$('#shibor').html(result);
+	      	}  
       	});  
       }
       
-      function getZjlx(){
+      function getZjlx(type){
       	var date = new Date().Format("yyyy-MM-dd");
+      	$('#zjlx').html(getShuaHtml(4));
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/zjlx/getList",//路径  
         data : {
-        	datas:'[{"must":"must","name":"date","type":"=","value":"'+date+'"}]',
+        	datas:'[{"must":"must","name":"date","type":"=","value":"'+date+'"},{"must":"must","name":"type","type":"=","value":"'+type+'"}]',
 			sort:'zlNum.desc',
 			limit:5
         },//数据，这里使用的是Json格式进行传输  
@@ -1189,8 +1211,20 @@
       	});  
       }
       
+      function changeZjlx(type){
+      	if(type == 1){
+      		$('#bankuai').attr("class","btn btn-primary btn-xs");
+      		$('#gegu').attr("class","btn btn-default btn-xs");
+      	}
+      	if(type == 2){
+      		$('#gegu').attr("class","btn btn-primary btn-xs");
+      		$('#bankuai').attr("class","btn btn-default btn-xs");
+      	}
+      	getZjlx(type);
+      }
+      
       function getRzrq(){
-      	
+      	$('#rzrq').html(getShuaHtml(3));
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/rzrq/getList",//路径  
@@ -1212,21 +1246,6 @@
       	});  
       }
       
-      Date.prototype.Format = function (fmt) {    
-    var o = {    
-        "M+": this.getMonth() + 1, //月份     
-        "d+": this.getDate(), //日     
-        "H+": this.getHours(), //小时     
-        "m+": this.getMinutes(), //分     
-        "s+": this.getSeconds(), //秒     
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度     
-        "S": this.getMilliseconds() //毫秒     
-    };    
-    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));    
-    for (var k in o)    
-    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));    
-    return fmt;    
-}    
       
   </script>
   </body>

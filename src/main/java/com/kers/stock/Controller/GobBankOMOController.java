@@ -54,6 +54,33 @@ public class GobBankOMOController  extends BaseController<GovBankOMOBean>{
     	setQuery(query,page);
         return SelGetStock.getCommonLstResult(query,page,CommonBaseStockInfo.ES_INDEX_GOV_OMO,type);
     }
+	
+	/**
+	 * 获取本周到期
+	 * @param page
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/govomo/getDateList2")
+    public Map<String,Object> getDateList2(StockBasePageInfo page, String type) throws Exception {
+		SimpleDateFormat  format = new  SimpleDateFormat(TimeUtils.DEFAULT_DATEYMD_FORMAT); 
+		Calendar ncalendar = new GregorianCalendar();
+    	TimeZone tz = TimeZone.getTimeZone("GMT+8");
+    	ncalendar.setTimeZone(tz);
+    	String startDate = format.format(ncalendar.getTime());
+    	int w = -1;
+    	while(w != 1){
+    		ncalendar.add(Calendar.DATE,-1);
+    		w = ncalendar.get(Calendar.DAY_OF_WEEK) - 1;
+    	}
+    	String endDate = format.format(ncalendar.getTime());
+    	String d = "[{\"must\":\"must\",\"name\":\"date\",\"type\":\">=\",\"value\":\""+endDate+"\"},{\"must\":\"must\",\"name\":\"date\",\"type\":\"<=\",\"value\":\""+startDate+"\"}]";
+    	page.setDatas(d);
+    	BoolQueryBuilder query = QueryBuilders.boolQuery();
+    	setQuery(query,page);
+        return SelGetStock.getCommonLstResult(query,page,CommonBaseStockInfo.ES_INDEX_GOV_OMO,type);
+    }
     
     @RequestMapping("/govomo/getClassNameList")
     public String[] getClassNameList() throws Exception {

@@ -83,6 +83,7 @@ public class GovBankOMOHand {
 								break z;
 							}
 							bankOMOBean.setDate(dates);
+							bankOMOBean.setDateWeek(TimeUtils.dateToWeek(dates));
 							String qx = elementds.get(1).text().replace("&nbsp;", "").replace(" ", "");
 							bankOMOBean.setCzqx(Integer.parseInt(qx));
 							bankOMOBean.setJyl(
@@ -94,8 +95,9 @@ public class GovBankOMOHand {
 							Date date = TimeUtils.addDay(
 									TimeUtils.toDate(bankOMOBean.getDate(), TimeUtils.DEFAULT_DATEYMD_FORMAT),
 									bankOMOBean.getCzqx());
-
-							bankOMOBean.setExpDate(TimeUtils.format(date, TimeUtils.DEFAULT_DATEYMD_FORMAT));
+							String expDate = TimeUtils.format(date, TimeUtils.DEFAULT_DATEYMD_FORMAT);
+							bankOMOBean.setExpDate(expDate);
+							bankOMOBean.setExpWeek(TimeUtils.dateToWeek(expDate));
 							lstRes.add(bankOMOBean);
 						} catch (Exception e) {
 							e.printStackTrace();
