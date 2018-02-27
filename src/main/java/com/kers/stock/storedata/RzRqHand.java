@@ -32,7 +32,7 @@ import com.kers.stock.bean.RzRqBean;
  */
 public class RzRqHand {
 	
-	static JestClient jClient = BaseCommonConfig.clientConfig();
+	static JestClient jestClient = BaseCommonConfig.clientConfig();
 	
 	public static void main(String[] args) throws Exception {
 //		getAllDatas("");
@@ -90,7 +90,7 @@ public class RzRqHand {
 		}
 		System.out.println("总共加入数据：" + list.size());
 		if(list.size() > 0){
-			insBatchEs(list, jClient, CommonBaseStockInfo.ES_INDEX_STOCK_RZRQ);
+			insBatchEs(list, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_RZRQ);
 		}
 	}
 	
@@ -102,7 +102,6 @@ public class RzRqHand {
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_RZRQ, CommonBaseStockInfo.ES_INDEX_STOCK_RZRQ,
 				1, 1);
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		RzRqBean bean = new RzRqBean();
 		try {
 			JestResult results = jestClient.execute(selResult);

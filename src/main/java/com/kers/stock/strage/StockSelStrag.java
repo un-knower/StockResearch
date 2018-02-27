@@ -28,11 +28,11 @@ public class StockSelStrag {
 
 	public final static String STRA_TYPE_DEF = "003";
 
-	public final static String execStockDefined = "002323,002925,601828,001965,300433"; // 次新股
+	public final static String execStockDefined = "601633,600732,601519,600225,002650,002832,603158,600853,002059,603908,600317,600578,000027,000539,002498,002641,603606,601618,600023,600488,601866,600863,601018,601872,600642,601339,600033,600811,002239,600170,600220,000420,600635,002266,600665,600163,600620,000421,002375,000958,000987,002748,603985,600415,600372,000514,002574,002187,600865,603618,002567,600052,603658,601518,000157,002561,600765,000631,000637,600461,603313,600758,002889,000753,603050,600292,000591,601718,600272,600135,002367,603268,002364,600007,601880,601238,601390,000617,000166,600010,600641,600020,000921,600633,600688,000541,300495,002468,002323,002925,601828,001965,300433";
 	public final static String excStockBchipStock = "600010,6600023,00853,600025,600900,300072,600011,601018,000166,600061,601991,601985,000617,601919,601618,600795,600297,601669,601238,600688,601186,000938,601727,600663,601901,601006,600547,600406,002252,600893,601108,601808,601989,300059,002044,601878,002024,601857,300104,600028,002010,300015";
 	public final static String excGrowUpStock = ",300029,300306,000662,600383,600233,300026,000718,002818,600233,601689,600093,000892,000987,300267,600420,000728,002108,000021,600312,600307,002501,002818,600266,600787,600577,600621,600502,603319,601688,600711,600466,002563,600926,000937,002608,000750,002662,002247,600079,600153,600393,601128,600240,000060,000983,600060,600649,600970,601117,601555,603323,002092,601555,603323,601021,000783,600885,002440,600598,600066,600477,600109,600835,600823,600908,000423,000686,000761,600649,000581,600068,600859,000090,000990,600299,000402,600525,601019,002354,000550,601000,600633,002217,600409,000921,002048,600258,603444,002271,600498,002195,300182,000559,000012,600376,002839,000883,000539,601179,000826,000999,600260,600236,600236,600415,600827,002065,600522,601326,000685,600269,600400,601811,601801,601139,000598,000778,000709,000902,600528,000587,000541,600873,002007,601158,600674,600271,600611,600804,600219,600160,002203,600739,600373,600012,002372,002221,603113,002434,600705,600535,600350,000623,002091,002074,002051,600978,002002,601333,000959,000027,600231,000933,002241,000887,600699,000723,000525,600612,000501,002701,600642,600483,600886,601107,002831,600548,600377,600056,002468,600390,601866,601872,000951,300144,601966,600161,000157,600338,300156,600998,600618,000666,600026,603369,002477,601588,000059,600704,000591,600511,600170,603858,600820,600089,601098,601928,603766,000429,002242,000656,600201,601877,002624,600332,600717,000869,000028,002223";//
 	// 白名单股票   
-	public final static String whStock = "002001,002202,0000001,1399001,002460";
+	public final static String whStock = "002001,002202,0000001,1399001,002460,603799,603993,002497,002460,600703";
 
 	/**
 	 * 选优质股 蓝筹股
@@ -183,6 +183,8 @@ public class StockSelStrag {
 				CommonBaseStockInfo.ES_INDEX_STOCK_STOREREPORT, 0, 3800);
 		// System.out.println(lstResult.size());
 		// System.out.println(lstResult);
+		
+		//  upSumRises10<0&&upSumRises30<0&&upSumRises60<0&&upSumRises120<0    常年呈下滑趋势 
 		for (EastReportBean bean : lstResult) {
 			// if(!((bean.getJlr_tbzz_xjd()<0&&bean.getXjlr()>0)||(bean.getJlr()<0&&bean.getJlr_ycb()>0&&bean.getNpe()<=80)))
 			// mapsInfo.put(bean.getStockCode(), STRA_TYPE_BADEARNING);
@@ -192,8 +194,15 @@ public class StockSelStrag {
 			// if(bean.getStockCode().equals("000950")){
 			// System.out.println(bean.getPe()+" "+bean.getNpe() );
 			// }
+			
+			if(bean.getStockName().contains("ST")){
+				if(bean.getNpe()<=26&&bean.getNpe()>0){
+					mapsInfo.remove(bean.getStockCode());
+				}
+				
+			}else{
 
-			if (!(bean.getStockName().contains("*ST") || bean.getNpe() > 200 || bean.getPe() > 1000)) {
+			if (!( bean.getNpe() > 200 || bean.getPe() > 1000)) {//bean.getStockName().contains("*ST") ||
 				if ((bean.getPe() > 0 && bean.getNpe() > 0 && bean.getNpe() < 60)) {
 					if (bean.getPe() > 0) {
 						if (bean.getPe() < 200 && bean.getNpe() < 50)
@@ -219,64 +228,14 @@ public class StockSelStrag {
 
 			}
 
-			// > 0)
-			// if (bean.getJlr_tbzz_xjd() < 0 && bean.getXjlr() > 0 &&
-			// (bean.getJdzzl() > 0 || bean.getJlr_ycb() > 0)
-			// && (bean.getPe() < 60 || bean.getNpe() < 60) && (bean.getNpe() >
-			// 0 && bean.getNpe() < 60)&&bean.getPe()>0) {
-			//
-			// if (bean.getPe() > 60) {
-			// if (bean.getNpe() < 40)
-			// mapsInfo.remove(bean.getStockCode());
-			//
-			// } else
-			//
-			// mapsInfo.remove(bean.getStockCode());
-			// // mapsInfo.put(bean.getStockCode(), STRA_TYPE_BADEARNING);
-			// }
-			// if((bean.getXjlr()>0&&(bean.getNpe()>0&&bean.getNpe()<=60))||new
-			// BigDecimal(bean.getXjlr()).compareTo(new BigDecimal("500000000"))
-			// > 0)
-			// mapsInfo.remove(bean.getStockCode());
+		}
 		}
 
-		// for (EastReportBean bean : lstResult) {
-		// //
-		// if(!((bean.getJlr_tbzz_xjd()<0&&bean.getXjlr()>0)||(bean.getJlr()<0&&bean.getJlr_ycb()>0&&bean.getNpe()<=80)))
-		// mapsInfo.put(bean.getStockCode(), STRA_TYPE_BADEARNING);
-		// }
-
-		// Map<String, String> mapsInfoRet = Maps.newConcurrentMap();
-
-		//
-		// Map<String, StockBaseInfo> mapsStock =
-		// QueryComLstData.getStockBaseInfo();
-		//
-		// for (String key : mapsStock.keySet()) {
-		// StockBaseInfo bean = mapsStock.get(key);
-		// if (new BigDecimal(bean.getZsz()).compareTo(new
-		// BigDecimal("12000000000")) < 0 || bean.getPe() > 400
-		// ) {//|| bean.getStockName().contains("ST") ||
-		// bean.getStockName().contains("*ST")
-		// mapsInfo.put(bean.getStockCode(), STRA_TYPE_BADTOTAL);
-		// }
-		// }
-		//
-		// for (EastReportBean bean : queryEarningsStock()) {
-		// if (mapsInfo.get(bean.getStockCode()) != null)
-		// mapsInfo.remove(bean.getStockCode());
-		// }
-		// for (StockBaseInfo bean : queryBchipStock()) {
-		// if (mapsInfo.get(bean.getStockCode()) != null)
-		// mapsInfo.remove(bean.getStockCode());
-		// }
-		//
-		// for (StockBaseInfo bean : queryGrowUpStock()) {
-		// if (mapsInfo.get(bean.getStockCode()) != null)
-		// mapsInfo.remove(bean.getStockCode());
-		// }
-
-		mapsInfo.put("002346", STRA_TYPE_DEF);// 特殊之前接触过的坑股
+		
+		 for (int i = 0; i < execStockDefined.split(",").length; i++) {
+				mapsInfo.put(execStockDefined.split(",")[i], STRA_TYPE_DEF);// 特殊之前接触过的坑股
+		}
+	
 		return mapsInfo;
 	}
 
@@ -389,7 +348,7 @@ public class StockSelStrag {
 	
 	public  static Set<String> allBlckStockLst(){
 		 Set<String> setsResult= Sets.newHashSet(blckLstOfStock().keySet());
-		 setsResult .addAll(getSubnewStock(-60).keySet());
+		 setsResult .addAll(getSubnewStock(-200).keySet());
 		return setsResult;
 	}
 	
