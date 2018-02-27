@@ -373,10 +373,10 @@ public class StoreAstockTradInfo {
 		
 	}
 	public static void main(String[] args) throws ClientProtocolException, IOException, Exception {
-//		getHistoryData();
+		getHistoryData();
 //		executorServiceLocal.shutdown();f
 //		getRealTimeData();
-		wDataToEs();
+//		wDataToEs();
 
 		//		wDataRealToEs();
 	}
