@@ -97,7 +97,8 @@
 							<table class="no-border">
 								<thead class="no-border">
 									<tr>
-										<th>到期时间(星期)</th>
+										<th>到期时间</th>
+										<th>星期</th>
 										<th>金额(亿)</th>
 										<th>类型</th>
 									</tr>
@@ -178,8 +179,8 @@
 										<th>名称</th>
 										<th>板块</th>
 										<th>type</th>
-										<th><a href = "javascript:void(0)" data1 = "rises" data2 = "desc" data3= "longhu" onclick = "getLonghuSort(this)">涨幅</a></th>
-										<th><a href = "javascript:void(0)" data1 = "upSumRises5" data2 = "desc" data3= "longhu" onclick = "getLonghuSort(this)">5天涨</a></th>
+										<th><a href = "javascript:void(0)" data1 = "rises" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">涨幅</a></th>
+										<th><a href = "javascript:void(0)" data1 = "upSumRises5" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">5天涨</a></th>
 									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "longhu"></tbody>
@@ -239,15 +240,15 @@
 							<h4>周榜商品</h4>
 						</div>
 						<div class="content">
-							<input type = "hidden" , value = "wtzf.desc" id = "StapledayUpText">
+							<input type = "hidden" , value = "wtzf.asc" id = "StapledayUpText">
 							<table class="no-border">
 								<thead class="no-border">
 									<tr>
 										<th width = "40%">名称</th>
-										<th width = "20%"><a href = "javascript:void(0)" data1 = "monthRise" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">涨幅</a></th>
-										<th width = "20%"><a href = "javascript:void(0)" data1 = "wtzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">周涨幅</a></th>
-										<th width = "20%"><a href = "javascript:void(0)" data1 = "yfzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">月涨幅</a></th>
-										<th width = "20%"><a href = "javascript:void(0)" data1 = "jdzf" data2 = "desc" data3= "stapledayUp" onclick = "getSortZ(this)">季涨幅</a></th>
+										<th width = "20%"><a href = "javascript:void(0)" data1 = "monthRise" data2 = "asc" data3= "stapledayUp" onclick = "getSortZ(this)">涨幅</a></th>
+										<th width = "20%"><a href = "javascript:void(0)" data1 = "wtzf" data2 = "asc" data3= "stapledayUp" onclick = "getSortZ(this)">周涨幅</a></th>
+										<th width = "20%"><a href = "javascript:void(0)" data1 = "yfzf" data2 = "asc" data3= "stapledayUp" onclick = "getSortZ(this)">月涨幅</a></th>
+										<th width = "20%"><a href = "javascript:void(0)" data1 = "jdzf" data2 = "asc" data3= "stapledayUp" onclick = "getSortZ(this)">季涨幅</a></th>
 									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "stapledayUp"></tbody>
@@ -332,12 +333,12 @@
       App.dashBoard();   
       
       getAllList();
-      kdj('0000001');
-
+      //kdj('0000001');
+	  kdj('601668');
       getReal();
       getHotHtml();
-      getStapledayUp(1,1,'wtzf' , 'desc' , 'stapledayUp');
-      getLongHuTable(1,1,'rises','desc');
+      getStapledayUp(1,1,'wtzf' , 'asc' , 'stapledayUp');
+      getLongHuTable(1,1,'rises','asc');
       getZhiBiaoTable(1,1,'');
       getMyStock();
       getMom();
@@ -421,11 +422,11 @@
     	var da1 = $(data).attr("data1");
     	var da2 = $(data).attr("data2");
     	var da3 = $(data).attr("data3");
-    	if(da2 == 'asc'){
-    		da2 = "desc";
-    		$(data).attr("data2" , da2);
-    	}else if(da2 == 'desc'){
+    	if(da2 == 'desc'){
     		da2 = "asc";
+    		$(data).attr("data2" , da2);
+    	}else if(da2 == 'asc'){
+    		da2 = "desc";
     		$(data).attr("data2" , da2);
     	}
     	getStapledayUp(1,1,da1 , da2 , da3)
@@ -435,11 +436,11 @@
     	var da1 = $(data).attr("data1");
     	var da2 = $(data).attr("data2");
     	var da3 = $(data).attr("data3");
-    	if(da2 == 'asc'){
-    		da2 = "desc";
-    		$(data).attr("data2" , da2);
-    	}else if(da2 == 'desc'){
+    	if(da2 == 'desc'){
     		da2 = "asc";
+    		$(data).attr("data2" , da2);
+    	}else if(da2 == 'asc'){
+    		da2 = "desc";
     		$(data).attr("data2" , da2);
     	}
     	getLongHuTable(1,1,da1 , da2 )
@@ -451,7 +452,7 @@
 		url : "http://www.estock.com:8080/stock/stapleday/getList",//路径  
         data : {
         	datas:'',
-        	sort:'rq.desc,'+da1+'.'+da2,
+        	sort:'rq.asc,'+da1+'.'+da2,
         	page:page,
         	limit:5
         },//数据，这里使用的是Json格式进行传输  
@@ -496,7 +497,7 @@
       
       function stapledayUpGo(){
       	var sorts = $('#StapledayUpText').val();
-      	window.location.href='/stock/datas/dzsj?sort=rq.desc,'+sorts;
+      	window.location.href='/stock/datas/dzsj?sort=rq.asc,'+sorts;
       }
       
       
@@ -552,7 +553,7 @@
       }
       
       function longhuGo(){
-      	window.location.href='/stock/datas/stockinfo?sort=date.desc&datas='+longhuDatas;
+      	window.location.href='/stock/datas/stockinfo?sort=date.asc&datas='+longhuDatas;
       }
       
       function getZhiBiaoTable(page , num , val){
@@ -564,7 +565,7 @@
 		url : "http://www.estock.com:8080/stock/getList",//路径  
         data : {
         	datas:val,
-        	sort:'date.desc',
+        	sort:'date.asc',
         	page:page,
         	limit:5
         },//数据，这里使用的是Json格式进行传输  
@@ -611,7 +612,7 @@
       
       function zhibiaoGo(){
       	var val = $('#zhibiaoSelect').val();
-      	window.location.href='/stock/datas/stockinfo?sort=date.desc&datas='+val;
+      	window.location.href='/stock/datas/stockinfo?sort=date.asc&datas='+val;
       }
       
       
@@ -655,7 +656,7 @@
 		url : "http://www.estock.com:8080/stock/stapleday/getListByName",//路径  
         data : {
 			datas:'[{"must":"must","name":"code","type":"=","value":"'+code+'"}]',
-			sort:'rq.desc'
+			sort:'rq.asc'
         },//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
         	 var myChart = echarts.init(document.getElementById('main2'));
@@ -729,7 +730,7 @@
 		url : "http://www.estock.com:8080/stock/getKDJ",//路径  
         data : {
 			datas:'[{"must":"must","name":"stockCode","type":"=","value":"'+code+'"}]',
-			sort:'date.desc',
+			sort:'date.asc',
 			page:1,
 			limit:50
         },//数据，这里使用的是Json格式进行传输  
@@ -1135,7 +1136,7 @@
       }
       
       function getMom(){
-      	$('#mom').html(getShuaHtml(3));
+      	$('#mom').html(getShuaHtml(4));
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/govomo/getDateList2",//路径  
@@ -1153,18 +1154,20 @@
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/govomo/getDateList",//路径  
         data : {
-        	sort:'expDate.asc'
+        	sort:'expDate.desc'
         },//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
         	var item = result['items'];
         	var html = "";
         	for(var i=0;i<item2.length;i++){
-        		html = html + "<tr><td>"+item2[i]['date']+"("+item2[i]['dateWeek']+")</td>";
+        		html = html + "<tr><td>"+item2[i]['date']+"</td>";
+        		html = html + "<td>"+item2[i]['dateWeek']+"</td>";
         		html = html + "<td>"+item2[i]['jyl']+"</td>";
         		html = html + "<td><span style=\"color: #b00\">投放</span></td></tr>";
         	}
         	for(var i=0;i<item.length;i++){
-        		html = html + "<tr><td>"+item[i]['expDate']+"("+item[i]['expWeek']+")</td>";
+        		html = html + "<tr><td>"+item[i]['expDate']+"</td>";
+        		html = html + "<td>"+item[i]['expWeek']+"</td>";
         		html = html + "<td>"+item[i]['jyl']+"</td>";
         		html = html + "<td><span style=\"color: #0b0\">回购</span></td></tr>";
         	}
@@ -1194,7 +1197,7 @@
 		url : "http://www.estock.com:8080/stock/zjlx/getList",//路径  
         data : {
         	datas:'[{"must":"must","name":"date","type":"=","value":"'+date+'"},{"must":"must","name":"type","type":"=","value":"'+type+'"}]',
-			sort:'zlNum.desc',
+			sort:'zlNum.asc',
 			limit:5
         },//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
@@ -1230,7 +1233,7 @@
 		url : "http://www.estock.com:8080/stock/rzrq/getList",//路径  
         data : {
         	datas:'',
-			sort:'tdate.desc',
+			sort:'tdate.asc',
 			limit:5
         },//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  

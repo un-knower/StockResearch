@@ -376,7 +376,7 @@ public class StoreAstockTradInfo {
 		getHistoryData();
 //		executorServiceLocal.shutdown();f
 //		getRealTimeData();
-//		wDataToEs();
+		wDataToEs();
 
 		//		wDataRealToEs();
 	}
@@ -388,6 +388,7 @@ public class StoreAstockTradInfo {
 //			output+=bean.getOpen()+"|"+bean.getHigh()+"|"+bean.getLow()+"|"+bean.getClose()+"|"+bean.getVolume()+"|"+bean.getDate()+",";
 //			
 //		}
+	
 //		output=(output.substring(0, output.length()-1)).replace("-", "/");
 //		FileUtils.write(new File("/opt/stockAcd"), output);
 //		 getHistoryData();

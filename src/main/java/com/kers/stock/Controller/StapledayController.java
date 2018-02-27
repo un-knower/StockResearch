@@ -160,7 +160,7 @@ public class StapledayController  extends BaseController<Stap100PPI>{
 				Elements tds = trs.get(i).select("td");
 				html = html + "<td>" + tds.get(0).select("a").get(0).html() + "</td>";
 				html = html + "<td>" + tds.get(1).html() + "</td>";
-				if(Float.parseFloat(tds.get(2).select("span").get(0).html()) >= 1){
+				if(tds.get(2).select("span").get(0).attr("class").indexOf("down") == 0){
 					html = html + "<td><span style=\"color: #b00\">" + tds.get(2).select("span").get(0).html() + "</span></td>";
 				}else{
 					html = html + "<td><span style=\"color: #0b0\">" + tds.get(2).select("span").get(0).html() + "</span></td>";
