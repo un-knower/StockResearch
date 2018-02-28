@@ -16,6 +16,8 @@ import org.jsoup.select.Elements;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.kers.httpmodel.BaseConnClient;
 import com.kers.staple.bean.Stap100PPI;
 import com.kers.stock.bean.StockBaseInfo;
@@ -78,8 +80,19 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     public String getHotspotHtml() throws ClientProtocolException, IOException{
     	String fan = "";
     	
+    	//获取国务院数据
+    	String con = BaseConnClient.baseGetReq("http://www.drc.gov.cn/Json/GetPageDocuments.ashx?chnid=1&leafid=224&page=1&pagesize=30&sublen=26&sumlen=160&expertid=0&keyword=&experts=&year=0");
+    	JSONArray object = JSONObject.parseArray(con);
+    	JSONArray arr = object.getJSONObject(0).getJSONArray("rows");
+    	for (int i = 0; i < 3; i++) {
+    		JSONObject ob = arr.getJSONObject(i);
+    		String name = "[国务院]";
+    		String url = "http://www.drc.gov.cn"+ob.getString("link");
+    		String value = ob.getString("title");
+    		fan = fan + "<li class=\"list-group-item\" href=\"#\">"+name+"<a href=\""+url+"\" target=\"_blank\" title=\""+value+"\">"+value+"</a></li>";
+		}
     	
-    	String con = BaseConnClient.baseGetReq("http://www.chinamoney.com.cn/fe/Channel/5491");
+    	con = BaseConnClient.baseGetReq("http://www.chinamoney.com.cn/fe/Channel/5491");
 		Document document = Jsoup.parse(con);
 		Element eles = document.getElementById("tabcont1");
 		Elements tds = eles.select("tr");
@@ -197,19 +210,12 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     }
     
     public static void main(String[] args) throws ClientProtocolException, IOException {
-    	//<li class="list-group-item" href="#">[农副]<a href="http://www.100ppi.com/news/detail-20180227-1209511.html" target="_blank" title="年后猪肉价格继续回落 分析师：降幅不会大">年后猪肉价格继续回落 分析师：降幅不会大</a></li>
-    	String con = BaseConnClient.baseGetReq("http://www.chinamoney.com.cn/fe/Channel/5491");
-		Document document = Jsoup.parse(con);
-		Element eles = document.getElementById("tabcont1");
-		Elements tds = eles.select("tr");
-		for (int i = 0; i < 3; i++) {
-			String url = "http://www.chinamoney.com.cn" + tds.get(i).select("td").get(0).select("a").get(0).attr("href");
-			String name = tds.get(i).select("td").get(0).select("a").get(0).html().replace("公开市场业务交易公告", "");
-			con = BaseConnClient.baseGetReq(url);
-			Document documents = Jsoup.parse(con);
-			Element content = documents.getElementById("content");
-			String value = content.select("p").get(1).html().split("，")[0];
-			String html = "<li class=\"list-group-item\" href=\"#\">["+name+"]<a href=\""+url+"\" target=\"_blank\" title=\""+value+"\">"+value+"</a></li>";
+    	String con = BaseConnClient.baseGetReq("http://www.drc.gov.cn/Json/GetPageDocuments.ashx?chnid=1&leafid=224&page=1&pagesize=30&sublen=26&sumlen=160&expertid=0&keyword=&experts=&year=0");
+    	JSONArray object = JSONObject.parseArray(con);
+    	JSONArray arr = object.getJSONObject(0).getJSONArray("rows");
+    	for (int i = 0; i < arr.size(); i++) {
+    		JSONObject ob = arr.getJSONObject(i);
+    		System.out.println(ob.getString("title"));
 		}
 	}
    
