@@ -26,6 +26,7 @@ import com.kers.stock.bean.StockOptionalInfo;
 import com.kers.stock.bean.StockRealBean;
 import com.kers.stock.storedata.CommonBaseStockInfo;
 import com.kers.stock.storedata.RzRqHand;
+import com.kers.stock.storedata.StockDpZjlxHand;
 import com.kers.stock.storedata.StockOptionalSet;
 import com.kers.stock.storedata.StockZjlxHand;
 import com.kers.stock.storedata.StoreAstockTradInfo;
@@ -48,7 +49,7 @@ public class SchedulingConfig {
 	
 	public static List<String> lstSource;
 		
-	@Scheduled(cron = "0 03 12 * * ?") 
+	@Scheduled(cron = "0 00 02 * * ?") 
     public void updateDzsp() {
 		try {
 			MonthsStapleData.freshEsData();
@@ -82,6 +83,7 @@ public class SchedulingConfig {
 			if(shijian()){
 				StockZjlxHand.impBkData();
 				StockZjlxHand.impGguData();
+				StockDpZjlxHand.impDpData();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -94,13 +96,14 @@ public class SchedulingConfig {
 			if(shijian()){
 				StockZjlxHand.impBkData();
 				StockZjlxHand.impGguData();
+				StockDpZjlxHand.impDpData();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-//	@Scheduled(cron = "0 0 0/1 * * ?") 
+	@Scheduled(cron = "0 0 03 * * ?") 
     public void updateyubao() {
 		try {
 			StoreTrailerSet.wsData(50);
@@ -122,7 +125,7 @@ public class SchedulingConfig {
 //		}
 //	}
 	
-//	@Scheduled(cron = "0 30 15 * * ?") // 姣?0绉掓墽琛屼竴娆?
+	@Scheduled(cron = "0 30 15 * * ?")
     public void updateCaoScData() {
 		try {
 			StoreReportSet.daoshuju();
@@ -160,7 +163,7 @@ public class SchedulingConfig {
 	}
 	
 	
-	//@Scheduled(cron = "0 0/5 * * * ?") 
+	@Scheduled(cron = "0 0/5 * * * ?") 
     public void updateInfo2() {
 		if(shijian()){
 			try {
@@ -171,7 +174,7 @@ public class SchedulingConfig {
 		}
 	}
 	
-	//@Scheduled(cron = "0 11 10 * * ?") 
+	@Scheduled(cron = "0 05 15 * * ?") 
     public void updateInfo() {
 			try {
 				wDataRealToEs();
@@ -180,7 +183,7 @@ public class SchedulingConfig {
 			}
 	}
 	
-//	@Scheduled(cron = "0 10 16 * * ?") 
+	@Scheduled(cron = "0 00 08 * * ?") 
     public void updateHisDate() {
 		try {
 			StoreAstockTradInfo.getHistoryData();

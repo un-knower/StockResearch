@@ -89,6 +89,15 @@
    		val = parseFloat(val) * 100
        return highliht(val)+'%';
    }
+   var sub2 = function(val){
+		return val.substr(0,4);
+   }
+   
+   var fixed2percentage3 = function(val){
+   		val = parseFloat(val) * 1000
+       return highliht(val)+'%';
+   }
+   
    function getDatas(){
        var datas = [];
        $('#fh .data').each(function(i){

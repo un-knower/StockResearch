@@ -41,8 +41,9 @@ public class CommonBaseStockInfo {
 	
 	public final static String ES_INDEX_STOCK_RZRQ="rzrq"; 
 	
-	
 	public final static String ES_INDEX_GOV_OMO="gbomo";
+	
+	public final static String ES_INDEX_DZJY="dzjy"; 
 
 	
 	
