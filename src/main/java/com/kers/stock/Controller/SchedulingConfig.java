@@ -248,9 +248,6 @@ public class SchedulingConfig {
 		int H = ncalendar.get(Calendar.HOUR_OF_DAY);
 		int M = ncalendar.get(Calendar.MINUTE);
 		int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 2;
-		System.out.println("H:"+H);
-		System.out.println("M:"+M);
-		System.out.println("w:"+w);
 		boolean k = true;
 		if(((H == 9 && M >= 30) || (H==10) || (H==11 && M <= 30) || (H==13) || (H==14)) 
 				&& w !=6 && w !=7){
@@ -258,7 +255,6 @@ public class SchedulingConfig {
 		}else{
 			k = false;
 		}
-		System.out.println("k:"+k);
 		return k;
 	}
 }
