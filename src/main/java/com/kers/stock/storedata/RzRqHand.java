@@ -35,8 +35,8 @@ public class RzRqHand {
 	static JestClient jestClient = BaseCommonConfig.clientConfig();
 	
 	public static void main(String[] args) throws Exception {
-//		getAllDatas("");
-		getBreakPointDatas();
+		getAllDatas("");
+//		getBreakPointDatas();
 	}
 	
 	public static String getJsonUrlByP(int p) throws ClientProtocolException, IOException {
@@ -108,7 +108,6 @@ public class RzRqHand {
 			if(results.isSucceeded()){
 				bean = results.getSourceAsObject(RzRqBean.class);
 				stopDate = bean.getTdate();
-				System.out.println(stopDate);
 			}
 			getAllDatas(stopDate);
 		} catch (Exception e) {
