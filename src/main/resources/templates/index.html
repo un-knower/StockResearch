@@ -103,50 +103,21 @@
 				</div>
 			</div>
 			
-			
-			
-			<div class="stats_bar">
-				<div class="col-sm-4 col-md-4">
-				<div id="main3" style="width: 300px;height:300px;"></div>
+			<div class="row dash-cols">
+				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;">
+					<div id="main3" style="width: 220px;height:180px;"></div>
 				</div>
-				<div class="col-sm-4 col-md-4">
-				<div id="main4" style="width: 300px;height:300px;"></div>
+				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;">
+					<div id="main4" style="width: 220px;height:180px;"></div>
 				</div>
-				<div class="col-sm-4 col-md-4" >
-				<div class="block"  style="width: 300px;height:300px;">
-						<input type="hidden" class="form-control" id="code" value="000001" >
-    					<div class="content"  data-step="3" data-intro="" style="width: 300px;height:200px;">
-    						<div id="main5" style="width: 400px;height:300px;"></div>
-      						<!-- <img src = "http://image.sinajs.cn/newchart/min/n/sh000001.gif" style="width: 300px;height:200px;" id ="imgFen"/> -->
-      							<div class="stat-number">
-          							<div class = "col-sm-6 col-md-6">
-          								开盘:<span id = "realOpen" style = "font-size: 16px !important;"></span>
-          								<br/>
-          								涨幅:<span id = "realUp" style = "font-size: 16px !important;"></span>
-          							</div>
-          							<div class = "col-sm-6 col-md-6">
-          								最高:<span id = "realHigh" style = "font-size: 16px !important;"></span>
-          								<br/>
-          								最低:<span id = "realLow" style = "font-size: 16px !important;"></span>
-          							</div>
-        						</div>
-    					</div>
-    				<!-- 	<div class="content">
+				<div class="col-sm-5 col-md-5" style = "padding-right:5px;padding-left:5px;">
+					<div id="main5" style="width: 400px;height:180px;"></div>
+				</div>
 
-      						<div class="stat-data">
-        						
-        					
-							</div>
-      						<div class="clear"></div>
-    					</div> -->
-  					</div>
-				</div>
 			</div>
 			
-			
-			
-			
 			<div class="row dash-cols">
+			
 				<!-- 内容左侧 -->
 				<div class="col-sm-6 col-md-6">
 					
@@ -327,7 +298,7 @@
       getAllList();
       kdj('0000001');
 	  //kdj('601668');
-      getReal();
+      //getReal();
       getHotHtml();
       getStapledayUp(1,1,'wtzf' , 'asc' , 'stapledayUp');
       getLongHuTable(1,1,'rises','asc');
@@ -742,18 +713,6 @@
 			    legend: {
 			        data:['K','D','J']
 			    },
-			    toolbox: {
-			        show: true,
-			        feature: {
-			            dataZoom: {
-			                yAxisIndex: 'none'
-			            },
-			            dataView: {readOnly: false},
-			            magicType: {type: ['line', 'bar']},
-			            restore: {},
-			            saveAsImage: {}
-			        }
-			    },
 			    xAxis:  {
 			        type: 'category',
 			        boundaryGap: false,
@@ -798,18 +757,7 @@
 			    legend: {
 			        data:['diff','dae']
 			    },
-			    toolbox: {
-			        show: true,
-			        feature: {
-			            dataZoom: {
-			                yAxisIndex: 'none'
-			            },
-			            dataView: {readOnly: false},
-			            magicType: {type: ['line', 'bar']},
-			            restore: {},
-			            saveAsImage: {}
-			        }
-			    },
+			   
 			    xAxis:  {
 			        type: 'category',
 			        boundaryGap: false,
@@ -862,10 +810,7 @@
 		var obj = data["obj"];
 		var data0 = splitData(obj);
 		option3 = {
-		    title: {
-		        text: '上证指数',
-		        left: 0
-		    },
+		    
 		    tooltip: {
 		        trigger: 'axis',
 		        axisPointer: {

@@ -308,6 +308,7 @@ public class SelGetStock {
 		Map<String, Object> returnMap = Maps.newHashMap();
         
 		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
+		
 		//query.mustNot(QueryBuilders.inQuery("stockCode", mapsSubnewStock.keySet()));
 
 		// query.mustNot(QueryBuilders.inQuery("stockCode",
