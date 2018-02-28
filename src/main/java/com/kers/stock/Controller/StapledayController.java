@@ -1,6 +1,7 @@
 package com.kers.stock.Controller;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import com.kers.staple.bean.Stap100PPI;
 import com.kers.stock.bean.StockBaseInfo;
 import com.kers.stock.storedata.CommonBaseStockInfo;
 import com.kers.stock.strage.SelGetStock;
+import com.kers.stock.utils.MathsUtils;
 import com.kers.stock.vo.StockBasePageInfo;
 
 @RestController
@@ -173,11 +175,12 @@ public class StapledayController  extends BaseController<Stap100PPI>{
 			Document document = Jsoup.parse(con);
 			Elements tables = document.select("table");
 			Elements trs = tables.get(0).select("tr");
+			DecimalFormat df = new DecimalFormat("#.00");
 			for (int i = 4; i < 7; i++) {
 				html = html + "<tr>";
 				Elements tds = trs.get(i).select("td");
 				html = html + "<td>" + tds.get(0).select("a").get(0).html() + "</td>";
-				html = html + "<td>" + tds.get(1).html() + "</td>";
+				html = html + "<td>" + df.format(MathsUtils.parseDouble(tds.get(1).html())) + "</td>";
 				if(tds.get(2).select("span").get(0).attr("class").indexOf("down") == 0){
 					html = html + "<td><span style=\"color: #b00\">" + tds.get(2).select("span").get(0).html() + "</span></td>";
 				}else{

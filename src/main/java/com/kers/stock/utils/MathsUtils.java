@@ -25,6 +25,15 @@ public class MathsUtils {
 		return 0;
 	}
 	
+	public  static double parseDoubleStockYy(Object input){
+		try {
+			return Double.parseDouble(input.toString())*100000000;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return 0;
+	}
+	
 	public  static double parseDoubleStockWyFormat(Object input){
 		try {
 			if( input.toString().contains("万")){

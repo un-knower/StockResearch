@@ -14,7 +14,7 @@
 			
 			<div class="row dash-cols" style = "margin-top:5px;">
 				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:10px;">
-					<div class="block-flat2 pie-widget" style = "height:200px;overflow:auto">
+					<div class="block-flat2 pie-widget" >
 						<div class="header">
 							<h4>融资融券</h4>
 						</div>
@@ -29,14 +29,12 @@
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "rzrq"></tbody>
 							</table>
-							<nav aria-label="龙虎榜分页">
-							  <ul class="pagination" id = "rzrq"></ul>
-							</nav>
+							
 						</div>
 					</div>
 				</div>
 				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;">
-					<div class="block-flat2 pie-widget"  style = "height:200px;overflow:auto">
+					<div class="block-flat2 pie-widget" >
 						<div class="header">
 							<span class="pull-right">
 								<div class="btn-group" role="group" >
@@ -50,17 +48,11 @@
 						<div class="content">
 							<table class="no-border">
 								<thead class="no-border" id = "zjlrThead">
-									<tr>
-										<th>日期</th>
-										<th>净额(亿)</th>
-										<th>净占比</th>
-									</tr>
+									<tr><th>代码</th><th>名称</th><th>主力流入</th><th>占比</th></tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "zjlx"></tbody>
 							</table>
-							<nav aria-label="龙虎榜分页">
-							  <ul class="pagination" id = "zjlxPag"></ul>
-							</nav>
+							
 						</div>
 					</div>
 				</div>
@@ -68,7 +60,7 @@
 				
 				
 				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;">
-					<div class="block-flat2 pie-widget" style = "height:200px;overflow:auto">
+					<div class="block-flat2 pie-widget">
 						<div class="header">
 							<h4>逆回购</h4>
 						</div>
@@ -84,15 +76,13 @@
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "mom"></tbody>
 							</table>
-							<nav aria-label="龙虎榜分页">
-							  <ul class="pagination" id = "momPag"></ul>
-							</nav>
+							
 						</div>
 					</div>
 				</div>
 				
 				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;">
-					<div class="block-flat2 pie-widget" style = "height:200px;overflow:auto">
+					<div class="block-flat2 pie-widget" >
 						<div class="header">
 							<h4>shibor</h4>
 						</div>
@@ -107,9 +97,7 @@
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "shibor"></tbody>
 							</table>
-							<nav aria-label="龙虎榜分页">
-							  <ul class="pagination" id = "shiborPag"></ul>
-							</nav>
+							
 						</div>
 					</div>
 				</div>
@@ -337,8 +325,8 @@
       App.dashBoard();   
       
       getAllList();
-      //kdj('0000001');
-	  kdj('601668');
+      kdj('0000001');
+	  //kdj('601668');
       getReal();
       getHotHtml();
       getStapledayUp(1,1,'wtzf' , 'asc' , 'stapledayUp');
@@ -348,7 +336,7 @@
       getMom();
       getShibor();
       getRzrq();
-      getDpZjlx();
+      getZjlx(0);
       
       $("#zhibiaoSelect").change(function(){
       	var val = $(this).children('option:selected').val();
@@ -1195,13 +1183,21 @@
       
       function getZjlx(type){
       	var date = new Date().Format("yyyy-MM-dd");
+      	var datas = "";
+      	var sorts = 'zlNum.asc';
+      	if(type == 0){
+      		sorts = 'date.asc';
+      		datas = '[{"must":"must","name":"type","type":"=","value":"'+type+'"},{"must":"must_not","name":"stockCode","type":"prefix","value":"3"}]';
+      	}else{
+      		datas = '[{"must":"must","name":"date","type":"=","value":"'+date+'"},{"must":"must","name":"type","type":"=","value":"'+type+'"},{"must":"must_not","name":"stockCode","type":"prefix","value":"3"}]';
+      	}
       	$('#zjlx').html(getShuaHtml(4));
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/zjlx/getList",//路径  
         data : {
-        	datas:'[{"must":"must","name":"date","type":"=","value":"'+date+'"},{"must":"must","name":"type","type":"=","value":"'+type+'"},{"must":"must_not","name":"stockCode","type":"prefix","value":"3"}]',
-			sort:'zlNum.asc',
+        	datas:datas,
+			sort:sorts,
 			limit:5
         },//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
@@ -1220,26 +1216,21 @@
       
       function changeZjlx(type){
       	if(type == 0){
-      		$('zjlrThead').html("<tr><th>日期</th><th>净额(亿)</th><th>净占比</th></tr>");
       		$('#dapan').attr("class","btn btn-primary btn-xs");
       		$('#gegu').attr("class","btn btn-default btn-xs");
-      		$('#bankuai').attr("class","btn btn-default btn-xs");
-      		getDpZjlx();
+      		$('#bankuai').attr("class","btn btn-default btn-xs");	
       	}
       	if(type == 1){
-      		$('zjlrThead').html("<tr><th>代码</th><th>名称</th><th>主力流入</th><th>占比</th></tr>");
       		$('#bankuai').attr("class","btn btn-primary btn-xs");
       		$('#gegu').attr("class","btn btn-default btn-xs");
       		$('#dapan').attr("class","btn btn-default btn-xs");
-      		getZjlx(type);
       	}
       	if(type == 2){
-      		$('zjlrThead').html("<tr><th>代码</th><th>名称</th><th>主力流入</th><th>占比</th></tr>");
       		$('#gegu').attr("class","btn btn-primary btn-xs");
       		$('#bankuai').attr("class","btn btn-default btn-xs");
       		$('#dapan').attr("class","btn btn-default btn-xs");
-      		getZjlx(type);
       	}
+      	getZjlx(type);
       	
       }
       
@@ -1258,7 +1249,7 @@
         	var html = "";
         	for(var i=0;i<item.length;i++){
         		html = html + "<tr><td>"+item[i]['tdate']+"</td>";
-        		html = html + "<td>"+item[i]['close']+"</td>";
+        		html = html + "<td>"+fixed2(item[i]['close'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['zdf'])+"</td></tr>";
         	}
         	$('#rzrq').html(html);
