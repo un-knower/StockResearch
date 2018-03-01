@@ -26,6 +26,7 @@ import com.kers.stock.bean.StockOptionalInfo;
 import com.kers.stock.bean.StockRealBean;
 import com.kers.stock.storedata.CommonBaseStockInfo;
 import com.kers.stock.storedata.RzRqHand;
+import com.kers.stock.storedata.StockDetailInfoHand;
 import com.kers.stock.storedata.StockDpZjlxHand;
 import com.kers.stock.storedata.StockOptionalSet;
 import com.kers.stock.storedata.StockZjlxHand;
@@ -62,7 +63,7 @@ public class SchedulingConfig {
 		}
 	}
 	
-	@Scheduled(cron = "0 00 01 * * ?") 
+	@Scheduled(cron = "0 00 09 * * ?") 
     public void updateRzrq() {
 		RzRqHand.getBreakPointDatas();
 	}
@@ -75,6 +76,31 @@ public class SchedulingConfig {
 	@Scheduled(cron = "0 30 09 * * ?") 
     public void updateOmO30() {
 		GovBankOMOHand.getBreakPointDatas();
+	}
+	
+	@Scheduled(cron = "0 00 10 * * ?") 
+    public void updateDetail10() {
+		try {
+			StockDetailInfoHand.insBatchEsStore();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Scheduled(cron = "0 00 12 * * ?") 
+    public void updateDetail12() {
+		try {
+			StockDetailInfoHand.insBatchEsStore();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Scheduled(cron = "0 00 15 * * ?") 
+    public void updateDetail15() {
+		try {
+			StockDetailInfoHand.insBatchEsStore();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Scheduled(cron = "0 0/30 * * * ?") 
