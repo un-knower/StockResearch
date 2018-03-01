@@ -457,7 +457,7 @@ public class SelGetStock {
 	public static Map<String, Object> getCommonLstResult(BoolQueryBuilder query, StockBasePageInfo page, String index,
 			String type) throws Exception {
 		
-		//query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
+	//query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
 //		revtmpMap(mapsSelStock);
 	 	//query.must(QueryBuilders.inQuery("stockCode",mapsSelStock.keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);

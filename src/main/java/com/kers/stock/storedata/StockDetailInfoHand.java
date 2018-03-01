@@ -15,6 +15,7 @@ import com.kers.esmodel.BaseCommonConfig;
 import com.kers.esmodel.UtilEs;
 import com.kers.httpmodel.BaseConnClient;
 import com.kers.stock.bean.StockDetailInfoBean;
+import com.kers.stock.strage.StockSelStrag;
 import com.kers.stock.utils.CsvHandUtils;
 
 import io.searchbox.client.JestClient;
@@ -32,10 +33,13 @@ public class StockDetailInfoHand {
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
 
 		ssb.query(query);
+		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
 		Search selResult = UtilEs.getSearch(ssb, CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO,
 				CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO, 0, 5000);
 		JestResult results =  BaseCommonConfig.clientConfig().execute(selResult);
 		List<StockDetailInfoBean> lstBean = results.getSourceAsObjectList(StockDetailInfoBean.class);
+		
+		
 		return lstBean;
 
 	}

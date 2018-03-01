@@ -519,6 +519,12 @@ public class StockStragEnSey {
             			StockBaseInfo.setUpSumRises90(((StockBaseInfo.getClose()-entries.get(i-90).getClose())/entries.get(i-90).getClose())*100);
         			if(i>=120)
             			StockBaseInfo.setUpSumRises120(((StockBaseInfo.getClose()-entries.get(i-120).getClose())/entries.get(i-120).getClose())*100);
+        			
+        			if(i>=160)
+            			StockBaseInfo.setUpSumRises160(((StockBaseInfo.getClose()-entries.get(i-160).getClose())/entries.get(i-160).getClose())*100);
+        			
+        			if(i>=180)
+            			StockBaseInfo.setUpSumRises180(((StockBaseInfo.getClose()-entries.get(i-180).getClose())/entries.get(i-180).getClose())*100);
         			if(i>=2){
         				StockBaseInfo.setUp2J(entries.get(i-2).getJ());
         				StockBaseInfo.setUp2Rises(entries.get(i-2).getRises());
