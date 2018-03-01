@@ -73,7 +73,7 @@ public class SchedulingConfig {
 		GovBankOMOHand.getBreakPointDatas();
 	}
 	
-	@Scheduled(cron = "0 30 09 * * ?") 
+	@Scheduled(cron = "0 30 11 * * ?") 
     public void updateOmO30() {
 		GovBankOMOHand.getBreakPointDatas();
 	}
