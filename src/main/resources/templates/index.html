@@ -48,7 +48,7 @@
 						<div class="content">
 							<table class="no-border">
 								<thead class="no-border" id = "zjlrThead">
-									<tr><th>代码</th><th>名称</th><th>主力流入</th><th>占比</th></tr>
+									<tr><th>日期</th><th>名称</th><th>主力流入</th><th>占比</th></tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "zjlx"></tbody>
 							</table>
@@ -62,6 +62,9 @@
 				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;">
 					<div class="block-flat2 pie-widget">
 						<div class="header">
+							<span class="pull-right">
+								
+							</span>
 							<h4>逆回购</h4>
 						</div>
 						<div class="content">
@@ -1129,12 +1132,12 @@
       function getZjlx(type){
       	var date = new Date().Format("yyyy-MM-dd");
       	var datas = "";
-      	var sorts = 'zlNum.asc';
+      	var sorts = 'date.asc,zlNum.asc';
       	if(type == 0){
       		sorts = 'date.asc';
       		datas = '[{"must":"must","name":"type","type":"=","value":"'+type+'"},{"must":"must_not","name":"stockCode","type":"prefix","value":"3"}]';
       	}else{
-      		datas = '[{"must":"must","name":"date","type":"=","value":"'+date+'"},{"must":"must","name":"type","type":"=","value":"'+type+'"},{"must":"must_not","name":"stockCode","type":"prefix","value":"3"}]';
+      		datas = '[{"must":"must","name":"type","type":"=","value":"'+type+'"},{"must":"must_not","name":"stockCode","type":"prefix","value":"3"}]';
       	}
       	$('#zjlx').html(getShuaHtml(4));
     	$.ajax({  
@@ -1149,7 +1152,7 @@
         	var item = result['items'];
         	var html = "";
         	for(var i=0;i<item.length;i++){
-        		html = html + "<tr><td>"+item[i]['stockCode']+"</td>";
+        		html = html + "<tr><td>"+item[i]['date']+"</td>";
         		html = html + "<td>"+item[i]['stockName']+"</td>";
         		html = html + "<td>"+moformat(item[i]['zlNum'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['zlRatio'])+"</td></tr>";
