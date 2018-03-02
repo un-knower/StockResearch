@@ -16,6 +16,12 @@
 				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:10px;">
 					<div class="block-flat2 pie-widget" >
 						<div class="header">
+							<span class="pull-right">
+								<div class="btn-group" role="group" >
+								  <button type="button" class="btn btn-primary btn-xs" onclick = "changerzrq(0)" id = "rzdapan">大盘</button>
+								  <button type="button" class="btn btn-default btn-xs" onclick = "changerzrq(1)" id = "rzgegu">个股</button>
+								</div>
+							</span>
 							<h4>融资融券</h4>
 						</div>
 						<div class="content">
@@ -23,6 +29,7 @@
 								<thead class="no-border">
 									<tr>
 										<th>日期</th>
+										<th>名称</th>
 										<th>收盘</th>
 										<th>涨幅</th>
 									</tr>
@@ -144,7 +151,6 @@
 										<th>code</th>
 										<th>名称</th>
 										<th>板块</th>
-										<th>type</th>
 										<th><a href = "javascript:void(0)" data1 = "rises" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">涨幅</a></th>
 										<th><a href = "javascript:void(0)" data1 = "upSumRises5" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">5天涨</a></th>
 									</tr>
@@ -196,6 +202,12 @@
 					<div class="block-flat2 pie-widget"  style = "height:300px;overflow:auto">
 			            <div class="content no-padding">
 			            	<span class="pull-right"><a href = "http://www.100ppi.com/hot/" target="_blank">更多</a></span>
+			            	<span class="pull-right" style = "margin-right:10px">
+								<div class="btn-group" role="group" >
+								  <button type="button" class="btn btn-primary btn-xs" onclick = "changeRd(0)" id = "dzsp">大宗商品</button>
+								  <button type="button" class="btn btn-default btn-xs" onclick = "changeRd(2)" id = "gwy">国务院</button>
+								</div>
+							</span>
 			              	<h4 class="title">热点消息</h4>
 			              	<div class="list-group tickets" id = "dzsprd"></div>	            
 			            </div>
@@ -309,7 +321,7 @@
       getMyStock();
       getMom();
       getShibor();
-      getRzrq();
+      getRzrq(0);
       getZjlx(0);
       
       $("#zhibiaoSelect").change(function(){
@@ -369,10 +381,39 @@
             	return path;
             }
             
+    function changeRd(type){
+    	if(type == 0){
+    		$('#dzsp').attr("class","btn btn-primary btn-xs");
+      		$('#gwy').attr("class","btn btn-default btn-xs");
+    		getHotHtml();
+    	}
+    	
+    	if(type == 2){
+    		$('#gwy').attr("class","btn btn-primary btn-xs");
+      		$('#dzsp').attr("class","btn btn-default btn-xs");
+    		getGwyHtml();
+    	}
+    }
+            
      function getHotHtml(){
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/stapleday/getHotspotHtml",//路径  
+        data : {},//数据，这里使用的是Json格式进行传输  
+        success : function(result) {//返回数据根据结果进行相应的处理  
+        	if(result != ''){
+        		$('#dzsprd').html(result);
+        	}else{
+        		alert('查不到数据');
+        	}
+      	}  
+      });
+    }
+    
+    function getGwyHtml(){
+    	$.ajax({  
+      	type : "GET",  //提交方式  
+		url : "http://www.estock.com:8080/stock/stapleday/getGwyValue",//路径  
         data : {},//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
         	if(result != ''){
@@ -485,7 +526,6 @@
         		html = html + "<td>"+item[i]['stockCode']+"</td>";
         		html = html + "<td>"+item[i]['stockName']+"</td>";
         		html = html + "<td>"+item[i]['industry']+"</td>";
-        		html = html + "<td>"+item[i]['type']+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['upSumRises5'])+"</td></tr>";
         	}
@@ -1081,6 +1121,7 @@
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/govomo/getDateList2",//路径  
         data : {
+        	sort:'date.desc'
         },//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
         	var item = result['items'];
@@ -1182,14 +1223,14 @@
       	
       }
       
-      function getRzrq(){
+      function getRzrq(type){
       	$('#rzrq').html(getShuaHtml(3));
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/rzrq/getList",//路径  
         data : {
-        	datas:'',
-			sort:'tdate.asc',
+        	datas:'[{"must":"must","name":"type","type":"=","value":"'+type+'"},{"must":"must_not","name":"stockCode","type":"prefix","value":"3"}]',
+			sort:'tdate.asc,zdf.asc',
 			limit:5
         },//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
@@ -1197,6 +1238,7 @@
         	var html = "";
         	for(var i=0;i<item.length;i++){
         		html = html + "<tr><td>"+item[i]['tdate']+"</td>";
+        		html = html + "<td>"+item[i]['sname']+"</td>";
         		html = html + "<td>"+fixed2(item[i]['close'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['zdf'])+"</td></tr>";
         	}
@@ -1205,8 +1247,20 @@
       	});  
       }
       
+      function changerzrq(type){
+      	if(type == 0){
+      		$('#rzdapan').attr("class","btn btn-primary btn-xs");
+      		$('#rzgegu').attr("class","btn btn-default btn-xs");	
+      	}
+      	if(type == 1){
+      		$('#rzgegu').attr("class","btn btn-primary btn-xs");
+      		$('#rzdapan').attr("class","btn btn-default btn-xs");	
+      	}
+      	getRzrq(type);
+      }
+      
       function getDpZjlx(){
-      	$('#zjlx').html(getShuaHtml(3));
+      	$('#zjlx').html(getShuaHtml(4));
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/dpzjlx/getDpList",//路径  

@@ -80,30 +80,22 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     public String getHotspotHtml() throws ClientProtocolException, IOException{
     	String fan = "";
     	
-    	//获取国务院数据
-    	String con = BaseConnClient.baseGetReq("http://www.drc.gov.cn/Json/GetPageDocuments.ashx?chnid=1&leafid=224&page=1&pagesize=30&sublen=26&sumlen=160&expertid=0&keyword=&experts=&year=0");
-    	JSONArray object = JSONObject.parseArray(con);
-    	JSONArray arr = object.getJSONObject(0).getJSONArray("rows");
-    	for (int i = 0; i < 3; i++) {
-    		JSONObject ob = arr.getJSONObject(i);
-    		String name = "[国务院]";
-    		String url = "http://www.drc.gov.cn"+ob.getString("link");
-    		String value = ob.getString("title");
-    		fan = fan + "<li class=\"list-group-item\" href=\"#\">"+name+"<a href=\""+url+"\" target=\"_blank\" title=\""+value+"\">"+value+"</a></li>";
-		}
-    	
-    	con = BaseConnClient.baseGetReq("http://www.chinamoney.com.cn/fe/Channel/5491");
+    	String con = BaseConnClient.baseGetReq("http://www.chinamoney.com.cn/fe/Channel/5491");
 		Document document = Jsoup.parse(con);
 		Element eles = document.getElementById("tabcont1");
 		Elements tds = eles.select("tr");
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 1; i++) {
 			String url = "http://www.chinamoney.com.cn" + tds.get(i).select("td").get(0).select("a").get(0).attr("href");
 			String name = tds.get(i).select("td").get(0).select("a").get(0).html().replace("公开市场业务交易公告", "");
+			String date = tds.get(i).select("td").get(1).html();
 			con = BaseConnClient.baseGetReq(url);
 			Document documents = Jsoup.parse(con);
 			Element content = documents.getElementById("content");
+			if(null == content || content.select("p").size() <= 0){
+				break;
+			}
 			String value = content.select("p").get(1).html().split("，")[0];
-			fan = fan + "<li class=\"list-group-item\" href=\"#\">["+name+"]<a href=\""+url+"\" target=\"_blank\" title=\""+value+"\">"+value+"</a></li>";
+			fan = fan + "<li class=\"list-group-item\" href=\"#\">["+date+"]<a href=\""+url+"\" target=\"_blank\" title=\""+value+"\">"+value+"</a></li>";
 		}
     	
     	
@@ -128,6 +120,27 @@ public class StapledayController  extends BaseController<Stap100PPI>{
     	return fan;
     }
     
+    /**
+     * 获取逆回购最新消息
+     * @return
+     * @throws IOException 
+     * @throws ClientProtocolException 
+     */
+    @RequestMapping("/stapleday/getGwyValue")
+    public String getGwyValue() throws ClientProtocolException, IOException{
+    	String fan = "";
+    	String con = BaseConnClient.baseGetReq("http://www.drc.gov.cn/Json/GetPageDocuments.ashx?chnid=1&leafid=224&page=1&pagesize=30&sublen=26&sumlen=160&expertid=0&keyword=&experts=&year=0");
+    	JSONArray object = JSONObject.parseArray(con);
+    	JSONArray arr = object.getJSONObject(0).getJSONArray("rows");
+    	for (int i = 0; i < 3; i++) {
+    		JSONObject ob = arr.getJSONObject(i);
+    		String name = "[国务院]";
+    		String url = "http://www.drc.gov.cn"+ob.getString("link");
+    		String value = ob.getString("title");
+    		fan = fan + "<li class=\"list-group-item\" href=\"#\">"+name+"<a href=\""+url+"\" target=\"_blank\" title=\""+value+"\">"+value+"</a></li>";
+		}
+    	return fan;
+    }
     
     /**
      * 获取全球大盘数据

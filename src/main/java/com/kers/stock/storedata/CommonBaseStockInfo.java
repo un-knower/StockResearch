@@ -39,11 +39,14 @@ public class CommonBaseStockInfo {
 	public final static String ES_INDEX_STOCK_ZJLX="zjlx"; 
 	public final static String ES_INDEX_STOCK_DPZJLX="dpzjlx"; 
 	
-	public final static String ES_INDEX_STOCK_RZRQ="rzrq"; 
+	//融资融券
+	public final static String ES_INDEX_STOCK_RZRQ="rzrq";
 	
 	public final static String ES_INDEX_GOV_OMO="gbomo";
 	
-	public final static String ES_INDEX_DZJY="dzjy"; 
+	public final static String ES_INDEX_DZJY="dzjy";
+	//限售解禁
+	public final static String ES_INDEX_XSJJ="xsjj"; 
 
 	
 	

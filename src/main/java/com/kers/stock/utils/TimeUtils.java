@@ -1323,4 +1323,22 @@ public class TimeUtils {
             w = 0;
         return weekDays[w];
     }
+    
+    public static String addSubDay(String time , int num){
+    	SimpleDateFormat f = new SimpleDateFormat(DEFAULT_DATEYMD_FORMAT);
+    	Calendar cal = Calendar.getInstance(); // 获得一个日历
+    	 Date datet = null;
+         try {
+        	 if(null != time){
+        		 datet = f.parse(time);
+        	 }else{
+        		 datet = new Date(); 
+        	 }
+             cal.setTime(datet);
+             cal.add(Calendar.DATE,num);
+         } catch (ParseException e) {
+             e.printStackTrace();
+         }
+    	return f.format(cal.getTime());
+    }
 }
