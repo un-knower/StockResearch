@@ -73,7 +73,7 @@ public class SchedulingConfig {
 			for (int i = 0; i < 30; i++) {
 				String datetime = TimeUtils.addSubDay(null, i * -1);
 				System.out.println("个股日期:"+datetime);
-				RzRqHand.getAllDatas(1,"");
+				RzRqHand.getAllDatas(1,datetime);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

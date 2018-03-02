@@ -23,8 +23,10 @@ import com.google.gson.reflect.TypeToken;
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.esmodel.UtilEs;
 import com.kers.httpmodel.BaseConnClient;
+import com.kers.stock.Controller.SchedulingConfig;
 import com.kers.stock.bean.RzRqBean;
 import com.kers.stock.bean.RzRqGGBean;
+import com.kers.stock.bean.StockBaseInfo;
 import com.kers.stock.utils.TimeUtils;
 
 /**
@@ -45,10 +47,20 @@ public class RzRqHand {
 		//大盘
 		getAllDatas(0,"");
 		//个股
-		for (int i = 0; i < 30; i++) {
-			String datetime = TimeUtils.addSubDay(null, i * -1);
-			System.out.println("个股日期:"+datetime);
-			getAllDatas(1,"");
+		for ( int i = 0; i < 30; i++) {
+			final int j = i;
+			SchedulingConfig.executorServiceLocal.execute(new Thread(){
+				@Override
+				public void run() {
+			          try {
+			        	String datetime = TimeUtils.addSubDay(null, j * -1);
+			  			System.out.println("个股日期:"+datetime);
+			  			getAllDatas(1,datetime);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		}
 	}
 	
