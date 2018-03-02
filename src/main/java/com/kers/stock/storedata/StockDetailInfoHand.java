@@ -34,6 +34,7 @@ public class StockDetailInfoHand {
 
 		ssb.query(query);
 		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
+		query.mustNot(QueryBuilders.prefixQuery("stockCode", "3"));
 		Search selResult = UtilEs.getSearch(ssb, CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO,
 				CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO, 0, 5000);
 		JestResult results =  BaseCommonConfig.clientConfig().execute(selResult);

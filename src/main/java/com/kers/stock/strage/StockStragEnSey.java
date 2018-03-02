@@ -500,7 +500,7 @@ public class StockStragEnSey {
         			StockBaseInfo.setUpSumRises5(((StockBaseInfo.getClose()-entries.get(i-5).getClose())/entries.get(i-5).getClose())*100);
        			
        			if(i>=3)
-        			StockBaseInfo.setUpSumRises5(((StockBaseInfo.getClose()-entries.get(i-3).getClose())/entries.get(i-3).getClose())*100);
+        			StockBaseInfo.setUpSumRises3(((StockBaseInfo.getClose()-entries.get(i-3).getClose())/entries.get(i-3).getClose())*100);
         			
         			
         			if(i>=10)

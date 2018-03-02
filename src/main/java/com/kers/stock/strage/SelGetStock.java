@@ -40,8 +40,11 @@ import io.searchbox.core.Search;
  *
  */
 public class SelGetStock {
+	
+	static final JestClient jestClient = BaseCommonConfig.clientConfig();
+
 	static Map<String, String> mapsInfo = StockSelStrag.blckLstOfStock();
-	static Map<String, StockDetailInfoBean> mapsSubnewStock = 	StockSelStrag.getSubnewStock(-60);
+	static Map<String, StockDetailInfoBean> mapsSubnewStock = 	StockSelStrag.getSubnewStock(-200);
 	static Map<String, String> mapsSelStock = StockSelStrag.getAllChkStock();
 
 	public static void revtmpMap(Map<String, String> mapsSelStockTmp) {// 临时剔除一些
@@ -238,7 +241,6 @@ public class SelGetStock {
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "",
 				(page.getPage() - 1) * page.getLimit(), page.getLimit());
 
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
 		List<StockBaseInfo> lstBean = results.getSourceAsObjectList(StockBaseInfo.class);
 		List<StockBaseInfo> lstResult = Lists.newArrayList();
@@ -307,7 +309,7 @@ public class SelGetStock {
 
 		Map<String, Object> returnMap = Maps.newHashMap();
         
-		query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
+		//query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
 		
 		//query.mustNot(QueryBuilders.inQuery("stockCode", mapsSubnewStock.keySet()));
 
@@ -318,7 +320,6 @@ public class SelGetStock {
 				(page.getPage() - 1) * page.getLimit(), page.getLimit());
 
 		// final JestClient jestClient = BaseCommonConfig.clientConfig();
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
 		// StockSelStrag.queryGrowUpStock();//
 		List<StockBaseInfo> lstBean = results.getSourceAsObjectList(StockBaseInfo.class);// .queryBchipStock();//queryGrowUpStock();//
@@ -389,8 +390,7 @@ public class SelGetStock {
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STORETRAILER, type,
 				(page.getPage() - 1) * page.getLimit(), page.getLimit());
 
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
-		JestResult results = jestClient.execute(selResult);
+ 		JestResult results = jestClient.execute(selResult);
 		List<StoreTrailer> lstBeanInt = results.getSourceAsObjectList(StoreTrailer.class);
 
 		List<StoreTrailer> lstResult = Lists.newArrayList();
@@ -462,7 +462,6 @@ public class SelGetStock {
 	 	//query.must(QueryBuilders.inQuery("stockCode",mapsSelStock.keySet()));
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
 		System.out.println(searchSourceBuilder.toString());
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		// (page.getPage() - 1) * page.getLimit(),page.getLimit()
 
 		return UtilEs.getSearchRsult(searchSourceBuilder, index, type, page.getPage(), page.getLimit(), jestClient);
@@ -486,7 +485,6 @@ public class SelGetStock {
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOREREPORT, types,
 				(page.getPage() - 1) * page.getLimit(), page.getLimit());
 
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
 		List<EastReportBean> lstBeanInt = results.getSourceAsObjectList(EastReportBean.class);// StockSelStrag.queryEarningsStock();//
 																								// results.getSourceAsObjectList(EastReportBean.class);//
@@ -526,7 +524,6 @@ public class SelGetStock {
 		}
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
 		System.out.println(searchSourceBuilder.toString());
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		// System.out.println(page.getLimit());
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, index, type, (page.getPage() - 1) * page.getLimit(),
 				page.getLimit());
