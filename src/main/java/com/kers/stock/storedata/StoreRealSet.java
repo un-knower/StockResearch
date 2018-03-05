@@ -76,7 +76,6 @@ public class StoreRealSet {
 	}
 	
 	private static void sVo() throws Exception{
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
 		List<String> lstSource =CommonBaseStockInfo.getAllAStockInfo();
 		for(String  sat:lstSource){
 			//StockBaseInfo info = getNextDate(sat,jestClient);

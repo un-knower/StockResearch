@@ -98,7 +98,7 @@ public class StockDetailInfoHand {
 //		}
 
 		insBatchEsMec(getDetailForNetLst(), BaseCommonConfig.clientConfig());
-		Thread.sleep(10000);
+		Thread.sleep(5000);
 	}
 
 	public static void insBatchEsMec(List<StockDetailInfoBean> list, JestClient jestClient) throws Exception {

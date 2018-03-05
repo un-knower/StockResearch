@@ -1,7 +1,5 @@
 package com.kers.stock.Controller;
 
-import io.searchbox.client.JestClient;
-
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
@@ -10,18 +8,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.google.common.util.concurrent.MoreExecutors;
 import com.kers.esmodel.BaseCommonConfig;
-import com.kers.esmodel.QueryComLstData;
 import com.kers.gov.GovBankOMOHand;
 import com.kers.staple.data.MonthsStapleData;
 import com.kers.stock.bean.StockBaseInfo;
-import com.kers.stock.bean.StockDetailInfoBean;
 import com.kers.stock.bean.StockOptionalInfo;
 import com.kers.stock.bean.StockRealBean;
 import com.kers.stock.storedata.CommonBaseStockInfo;
@@ -34,15 +29,13 @@ import com.kers.stock.storedata.StoreAstockTradInfo;
 import com.kers.stock.storedata.StoreRealSet;
 import com.kers.stock.storedata.StoreReportSet;
 import com.kers.stock.storedata.StoreTrailerSet;
-import com.kers.stock.utils.FilePath;
-import com.kers.stock.utils.TextUtil;
 import com.kers.stock.utils.TimeUtils;
+
 
 @Configuration
 @EnableScheduling 
 public class SchedulingConfig {
 
-	Logger logger = Logger.getLogger("chapter07");
 //	public static String path = "D://data//sto.txt";
 	
 	public static ExecutorService executorServiceLocal = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(30));
@@ -68,12 +61,14 @@ public class SchedulingConfig {
     public void updateRzrq() {
 		//大盘
 		try {
+			if(shijian()){
 			RzRqHand.getAllDatas(0,"");
 			//个股
 			for (int i = 0; i < 30; i++) {
 				String datetime = TimeUtils.addSubDay(null, i * -1);
 				System.out.println("个股日期:"+datetime);
 				RzRqHand.getAllDatas(1,datetime);
+			}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,17 +77,20 @@ public class SchedulingConfig {
 	
 	@Scheduled(cron = "0 20 09 * * ?") 
     public void updateOmO20() {
+		if(shijian())
 		GovBankOMOHand.getBreakPointDatas();
 	}
 	
 	@Scheduled(cron = "0 30 11 * * ?") 
     public void updateOmO30() {
+		if(shijian())
 		GovBankOMOHand.getBreakPointDatas();
 	}
 	
 	@Scheduled(cron = "0 00 10 * * ?") 
     public void updateDetail10() {
 		try {
+			if(shijian())
 			StockDetailInfoHand.insBatchEsStore();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,6 +99,7 @@ public class SchedulingConfig {
 	@Scheduled(cron = "0 00 12 * * ?") 
     public void updateDetail12() {
 		try {
+			if(shijian())
 			StockDetailInfoHand.insBatchEsStore();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -109,6 +108,7 @@ public class SchedulingConfig {
 	@Scheduled(cron = "0 00 15 * * ?") 
     public void updateDetail15() {
 		try {
+			if(shijian())
 			StockDetailInfoHand.insBatchEsStore();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,7 +141,7 @@ public class SchedulingConfig {
 		}
 	}
 	
-	@Scheduled(cron = "0 0 03 * * ?") 
+	// @Scheduled(cron = "0 0 03 * * ?")  //确定调度时间没问题？
     public void updateyubao() {
 		try {
 			StoreTrailerSet.wsData(50);
@@ -163,7 +163,7 @@ public class SchedulingConfig {
 //		}
 //	}
 	
-	@Scheduled(cron = "0 30 15 * * ?")
+	//@Scheduled(cron = "0 30 15 * * ?")  ??确定调度时间没问题？
     public void updateCaoScData() {
 		try {
 			StoreReportSet.daoshuju();
@@ -172,49 +172,49 @@ public class SchedulingConfig {
 		}
 	}
 	
-//	@Scheduled(cron = "0 0/5 * * * ?") // 濮?0缁夋帗澧界悰灞肩濞?
+//	@Scheduled(cron = "0 0/5 * * * ?") //  
     public void updateOption() {
 		if(shijian()){
-			try {
-				final JestClient  jestClient =BaseCommonConfig.clientConfig();
-				List<StockOptionalInfo> list = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
-				for(final StockOptionalInfo  info:list){
-					executorServiceLocal.execute(new Thread(){
-						@Override
-						public void run() {
-					          try {
-					        	  System.out.println("zixuan=="+info.getStockName());
-					        	  StockRealBean bean = StoreRealSet.getBeanByCode(info.getStockCode());
-					        	  info.setPrice(bean.getPrice());
-					        	  StockOptionalSet.insBatchBean(info, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-								
-						}
-					});
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			try {
+//				final JestClient  jestClient =BaseCommonConfig.clientConfig();
+//				List<StockOptionalInfo> list = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
+//				for(final StockOptionalInfo  info:list){
+//					executorServiceLocal.execute(new Thread(){
+//						@Override
+//						public void run() {
+//					          try {
+//					        	  StockRealBean bean = StoreRealSet.getBeanByCode(info.getStockCode());
+//					        	  info.setPrice(bean.getPrice());
+//					        	  StockOptionalSet.insBatchBean(info, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
+//							} catch (Exception e) {
+//								e.printStackTrace();
+//							}
+//								
+//						}
+//					});
+//				}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 		}
 	}
 	
 	
 	@Scheduled(cron = "0 0/5 * * * ?") 
     public void updateInfo2() {
-		if(shijian()){
-			try {
-				wDataRealToEs();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+//		if(shijian()){
+//			try {
+//				wDataRealToEs();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 	}
 	
 	@Scheduled(cron = "0 05 15 * * ?") 
     public void updateInfo() {
 			try {
+				if(shijian())
 				wDataRealToEs();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -224,6 +224,7 @@ public class SchedulingConfig {
 	@Scheduled(cron = "0 00 08 * * ?") 
     public void updateHisDate() {
 		try {
+			if(shijian())
 			StoreAstockTradInfo.getHistoryData();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -232,12 +233,12 @@ public class SchedulingConfig {
 	
 //	@Scheduled(cron = "0 55 15 * * ?") 
     public void setMap() {
-		final JestClient jestClient = BaseCommonConfig.clientConfig();
-		try {
-			upMap = StoreRealSet.getUpMap(jestClient);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		final JestClient jestClient = BaseCommonConfig.clientConfig();
+//		try {
+//			upMap = StoreRealSet.getUpMap(jestClient);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
     
     public static void main(String[] args) {
@@ -253,31 +254,33 @@ public class SchedulingConfig {
 	}
 	
 	public  static  void  wDataRealToEs() throws Exception{
-		List<String> lstSource = TextUtil.readTxtFile(FilePath.path);
-		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
-		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo();
-		 
-		for(final String  sat:lstSource){
-			executorServiceLocal.execute(new Thread(){
-				@Override
-				public void run() {
-			          try {
-			        	  
-			        	  List<StockBaseInfo> lstInfo = StoreAstockTradInfo.getstockBaseInfo(sat ,  map.get(sat));
-			        	  if(lstInfo.size() > 0){
-			        		  if(!Double.isInfinite(lstInfo.get(0).getK()) &&
-			        				  !Double.isInfinite(lstInfo.get(0).getD())){
-			        			  StoreAstockTradInfo.insBatchEs(lstInfo, jestClient, "stockpcse");
-			        		  }
-			        	  }
-					} catch (Exception e) {
-						System.out.println(sat);
-						e.printStackTrace();
-					}
-						
-				}
-			});
-		}
+//		List<String> lstSource = TextUtil.readTxtFile(FilePath.path);
+//		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
+//		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo();
+//		 
+//		for(final String  sat:lstSource){
+//			executorServiceLocal.execute(new Thread(){
+//				@Override
+//				public void run() {
+//			          try {
+//			        	  
+//			        	//  List<StockBaseInfo> lstInfo = StoreAstockTradInfo.getstockBaseInfo(sat ,  map.get(sat));
+//			      		List<StockDetailInfoBean>  lstInfo =StockDetailInfoHand.getDetailForLst();//Lists.newArrayList();//
+//
+//			        	  if(lstInfo.size() > 0){
+//			        		  if(!Double.isInfinite(lstInfo.get(0).getK()) &&
+//			        				  !Double.isInfinite(lstInfo.get(0).getD())){
+//			        			  StoreAstockTradInfo.insBatchEs(lstInfo, jestClient, "stockpcse");
+//			        		  }
+//			        	  }
+//					} catch (Exception e) {
+//						System.out.println(sat);
+//						e.printStackTrace();
+//					}
+//						
+//				}
+//			});
+//		}
 		
 	}
 	
