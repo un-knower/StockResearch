@@ -113,5 +113,10 @@
 	function getShuaHtml(num){
 		return "<tr><td colspan = '"+num+"'>正在查询,请稍等</td></tr>";
 	}
+	
+	var dsj = function(val){
+   		var s = val.split('-');
+       return s[1] + '-' + s[2];
+   }
 
    

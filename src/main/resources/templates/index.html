@@ -30,7 +30,8 @@
 									<tr>
 										<th>日期</th>
 										<th>名称</th>
-										<th>融资总量</th>
+										<th>买入额</th>
+										<th>净买入</th>
 										<th>涨幅</th>
 									</tr>
 								</thead>
@@ -68,6 +69,25 @@
 						</div>
 					</div>
 				</div>
+				
+				
+				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;height:160px;overflow:auto;">
+					<div class="block-flat2 pie-widget" style = "height:150px">
+						<div class="header">
+							<h4>个股资金流向</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr><th>日期</th><th>名称</th><th>主力流入</th><th>占比</th></tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "ggzjlx"></tbody>
+							</table>
+							
+						</div>
+					</div>
+				</div>
+				
 				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;height:160px;overflow:auto;">
 					<div class="block-flat2 pie-widget" style = "height:150px">
 						<div class="header">
@@ -90,25 +110,6 @@
 						</div>
 					</div>
 				</div>
-				
-				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;height:160px;overflow:auto;">
-					<div class="block-flat2 pie-widget"  style = "height:150px">
-						<div class="header">
-							<h4>个股资金流向</h4>
-						</div>
-						<div class="content">
-							<table class="no-border">
-								<thead class="no-border">
-									<tr><th>日期</th><th>名称</th><th>主力流入</th><th>占比</th></tr>
-								</thead>
-								<tbody class="no-border-x no-border-y" id = "ggzjlx"></tbody>
-							</table>
-							
-						</div>
-					</div>
-				</div>
-				
-				
 				
 				
 			</div>
@@ -152,14 +153,15 @@
 										<th>名称</th>
 										<th>板块</th>
 										<th><a href = "javascript:void(0)" data1 = "rises" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">涨幅</a></th>
+										<th><a href = "javascript:void(0)" data1 = "upSumRises3" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">3天涨</a></th>
 										<th><a href = "javascript:void(0)" data1 = "upSumRises5" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">5天涨</a></th>
 									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "longhu"></tbody>
 							</table>
-							<!--<nav aria-label="龙虎榜分页">
-							  <ul class="pagination" id = "longhupag"></ul>
-							</nav>-->
+							<nav aria-label="龙虎榜分页">
+							  <ul class="pagination pagination-sm" id = "longhupag"></ul>
+							</nav>
 						</div>
 					</div>
 					
@@ -190,9 +192,9 @@
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "zhibiao"></tbody>
 							</table>
-							<!--<nav aria-label="指标数据分页">
-							  <ul class="pagination" id = "zhibiaopag"></ul>
-							</nav>-->
+							<nav aria-label="指标数据分页">
+							  <ul class="pagination pagination-sm " id = "zhibiaopag"></ul>
+							</nav>
 						</div>
 					</div>
 					
@@ -231,9 +233,9 @@
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "stapledayUp"></tbody>
 							</table>
-							<!--<nav aria-label="周分页">
-							  <ul class="pagination" id = "StapledayUpPag"></ul>
-							</nav>-->
+							<nav aria-label="周分页">
+							  <ul class="pagination pagination-sm" id = "StapledayUpPag"></ul>
+							</nav>
 						</div>
 					</div>
 					<!--
@@ -320,7 +322,6 @@
       getZhiBiaoTable(1,1,'');
       getMyStock();
       getMom();
-      getShibor();
       getRzrq(0);
       getZjlx(0);
       getZjlx(3);
@@ -523,11 +524,12 @@
         	var item = result['items'];
         	var html = "";
         	for(var i=0;i<item.length;i++){
-        		html = html + "<tr><td>"+item[i]['date']+"</td>";
+        		html = html + "<tr><td>"+dsj(item[i]['date'])+"</td>";
         		html = html + "<td>"+item[i]['stockCode']+"</td>";
         		html = html + "<td>"+item[i]['stockName']+"</td>";
         		html = html + "<td>"+item[i]['industry']+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['upSumRises3'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['upSumRises5'])+"</td></tr>";
         	}
         	$('#longhu').html(html);
@@ -580,7 +582,7 @@
         	var item = result['items'];
         	var html = "";
         	for(var i=0;i<item.length;i++){
-        			html = html + "<tr><td>"+item[i]['date']+"</td>";
+        			html = html + "<tr><td>"+dsj(item[i]['date'])+"</td>";
         		html = html + "<td>"+item[i]['stockCode']+"</td>";
         		html = html + "<td>"+item[i]['stockName']+"</td>";
         		html = html + "<td>"+item[i]['industry']+"</td>";
@@ -1157,13 +1159,13 @@
         	var item = result['items'];
         	var html = "";
         	for(var i=0;i<item2.length;i++){
-        		html = html + "<tr><td>"+item2[i]['date']+"</td>";
+        		html = html + "<tr><td>"+dsj(item2[i]['date'])+"</td>";
         		html = html + "<td>"+item2[i]['dateWeek']+"</td>";
         		html = html + "<td>"+item2[i]['jyl']+"</td>";
         		html = html + "<td><span style=\"color: #b00\">投放</span></td></tr>";
         	}
         	for(var i=0;i<item.length;i++){
-        		html = html + "<tr><td>"+item[i]['expDate']+"</td>";
+        		html = html + "<tr><td>"+dsj(item[i]['expDate'])+"</td>";
         		html = html + "<td>"+item[i]['expWeek']+"</td>";
         		html = html + "<td>"+item[i]['jyl']+"</td>";
         		html = html + "<td><span style=\"color: #0b0\">回购</span></td></tr>";
@@ -1174,14 +1176,14 @@
       }
       
       function getShibor(){
-      	$('#shibor').html(getShuaHtml(3));
+      	$('#mom').html(getShuaHtml(3));
     	$.ajax({  
 	      	type : "GET",  //提交方式  
 			url : "http://www.estock.com:8080/stock/stapleday/getShiborTable",//路径  
 	        data : {
 	        },//数据，这里使用的是Json格式进行传输  
 	        success : function(result) {//返回数据根据结果进行相应的处理  
-	        	$('#shibor').html(result);
+	        	$('#mom').html(result);
 	      	}  
       	});  
       }
@@ -1209,7 +1211,7 @@
         	var item = result['items'];
         	var html = "";
         	for(var i=0;i<item.length;i++){
-        		html = html + "<tr><td>"+item[i]['date']+"</td>";
+        		html = html + "<tr><td>"+dsj(item[i]['date'])+"</td>";
         		html = html + "<td>"+item[i]['stockName']+"</td>";
         		html = html + "<td>"+moformat(item[i]['zlNum'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['zlRatio'])+"</td></tr>";
@@ -1251,16 +1253,17 @@
 		url : "http://www.estock.com:8080/stock/rzrq/getList",//路径  
         data : {
         	datas:'[{"must":"must","name":"type","type":"=","value":"'+type+'"},{"must":"must_not","name":"stockCode","type":"prefix","value":"3"}]',
-			sort:'tdate.asc,zdf.asc',
+			sort:'tdate.asc,rzmre.asc',
 			limit:5
         },//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
         	var item = result['items'];
         	var html = "";
         	for(var i=0;i<item.length;i++){
-        		html = html + "<tr><td>"+item[i]['tdate']+"</td>";
+        		html = html + "<tr><td>"+dsj(item[i]['tdate'])+"</td>";
         		html = html + "<td>"+item[i]['sname']+"</td>";
-        		html = html + "<td>"+fixed2(item[i]['close'])+"</td>";
+        		html = html + "<td>"+moformat(item[i]['rzmre'])+"</td>";
+        		html = html + "<td>"+moformat(item[i]['rzjmre'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['zdf'])+"</td></tr>";
         	}
         	$('#rzrq').html(html);
