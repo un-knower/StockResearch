@@ -324,7 +324,7 @@
       getMom();
       getRzrq(0);
       getZjlx(0);
-      getZjlx(3);
+      getZjlx(2);
       
       $("#zhibiaoSelect").change(function(){
       	var val = $(this).children('option:selected').val();
@@ -1216,7 +1216,7 @@
         		html = html + "<td>"+moformat(item[i]['zlNum'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['zlRatio'])+"</td></tr>";
         	}
-        	if(type == 3){
+        	if(type == 2){
         		$('#ggzjlx').html(html);
         	}else{
         		$('#zjlx').html(html);
