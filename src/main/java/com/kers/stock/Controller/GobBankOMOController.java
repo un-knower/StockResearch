@@ -69,7 +69,7 @@ public class GobBankOMOController  extends BaseController<GovBankOMOBean>{
     	TimeZone tz = TimeZone.getTimeZone("GMT+8");
     	ncalendar.setTimeZone(tz);
     	String startDate = format.format(ncalendar.getTime());
-    	int w = -1;
+    	int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 1;
     	while(w != 1){
     		ncalendar.add(Calendar.DATE,-1);
     		w = ncalendar.get(Calendar.DAY_OF_WEEK) - 1;

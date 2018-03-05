@@ -143,9 +143,9 @@ public class GovBankOMOHand {
 
 	public static void main(String[] args) throws Exception {
 		//一次更新全部
-		getAllDatas("");
+//		getAllDatas("");
 		//更新到上次更新
-//		getBreakPointDatas();
+		getBreakPointDatas();
 	}
 
 }

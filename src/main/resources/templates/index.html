@@ -13,8 +13,8 @@
 			<div class="stats_bar" id = "startHtml"></div>
 			
 			<div class="row dash-cols" style = "margin-top:5px;">
-				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:10px;">
-					<div class="block-flat2 pie-widget" >
+				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:10px;height:160px;overflow:auto;" >
+					<div class="block-flat2 pie-widget" style = "height:150px">
 						<div class="header">
 							<span class="pull-right">
 								<div class="btn-group" role="group" >
@@ -40,43 +40,21 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;">
-					<div class="block-flat2 pie-widget" >
+				
+				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;height:160px;overflow:auto;">
+					<div class="block-flat2 pie-widget" style = "height:150px">
 						<div class="header">
-							<span class="pull-right">
-								<div class="btn-group" role="group" >
-								  <button type="button" class="btn btn-primary btn-xs" onclick = "changeZjlx(0)" id = "dapan">大盘</button>
-								  <button type="button" class="btn btn-default btn-xs" onclick = "changeZjlx(1)" id = "bankuai">板块</button>
-								  <button type="button" class="btn btn-default btn-xs" onclick = "changeZjlx(2)" id = "gegu">个股</button>
+
+								<div class="btn-group" role="group" style = "padding-top:1px">
+								  <button type="button" class="btn btn-primary btn-xs" onclick = "changenb(0)" id = "nhgb">逆回购</button>
+								  <button type="button" class="btn btn-default btn-xs" onclick = "changenb(1)" id = "sbb">shibor</button>
 								</div>
-							</span>
-							<h4>资金流向</h4>
+
+							<h4></h4>
 						</div>
 						<div class="content">
 							<table class="no-border">
-								<thead class="no-border" id = "zjlrThead">
-									<tr><th>日期</th><th>名称</th><th>主力流入</th><th>占比</th></tr>
-								</thead>
-								<tbody class="no-border-x no-border-y" id = "zjlx"></tbody>
-							</table>
-							
-						</div>
-					</div>
-				</div>
-				
-				
-				
-				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;">
-					<div class="block-flat2 pie-widget">
-						<div class="header">
-							<span class="pull-right">
-								
-							</span>
-							<h4>逆回购</h4>
-						</div>
-						<div class="content">
-							<table class="no-border">
-								<thead class="no-border">
+								<thead class="no-border" id = "nhgtable">
 									<tr>
 										<th>到期时间</th>
 										<th>星期</th>
@@ -90,27 +68,49 @@
 						</div>
 					</div>
 				</div>
-				
-				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;">
-					<div class="block-flat2 pie-widget" >
+				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;height:160px;overflow:auto;">
+					<div class="block-flat2 pie-widget" style = "height:150px">
 						<div class="header">
-							<h4>shibor</h4>
+							<span class="pull-right">
+								<div class="btn-group" role="group" >
+								  <button type="button" class="btn btn-primary btn-xs" onclick = "changeZjlx(0)" id = "dapan">大盘</button>
+								  <button type="button" class="btn btn-default btn-xs" onclick = "changeZjlx(1)" id = "bankuai">板块</button>
+								</div>
+							</span>
+							<h4>大盘资金流向</h4>
 						</div>
 						<div class="content">
 							<table class="no-border">
-								<thead class="no-border">
-									<tr>
-										<th>期限</th>
-										<th>Shibor(%)</th>
-										<th>涨跌(BP)</th>
-									</tr>
+								<thead class="no-border" id = "zjlrThead">
+									<tr><th>日期</th><th>名称</th><th>主力流入</th><th>占比</th></tr>
 								</thead>
-								<tbody class="no-border-x no-border-y" id = "shibor"></tbody>
+								<tbody class="no-border-x no-border-y" id = "zjlx"></tbody>
 							</table>
 							
 						</div>
 					</div>
 				</div>
+				
+				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;height:160px;overflow:auto;">
+					<div class="block-flat2 pie-widget"  style = "height:150px">
+						<div class="header">
+							<h4>个股资金流向</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr><th>日期</th><th>名称</th><th>主力流入</th><th>占比</th></tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "ggzjlx"></tbody>
+							</table>
+							
+						</div>
+					</div>
+				</div>
+				
+				
+				
+				
 			</div>
 			
 			<div class="row dash-cols">
@@ -121,7 +121,7 @@
 					<div id="main4" style="width: 220px;height:180px;"></div>
 				</div>
 				<div class="col-sm-5 col-md-5" style = "padding-right:5px;padding-left:5px;">
-					<div id="main5" style="width: 400px;height:180px;"></div>
+					<!-- <div id="main5" style="width: 400px;height:180px;"></div> -->
 				</div>
 
 			</div>
@@ -157,9 +157,9 @@
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "longhu"></tbody>
 							</table>
-							<nav aria-label="龙虎榜分页">
+							<!--<nav aria-label="龙虎榜分页">
 							  <ul class="pagination" id = "longhupag"></ul>
-							</nav>
+							</nav>-->
 						</div>
 					</div>
 					
@@ -190,9 +190,9 @@
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "zhibiao"></tbody>
 							</table>
-							<nav aria-label="指标数据分页">
+							<!--<nav aria-label="指标数据分页">
 							  <ul class="pagination" id = "zhibiaopag"></ul>
-							</nav>
+							</nav>-->
 						</div>
 					</div>
 					
@@ -231,9 +231,9 @@
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "stapledayUp"></tbody>
 							</table>
-							<nav aria-label="周分页">
+							<!--<nav aria-label="周分页">
 							  <ul class="pagination" id = "StapledayUpPag"></ul>
-							</nav>
+							</nav>-->
 						</div>
 					</div>
 					<!--
@@ -323,6 +323,7 @@
       getShibor();
       getRzrq(0);
       getZjlx(0);
+      getZjlx(3);
       
       $("#zhibiaoSelect").change(function(){
       	var val = $(this).children('option:selected').val();
@@ -1115,6 +1116,21 @@
       	
       }
       
+      function changenb(type){
+      	if(type == 0){
+      		$('#nhgb').attr("class","btn btn-primary btn-xs");
+      		$('#sbb').attr("class","btn btn-default btn-xs");
+      		$('#nhgtable').html("<tr><th>到期时间</th><th>星期</th><th>金额(亿)</th><th>类型</th></tr>");
+      		getMom();
+      	}
+      	if(type == 1){
+      		$('#sbb').attr("class","btn btn-primary btn-xs");
+      		$('#nhgb').attr("class","btn btn-default btn-xs");
+      		$('#nhgtable').html("<tr><th>期限</th><th>Shibor(%)</th><th>涨跌(BP)</th></tr>");
+      		getShibor();
+      	}
+      }
+      
       function getMom(){
       	$('#mom').html(getShuaHtml(4));
     	$.ajax({  
@@ -1198,7 +1214,12 @@
         		html = html + "<td>"+moformat(item[i]['zlNum'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['zlRatio'])+"</td></tr>";
         	}
-        	$('#zjlx').html(html);
+        	if(type == 3){
+        		$('#ggzjlx').html(html);
+        	}else{
+        		$('#zjlx').html(html);
+        	}
+        	
       	}  
       	});  
       }

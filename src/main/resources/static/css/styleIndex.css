@@ -4287,7 +4287,7 @@ h1:first-child {
 }
 /*Pagination*/
 .pagination {
-  margin: 18px 0;
+  margin: 1px 0;
 }
 .pagination > .active > a,
 .pagination > .active > span,

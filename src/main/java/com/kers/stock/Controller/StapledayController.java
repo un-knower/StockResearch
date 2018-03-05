@@ -94,7 +94,7 @@ public class StapledayController  extends BaseController<Stap100PPI>{
 			if(null == content || content.select("p").size() <= 0){
 				break;
 			}
-			String value = content.select("p").get(1).html().split("，")[0];
+			String value = content.select("p").get(1).html();
 			fan = fan + "<li class=\"list-group-item\" href=\"#\">["+date+"]<a href=\""+url+"\" target=\"_blank\" title=\""+value+"\">"+value+"</a></li>";
 		}
     	
