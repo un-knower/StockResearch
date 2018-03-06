@@ -253,6 +253,34 @@ public class StockStragEnSey {
         computeUpDateNum();
     }
 
+    //十字星算法
+    private void szxsf(StockBaseInfo StockBaseInfo){
+    	int t = 0;
+    	float open = StockBaseInfo.getOpen();
+    	float close = StockBaseInfo.getClose();
+    	float high = StockBaseInfo.getHigh();
+    	float low = StockBaseInfo.getLow();
+    	//最高价和最低价不相等代表不是停盘
+    	if(high == low){
+    		return;
+    	}
+    	//只要开盘和收盘在一定比例内就相当于是十字星
+    	float bl = 0.6f;
+    	float sbl = zzs((close-open) / open) * 100;
+    	if(sbl < bl){
+    		t = 1;
+    		//如果是
+    	}
+    	StockBaseInfo.setSzxType(t);
+    	StockBaseInfo.setSzxBl(sbl);
+    }
+    
+    public float zzs(float z){
+    	if(z < 0){
+    		return z * -1;
+    	}
+    	return z;
+    }
     /**
      * 计算连续上涨天数
      */
@@ -263,12 +291,14 @@ public class StockStragEnSey {
     	List<StockStrategyInfo> list = Lists.newArrayList();
     	for (int i = 0; i < entries.size(); i++) {
     		StockBaseInfo StockBaseInfo = entries.get(i);
+    		szxsf(StockBaseInfo);
+    		//增加十字星算法
+    		
     		if(i == 0){
     			if((StockBaseInfo.getMacd()>=0)||(StockBaseInfo.getDiff()>0&&StockBaseInfo.getDea()>0&&StockBaseInfo.getMacd() >=-0.01&&StockBaseInfo.getRises()>-0.5)){
     				StockBaseInfo.setMacdNum(1);
     			}else
     				StockBaseInfo.setMacdNum(-1);
-    				
     		}
     		if(i != entries.size() - 1){
     			float nextRises = entries.get(i+1).getRises();
