@@ -137,6 +137,7 @@ public class StockBaseInfo implements Serializable {
 	
 	//十字星种类 0  不是十字星  1普通十字星
 	private int szxType = 0;
+	private float upSzxBl = 0;
 	private float szxBl = 0;
 	/**
 	 * 自定义分时图用的数据
@@ -930,6 +931,14 @@ public class StockBaseInfo implements Serializable {
 
 	public void setSzxBl(float szxBl) {
 		this.szxBl = szxBl;
+	}
+
+	public float getUpSzxBl() {
+		return upSzxBl;
+	}
+
+	public void setUpSzxBl(float upSzxBl) {
+		this.upSzxBl = upSzxBl;
 	}
 	
 	
