@@ -18,8 +18,9 @@
 						<div class="header">
 							<span class="pull-right">
 								<div class="btn-group" role="group" >
-								  <button type="button" class="btn btn-primary btn-xs" onclick = "changerzrq(0)" id = "rzdapan">大盘</button>
-								  <button type="button" class="btn btn-default btn-xs" onclick = "changerzrq(1)" id = "rzgegu">个股</button>
+								 <button type="button" class="btn btn-primary btn-xs" onclick = "changerzrq(1)" id = "rzgegu">个股</button>
+								  <button type="button" class="btn btn-default  btn-xs" onclick = "changerzrq(0)" id = "rzdapan">大盘</button>
+								 
 								</div>
 							</span>
 							<h4>融资融券</h4>
@@ -79,7 +80,7 @@
 						<div class="content">
 							<table class="no-border">
 								<thead class="no-border">
-									<tr><th>日期</th><th>名称</th><th>主力流入</th><th>占比</th></tr>
+									<tr><th>日期</th><th>名称</th><th>主力流入</th><th>占比</th><th>涨跌幅</th></tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "ggzjlx"></tbody>
 							</table>
@@ -93,8 +94,8 @@
 						<div class="header">
 							<span class="pull-right">
 								<div class="btn-group" role="group" >
-								  <button type="button" class="btn btn-primary btn-xs" onclick = "changeZjlx(0)" id = "dapan">大盘</button>
-								  <button type="button" class="btn btn-default btn-xs" onclick = "changeZjlx(1)" id = "bankuai">板块</button>
+								<button type="button" class="btn btn-primary btn-xs" onclick = "changeZjlx(1)" id = "bankuai">板块</button>
+								  <button type="button" class="btn btn-default  btn-xs" onclick = "changeZjlx(0)" id = "dapan">大盘</button>
 								</div>
 							</span>
 							<h4>大盘资金流向</h4>
@@ -322,8 +323,8 @@
       getZhiBiaoTable(1,1,'');
       getMyStock();
       getMom();
-      getRzrq(0);
-      getZjlx(0);
+      getRzrq(1);
+      getZjlx(1);
       getZjlx(2);
       
       $("#zhibiaoSelect").change(function(){
@@ -1214,9 +1215,15 @@
         		html = html + "<tr><td>"+dsj(item[i]['date'])+"</td>";
         		html = html + "<td>"+item[i]['stockName']+"</td>";
         		html = html + "<td>"+moformat(item[i]['zlNum'])+"</td>";
+        		if(type==2){
+        			html = html + "<td>"+fixed2percentage(item[i]['zlRatio'])+"</td>";
+        			html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td></tr>";
+        		}else{
         		html = html + "<td>"+fixed2percentage(item[i]['zlRatio'])+"</td></tr>";
+        		}
         	}
         	if(type == 2){
+        	 
         		$('#ggzjlx').html(html);
         	}else{
         		$('#zjlx').html(html);

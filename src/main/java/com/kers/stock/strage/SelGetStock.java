@@ -326,6 +326,10 @@ public class SelGetStock {
 																							// results.getSourceAsObjectList(StockBaseInfo.class);
 		List<StockBaseInfo> lstResult = Lists.newArrayList();
 		for (StockBaseInfo baseInfo : lstBean) {
+			
+			//if(!(baseInfo.getUpSumRises160()>baseInfo.getUpSumRises120()&&baseInfo.getUpSumRises120()>baseInfo.getUpSumRises90()&&baseInfo.getUpSumRises90()>baseInfo.getUpSumRises10()))
+			//if(20>=baseInfo.getJ()&&baseInfo.getJ()>=baseInfo.getUpJ()&&baseInfo.getUpJ()>=baseInfo.getUp2J())	 
+			lstResult.add(baseInfo);
 			// if(baseInfo.getJ()>baseInfo.getUpJ())
 			//if(baseInfo.getUp2J()<baseInfo.getJ())
 			//lstResult.add(baseInfo);
@@ -357,7 +361,7 @@ public class SelGetStock {
 			// }
 
 			// }
-			 lstResult.add(baseInfo);
+			
 
 		}
 
@@ -366,9 +370,9 @@ public class SelGetStock {
 			if (hitsMap != null) {
 				Number total = (Number) hitsMap.get("total");
 				if (total != null) {
-					if (total.intValue() > lstResult.size())
-						returnMap.put("totalCount", lstResult.size());
-					else
+//					if (total.intValue() > lstResult.size())
+//						returnMap.put("totalCount", lstResult.size());
+//					else
 						returnMap.put("totalCount", total.intValue());
 				}
 			}
