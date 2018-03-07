@@ -1,9 +1,11 @@
 package com.kers.stock.storedata;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.common.collect.Maps;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -17,6 +19,7 @@ import io.searchbox.core.Search;
 
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.esmodel.UtilEs;
+import com.kers.stock.Controller.SchedulingConfig;
 import com.kers.stock.bean.RzRqBean;
 import com.kers.stock.bean.StockBaseInfo;
 import com.kers.stock.bean.StockOptionalInfo;
@@ -55,34 +58,55 @@ public class ZxzbHand {
 	 * 获取指标列表
 	 * @throws Exception
 	 */
-	public static void getBreakPointDatas(Map<String, StockOptionalInfo> map ) throws Exception{
+	public static void getBreakPointDatas(final Map<String, StockOptionalInfo> map ) throws Exception{
 		String d = TimeUtils.getStockDate();
 		System.out.println("获取"+d);
 		StockBasePageInfo page = new StockBasePageInfo();
-		DecimalFormat df = new DecimalFormat("#.00");
+		final DecimalFormat df = new DecimalFormat("#.00");
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
 		query.must(QueryBuilders.termQuery("szxType","1"));
 		query.must(QueryBuilders.termQuery("date",d));
 		List<StockBaseInfo> list = (List<StockBaseInfo>) SelGetStock.getfocDaysLstResult(query, page).get("items");
-		List<StockOptionalInfo> addList = Lists.newArrayList();
-		for (StockBaseInfo stockBaseInfo : list) {
-			if(null != map.get(stockBaseInfo.getStockCode())){
-				StockOptionalInfo info = map.get(stockBaseInfo.getStockCode());
-				info.setJrzblt(1);
-				addList.add(info);
-			}else{
-				StockOptionalInfo info = new StockOptionalInfo();
-				StockRealBean bean = StoreRealSet.getBeanByCode(stockBaseInfo.getStockCode());
-				info.setStockCode(stockBaseInfo.getStockCode());
-				info.setStockName(bean.getName());
-				info.setOldPrice(bean.getPrice());
-				info.setPercent(Double.parseDouble(df.format((bean.getPrice()-bean.getYestclose()) /bean.getYestclose() * 100)));
-				info.setPrice(bean.getPrice());
-				info.setJrzblt(1);
-				info.setAddType(1);
-				addList.add(info);
-			}
+		for (final StockBaseInfo stockBaseInfo : list) {
+			SchedulingConfig.executorServiceLocal.execute(new Thread(){
+				@Override
+				public void run() {
+					List<StockOptionalInfo> addList = Lists.newArrayList();
+					if(null != map.get(stockBaseInfo.getStockCode())){
+						StockOptionalInfo info = map.get(stockBaseInfo.getStockCode());
+						info.setJrzblt(1);
+						addList.add(info);
+					}else{
+						StockOptionalInfo info = new StockOptionalInfo();
+						StockRealBean bean;
+						try {
+							bean = StoreRealSet.getBeanByCode(stockBaseInfo.getStockCode());
+							if(null != bean){
+								info.setStockCode(stockBaseInfo.getStockCode());
+								info.setStockName(bean.getName());
+								info.setOldPrice(bean.getPrice());
+								info.setPercent(Double.parseDouble(df.format((bean.getPrice()-bean.getYestclose()) /bean.getYestclose() * 100)));
+								info.setPrice(bean.getPrice());
+								info.setJrzblt(1);
+								info.setAddType(1);
+								addList.add(info);
+							}
+						} catch (ClientProtocolException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+					}
+					try {
+						StockOptionalSet.insBatchEs(addList, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
 		}
-		StockOptionalSet.insBatchEs(addList, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
+		
 	}
 }

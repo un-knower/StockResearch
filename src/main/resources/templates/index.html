@@ -351,7 +351,11 @@
       $("#zhibiaoSelect").change(function(){
       	var val = $(this).children('option:selected').val();
       	getZhiBiaoTable(1,1,val);
-		});   
+		}); 
+		
+		var timer2=window.setInterval(function(){
+      		getZjlx(2);
+      	},600000);	  
     });
     
     function getReal(){
@@ -1354,13 +1358,13 @@
       		$('#kai').attr("class","btn btn-primary btn-xs");
       		$('#guan').attr("class","btn btn-default btn-xs");
       		timer1=window.setInterval(function(){
-      			sj1 = sj1 - 1;
-      			if(sj1 == 0){
+      			//sj1 = sj1 - 1;
+      			//if(sj1 == 0){
       				getMyStock();
-      				sj1 = 10;
-      			}
-      			$('#ds').html(sj1);
-      		},1000);	
+      				//sj1 = 10;
+      			//}
+      			//$('#ds').html(sj1);
+      		},10000);	
       	}
       }
       
