@@ -118,7 +118,7 @@ public class SchedulingConfig {
 		}
 	}
 	
-	@Scheduled(cron = "0 0/30 * * * ?") 
+	@Scheduled(cron = "0 0/10 * * * ?") 
     public void updateZjlx() {
 		try {
 			if(shijian()){
