@@ -1,6 +1,9 @@
 package com.kers.stock.Controller;
 
+import io.searchbox.client.JestClient;
+
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -128,14 +131,12 @@ public class SchedulingConfig {
 		}
 	}
 	
-	@Scheduled(cron = "0 30 15 * * ?") 
+	@Scheduled(cron = "0 30 16 * * ?") 
     public void updateZjlx1530() {
 		try {
-			if(shijian()){
 				StockZjlxHand.impBkData();
 				StockZjlxHand.impGguData();
 				StockDpZjlxHand.impDpData();
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -172,30 +173,32 @@ public class SchedulingConfig {
 		}
 	}
 	
-//	@Scheduled(cron = "0 0/5 * * * ?") //  
+	@Scheduled(cron = "0/20 * * * * ?") //  
     public void updateOption() {
 		if(shijian()){
-//			try {
-//				final JestClient  jestClient =BaseCommonConfig.clientConfig();
-//				List<StockOptionalInfo> list = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
-//				for(final StockOptionalInfo  info:list){
-//					executorServiceLocal.execute(new Thread(){
-//						@Override
-//						public void run() {
-//					          try {
-//					        	  StockRealBean bean = StoreRealSet.getBeanByCode(info.getStockCode());
-//					        	  info.setPrice(bean.getPrice());
-//					        	  StockOptionalSet.insBatchBean(info, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
-//							} catch (Exception e) {
-//								e.printStackTrace();
-//							}
-//								
-//						}
-//					});
-//				}
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
+			final JestClient jestClient = BaseCommonConfig.clientConfig();
+			final DecimalFormat df = new DecimalFormat("#.00");
+			try {
+				List<StockOptionalInfo> list = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL,null);
+				for(final StockOptionalInfo  info:list){
+					executorServiceLocal.execute(new Thread(){
+						@Override
+						public void run() {
+					          try {
+					        	  StockRealBean bean = StoreRealSet.getBeanByCode(info.getStockCode());
+					        	  info.setPrice(bean.getPrice());
+					        	  info.setPercent(Double.parseDouble(df.format((bean.getPrice()-bean.getYestclose()) /bean.getYestclose() * 100)));
+					        	  StockOptionalSet.insBatchBean(info, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+								
+						}
+					});
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

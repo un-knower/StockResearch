@@ -26,7 +26,7 @@ public class HtmlController{
 	@RequestMapping("/datas/stockinfo")
     public String  dataStockInfo(Model model , StockBasePageInfo info) throws Exception {
 		model.addAttribute("info", info);
-		List<StockOptionalInfo> optionList = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL);
+		List<StockOptionalInfo> optionList = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL,null);
 		model.addAttribute("optionList", optionList);
         return "/datas/stockinfo";
     }

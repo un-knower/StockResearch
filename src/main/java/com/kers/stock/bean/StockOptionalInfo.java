@@ -10,23 +10,26 @@ public class StockOptionalInfo implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private String stockCode;
-	private String stockName;
 	
+	private String stockName;
 	//涨幅
 	private double percent;
-	
 	//现在价格
     private double price;
-	
 	//加入理由
-	private String text;
-	
+	private String text = "";	
 	//加入时价格
 	private double oldPrice;
 	
 	private String tag;
 	
 	private String zb;
+	
+	//类型
+	private int addType = 0;
+	
+	//加入指标类型 1:十字星
+	private int jrzblt = 0;
 
 	public String getStockCode() {
 		return stockCode;
@@ -91,6 +94,23 @@ public class StockOptionalInfo implements Serializable{
 	public void setZb(String zb) {
 		this.zb = zb;
 	}
+
+	public int getJrzblt() {
+		return jrzblt;
+	}
+
+	public void setJrzblt(int jrzblt) {
+		this.jrzblt = jrzblt;
+	}
+
+	public int getAddType() {
+		return addType;
+	}
+
+	public void setAddType(int addType) {
+		this.addType = addType;
+	}
+
 	
 	
 	

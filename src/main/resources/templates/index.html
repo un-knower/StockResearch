@@ -20,7 +20,6 @@
 								<div class="btn-group" role="group" >
 								 <button type="button" class="btn btn-primary btn-xs" onclick = "changerzrq(1)" id = "rzgegu">个股</button>
 								  <button type="button" class="btn btn-default  btn-xs" onclick = "changerzrq(0)" id = "rzdapan">大盘</button>
-								 
 								</div>
 							</span>
 							<h4>融资融券</h4>
@@ -122,8 +121,30 @@
 				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;">
 					<div id="main4" style="width: 220px;height:180px;"></div>
 				</div>
-				<div class="col-sm-5 col-md-5" style = "padding-right:5px;padding-left:5px;">
+				<div class="col-sm-5 col-md-5" style = "padding-right:5px;padding-left:5px;height:160px;overflow:auto;">
 					<!-- <div id="main5" style="width: 400px;height:180px;"></div> -->
+					
+					<div class="block-flat2 pie-widget" style = "height:150px">
+						<div class="header">
+							<span class="pull-right">
+								自动刷新:
+								<div class="btn-group" role="group">
+								 <button type="button" class="btn btn-primary btn-xs" onclick = "changekg(0)" id = "guan">关</button>
+								  <button type="button" class="btn btn-default  btn-xs" onclick = "changekg(1)" id = "kai">开
+								  <span class="badge" id ="ds"></span></button>
+								</div>
+							</span>
+							<h4>自选股票</h4>
+						</div>
+						<div class="content">
+							<table class="no-border">
+								<thead class="no-border">
+									<tr><th>代码</th><th>名称</th><th>涨幅</th><th>价格</th><th>标签</th></tr>
+								</thead>
+								<tbody class="no-border-x no-border-y" id = "zbgp"></tbody>
+							</table>
+						</div>
+					</div>
 				</div>
 
 			</div>
@@ -631,7 +652,7 @@
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/optional/getList",//路径  
         data : {
-
+			sort:'percent.asc'
         },//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
         	var item = result['items'];
@@ -640,9 +661,15 @@
         		html = html + "<tr><td>"+item[i]['stockCode']+"</td>";
         		html = html + "<td>"+item[i]['stockName']+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['percent'])+"</td>";
-        		html = html + '<td><button type="button" class="btn btn-default" onclick = "delMyStock('+item[i]["stockCode"]+')">删除</button></td></tr>';
+        		html = html + "<td>"+item[i]['price']+"</td>";
+        		var biaoq = item[i]['text'];
+        		if(item[i]['jrzblt'] == 1){
+        			biaoq = biaoq + ' 十字星';
+        		}
+        		html = html + "<td>"+biaoq+"</td></tr>";
+        		//html = html + '<td><button type="button" class="btn btn-default" onclick = "delMyStock('+item[i]["stockCode"]+')">删除</button></td></tr>';
         	}
-        	$('#myStock').html(html);
+        	$('#zbgp').html(html);
       	}  
       });  
       }
@@ -1311,6 +1338,30 @@
         	$('#zjlx').html(html);
       	}  
       	});  
+      }
+      
+      var sj1 = 11;
+      var timer1;
+      function changekg(type){
+      	if(type == 0){
+      		$('#guan').attr("class","btn btn-primary btn-xs");
+      		$('#kai').attr("class","btn btn-default btn-xs");
+      		window.clearInterval(timer1);
+      		sj1 = 11;
+      		$('#ds').html('');	
+      	}
+      	if(type == 1){
+      		$('#kai').attr("class","btn btn-primary btn-xs");
+      		$('#guan').attr("class","btn btn-default btn-xs");
+      		timer1=window.setInterval(function(){
+      			sj1 = sj1 - 1;
+      			if(sj1 == 0){
+      				getMyStock();
+      				sj1 = 10;
+      			}
+      			$('#ds').html(sj1);
+      		},1000);	
+      	}
       }
       
   </script>

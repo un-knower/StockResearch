@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -60,8 +61,14 @@ public class StockOptionalSet {
         jestClient.execute(delete) ;
 	}
 	
-	public static List<StockOptionalInfo> getList(String indexIns) throws Exception{
+	public static List<StockOptionalInfo> getList(String indexIns,List<String> q) throws Exception{
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
+		if(null != q){
+			for (String string : q) {
+				String[] qs = string.split(",");
+				query.must(QueryBuilders.termQuery(qs[0],qs[1]));
+			}
+		}
 		SearchSourceBuilder ssb = new SearchSourceBuilder();
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
@@ -69,5 +76,34 @@ public class StockOptionalSet {
 		JestResult results = jestClient.execute(selResult);
 		List<StockOptionalInfo> lstBean = results.getSourceAsObjectList(StockOptionalInfo.class);
 		return lstBean;
+	}
+	
+	public static void delzhi(String indexIns,JestClient jestClient) throws Exception{
+		List<String> q = Lists.newArrayList();
+		q.add("jrzblt,1");
+		List<StockOptionalInfo> list = getList(indexIns,q);
+		List<StockOptionalInfo> delList = Lists.newArrayList();
+		List<StockOptionalInfo> upList = Lists.newArrayList();
+		for (StockOptionalInfo stockOptionalInfo : list) {
+			if(stockOptionalInfo.getAddType() == 1){
+				delList.add(stockOptionalInfo);
+			}
+			if(stockOptionalInfo.getAddType() == 0){
+				stockOptionalInfo.setJrzblt(0);
+				upList.add(stockOptionalInfo);
+			}
+		}
+		if(delList.size() > 0){
+			for (StockOptionalInfo stockOptionalInfo : delList) {
+				try{
+					deleteBean(stockOptionalInfo,jestClient,indexIns);
+				}catch(Exception e){
+					
+				}
+			}
+		}
+		if(upList.size() > 0){
+			insBatchEs(upList,jestClient,indexIns);
+		}
 	}
 }
