@@ -47,6 +47,9 @@ public class CommonBaseStockInfo {
 	public final static String ES_INDEX_DZJY="dzjy";
 	//限售解禁
 	public final static String ES_INDEX_XSJJ="xsjj"; 
+	
+	//保存策略
+	public final static String SAVE_CN="savecn"; 
 
 	
 	

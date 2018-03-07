@@ -22,6 +22,9 @@
    };
    
    var   moformat=function(val){
+   	if(val == null || val == ''){
+   		return 0;
+   	}
    	val=parseFloat(val);
    	  if(typeof val != 'number'){
              return '';

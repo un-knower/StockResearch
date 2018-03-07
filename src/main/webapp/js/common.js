@@ -112,3 +112,91 @@
        });
        return datas;
    }
+   
+   function opencl(){
+   		$('#clName').val('');
+   		$('#clModal').modal('show');
+   }
+   
+   function savecl(bq){
+   		var name = $('#clName').val();
+   		if(name == ''){
+   			alert('请填写策略名称');
+   			return;
+   		}
+   		var str=JSON.stringify(getDatas());
+   		$.ajax({  
+        	type : "GET",  //提交方式  
+        	url : "http://www.estock.com:8080/stock/savecl",//路径  
+        	data : {
+        		datas:str,
+        		name:name,
+        		bq:bq
+        	},//数据，这里使用的是Json格式进行传输  
+        	success : function(result) {//返回数据根据结果进行相应的处理  
+        		alert('保存成功');
+        		getcl(bq,name);
+            }  
+        }); 
+   }
+   
+   function getcl(bq,op){
+   		$.ajax({  
+        	type : "GET",  //提交方式  
+        	url : "http://www.estock.com:8080/stock/getcl",//路径  
+        	data : {
+        		sort:'date.asc',
+        		datas:'[{"must":"must","name":"bq","type":"=","value":"'+bq+'"}]'
+        	},//数据，这里使用的是Json格式进行传输  
+        	success : function(result) {//返回数据根据结果进行相应的处理  
+        		var item = result['items'];
+	        	var html = '<option value = "-1">未选择</option>';
+	        	for(var i=0;i<item.length;i++){
+	        		if(op != item[i]['name']){
+	        			html = html + "<option value = '"+item[i]["datas"]+"'>"+item[i]["name"]+"</option>";
+	        		}else{
+	        			html = html + "<option value = '"+item[i]["datas"]+"' selected>"+item[i]["name"]+"</option>";
+	        		}
+	        	}
+	        	$('#clselect').html(html);
+            }  
+        }); 
+   }
+   
+   function getDatasHtml(datas){
+            	var data = $.parseJSON(datas);  
+            	var musts = ['must' , 'must_not' , 'should'];
+            	var types = ['=' , '>' , '<' , '>=' , '<=' , 'prefix' , 'queryStr' , 'missing' , 'in'];
+            	var html = '';   
+            	for(var k = 0;k<data.length;k++){
+            		var d = data[k];
+            		html = html + '<form class="form-inline"><div class="row "><div class="data" style = "vertical-align: middle;"> <select class="form-control">';
+            		for (var i = 0; i < musts.length; i++) {
+            			if(d["must"] == musts[i]){
+            				html = html + '<option selected>'+musts[i]+'</option>';
+            			}else{
+            				html = html + '<option>'+musts[i]+'</option>';
+            			}
+            		}
+            		html = html + '</select> <select class="form-control">';
+	                for (var i = 0; i < classNames.length; i++) {
+	                	if(d["name"] == classNames[i]){
+	                		html = html + '<option selected>'+classNames[i]+'</option>';
+	                	}else{
+	                		html = html + '<option>'+classNames[i]+'</option>';
+	                	}
+	                }
+	                html = html + '</select> <select style = "width:100px" class="form-control">';
+	                for (var i = 0; i < types.length; i++) {
+	                	if(d["type"] == types[i]){
+            				html = html + '<option selected>'+types[i]+'</option>';
+            			}else{
+            				html = html + '<option>'+types[i]+'</option>';
+            			}
+	                }
+	                html = html + '</select> <input type="text" class="form-control" value = '+d["value"]+'>';
+	                html = html + ' <input type="button" class="form-control" onclick = "addFormDiv()" value = " + ">';            
+	                html = html + ' <input type="button" class="form-control" onclick = "delFormDiv(this)" value = " - "></div></div></from>';
+            	}
+            	$('#fh').html(html);
+            }

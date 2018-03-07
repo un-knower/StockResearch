@@ -1,10 +1,13 @@
 package com.kers.stock.Controller;
 
+import io.searchbox.client.JestClient;
+
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.tomcat.jni.Time;
 import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -15,9 +18,12 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kers.esmodel.BaseCommonConfig;
 import com.kers.staple.bean.Stap100PPI;
 import com.kers.stock.bean.StockBaseInfo;
+import com.kers.stock.storedata.CommonBaseStockInfo;
 import com.kers.stock.strage.SelGetStock;
+import com.kers.stock.strage.StrategySet;
 import com.kers.stock.utils.TimeUtils;
 import com.kers.stock.vo.StockBaseInfoVo;
 import com.kers.stock.vo.StockBasePageInfo;
@@ -211,6 +217,24 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		return map;
 
 	}
+	
+	
+	@RequestMapping("/savecl")
+	public String savecl(StockBasePageInfo page) throws Exception {
+		List<StockBasePageInfo> list = Lists.newArrayList();
+		JestClient jestClient = BaseCommonConfig.clientConfig();
+		page.setDate(TimeUtils.getDate());
+		list.add(page);
+		StrategySet.insBatchEs(list, jestClient, CommonBaseStockInfo.SAVE_CN);
+		return "OK";
+	}
+	
+	@RequestMapping("/getcl")
+    public Map<String,Object> getcl(StockBasePageInfo page, String type) throws Exception {
+    	BoolQueryBuilder query = QueryBuilders.boolQuery();
+    	setQuery(query,page);
+        return SelGetStock.getCommonLstResult(query,page,CommonBaseStockInfo.SAVE_CN,type);
+    }
 
 }
 

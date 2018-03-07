@@ -270,6 +270,22 @@ public class StockStragEnSey {
     	if(sbl < bl){
     		t = 1;
     		//如果是
+    		float h1 = close;
+    		float h2 = close;
+    		if(open > close){
+    			h1 = open;
+    		}
+    		if(open < close){
+    			h2 = open;
+    		}
+    		if(high <= h1){
+    			t = 2;
+    		}
+    		if(low >= h2){
+    			t = 3;
+    		}
+    		int num = StockBaseInfo.getSzxNum() + 1;
+    		StockBaseInfo.setSzxNum(num);
     	}
     	StockBaseInfo.setSzxType(t);
     	StockBaseInfo.setSzxBl(sbl);

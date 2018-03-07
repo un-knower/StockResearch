@@ -139,6 +139,8 @@ public class StockBaseInfo implements Serializable {
 	private int szxType = 0;
 	private float upSzxBl = 0;
 	private float szxBl = 0;
+	//十字星天数
+	private int szxNum = 0;
 	/**
 	 * 自定义分时图用的数据
 	 *
@@ -939,6 +941,14 @@ public class StockBaseInfo implements Serializable {
 
 	public void setUpSzxBl(float upSzxBl) {
 		this.upSzxBl = upSzxBl;
+	}
+
+	public int getSzxNum() {
+		return szxNum;
+	}
+
+	public void setSzxNum(int szxNum) {
+		this.szxNum = szxNum;
 	}
 	
 	

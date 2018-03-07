@@ -56,14 +56,20 @@
     	<a href = "/stock/storesta.html">查看策略</a> 
     	<a href = "/stock/realindex.html">实时数据</a> 
     	<a href = "/stock/jyfx.html">jyfx</a> 
-    	<a href = "/stock/stapleday.html">大宗商品</a>
+    	<a href = "/stock/stapleday.html">大宗商品</a> 
+    			<select class="form-control" id = "clselect">
+            		<option value = "-1">未选择</option>
+            	</select>
         <main>
             <div style="margin-bottom: 5px;">
                 <div style="text-align: center;">
                     <div id = "fh"></div>
                 </div>
             </div>
-            <div style="text-align: center;margin-bottom: 5px;"><button id="btnSearch" class="btn" >搜索</button></div>
+            <div style="text-align: center;margin-bottom: 5px;">
+            	<input type="text" class="form-control" id="clName" placeholder="策略名称">
+            	<button class="btn" onclick = "savecl('base')">保存</button> 
+            	<button id="btnSearch" class="btn" >搜索</button> </div>
             <table id="mmg" class="mmg">
                 <tr>
                     <th rowspan="" colspan=""></th>
@@ -93,6 +99,8 @@
 			    </div>
 			  </div>
 			</div>
+			
+			
         </main>
 
         <script src="js/vendor/jquery-1.9.1.min.js"></script>
@@ -101,10 +109,14 @@
         <script src="src/mmGrid.js"></script>
         <script src="src/mmPaginator.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/common.js"></script>
         <script>
             var classNames = [];
+            var mmg;
 
             $(document).ready(function(){
+            	getcl('base','');
+            	
                 $.ajax({  
                     type : "GET",  //提交方式  
                     url : "http://www.estock.com:8080/stock/getClassNameList",//路径  
@@ -112,10 +124,28 @@
                     success : function(result) {//返回数据根据结果进行相应的处理  
                         classNames =  result;
                         $('#fh').append(formHtml);
+                        chushihua();
                     }  
                 }); 
 
-                var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
+                $('#btnSearch').on('click',function(){
+                    //点击查询时页码置为1
+                    var str=JSON.stringify(getDatas());
+                    mmg.load({page:1,datas:str});
+                });
+
+				$('#clselect').on('change',function(){
+                    //点击查询时页码置为1
+                    getDatasHtml($(this).children('option:selected').val());
+                    var str=JSON.stringify(getDatas());
+                    mmg.load({page:1,datas:str});
+                });
+
+
+            });
+            
+            function chushihua(){
+            	var pgBar = $('#pg').mmPaginator({"limitList":[10,20,30,50,100,500,1000]});
                 
                 var cols = [
                     {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
@@ -165,7 +195,7 @@
                 ];
 
 
-                var mmg = $('.mmg').mmGrid({
+                mmg = $('.mmg').mmGrid({
                     height: 'auto'
                     , cols: cols
                     , url: 'http://www.estock.com:8080/stock/getList'
@@ -189,17 +219,7 @@
 
 
                 mmg.load();
-
-                $('#btnSearch').on('click',function(){
-                    //点击查询时页码置为1
-                    var str=JSON.stringify(getDatas());
-                    mmg.load({page:1,datas:str});
-                });
-
-
-
-
-            });
+            }
 
              //高亮
             var highliht = function(val){

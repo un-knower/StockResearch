@@ -30,9 +30,9 @@
 									<tr>
 										<th>日期</th>
 										<th>名称</th>
-										<th>买入额</th>
-										<th>净买入</th>
-										<th>涨幅</th>
+										<th><a href = "javascript:void(0)" data1 = "rzmre" data2 = "asc" data3= "1" onclick = "getRzRqSort(this)">买入额</a></th>
+										<th><a href = "javascript:void(0)" data1 = "rzjmre" data2 = "asc" data3= "1" onclick = "getRzRqSort(this)">净买入</a></th>
+										<th><a href = "javascript:void(0)" data1 = "zdf" data2 = "asc" data3= "1" onclick = "getRzRqSort(this)">涨幅</a></th>
 									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "rzrq"></tbody>
@@ -79,7 +79,11 @@
 						<div class="content">
 							<table class="no-border">
 								<thead class="no-border">
-									<tr><th>日期</th><th>名称</th><th>主力流入</th><th>占比</th><th>涨跌幅</th></tr>
+									<tr><th>日期</th><th>名称</th>
+									<th><a href = "javascript:void(0)" data1 = "zlNum" data2 = "asc" data3= "2" onclick = "getZjlxSort(this)">主力流入</a></th>
+									<th><a href = "javascript:void(0)" data1 = "zlRatio" data2 = "asc" data3= "2" onclick = "getZjlxSort(this)">占比</a></th>
+									<th><a href = "javascript:void(0)" data1 = "rises" data2 = "asc" data3= "2" onclick = "getZjlxSort(this)">涨跌幅</a></th>
+									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "ggzjlx"></tbody>
 							</table>
@@ -102,7 +106,10 @@
 						<div class="content">
 							<table class="no-border">
 								<thead class="no-border" id = "zjlrThead">
-									<tr><th>日期</th><th>名称</th><th>主力流入</th><th>占比</th></tr>
+									<tr><th>日期</th><th>名称</th>
+									<th><a href = "javascript:void(0)" data1 = "zlNum" data2 = "asc" data3= "1" onclick = "getZjlxSort(this)">主力流入</a></th>
+									<th><a href = "javascript:void(0)" data1 = "zlRatio" data2 = "asc" data3= "1" onclick = "getZjlxSort(this)">占比</a></th>
+									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "zjlx"></tbody>
 							</table>
@@ -323,6 +330,29 @@
 </div>
 
 
+<!-- Modal -->
+			<div class="modal fade" id="fModal" tabindex="-1" role="dialog" aria-labelledby="分时图">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="fModalLabel">分时图</h4>
+			      </div>
+			      <div class="modal-body">
+			      	<input type="hidden" id = "code"/>
+			      	<button class="btn btn-default" onclick = "huan('min')">分时</button>
+			      	<button class="btn btn-default" onclick = "huan('daily')">周</button>
+			      	<button class="btn btn-default" onclick = "huan('weekly')">月</button>
+			        <img src = "" id = "imgFen">
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">关</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+
+
   <div th:include="/common/onload_js :: onloadJs"></div>
   <script type="text/javascript">
   	//var longhuDatas = '[{"must":"must","name":"rises","type":">=","value":"10"},{"must":"must","name":"upRisesDayNum5","type":">=","value":"3"},{"must":"must","name":"upRises","type":">=","value":"3"},{"must":"must","name":"upSumRises5","type":">=","value":"15"}]';
@@ -344,9 +374,9 @@
       getZhiBiaoTable(1,1,'');
       getMyStock();
       getMom();
-      getRzrq(1);
-      getZjlx(1);
-      getZjlx(2);
+      getRzrq("",1);
+      getZjlx('',1);
+      getZjlx('',2);
       
       $("#zhibiaoSelect").change(function(){
       	var val = $(this).children('option:selected').val();
@@ -354,9 +384,23 @@
 		}); 
 		
 		var timer2=window.setInterval(function(){
-      		getZjlx(2);
+      		getZjlx('',2);
       	},600000);	  
     });
+    
+    function openDiv(code){
+            	$('#code').val('min');
+            	$('#imgFen').attr('src' ,getPath(code));
+            	$('#fModal').modal('show');
+            }
+            
+     function huan(type){
+            	var old = $('#code').val();
+            	var imgPath = $('#imgFen').attr('src');
+            	imgPath = imgPath.replace(old , type);
+            	$('#code').val(type);
+            	$('#imgFen').attr('src' ,imgPath);
+            }
     
     function getReal(){
     	
@@ -374,7 +418,7 @@
         		$('#realHigh').html(result['high']);
         		$('#realLow').html(result['low']);
         		var percent = parseFloat(result['percent']) * 100;
-        		percent = percent.toFixed(2)
+        		percent = percent.toFixed(2);
         		if(percent > 0){
         			percent = "+" + percent + "%";
         			$('#realPrice').attr("class","stat-red");
@@ -1220,7 +1264,7 @@
       	});  
       }
       
-      function getZjlx(type){
+      function getZjlx(sort,type){
       	var date = new Date().Format("yyyy-MM-dd");
       	var datas = "";
       	var sorts = 'date.asc,zlNum.asc';
@@ -1228,6 +1272,9 @@
       		sorts = 'date.asc';
       		datas = '[{"must":"must","name":"type","type":"=","value":"'+type+'"},{"must":"must_not","name":"stockCode","type":"prefix","value":"3"}]';
       	}else{
+      		if(sort != ''){
+      			sorts = 'date.asc,'+sort;
+      		}
       		datas = '[{"must":"must","name":"type","type":"=","value":"'+type+'"},{"must":"must_not","name":"stockCode","type":"prefix","value":"3"}]';
       	}
       	$('#zjlx').html(getShuaHtml(4));
@@ -1244,7 +1291,11 @@
         	var html = "";
         	for(var i=0;i<item.length;i++){
         		html = html + "<tr><td>"+dsj(item[i]['date'])+"</td>";
-        		html = html + "<td>"+item[i]['stockName']+"</td>";
+        		if(type == 2){
+        			html = html + "<td><a href = 'javascript:void(0)' onclick = openDiv('"+item[i]['stockCode']+"')>"+item[i]['stockName']+"</a></td>";
+        		}else{
+        			html = html + "<td>"+item[i]['stockName']+"</td>";
+        		}
         		html = html + "<td>"+moformat(item[i]['zlNum'])+"</td>";
         		if(type==2){
         			html = html + "<td>"+fixed2percentage(item[i]['zlRatio'])+"</td>";
@@ -1280,18 +1331,24 @@
       		$('#bankuai').attr("class","btn btn-default btn-xs");
       		$('#dapan').attr("class","btn btn-default btn-xs");
       	}
-      	getZjlx(type);
+      	getZjlx('',type);
       	
       }
       
-      function getRzrq(type){
+      function getRzrq(sort , type){
       	$('#rzrq').html(getShuaHtml(3));
+      	var sorts = '';
+      	if(sort == ''){
+      		sorts = 'tdate.asc,rzmre.asc';
+      	}else{
+      		sorts = 'tdate.asc,' + sort;
+      	}
     	$.ajax({  
       	type : "GET",  //提交方式  
 		url : "http://www.estock.com:8080/stock/rzrq/getList",//路径  
         data : {
         	datas:'[{"must":"must","name":"type","type":"=","value":"'+type+'"},{"must":"must_not","name":"stockCode","type":"prefix","value":"3"}]',
-			sort:'tdate.asc,rzmre.asc',
+			sort:sorts,
 			limit:5
         },//数据，这里使用的是Json格式进行传输  
         success : function(result) {//返回数据根据结果进行相应的处理  
@@ -1299,7 +1356,7 @@
         	var html = "";
         	for(var i=0;i<item.length;i++){
         		html = html + "<tr><td>"+dsj(item[i]['tdate'])+"</td>";
-        		html = html + "<td>"+item[i]['sname']+"</td>";
+        		html = html + "<td><a href = 'javascript:void(0)' onclick = openDiv('"+item[i]['scode']+"')>"+item[i]['sname']+"</a></td>";
         		html = html + "<td>"+moformat(item[i]['rzmre'])+"</td>";
         		html = html + "<td>"+moformat(item[i]['rzjmre'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['zdf'])+"</td></tr>";
@@ -1318,7 +1375,7 @@
       		$('#rzgegu').attr("class","btn btn-primary btn-xs");
       		$('#rzdapan').attr("class","btn btn-default btn-xs");	
       	}
-      	getRzrq(type);
+      	getRzrq('',type);
       }
       
       function getDpZjlx(){
@@ -1367,6 +1424,34 @@
       		},10000);	
       	}
       }
+      
+      function getRzRqSort(data){
+    	var da1 = $(data).attr("data1");
+    	var da2 = $(data).attr("data2");
+    	var da3 = $(data).attr("data3");
+    	if(da2 == 'desc'){
+    		da2 = "asc";
+    		$(data).attr("data2" , da2);
+    	}else if(da2 == 'asc'){
+    		da2 = "desc";
+    		$(data).attr("data2" , da2);
+    	}
+    	getRzrq(da1+"."+da2,da3);
+    }
+    
+    function getZjlxSort(data){
+    	var da1 = $(data).attr("data1");
+    	var da2 = $(data).attr("data2");
+    	var da3 = $(data).attr("data3");
+    	if(da2 == 'desc'){
+    		da2 = "asc";
+    		$(data).attr("data2" , da2);
+    	}else if(da2 == 'asc'){
+    		da2 = "desc";
+    		$(data).attr("data2" , da2);
+    	}
+    	getZjlx(da1+"."+da2,da3);
+    }
       
   </script>
   </body>
