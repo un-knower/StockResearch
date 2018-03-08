@@ -15,6 +15,7 @@ import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.esmodel.UtilEs;
@@ -61,7 +62,7 @@ public class StockOptionalSet {
         jestClient.execute(delete) ;
 	}
 	
-	public static List<StockOptionalInfo> getList(String indexIns,List<String> q) throws Exception{
+	public static List<StockOptionalInfo> getList(String indexIns,List<String> q , int limit) throws Exception{
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
 		if(null != q){
 			for (String string : q) {
@@ -70,9 +71,10 @@ public class StockOptionalSet {
 			}
 		}
 		SearchSourceBuilder ssb = new SearchSourceBuilder();
+		ssb.sort("date", SortOrder.DESC);
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
 		final JestClient jestClient = BaseCommonConfig.clientConfig();
-		Search selResult = UtilEs.getSearch(searchSourceBuilder, indexIns, "2018", 0 , 1000);
+		Search selResult = UtilEs.getSearch(searchSourceBuilder, indexIns, "2018", 0 , limit);
 		JestResult results = jestClient.execute(selResult);
 		List<StockOptionalInfo> lstBean = results.getSourceAsObjectList(StockOptionalInfo.class);
 		return lstBean;
@@ -81,7 +83,7 @@ public class StockOptionalSet {
 	public static void delzhi(String indexIns,JestClient jestClient) throws Exception{
 		List<String> q = Lists.newArrayList();
 		q.add("jrzblt,1");
-		List<StockOptionalInfo> list = getList(indexIns,q);
+		List<StockOptionalInfo> list = getList(indexIns,q,10000);
 		List<StockOptionalInfo> delList = Lists.newArrayList();
 		List<StockOptionalInfo> upList = Lists.newArrayList();
 		for (StockOptionalInfo stockOptionalInfo : list) {
@@ -105,5 +107,16 @@ public class StockOptionalSet {
 		if(upList.size() > 0){
 			insBatchEs(upList,jestClient,indexIns);
 		}
+	}
+	
+	public String getListNextDate(String indexIns) throws Exception{
+		String d = "";
+		List<String> q = Lists.newArrayList();
+		q.add("jrzblt,1");
+		List<StockOptionalInfo> list = getList(indexIns,q,1);
+		if(list.size() > 0){
+			d = list.get(0).getDate();
+		}
+		return d;
 	}
 }

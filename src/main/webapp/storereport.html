@@ -27,6 +27,9 @@
     </head>
     <body style="padding: 40px;">
         <a href = "/stock/">stockpcse</a> <a href = "/stock/storetrailer.html">storetrailer</a>
+        <select class="form-control" id = "clselect">
+            		<option value = "-1">未选择</option>
+            	</select>
         <main>
             <div style="margin-bottom: 5px;">
                 <div style="text-align: center;">
@@ -34,6 +37,8 @@
                 </div>
             </div>
             <div style="text-align: center;margin-bottom: 5px;">
+            	<input type="text" class="form-control" id="clName" placeholder="策略名称">
+            	<button class="btn" onclick = "savecl('report')">保存</button> 
             	<input type = "text" id = "type"> <!-- value = "2017-09-30" -->
             	<button id="btnSearch" class="btn" >搜索</button>
             </div>
@@ -167,6 +172,14 @@
                     var str=JSON.stringify(getDatas());
                     var type = $('#type').val();
                     mmg.load({page:1,datas:str,type:type});
+                });
+                
+                 getcl('report','');
+                $('#clselect').on('change',function(){
+                    //点击查询时页码置为1
+                    getDatasHtml($(this).children('option:selected').val());
+                    var str=JSON.stringify(getDatas());
+                    mmg.load({page:1,datas:str});
                 });
          	}
 

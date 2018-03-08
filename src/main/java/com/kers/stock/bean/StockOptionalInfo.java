@@ -2,6 +2,8 @@ package com.kers.stock.bean;
 
 import java.io.Serializable;
 
+import com.kers.stock.utils.TimeUtils;
+
 public class StockOptionalInfo implements Serializable{
 
 	/**
@@ -30,6 +32,8 @@ public class StockOptionalInfo implements Serializable{
 	
 	//加入指标类型 1:十字星
 	private int jrzblt = 0;
+	
+	private String date = TimeUtils.getDate(TimeUtils.DATE_FORMAT);
 
 	public String getStockCode() {
 		return stockCode;
@@ -109,6 +113,14 @@ public class StockOptionalInfo implements Serializable{
 
 	public void setAddType(int addType) {
 		this.addType = addType;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 	

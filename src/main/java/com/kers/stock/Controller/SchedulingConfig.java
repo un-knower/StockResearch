@@ -32,6 +32,7 @@ import com.kers.stock.storedata.StoreAstockTradInfo;
 import com.kers.stock.storedata.StoreRealSet;
 import com.kers.stock.storedata.StoreReportSet;
 import com.kers.stock.storedata.StoreTrailerSet;
+import com.kers.stock.storedata.ZxzbHand;
 import com.kers.stock.utils.TimeUtils;
 
 
@@ -46,6 +47,8 @@ public class SchedulingConfig {
 	public static Map<String, StockBaseInfo> upMap;
 	
 	public static List<String> lstSource;
+	
+	public static String updateOptionDate = "";
 		
 	@Scheduled(cron = "0 00 02 * * ?") 
     public void updateDzsp() {
@@ -176,10 +179,19 @@ public class SchedulingConfig {
 	@Scheduled(cron = "0/20 * * * * ?") //  
     public void updateOption() {
 		if(shijian()){
+			String d = TimeUtils.getDate(TimeUtils.DATE_FORMAT);
+			if(updateOptionDate.equals("") || !updateOptionDate.equals(d)){
+				try {
+					ZxzbHand.zbzx();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				updateOptionDate = d;
+			}
 			final JestClient jestClient = BaseCommonConfig.clientConfig();
 			final DecimalFormat df = new DecimalFormat("#.00");
 			try {
-				List<StockOptionalInfo> list = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL,null);
+				List<StockOptionalInfo> list = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL,null,10000);
 				for(final StockOptionalInfo  info:list){
 					executorServiceLocal.execute(new Thread(){
 						@Override

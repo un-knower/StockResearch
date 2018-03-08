@@ -47,7 +47,7 @@ public class ZxzbHand {
 				StockOptionalSet.delzhi(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL,jestClient);
 				//然后新增指标数据
 				Map<String, StockOptionalInfo> map = Maps.newHashMap();
-				List<StockOptionalInfo> list = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL,null);
+				List<StockOptionalInfo> list = StockOptionalSet.getList(CommonBaseStockInfo.ES_INDEX_STOCK_OPTIONAL,null,10000);
 				for (StockOptionalInfo stockOptionalInfo : list) {
 					map.put(stockOptionalInfo.getStockCode(), stockOptionalInfo);
 				}
