@@ -33,6 +33,7 @@ public class StockZjlx   implements Serializable{
 	 private double up5NumAvg;  //3天平均量
 	 private double up10NumAvg;  //3天平均量
 	 private double  zzRises;//增长率
+	 private double zsz;//总市值
 	 
 	 private int   type ;//0 大盘  1 板块   2 个股 
 	public String getDate() {
@@ -206,7 +207,11 @@ public class StockZjlx   implements Serializable{
 	public void setLjlrNum(double ljlrNum) {
 		this.ljlrNum = ljlrNum;
 	}
-	 
-	
+	public double getZsz() {
+		return zsz;
+	}
+	public void setZsz(double zsz) {
+		this.zsz = zsz;
+	}
 	
 }

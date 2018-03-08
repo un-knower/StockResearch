@@ -81,6 +81,7 @@
 								<thead class="no-border">
 									<tr><th>日期</th><th>名称</th>
 									<th><a href = "javascript:void(0)" data1 = "zlNum" data2 = "asc" data3= "2" onclick = "getZjlxSort(this)">主力流入</a></th>
+									<!-- //	<th><a href = "javascript:void(0)" data1 = "zsz" data2 = "asc" data3= "2" onclick = "getZjlxSort(this)">总市值</a></th> -->
 									<th><a href = "javascript:void(0)" data1 = "zlRatio" data2 = "asc" data3= "2" onclick = "getZjlxSort(this)">占比</a></th>
 									<th><a href = "javascript:void(0)" data1 = "rises" data2 = "asc" data3= "2" onclick = "getZjlxSort(this)">涨跌幅</a></th>
 									</tr>
@@ -1297,6 +1298,7 @@
         			html = html + "<td>"+item[i]['stockName']+"</td>";
         		}
         		html = html + "<td>"+moformat(item[i]['zlNum'])+"</td>";
+        		//html = html + "<td>"+moformat(item[i]['zsz'])+"</td>";
         		if(type==2){
         			html = html + "<td>"+fixed2percentage(item[i]['zlRatio'])+"</td>";
         			html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td></tr>";

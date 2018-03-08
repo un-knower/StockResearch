@@ -46,7 +46,7 @@ public class StockZjlxHand {
 
 	// 6 1 0 2
 	// 个股
-	public static List<StockZjlx> parseGgZjlxFromUrl(String stockCode, String stockName)
+	public static List<StockZjlx> parseGgZjlxFromUrl(String stockCode, String stockName,  double zsz)
 			throws ClientProtocolException, IOException {
 		String scffix = "2";
 		if (stockCode.startsWith("6"))
@@ -87,6 +87,7 @@ public class StockZjlxHand {
 				stockZjlx.setStockCode(stockCode);
 				stockZjlx.setStockName(stockName);
 				stockZjlx.setType(2);
+				stockZjlx.setZsz(zsz);
 
 				int up3 = 0;
 				double up3NumAvg = 0;
@@ -254,7 +255,7 @@ public class StockZjlxHand {
 						  try {
 								List<StockZjlx> lstResult = Lists.newArrayList();
 								if (stockCode.startsWith("0") || stockCode.startsWith("6") || stockCode.startsWith("3")) {
-									lstResult = parseGgZjlxFromUrl(bean.getStockCode(), bean.getStockName());
+									lstResult = parseGgZjlxFromUrl(bean.getStockCode(), bean.getStockName(),bean.getZsz());
 								}
 
 								insBatchEs(lstResult, jClient, CommonBaseStockInfo.ES_INDEX_STOCK_ZJLX);

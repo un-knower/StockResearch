@@ -1,6 +1,7 @@
 package com.kers.stock.storedata;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.esmodel.UtilEs;
 import com.kers.httpmodel.BaseConnClient;
+import com.kers.stock.bean.StockBaseInfo;
 import com.kers.stock.bean.StockDetailInfoBean;
 import com.kers.stock.strage.StockSelStrag;
 import com.kers.stock.utils.CsvHandUtils;
@@ -44,13 +46,17 @@ public class StockDetailInfoHand {
 		return lstBean;
 
 	}
-	public static List<StockDetailInfoBean> getDetailForNetLst() throws ClientProtocolException, IOException  {
+	public static List<StockDetailInfoBean> getDetailForNetLst() throws ClientProtocolException, IOException, ParseException  {
 		CsvHandUtils csvHandUtils = new CsvHandUtils(BaseConnClient.baseGetReqToStream(CommonBaseStockInfo.DETAIL_CONNPATH));
 		List<List<String>> lstSource = csvHandUtils.readCSVFile();
 		List<StockDetailInfoBean> list = Lists.newArrayList();
+		 Map<String, StockBaseInfo>    mapsRes=	StoreAstockTradInfo.getAllLastStockInfo();
 		for (int i = 1; i < lstSource.size(); i++) {
 			List<String> lstBeanCon = lstSource.get(i);
 			StockDetailInfoBean detailInfoBean = new StockDetailInfoBean(lstBeanCon);
+			StockBaseInfo  bean = mapsRes.get(detailInfoBean.getStockCode());
+			if(bean!=null)
+			detailInfoBean.setZsz(bean.getZsz());
 			list.add(detailInfoBean);
 		}
 		StockDetailInfoBean  stbean = new StockDetailInfoBean();

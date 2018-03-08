@@ -68,14 +68,14 @@
                 </tr>
             </table>
             <div id="pg" style="text-align: right;"></div>
-        </main>
-
+       
         <script src="js/vendor/jquery-1.9.1.min.js"></script>
         <script src="js/plugins.js"></script>
          <script src="js/common.js"></script>
         <script src="js/vendor/json2.js"></script>
         <script src="src/mmGrid.js"></script>
         <script src="src/mmPaginator.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
         <script>
             var classNames = [];
 
@@ -96,11 +96,15 @@
                    
                     { title:'日期', name:'date' , align:'center' ,sortable:true},
                     { title:'股票代码', name:'stockCode' , align:'center' ,width:60},
-                    { title:'名称', name:'stockName' , align:'center',width:60 },
+                    { title:'名称', name:'stockName' , align:'center',width:60 , renderer: function(val,item,rowIndex){
+                        var path = getPath(item['stockCode']);
+                        return '<a src = "' +path+ '" onclick = "openDiv(\''+item['stockCode']+'\')">'+item['stockName']+'</a>';
+                    }},
                     {title:'当日涨',name:'rises',sortable:true,renderer: fixed2percentage,width:40},
-                    {title:'主力流入',name:'zlNum',sortable:true,renderer:moformat,width:80},
+                    {title:'主力流入',name:'zlNum',sortable:true,renderer:moformat,width:60},
+                    {title:'总市值',name:'zsz',sortable:true,renderer:moformat,width:60},
                     {title:'主力占比',name:'zlRatio',sortable:true,renderer: fixed2percentage,width:60},
-                    {title:'主力流入差',name:'zzRises',sortable:true, renderer:moformat,width:80},
+                    {title:'主力流入差',name:'zzRises',sortable:true, renderer:moformat,width:60},
                    
                     {title:'涨/3',name:'up3',sortable:true,renderer:highlihtNor,width:40},
                     {title:'均/3',name:'up3NumAvg',sortable:true,renderer:moformat,width:60},
@@ -110,7 +114,7 @@
                     {title:'均/10',name:'up10NumAvg',sortable:true,renderer:moformat,width:60},
 
                     
-                    {title:'连续天数',name:'upNum',sortable:true,renderer:highlihtNor},
+                    {title:'连续天数',name:'upNum',sortable:true,renderer:highlihtNor,width:40},
                     {title:'连续资金',name:'ljlrNum',sortable:true,renderer:moformat}
                 ];
 
@@ -172,6 +176,55 @@
                 });
                 return datas;
             }
+            
+            
+            function openDiv(code){
+            	$('#code').val('min');
+            	$('#imgFen').attr('src' ,getPath(code));
+            	$('#myModal').modal('show');
+            }
+            function huan(type){
+            	var old = $('#code').val();
+            	var imgPath = $('#imgFen').attr('src');
+            	imgPath = imgPath.replace(old , type);
+            	$('#code').val(type);
+            	$('#imgFen').attr('src' ,imgPath);
+            }
+            function getPath(code){
+            	var timestamp = Date.parse(new Date());
+            	var path = 'http://image.sinajs.cn/newchart/min/n/';
+            	if(code.toString().substring(0,1) == 6){
+            		path = path +  'sh'+code+'.gif';
+            	}else{
+            		path = path +  'sz'+code+'.gif';
+            	}
+            	path = path + '?'+timestamp;
+            	return path;
+            }
         </script>
+        
+         </main>
+         <div></div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="分时图">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">分时图</h4>
+			      </div>
+			      <div class="modal-body">
+			      	<input type="hidden" id = "code"/>
+			      	<button class="btn btn-default" onclick = "huan('min')">分时</button>
+			      	<button class="btn btn-default" onclick = "huan('daily')">周</button>
+			      	<button class="btn btn-default" onclick = "huan('weekly')">月</button>
+			        <img src = "" id = "imgFen">
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">关</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+        </main>
     </body>
 </html>
