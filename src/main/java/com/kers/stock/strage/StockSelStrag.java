@@ -116,7 +116,7 @@ public class StockSelStrag {
 				CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, 0, 3800);
 		
 		
-		lstResRet.addAll(lstResult2);
+		//lstResRet.addAll(lstResult2);
 		
 		
 		

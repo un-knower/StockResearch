@@ -229,11 +229,11 @@ public class SelGetStock {
 			throws Exception {
 		// 002597 002311 000039
 		Map<String, Object> returnMap = Maps.newHashMap();
-		Map<String, String> mapsSelStockTmp = mapsSelStock;
+		//Map<String, String> mapsSelStockTmp = mapsSelStock;
 		
 
-		//revtmpMap(mapsSelStockTmp);
-		query.must(QueryBuilders.inQuery("stockCode", mapsSelStockTmp.keySet()));
+	    // revtmpMap(mapsSelStockTmp);
+		//query.must(QueryBuilders.inQuery("stockCode", mapsSelStockTmp.keySet()));
 		//query.mustNot(QueryBuilders.inQuery("stockCode", mapsSubnewStock.keySet()));//排除次新股
 
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);

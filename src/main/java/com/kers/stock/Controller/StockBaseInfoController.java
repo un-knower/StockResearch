@@ -123,7 +123,6 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
 		
 		setQuery(query, page);
-		System.out.println(page.getSort());
 		List<StockBaseInfo> list = (List<StockBaseInfo>) SelGetStock.getfocDaysLstResult(query, page).get("items");
 
 		Set<String> legendData = Sets.newTreeSet();
