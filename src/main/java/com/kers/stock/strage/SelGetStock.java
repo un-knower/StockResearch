@@ -330,6 +330,7 @@ public class SelGetStock {
 			//if(!(baseInfo.getUpSumRises160()>baseInfo.getUpSumRises120()&&baseInfo.getUpSumRises120()>baseInfo.getUpSumRises90()&&baseInfo.getUpSumRises90()>baseInfo.getUpSumRises10()))
 			//if(20>=baseInfo.getJ()&&baseInfo.getJ()>=baseInfo.getUpJ()&&baseInfo.getUpJ()>=baseInfo.getUp2J())	 
 //			if(baseInfo.getJ()>baseInfo.getUpJ())
+		//	if(!(baseInfo.getUp2J()>baseInfo.getUpJ()&&baseInfo.getMacd()<0))
 			lstResult.add(baseInfo);
 			// if(baseInfo.getJ()>baseInfo.getUpJ())
 			//if(baseInfo.getUp2J()<baseInfo.getJ())

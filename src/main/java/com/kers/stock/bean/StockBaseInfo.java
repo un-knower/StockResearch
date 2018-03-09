@@ -66,6 +66,7 @@ public class StockBaseInfo implements Serializable {
 
 	// macd 持续天数
 	private int macdNum = 0;
+	private int macdUpNum = 0;
 	private int macdUp5 = 0;
 	private int macdUp10  = 0;
 	private float sumMacdUp5 = 0;
@@ -949,6 +950,14 @@ public class StockBaseInfo implements Serializable {
 
 	public void setSzxNum(int szxNum) {
 		this.szxNum = szxNum;
+	}
+
+	public int getMacdUpNum() {
+		return macdUpNum;
+	}
+
+	public void setMacdUpNum(int macdUpNum) {
+		this.macdUpNum = macdUpNum;
 	}
 	
 	

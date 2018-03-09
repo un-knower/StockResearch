@@ -23,15 +23,49 @@ public class BaseController<T> {
 	    			if(StringUtils.isEmpty(vo.getValue())){
 	    				continue;
 	    			}
-	    			if(vo.getMust().equals("must")){
-	    				query.must(getType(vo));
+	    			
+	    			
+	    			if(vo.getValue().indexOf(",")>-1&&(!vo.getType().equals("in"))){
+	    			 String [] valuesarr= vo.getValue().split(",");	
+	    			 for (int i = 0; i < valuesarr.length; i++) {
+	    				 StockBaseInfoVo baseInfoVo = new StockBaseInfoVo();
+	    				 baseInfoVo.setValue(valuesarr[i]);
+	    				 baseInfoVo.setMust(vo.getMust());
+	    				 baseInfoVo.setName(vo.getName());
+	    				 baseInfoVo.setType(vo.getType());
+	    				 
+	    				 if(baseInfoVo.getMust().equals("must")){
+	 	    				
+	 	    				query.must(getType(baseInfoVo));
+	 	    			}
+	 	    			if(vo.getMust().equals("must_not")){
+	 	    				query.mustNot(getType(baseInfoVo));
+	 	    			}
+	 	    			if(vo.getMust().equals("should")){
+	 	    				
+	 	    				query.should(getType(baseInfoVo));
+	 	    			}
+	 	    			
+					}
+	    			
 	    			}
-	    			if(vo.getMust().equals("must_not")){
-	    				query.mustNot(getType(vo));
+	    			else{
+	    				
+	    				 if(vo.getMust().equals("must")){
+		 	    				
+		 	    				query.must(getType(vo));
+		 	    			}
+		 	    			if(vo.getMust().equals("must_not")){
+		 	    				query.mustNot(getType(vo));
+		 	    			}
+		 	    			if(vo.getMust().equals("should")){
+		 	    				
+		 	    				query.should(getType(vo));
+		 	    			}
+	    				
 	    			}
-	    			if(vo.getMust().equals("should")){
-	    				query.should(getType(vo));
-	    			}
+	    			
+	    			
 				}
 	    	}
 	    }
@@ -58,6 +92,7 @@ public class BaseController<T> {
 				q = QueryBuilders.prefixQuery(vo.getName(), quvalue);
 			}
 	    	else if(vo.getType().equals("queryStr")){
+	    		
 	    		q=QueryBuilders.queryString("\""+quvalue+"\"").field(vo.getName());
 			}
 	    	else if(vo.getType().equals("in")){

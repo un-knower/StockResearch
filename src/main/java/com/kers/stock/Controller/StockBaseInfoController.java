@@ -1,13 +1,10 @@
 package com.kers.stock.Controller;
 
-import io.searchbox.client.JestClient;
-
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.tomcat.jni.Time;
+import org.apache.commons.collections.list.TreeList;
 import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -16,17 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.kers.esmodel.BaseCommonConfig;
-import com.kers.staple.bean.Stap100PPI;
 import com.kers.stock.bean.StockBaseInfo;
 import com.kers.stock.storedata.CommonBaseStockInfo;
 import com.kers.stock.strage.SelGetStock;
 import com.kers.stock.strage.StrategySet;
 import com.kers.stock.utils.TimeUtils;
-import com.kers.stock.vo.StockBaseInfoVo;
 import com.kers.stock.vo.StockBasePageInfo;
+
+import io.searchbox.client.JestClient;
 
 @RestController
 public class StockBaseInfoController extends BaseController<StockBaseInfo> {
@@ -123,14 +118,15 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
 		
 		setQuery(query, page);
+	
 		List<StockBaseInfo> list = (List<StockBaseInfo>) SelGetStock.getfocDaysLstResult(query, page).get("items");
 
 		Set<String> legendData = Sets.newTreeSet();
 		Set<String> xAxisData = Sets.newTreeSet();
-		Map<String, SeriesBean> maps = Maps.newConcurrentMap();
+		Map<String, SeriesBean> maps = Maps.newTreeMap();
 
 		for (StockBaseInfo bean : list) {
-			legendData.add(bean.getStockName());
+  			legendData.add(bean.getStockName());
 //			if(!xAxisData.contains(bean.getDate()))
 //				System.out.println(bean.getDate());
 			xAxisData.add(bean.getDate());
@@ -139,7 +135,9 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 			String key=bean.getStockName().trim();
 			if ( maps.get(key)== null) {
 				SeriesBean beanss = new SeriesBean();
-				beanss.setData(Lists.newArrayList(bean.getRises()));
+				  TreeList sets= new TreeList();
+				  sets.add(bean.getRises());
+				beanss.setData(sets );
 				beanss.setName(bean.getStockName());
 				beanss.setType("line");
 				beanss.setStack("总量");
@@ -157,7 +155,19 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 
 		str[1] = xAxisData.toString().replace("[", "").replace("]", "");
 //		System.out.println(str[1]);
+//		List<Map.Entry<String, SeriesBean>> lstSort = new ArrayList<Map.Entry<String, SeriesBean>>(maps.entrySet());
+//		
+//		
+//		Collections.sort(list,new Comparator<Map.Entry<String,SeriesBean>>() {
+//            //升序排序
+//            public int compare(Entry<String, SeriesBean> o1,
+//                    Entry<String, SeriesBean> o2) {
+//                return o1.getVa().compareTo(o2.getValue());
+//            }
+//            
+//        });
 		str[2] = maps.values().toString();
+		System.out.println(str[2]);
 		//System.out.println(maps);
 		return str;
 

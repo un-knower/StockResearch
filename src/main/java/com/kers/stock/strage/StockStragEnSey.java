@@ -540,6 +540,7 @@ public class StockStragEnSey {
 //    			StockBaseInfo.setUpSumRises10(Rises10);
     			if(i>=1){
     				StockBaseInfo.setUpx(entries.get(i-1).getX());
+    				StockBaseInfo.setMacdUpNum(entries.get(i-1).getMacdNum());
     			}
     			if(i>=2){
     				StockBaseInfo.setUp2x(entries.get(i-2).getX());
