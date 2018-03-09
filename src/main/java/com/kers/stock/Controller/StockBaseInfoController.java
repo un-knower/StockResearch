@@ -124,48 +124,55 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		Set<String> legendData = Sets.newTreeSet();
 		Set<String> xAxisData = Sets.newTreeSet();
 		Map<String, SeriesBean> maps = Maps.newTreeMap();
-
+		Map<String, StockBaseInfo> m = Maps.newHashMap();
 		for (StockBaseInfo bean : list) {
   			legendData.add(bean.getStockName());
-//			if(!xAxisData.contains(bean.getDate()))
-//				System.out.println(bean.getDate());
 			xAxisData.add(bean.getDate());
-			
+			m.put(bean.getStockName().trim() + bean.getDate(), bean);
 			// maps.put(bean.getStockName(), bean);
-			String key=bean.getStockName().trim();
-			if ( maps.get(key)== null) {
-				SeriesBean beanss = new SeriesBean();
-				  TreeList sets= new TreeList();
-				  sets.add(bean.getRises());
-				beanss.setData(sets );
-				beanss.setName(bean.getStockName());
-				beanss.setType("line");
-				beanss.setStack("总量");
-				maps.put(key, beanss);
-			} else {
-				SeriesBean beanss = maps.get(key);
-				beanss.getData().add(bean.getRises());
-				maps.put(key, beanss);
-			}
-
+//			String key=bean.getStockName().trim();
+//			if ( maps.get(key)== null) {
+//				SeriesBean beanss = new SeriesBean();
+//				  TreeList sets= new TreeList();
+//				  sets.add(bean.getRises());
+//				beanss.setData(sets );
+//				beanss.setName(bean.getStockName());
+//				beanss.setType("line");
+//				beanss.setStack("总量");
+//				maps.put(key, beanss);
+//			} else {
+//				SeriesBean beanss = maps.get(key);
+//				beanss.getData().add(bean.getRises());
+//				maps.put(key, beanss);
+//			}
 		}
-		
+		for (String string : legendData) {
+			for (String x : xAxisData) {
+				String key2 = string + x;
+				if(null == m.get(key2)){
+					System.out.println("日期："+key2);
+				}else{
+					StockBaseInfo bean = m.get(key2);
+					String key=bean.getStockName().trim();
+					if ( maps.get(key)== null) {
+						SeriesBean beanss = new SeriesBean();
+						  TreeList sets= new TreeList();
+						  sets.add(bean.getRises());
+						beanss.setData(sets );
+						beanss.setName(bean.getStockName());
+						beanss.setType("line");
+						maps.put(key, beanss);
+					} else {
+						SeriesBean beanss = maps.get(key);
+						beanss.getData().add(bean.getRises());
+						maps.put(key, beanss);
+					}
+				}
+			}
+		}
 		Object[] str = new String[3];
 		str[0] = "data:\""+legendData.toString()+"\"";
-
 		str[1] = xAxisData.toString().replace("[", "").replace("]", "");
-//		System.out.println(str[1]);
-//		List<Map.Entry<String, SeriesBean>> lstSort = new ArrayList<Map.Entry<String, SeriesBean>>(maps.entrySet());
-//		
-//		
-//		Collections.sort(list,new Comparator<Map.Entry<String,SeriesBean>>() {
-//            //升序排序
-//            public int compare(Entry<String, SeriesBean> o1,
-//                    Entry<String, SeriesBean> o2) {
-//                return o1.getVa().compareTo(o2.getValue());
-//            }
-//            
-//        });
 		str[2] = maps.values().toString();
 		System.out.println(str[2]);
 		//System.out.println(maps);
@@ -250,7 +257,6 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 class SeriesBean {
 	private String name;
 	private String type;
-	private String stack;
 	private List data;
 
 	public String getName() {
@@ -269,13 +275,6 @@ class SeriesBean {
 		this.type = type;
 	}
 
-	public String getStack() {
-		return stack;
-	}
-
-	public void setStack(String stack) {
-		this.stack = stack;
-	}
 
 	public List getData() {
 		return data;
@@ -287,7 +286,7 @@ class SeriesBean {
 
 	@Override
 	public String toString() {
-		return "{name: '" + name + "', type:'" + type + "', stack:'" + stack + "', data:" + data + "}";
+		return "{name: '" + name + "', type:'" + type + "', data:" + data + "}";
 	}
 	
 	

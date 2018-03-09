@@ -71,6 +71,7 @@
                     <div id = "fh"></div>
                 </div>
             </div>
+            <div id = "fh2" style = "width:500px;"></div>
             <div style="text-align: center;margin-bottom: 5px;"><button id="btnCompare" class="btn"  onclick = "cmpData()" >对比</button></div>
             <table id="mmg" class="mmg">
                 <tr>
@@ -157,38 +158,37 @@
         	var myChart = echarts.init(dom);
         	var app = {};
         	option = null;
+        	
         	option = {
-        	    title: {
-        	        text: '折线图堆叠'
-        	    },
-        	    tooltip: {
-        	        trigger: 'axis'
-        	    },
-        	    legend:{
-        	    	legdatas
-        	    },
-        	    grid: {
-        	        left: '3%',
-        	        right: '4%',
-        	        bottom: '3%',
-        	        containLabel: true
-        	    },
-        	    toolbox: {
-        	        feature: {
-        	            saveAsImage: {}
-        	        }
-        	    },
-        	    xAxis: {
-        	        type: 'category',
-        	        boundaryGap: false,
-        	        data:result[1].split(",")//result[1].split(",")// ['周一','周二','周三','周四','周五','周六','周日']
-        	    },
-        	    yAxis: {
-        	        type: 'value'
-        	    },
-        	    series: eval(result[2])
-        	};
-        	;
+		    tooltip: {
+		        trigger: 'axis'
+		    },
+		    legend: {
+		        data:legdatas
+		    },
+		    grid: {
+		        top: 70,
+		        bottom: 50
+		    },
+		    xAxis: [
+		        {
+		            type: 'category',
+		            axisTick: {
+		                alignWithLabel: true
+		            },
+		            axisLine: {
+		                onZero: false
+		            },
+		            data: result[1].split(",")
+		        }
+		    ],
+		    yAxis: [
+		        {
+		            type: 'value'
+		        }
+		    ],
+		    series: eval(result[2])
+		};
         	if (option && typeof option === "object") {
         	    myChart.setOption(option, true);
         	}
