@@ -215,26 +215,17 @@ public class SchedulingConfig {
 	}
 	
 	
-	@Scheduled(cron = "0 0/5 * * * ?") 
+	@Scheduled(cron = "0 20 14 * * ?") 
     public void updateInfo2() {
-//		if(shijian()){
-//			try {
-//				wDataRealToEs();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-	}
-	
-	@Scheduled(cron = "0 05 15 * * ?") 
-    public void updateInfo() {
+		if(shijian()){
 			try {
-				if(shijian())
-				wDataRealToEs();
+				StoreAstockTradInfo.wDataRealToEs();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
 	}
+	
 	
 	@Scheduled(cron = "0 00 08 * * ?") 
     public void updateHisDate() {
@@ -268,37 +259,7 @@ public class SchedulingConfig {
 		}
 	}
 	
-	public  static  void  wDataRealToEs() throws Exception{
-//		List<String> lstSource = TextUtil.readTxtFile(FilePath.path);
-//		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
-//		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo();
-//		 
-//		for(final String  sat:lstSource){
-//			executorServiceLocal.execute(new Thread(){
-//				@Override
-//				public void run() {
-//			          try {
-//			        	  
-//			        	//  List<StockBaseInfo> lstInfo = StoreAstockTradInfo.getstockBaseInfo(sat ,  map.get(sat));
-//			      		List<StockDetailInfoBean>  lstInfo =StockDetailInfoHand.getDetailForLst();//Lists.newArrayList();//
-//
-//			        	  if(lstInfo.size() > 0){
-//			        		  if(!Double.isInfinite(lstInfo.get(0).getK()) &&
-//			        				  !Double.isInfinite(lstInfo.get(0).getD())){
-//			        			  StoreAstockTradInfo.insBatchEs(lstInfo, jestClient, "stockpcse");
-//			        		  }
-//			        	  }
-//					} catch (Exception e) {
-//						System.out.println(sat);
-//						e.printStackTrace();
-//					}
-//						
-//				}
-//			});
-//		}
-		
-	}
-	
+
 	public boolean shijian(){
 		Calendar ncalendar = Calendar.getInstance();
 		int H = ncalendar.get(Calendar.HOUR_OF_DAY);

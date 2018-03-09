@@ -147,11 +147,12 @@ public class StoreAstockTradInfo {
 	}
 	
 	public      static  void  wDataRealToEs() throws Exception{
-		List<String> lstSource = CommonBaseStockInfo.getAllAStockInfo();
+		List<StockDetailInfoBean> lstSource =StockDetailInfoHand.getDetailForLst();
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo();
 		 
-		for(final String  sat:lstSource){
+		for(final StockDetailInfoBean  bean:lstSource){
+			 final String sat=bean.getStockCode();
 //			if(sat.equals("603612")){
 			executorServiceLocal.execute(new Thread(){
 				@Override
@@ -401,5 +402,6 @@ public class StoreAstockTradInfo {
 		Thread.sleep(1000*60);
 //		System.out.println("start write Es data ");
 		wDataToEs();
+//		wDataRealToEs();
 	}
 	}
