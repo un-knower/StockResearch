@@ -129,44 +129,32 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
   			legendData.add(bean.getStockName());
 			xAxisData.add(bean.getDate());
 			m.put(bean.getStockName().trim() + bean.getDate(), bean);
-			// maps.put(bean.getStockName(), bean);
-//			String key=bean.getStockName().trim();
-//			if ( maps.get(key)== null) {
-//				SeriesBean beanss = new SeriesBean();
-//				  TreeList sets= new TreeList();
-//				  sets.add(bean.getRises());
-//				beanss.setData(sets );
-//				beanss.setName(bean.getStockName());
-//				beanss.setType("line");
-//				beanss.setStack("总量");
-//				maps.put(key, beanss);
-//			} else {
-//				SeriesBean beanss = maps.get(key);
-//				beanss.getData().add(bean.getRises());
-//				maps.put(key, beanss);
-//			}
 		}
 		for (String string : legendData) {
 			for (String x : xAxisData) {
 				String key2 = string + x;
-				if(null == m.get(key2)){
+				StockBaseInfo bean = m.get(key2);
+				float ri = 0;
+				if(null == bean){
 					System.out.println("日期："+key2);
+					bean = new StockBaseInfo();
+					bean.setStockName(string);
 				}else{
-					StockBaseInfo bean = m.get(key2);
-					String key=bean.getStockName().trim();
-					if ( maps.get(key)== null) {
-						SeriesBean beanss = new SeriesBean();
-						  TreeList sets= new TreeList();
-						  sets.add(bean.getRises());
-						beanss.setData(sets );
-						beanss.setName(bean.getStockName());
-						beanss.setType("line");
-						maps.put(key, beanss);
-					} else {
-						SeriesBean beanss = maps.get(key);
-						beanss.getData().add(bean.getRises());
-						maps.put(key, beanss);
-					}
+					ri = bean.getRises();
+				}
+				String key=bean.getStockName().trim();
+				if ( maps.get(key)== null) {
+					SeriesBean beanss = new SeriesBean();
+					  TreeList sets= new TreeList();
+					  sets.add(ri);
+					beanss.setData(sets );
+					beanss.setName(bean.getStockName());
+					beanss.setType("line");
+					maps.put(key, beanss);
+				} else {
+					SeriesBean beanss = maps.get(key);
+					beanss.getData().add(ri);
+					maps.put(key, beanss);
 				}
 			}
 		}
