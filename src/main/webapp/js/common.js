@@ -198,5 +198,5 @@
 	                html = html + ' <input type="button" class="form-control" onclick = "addFormDiv()" value = " + ">';            
 	                html = html + ' <input type="button" class="form-control" onclick = "delFormDiv(this)" value = " - "></div></div></from>';
             	}
-            	$('#fh').html(html);
+            	$('#fh').append(html);
             }

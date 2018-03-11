@@ -318,7 +318,7 @@ public class SelGetStock {
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "",
 				(page.getPage() - 1) * page.getLimit(), page.getLimit());
-
+             System.out.println(searchSourceBuilder.toString());
 		// final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
 		// StockSelStrag.queryGrowUpStock();//

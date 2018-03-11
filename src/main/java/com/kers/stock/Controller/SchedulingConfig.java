@@ -25,7 +25,6 @@ import com.kers.stock.bean.StockRealBean;
 import com.kers.stock.storedata.CommonBaseStockInfo;
 import com.kers.stock.storedata.RzRqHand;
 import com.kers.stock.storedata.StockDetailInfoHand;
-import com.kers.stock.storedata.StockDpZjlxHand;
 import com.kers.stock.storedata.StockOptionalSet;
 import com.kers.stock.storedata.StockZjlxHand;
 import com.kers.stock.storedata.StoreAstockTradInfo;
@@ -50,7 +49,7 @@ public class SchedulingConfig {
 	
 	public static String updateOptionDate = "";
 		
-	@Scheduled(cron = "0 00 02 * * ?") 
+	@Scheduled(cron = "0 00 11 * * ?") 
     public void updateDzsp() {
 		try {
 			MonthsStapleData.freshEsData();
@@ -67,7 +66,8 @@ public class SchedulingConfig {
     public void updateRzrq() {
 		//大盘
 		try {
-			if(shijian()){
+			
+			if(TimeUtils.tradeTime()){
 			RzRqHand.getAllDatas(0,"");
 			//个股
 			for (int i = 0; i < 30; i++) {
@@ -83,20 +83,20 @@ public class SchedulingConfig {
 	
 	@Scheduled(cron = "0 20 09 * * ?") 
     public void updateOmO20() {
-		if(shijian())
+		if(TimeUtils.tradeTime())
 		GovBankOMOHand.getBreakPointDatas();
 	}
 	
 	@Scheduled(cron = "0 30 11 * * ?") 
     public void updateOmO30() {
-		if(shijian())
+		if(TimeUtils.tradeTime())
 		GovBankOMOHand.getBreakPointDatas();
 	}
 	
 	@Scheduled(cron = "0 00 10 * * ?") 
     public void updateDetail10() {
 		try {
-			if(shijian())
+			if(TimeUtils.tradeTime())
 			StockDetailInfoHand.insBatchEsStore();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -105,7 +105,7 @@ public class SchedulingConfig {
 	@Scheduled(cron = "0 00 12 * * ?") 
     public void updateDetail12() {
 		try {
-			if(shijian())
+			if(TimeUtils.tradeTime())
 			StockDetailInfoHand.insBatchEsStore();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class SchedulingConfig {
 	@Scheduled(cron = "0 00 15 * * ?") 
     public void updateDetail15() {
 		try {
-			if(shijian())
+			if(TimeUtils.tradeTime())
 			StockDetailInfoHand.insBatchEsStore();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,10 +124,10 @@ public class SchedulingConfig {
 	@Scheduled(cron = "0 0/10 * * * ?") 
     public void updateZjlx() {
 		try {
-			if(shijian()){
+			if(TimeUtils.tradeTime()){
 				StockZjlxHand.impBkData();
 				StockZjlxHand.impGguData();
-				StockDpZjlxHand.impDpData();
+				StockZjlxHand.impDpData();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,9 +137,11 @@ public class SchedulingConfig {
 	@Scheduled(cron = "0 30 16 * * ?") 
     public void updateZjlx1530() {
 		try {
+			  if(TimeUtils.tradeTime()){
 				StockZjlxHand.impBkData();
 				StockZjlxHand.impGguData();
-				StockDpZjlxHand.impDpData();
+				StockZjlxHand.impDpData();
+			  }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -178,7 +180,7 @@ public class SchedulingConfig {
 	
 	@Scheduled(cron = "0/20 * * * * ?") //  
     public void updateOption() {
-		if(shijian()){
+		if(TimeUtils.tradeTime()){
 			String d = TimeUtils.getDate(TimeUtils.DATE_FORMAT);
 			if(updateOptionDate.equals("") || !updateOptionDate.equals(d)){
 				try {
@@ -217,7 +219,7 @@ public class SchedulingConfig {
 	
 	@Scheduled(cron = "0 20 14 * * ?") 
     public void updateInfo2() {
-		if(shijian()){
+		if(TimeUtils.tradeTime()){
 			try {
 				StoreAstockTradInfo.wDataRealToEs();
 			} catch (Exception e) {
@@ -230,7 +232,7 @@ public class SchedulingConfig {
 	@Scheduled(cron = "0 00 08 * * ?") 
     public void updateHisDate() {
 		try {
-			if(shijian())
+			if(TimeUtils.tradeTime())
 			StoreAstockTradInfo.getHistoryData();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -260,18 +262,5 @@ public class SchedulingConfig {
 	}
 	
 
-	public boolean shijian(){
-		Calendar ncalendar = Calendar.getInstance();
-		int H = ncalendar.get(Calendar.HOUR_OF_DAY);
-		int M = ncalendar.get(Calendar.MINUTE);
-		int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 2;
-		boolean k = true;
-		if(((H == 9 && M >= 30) || (H==10) || (H==11 && M <= 30) || (H==13) || (H==14)) 
-				&& w !=6 && w !=7){
-			k = true;
-		}else{
-			k = false;
-		}
-		return k;
-	}
+	 
 }

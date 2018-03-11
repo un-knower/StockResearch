@@ -6,12 +6,14 @@ import java.util.Map;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import com.google.common.collect.Maps;
+import com.kers.stock.storedata.CommonBaseStockInfo;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.Count;
 import io.searchbox.core.Count.Builder;
+import io.searchbox.core.Delete;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 
@@ -162,4 +164,29 @@ public class UtilEs {
 		 jestClient.execute(bulkBuilder.build());
 		 //jestClient.shutdownClient();
 	 }
+    /**
+     * 删除索引
+     * @param indexId
+     * @param indexName
+     * @param indexType
+     */
+    public  static  boolean deleteIndex( String indexName,String type,String id ) {
+        Delete.Builder builder = new Delete.Builder(indexName,type,id);
+        //builder.refresh(true);
+        Delete delete = builder.index(indexName).build();
+        try {
+        JestResult result =BaseCommonConfig.clientConfig().execute(delete);
+            if (result != null && result.isSucceeded()) {
+                throw new RuntimeException(result.getErrorMessage()+"删除索引失败!");
+            }
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    public static void main(String[] args) {
+     System.out.println(deleteIndex(CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "", ""));	;
+	}
 }

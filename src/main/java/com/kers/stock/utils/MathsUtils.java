@@ -3,12 +3,24 @@ package com.kers.stock.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 public class MathsUtils {
 	
 	
 	public  static double parseDouble(String input){
 		try {
 			return Double.parseDouble(input);
+		} catch (Exception e) {
+			//e.printStackTrace();
+			// TODO: handle exception
+		}
+		return 0;
+	}
+	
+	public  static float parseFloat(String input){
+		try {
+			return Float.parseFloat(input);
 		} catch (Exception e) {
 			//e.printStackTrace();
 			// TODO: handle exception
@@ -87,6 +99,12 @@ public class MathsUtils {
        return true; 
     }
 	
+    public static boolean objIsEmpty(String str){
+		if(StringUtils.isEmpty(str) || str.equals("0")||str.equals("None") ){
+			return true;
+		}
+		return false;
+	}
 	public static void main(String[] args) {
 		System.out.println(priceTrans("26%"));
 	}

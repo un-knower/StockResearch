@@ -183,10 +183,14 @@
 										<th>日期</th>
 										<th>code</th>
 										<th>名称</th>
-										<th>板块</th>
+										<th><a href = "javascript:void(0)" data1 = "industry" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">板块</a></th>
+										<th><a href = "javascript:void(0)" data1 = "sbType" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">类型</a></th>
+										<th><a href = "javascript:void(0)" data1 = "percent" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">当前涨幅</a></th>
 										<th><a href = "javascript:void(0)" data1 = "rises" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">涨幅</a></th>
 										<th><a href = "javascript:void(0)" data1 = "upSumRises3" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">3天涨</a></th>
 										<th><a href = "javascript:void(0)" data1 = "upSumRises5" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">5天涨</a></th>
+										<th><a href = "javascript:void(0)" data1 = "upRisesDay" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">连涨幅</a></th>
+									
 									</tr>
 								</thead>
 								<tbody class="no-border-x no-border-y" id = "longhu"></tbody>
@@ -202,10 +206,10 @@
 							<span class="pull-right"><a href = "#" onclick = "zhibiaoGo()">更多</a></span>
 							<span class="pull-right">
 								<select id = "zhibiaoSelect">
-									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;},{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;j&quot;,&quot;type&quot;:&quot;<&quot;,&quot;value&quot;:&quot;25&quot;}]' selected>KDJ金叉</option>
-									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]'>macd金叉</option>
-									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;}]'>KDJ死叉</option>
-									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;}]'>macd死叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;},{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;j&quot;,&quot;type&quot;:&quot;<&quot;,&quot;value&quot;:&quot;25&quot;},{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;lsImp&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]' selected>KDJ金叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;},{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;lsImp&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]'>macd金叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;},{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;lsImp&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]'>KDJ死叉</option>
+									<option value = '[{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;macdx&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;-1&quot;},{&quot;must&quot;:&quot;must&quot;,&quot;name&quot;:&quot;lsImp&quot;,&quot;type&quot;:&quot;=&quot;,&quot;value&quot;:&quot;0&quot;}]'>macd死叉</option>
 								</select>
 								&nbsp;&nbsp;&nbsp;&nbsp;</span>
 							<h4>指标榜</h4>
@@ -599,11 +603,14 @@
         	for(var i=0;i<item.length;i++){
         		html = html + "<tr><td>"+dsj(item[i]['date'])+"</td>";
         		html = html + "<td>"+item[i]['stockCode']+"</td>";
-        		html = html + "<td>"+item[i]['stockName']+"</td>";
+        		html = html + "<td><a href = 'javascript:void(0)' onclick = openDiv('"+item[i]['stockCode']+"')>"+item[i]['stockName']+"</a></td>"; 
         		html = html + "<td>"+item[i]['industry']+"</td>";
+        		html = html + "<td>"+item[i]['sbType']+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['percent'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['upSumRises3'])+"</td>";
-        		html = html + "<td>"+fixed2percentage(item[i]['upSumRises5'])+"</td></tr>";
+        		html = html + "<td>"+fixed2percentage(item[i]['upSumRises5'])+"</td>";
+        		html = html + "<td>"+fixed2percentage(item[i]['upRisesDay'])+"</td></tr>";
         	}
         	$('#longhu').html(html);
         	if(num == 1){

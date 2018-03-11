@@ -1,5 +1,6 @@
 package com.kers.stock.Controller;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +16,9 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.stock.bean.StockBaseInfo;
+import com.kers.stock.bean.StockOptionalInfo;
 import com.kers.stock.storedata.CommonBaseStockInfo;
+import com.kers.stock.storedata.ZxzbHand;
 import com.kers.stock.strage.SelGetStock;
 import com.kers.stock.strage.StrategySet;
 import com.kers.stock.utils.TimeUtils;
@@ -36,23 +39,22 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 	/**
 	 * 
 	 * @description
-	 * 	1.当日涨幅>=10% 或0
-			2.两天涨幅超过15% 
-			3.5天涨幅超过3天
-			4.成交量大于前一日交易量2倍
-			5.j值=0   》=2
-			
-			//3.5天内三天涨幅>0 
-			//4.5天内涨超过15% 
-			//5.10天内涨超过15% "
-								
-				次新股除外（上市时间超过6个月）   三点前查前一天数据（注意周六周日 向前减1,2天）				
+	 * 	1.当日涨幅>=10% 或0 2.两天涨幅超过15% 3.5天涨幅超过3天4.成交量大于前一日交易量2倍5.j值=0   》=2
+
+				次新股除外（上市时间超过6个月）   三点前查前一天数据（注意周六周日 向前减1,2天）		
+						每天五点执行一次 七点检查 早上九点检查 
+1.新加一张表 新导入数据（cvs只要近20天的数据）
+在导入的是做判断只需 三天涨幅超22%或者5天涨幅超33%数据（开板新股除外）
+成交量放大10倍并且rise>0
 	 */
 	@RequestMapping("/getListLonghu")
 	public Map<String, Object> getListLonghu(StockBasePageInfo page) throws Exception {
 		//获取查询时间
-		String date = TimeUtils.getStockDate();
-		String dateJson = "{\"must\":\"must\",\"name\":\"date\",\"type\":\"=\",\"value\":\""+date+"\"}]";
+		String date = TimeUtils.getaLstTradeDate();
+		System.out.println(date);
+		String dateJson = "{\"must\":\"must\",\"name\":\"date\",\"type\":\"=\",\"value\":\""+date+"\"},";
+		dateJson += "{\"must\":\"must_not\",\"name\":\"stockCode\",\"type\":\"prefix\",\"value\":\""+3+"\"},";
+		  dateJson+= "{\"must\":\"must\",\"name\":\"lsImp\",\"type\":\"=\",\"value\":\""+1+"\"}]";
 		String json = page.getDatas();
 		if(json.length() > 10){
 			dateJson = "," + dateJson;
@@ -61,11 +63,28 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		page.setDatas(json);
 //		int pageStart = page.getPage();
 //		int limit = page.getLimit();
-//		page.setLimit(5000);
+		page.setLimit(50);
 //		page.setPage(0);
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
 		setQuery(query, page);
-		return SelGetStock.getLstResult(query, page);
+		 Map<String, Object>  mapRes= SelGetStock.getLstResult(query, page);
+		List<StockBaseInfo>   lstRes=(List<StockBaseInfo>)SelGetStock.getLstResult(query, page).get("items");
+		for(StockBaseInfo  baseInfo:lstRes){
+		 
+			StockOptionalInfo stockOptionalInfo = ZxzbHand.mapsNdzData.get(baseInfo.getStockCode());
+			    if(baseInfo.getSbType().equals("rise2Up")){
+			    	
+			    	if(stockOptionalInfo!=null&&stockOptionalInfo.getPercent()<0){
+			    		lstRes.remove(baseInfo);
+			    		System.err.println("Strong rise lose :"+baseInfo.getStockName());
+			    	}
+			    	//else 
+			    		
+			    }
+			    baseInfo.setPercent(stockOptionalInfo==null?0:stockOptionalInfo.getPercent());
+		}
+		mapRes.put("items", lstRes);
+		return mapRes;
 	}
 	/**
 	 * 指标榜
@@ -125,18 +144,59 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		Set<String> xAxisData = Sets.newTreeSet();
 		Map<String, SeriesBean> maps = Maps.newTreeMap();
 		Map<String, StockBaseInfo> m = Maps.newHashMap();
+		int i=0;
+		//System.out.println(list);
+		 Map<String,StockBaseInfo> mapSource = Maps.newConcurrentMap();
+		 double nn=0;
+		 double mm=0;
+		 double  hhh=0;
+		 String name="";
 		for (StockBaseInfo bean : list) {
+			String stockName =bean.getStockName();
+			if(stockName.startsWith("XD")||stockName.startsWith("DR")){
+				 stockName=list.get(i-1).getStockName();
+				 bean.setStockName(stockName);
+			}
   			legendData.add(bean.getStockName());
 			xAxisData.add(bean.getDate());
 			m.put(bean.getStockName().trim() + bean.getDate(), bean);
+			i++;
+			if(mapSource.get(bean.getDate())!=null){
+				mm++;
+				StockBaseInfo  beanNw = mapSource.get(bean.getDate());
+				if(beanNw.getRises()>bean.getRises()){
+					name=beanNw.getStockName();
+				nn++;	
+				}
+				if((beanNw.getRises()>0&&bean.getRises()<0)||(beanNw.getRises()<0&&bean.getRises()>0)){
+					if(Math.abs(beanNw.getRises()+bean.getRises())>1){
+					System.out.println(beanNw.getRises()+" ==>"+bean.getRises());
+					hhh++;
+					}
+				}
+			}
+			mapSource.put(bean.getDate(), bean);
 		}
+		  String  rise1=String.format("%.2f",(nn/mm)*100);
+		  String rise2=String.format("%.2f",((hhh/mm)*100));
+		  String lout="";
+		  if(Double.parseDouble(rise1)<50)
+			  lout="(弱势)";
+		  else
+			  lout="(强势)";
+		  if(Double.parseDouble(rise2)<=8.8) {//在同一成长周期
+		  }else
+			  rise2+="(不同周期)";
+		  
+		System.out.println("总数为:"+mm+"	"+name+"涨幅超过天数为:"+nn+"  占比:"+rise1+lout+"  差异占比为:"+rise2);
+		
 		for (String string : legendData) {
 			for (String x : xAxisData) {
 				String key2 = string + x;
 				StockBaseInfo bean = m.get(key2);
 				float ri = 0;
 				if(null == bean){
-					System.out.println("日期："+key2);
+					//System.out.println("日期："+key2);
 					bean = new StockBaseInfo();
 					bean.setStockName(string);
 				}else{
@@ -162,7 +222,7 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		str[0] = "data:\""+legendData.toString()+"\"";
 		str[1] = xAxisData.toString().replace("[", "").replace("]", "");
 		str[2] = maps.values().toString();
-		System.out.println(str[2]);
+		//System.out.println(str[2]);
 		//System.out.println(maps);
 		return str;
 

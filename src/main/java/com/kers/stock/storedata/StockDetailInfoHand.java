@@ -46,6 +46,23 @@ public class StockDetailInfoHand {
 		return lstBean;
 
 	}
+	
+	public static List<StockDetailInfoBean> getAllStockDetailForLst() throws Exception {
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
+		BoolQueryBuilder query = QueryBuilders.boolQuery();
+
+		ssb.query(query);
+		//query.mustNot(QueryBuilders.inQuery("stockCode", StockSelStrag.allBlckStockLst()));
+		//query.mustNot(QueryBuilders.prefixQuery("stockCode", "3"));
+		Search selResult = UtilEs.getSearch(ssb, CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO,
+				CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO, 0, 5000);
+		JestResult results =  BaseCommonConfig.clientConfig().execute(selResult);
+		List<StockDetailInfoBean> lstBean = results.getSourceAsObjectList(StockDetailInfoBean.class);
+		
+		
+		return lstBean;
+
+	}
 	public static List<StockDetailInfoBean> getDetailForNetLst() throws ClientProtocolException, IOException, ParseException  {
 		CsvHandUtils csvHandUtils = new CsvHandUtils(BaseConnClient.baseGetReqToStream(CommonBaseStockInfo.DETAIL_CONNPATH));
 		List<List<String>> lstSource = csvHandUtils.readCSVFile();
@@ -80,7 +97,7 @@ public class StockDetailInfoHand {
 //		Search selResult = UtilEs.getSearch(ssb, CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO,
 //				CommonBaseStockInfo.ES_INDEX_STOCK_DETAILINFO, 0, 3800);
 //		JestResult results =  BaseCommonConfig.clientConfig().execute(selResult);
-		List<StockDetailInfoBean> lstBean =getDetailForLst();// results.getSourceAsObjectList(StockDetailInfoBean.class);
+		List<StockDetailInfoBean> lstBean =getAllStockDetailForLst();// results.getSourceAsObjectList(StockDetailInfoBean.class);
 		for (StockDetailInfoBean detailInfoBean : lstBean) {
 			mapSource.put(detailInfoBean.getStockCode(), detailInfoBean);
 		}

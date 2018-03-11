@@ -26,8 +26,9 @@ public class TimeUtils {
 	// public static final SimpleDateFormat FORMAT_FULL_DATETIME_LONG = new
 	// SimpleDateFormat("yyyyMMddHHmmss");
 	
+	
+	
 	public static void main(String[] args) {
-		
 //		System.out.println(TimeUtils.toString(TimeUtils.addDay(new Date(), -180), TimeUtils.DEFAULT_DATEYMD_FORMAT));
 //		System.out.println(TimeUtils.getStockDate());
 //		Calendar cal1 = Calendar.getInstance();
@@ -1301,6 +1302,26 @@ public class TimeUtils {
     	return format.format(ncalendar.getTime());
     }
     
+    public static String getaLstTradeDate(){
+		 
+		 
+		SimpleDateFormat  format = new  SimpleDateFormat("yyyy-MM-dd" );  
+    	 Calendar c = Calendar.getInstance();  
+    	 c.setTime(new Date());  
+    	 int  dayForWeek = 0 ;  
+    	 if (c.get(Calendar.DAY_OF_WEEK) == 1 ){  
+    	  dayForWeek = 7 ;  
+    	 }else {  
+    	  dayForWeek = c.get(Calendar.DAY_OF_WEEK) - 1 ;  
+    	 }  
+    	   int  uDay=-1;
+    	  if(dayForWeek==7)
+    		  uDay=-2;
+    	  if(dayForWeek==1)
+    		  uDay=-3;
+    	 return   format.format(addDay(new Date(), uDay));
+    } 
+    
     /**
      * 日期转星期
      * 
@@ -1341,4 +1362,19 @@ public class TimeUtils {
          }
     	return f.format(cal.getTime());
     }
+    
+    public static  boolean tradeTime(){
+		Calendar ncalendar = Calendar.getInstance();
+		int H = ncalendar.get(Calendar.HOUR_OF_DAY);
+		int M = ncalendar.get(Calendar.MINUTE);
+		int w = ncalendar.get(Calendar.DAY_OF_WEEK) - 2;
+		boolean k = true;
+		if(((H == 9 && M >= 30) || (H==10) || (H==11 && M <= 30) || (H==13) || (H==14)) 
+				&& w !=6 && w !=7){
+			k = true;
+		}else{
+			k = false;
+		}
+		return k;
+	}
 }

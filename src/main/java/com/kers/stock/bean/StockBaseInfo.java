@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.kers.stock.utils.MathsUtils;
+
 public class StockBaseInfo implements Serializable {
 
 	/**
@@ -16,6 +18,7 @@ public class StockBaseInfo implements Serializable {
 	private String industry;
 	
 	private String date;
+	private double percent;//当前涨幅
 	private float up2Rises;//上上一天涨幅
 	private float upRises = 0; //上一天涨幅
 	private float rises = 0;
@@ -142,6 +145,9 @@ public class StockBaseInfo implements Serializable {
 	private float szxBl = 0;
 	//十字星天数
 	private int szxNum = 0;
+	
+	private String sbType="";
+	private int   lsImp;//是否临时导入  1龙虎榜临时导入
 	/**
 	 * 自定义分时图用的数据
 	 *
@@ -402,7 +408,7 @@ public class StockBaseInfo implements Serializable {
 		this.low = Float.parseFloat(low);
 		this.close = Float.parseFloat(close);
 		this.volume = Long.parseLong(volume);
-		this.rises = Float.parseFloat(rises);
+		this.rises = MathsUtils.parseFloat(rises);
 		this.stockCode = stockCode;
 		this.stockName = stockName;
 		this.hslv = hslv;
@@ -958,6 +964,30 @@ public class StockBaseInfo implements Serializable {
 
 	public void setMacdUpNum(int macdUpNum) {
 		this.macdUpNum = macdUpNum;
+	}
+
+	public String getSbType() {
+		return sbType;
+	}
+
+	public void setSbType(String sbType) {
+		this.sbType = sbType;
+	}
+
+	public int getLsImp() {
+		return lsImp;
+	}
+
+	public void setLsImp(int lsImp) {
+		this.lsImp = lsImp;
+	}
+
+	public double getPercent() {
+		return percent;
+	}
+
+	public void setPercent(double percent) {
+		this.percent = percent;
 	}
 	
 	

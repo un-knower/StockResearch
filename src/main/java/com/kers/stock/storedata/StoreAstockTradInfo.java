@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.esmodel.QueryComLstData;
+import com.kers.esmodel.UtilEs;
 import com.kers.httpmodel.BaseConnClient;
 import com.kers.stock.bean.StockBaseInfo;
 import com.kers.stock.bean.StockDetailInfoBean;
@@ -35,7 +36,9 @@ import com.kers.stock.utils.TimeUtils;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Bulk;
+import io.searchbox.core.Bulk.Builder;
 import io.searchbox.core.Index;
+import io.searchbox.indices.DeleteIndex;
 
 public class StoreAstockTradInfo {
 
@@ -49,7 +52,7 @@ public class StoreAstockTradInfo {
 	public static void getHistoryData() throws Exception {
 		  final String  sfd=new SimpleDateFormat("yyyyMMdd").format(new Date());
 //		List<String> filePath =CommonBaseStockInfo.getAllAStockInfo();// FileUtils.readLines(new File(CommonBaseStockInfo.astockfilePath));
-		List<StockDetailInfoBean>  lstBean =StockDetailInfoHand.getDetailForLst();//Lists.newArrayList();//
+		List<StockDetailInfoBean>  lstBean =StockDetailInfoHand.getDetailForNetLst();//Lists.newArrayList();//
 		
 		//深证成指
 		
@@ -65,7 +68,7 @@ public class StoreAstockTradInfo {
 						scode=code;
 					//String scode = s.startsWith("6") ? "0" + code : "1" + code;
 					 
-					String webUri = stockHisCrawUrl + scode + "&start=20170701&end="+sfd;
+					String webUri = stockHisCrawUrl + scode + "&start=20170101&end="+sfd;
 					try {
 						HttpClientEx.downloadFromUri(webUri, FilePath.savePathsuff + code + ".csv");
 					} catch (Exception e) {
@@ -79,29 +82,16 @@ public class StoreAstockTradInfo {
 
 	}
 
-	public static List<StockBaseInfo> getstockBaseInfoFile(String stockCode , StockDetailInfoBean info,StoreTrailer  storeTrailer) throws Exception {
+	public static List<StockBaseInfo> getstockBaseInfoFile( StockBaseInfo  beanParam , StockDetailInfoBean info,StoreTrailer  storeTrailer) throws Exception {
+		String stockCode=beanParam.getStockCode();
 		  final StockStragEnSey stockStragEnSey = new StockStragEnSey();
 		String absPath = FilePath.savePathsuff + stockCode + ".csv";
 		CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
 		List<List<String>> lstSource = csvHandUtils.readCSVFile();
-//		 DecimalFormat df = new DecimalFormat("#.00");
 		List<StockBaseInfo> result = Lists.newArrayList();
 		for (int i = lstSource.size() - 1; i >=1; i--) {
-			// List<String> llData=
 			List<String> objdata = lstSource.get(i);
-			// System.out.println(lstSource.get(i).get(1));
-			//Integer.parseInt(
 			//日期,股票代码,名称,收盘价,最高价,最低价,开盘价,前收盘,涨跌额,涨跌幅,换手率(10),成交量,成交金额(12),总市值(13),流通市值(14),成交笔数(15)
-			//String date, String open, String high, String low, String close, String volume, String rises,
-	
-//		//,成交金额,总市值,流通市值,成交笔数
-//			System.out.println(objdata);
-//			System.out.println(objdata.size());
-//			String date, String open, String high, String low, String close, String volume, String rises,
-//			String stockCode, String stockName, String hslv, String String, String zsz, String ltsz, String cjbs,
-//			String dayForWeek
-			
-			//System.out.println(stockBaseInfo.toString());
 			if(!(objIsEmpty(objdata.get(6))||objIsEmpty(objdata.get(3))||objIsEmpty(objdata.get(4))||objIsEmpty(objdata.get(5))||objdata.get(9).equals("None"))){///|StringUtils.isBlank(stockBaseInfo.getCjbs()))){//!(stockBaseInfo.getOpen()==0||stockBaseInfo.getClose()==0||stockBaseInfo.getHigh()==0||stockBaseInfo.getLow()==0||StringUtils.isBlank(stockBaseInfo.getCjbs()))){
 				String volumn=objdata.get(11);
 				
@@ -126,6 +116,8 @@ public class StoreAstockTradInfo {
 					stockBaseInfo.setNpe(npe);
 				}
 				//002252
+				stockBaseInfo.setSbType(beanParam.getSbType());
+			   stockBaseInfo.setLsImp(beanParam.getLsImp());
 				if(stockBaseInfo.getZsz()>0||((CommonBaseStockInfo.SPEC_STOCK_CODE_SH.equals(stockCode)||CommonBaseStockInfo.SPEC_STOCK_CODE_SZ.equals(stockCode))))//排除停牌情况
 				result.add(stockBaseInfo);
 			}
@@ -323,38 +315,43 @@ public class StoreAstockTradInfo {
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo(); //getInfoByCsv();
 		 final Map<String , StoreTrailer> mapStoreTrailer =QueryComLstData.getStoreTrailerMapsInfo(); //getInfoByCsv();
+		 UtilEs.deleteIndex(CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "", "");
 		 
 		 
-		for(final StockDetailInfoBean  bean:lstSource){
-			 final String sat=bean.getStockCode();
-		//	if(sat.equals("0000001")||sat.equals(CommonBaseStockInfo.SPEC_STOCK_CODE_SZ)){
-			//	System.out.println(sat);
-//				try {
-//					List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat ,  map.get(sat));
-//		  			 insBatchEs(lstInfo, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
-//				} catch (Exception e) {
-//					// TODO: handle exception
-				
-//			
-//			}
+		for(final StockDetailInfoBean  bean:lstSource){ //导入基础数据
+			 final String stockCode=bean.getStockCode();
+			final  StockBaseInfo stockBaseInfo = new StockBaseInfo();
+			 stockBaseInfo.setStockCode(stockCode);
 			executorServiceLocal.execute(new Thread(){
 				@Override
 				public void run() {
 			          try {
-			        	 List<StockBaseInfo> lstInfo = getstockBaseInfoFile(sat ,  map.get(sat),mapStoreTrailer.get(sat));
-			     //   	 System.out.println(lstInfo);
+			        	 List<StockBaseInfo> lstInfo = getstockBaseInfoFile(stockBaseInfo ,  map.get(stockCode),mapStoreTrailer.get(stockCode));
 			  			 insBatchEs(lstInfo, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
 					} catch (Exception e) {
-						System.out.println(sat);
+						System.out.println(stockCode);
 						e.printStackTrace();
 					}
-						
 				}
 			});
-		//	}
 		}
-//	}
-		
+		 //导入特殊数据  龙虎榜 最近火热数据
+		 List<StockBaseInfo>  lstEcho=StockStrongRiseHand.getstockBaseInfoFile();
+			for(final StockBaseInfo  bean:lstEcho){ //导入基础数据
+				 final String stockCode=bean.getStockCode();
+				executorServiceLocal.execute(new Thread(){
+					@Override
+					public void run() {
+				          try {
+				        	 List<StockBaseInfo> lstInfo = getstockBaseInfoFile(bean ,  map.get(stockCode),mapStoreTrailer.get(stockCode));
+				  			 insBatchEs(lstInfo, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
+						} catch (Exception e) {
+							System.out.println(stockCode);
+							e.printStackTrace();
+						}
+					}
+				});
+			}
 	}
 	
 //	public static Map<String , StockFuncDetailInfo> getInfoByCsv() throws IOException{
@@ -396,12 +393,14 @@ public class StoreAstockTradInfo {
 	}
 	public static void main(String[] args) throws ClientProtocolException, IOException, Exception {
 		
-		getHistoryData();
+//		getHistoryData();
 //		executorServiceLocal.shutdown();
 //		 System.out.println(getAllLastStockInfo());
-		Thread.sleep(1000*60);
+//		Thread.sleep(1000*60);
 //		System.out.println("start write Es data ");
 		wDataToEs();
+		//Thread.sleep(1000*60);
+		//executorServiceLocal.shutdown();
 //		wDataRealToEs();
 	}
 	}
