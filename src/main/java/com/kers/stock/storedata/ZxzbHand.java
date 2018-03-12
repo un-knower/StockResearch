@@ -64,7 +64,7 @@ public class ZxzbHand {
 	public static void getBreakPointDatas(final Map<String, StockOptionalInfo> map) throws Exception {
 		String d = TimeUtils.getStockDate();
 
-		if (TimeUtils.tradeTime()) {
+	//	if (TimeUtils.tradeTime()) {
 			StockBasePageInfo page = new StockBasePageInfo();
 			final DecimalFormat df = new DecimalFormat("#.00");
 			BoolQueryBuilder query = QueryBuilders.boolQuery();
@@ -117,7 +117,7 @@ public class ZxzbHand {
 					}
 				});
 
-			}
+		//	}
 		}
 	}
 	
