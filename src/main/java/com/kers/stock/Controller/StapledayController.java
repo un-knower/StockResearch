@@ -9,6 +9,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,9 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.kers.esmodel.SelEsRelt;
 import com.kers.httpmodel.BaseConnClient;
 import com.kers.staple.bean.Stap100PPI;
 import com.kers.stock.bean.StockBaseInfo;
+import com.kers.stock.bean.StockZjlx;
+import com.kers.stock.bean.jyfx.JyfxInfo;
 import com.kers.stock.storedata.CommonBaseStockInfo;
 import com.kers.stock.strage.SelGetStock;
 import com.kers.stock.utils.MathsUtils;
@@ -56,7 +60,8 @@ public class StapledayController  extends BaseController<Stap100PPI>{
 		}
         return str;
     }
-    
+	
+	
     @RequestMapping("/stapleday/getClassNameList")
     public String[] getClassNameList() throws Exception {
     	

@@ -2,15 +2,18 @@ package com.kers.stock.storedata;
 
 import java.io.File;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.common.collect.Maps;
 
 import com.google.common.collect.Lists;
 import com.kers.esmodel.QueryComLstData;
 import com.kers.stock.bean.StockBaseInfo;
 import com.kers.stock.bean.StockDetailInfoBean;
+import com.kers.stock.strage.StockSelStrag;
 import com.kers.stock.utils.CsvHandUtils;
 import com.kers.stock.utils.FilePath;
 import com.kers.stock.utils.TimeUtils;
@@ -27,7 +30,29 @@ public class StockStrongRiseHand {
 
 			String absPath = file.getAbsolutePath();
 			CsvHandUtils csvHandUtils = new CsvHandUtils(absPath);
-			List<List<String>> lstSource = csvHandUtils.readCSVFile();
+			List<List<String>> lstSourceStr = csvHandUtils.readCSVFile();
+			List<List<String>> lstSource = Lists.newArrayList();
+                   int maxNum=lstSourceStr.size()>=50?50:lstSourceStr.size();
+                   
+                   
+			for (int j = 0; j < maxNum; j++) {
+				try {
+					
+			
+				List<String> objdata = lstSourceStr.get(j);
+				// StockBaseInfo bean =getBeanFromStr(lstStr);
+				if (!(objIsEmpty(objdata.get(6)) || objIsEmpty(objdata.get(3)) || objIsEmpty(objdata.get(4))
+						|| objIsEmpty(objdata.get(5)) || objdata.get(9).equals("None"))) {
+					lstSource.add(objdata);
+				}
+				
+				
+				
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+
 			if (!lstSource.isEmpty() && lstSource.size() > 30) {
 				StockBaseInfo objdata = getBeanFromStr(lstSource.get(1));
 				StockBaseInfo objdata2 = getBeanFromStr(lstSource.get(2));
@@ -40,9 +65,13 @@ public class StockStrongRiseHand {
 
 				// if (lstSource.size() < 30) {// 次新股排除
 				String stockCode = objdata.getStockCode().substring(1);
-				if (!stockCode.startsWith("3")) {
+				if (!stockCode.startsWith("3")&&(objdata.getRises()+objdata2.getRises()>-5)) {
 					String oup1 = objdata.getStockName();
 					StockDetailInfoBean bean = map.get(stockCode);
+					
+					oup1 = null != bean ? bean.getIndustry() + "   " + objdata.getStockName()
+					: objdata.getStockName();
+					
 					if (rise5 >= 33) {
 
 						double rrr = rise5 - rise3;
@@ -53,15 +82,21 @@ public class StockStrongRiseHand {
 									: "rise5Up";
 							if (objdata.getRises() >= 9.7 && objdata2.getRises() >= 9.7 && objdata3.getRises() >= 9.7)
 								output = "rise53Up";
-							if (objdata.getRises() >= 9.7 && objdata2.getRises() >= 9.7 && objdata3.getRises() >= 0
+							else if (objdata.getRises() >= 9.7 && objdata2.getRises() >= 9.7 && objdata3.getRises() >= 0
 									&& objdata4.getRises() >= 9.7)
 								output = "rise54Up";
-							if (objdata.getRises() >= 9.7 && objdata2.getRises() >= 9.7 && objdata3.getRises() >= 0
+							else if (objdata.getRises() >= 9.7 && objdata2.getRises() >= 9.7 && objdata3.getRises() >= 0
 									&& objdata4.getRises() >= 0 && objdata5.getRises() >= 9.7)
 								output = "rise55Up";
+							else {
+								if(!(objdata.getRises()<0&&objdata2.getRises()<0&&(objdata.getRises()+objdata2.getRises()<-5))){
+									output = "rise51Up";
+								}
+							
+							}
+								
 
-							oup1 = null != bean ? bean.getIndustry() + "   " + objdata.getStockName()
-									: objdata.getStockName();
+							 
 
 							StockBaseInfo baseInfo = new StockBaseInfo();
 							baseInfo.setSbType(output);
@@ -69,6 +104,7 @@ public class StockStrongRiseHand {
 							baseInfo.setLsImp(1);
 							mapSource.put(stockCode, baseInfo);
 							result.add(baseInfo);
+							StockSelStrag.allBlckStockLst().remove(baseInfo.getStockCode());
 							System.out.println(output + "  " + oup1 + "    " + stockCode + "   rise3:"
 									+ String.format("%.2f", rise3) + "  rise5:" + String.format("%.2f", rise5));
 						}
@@ -77,8 +113,7 @@ public class StockStrongRiseHand {
 								: "rise3Up";
 						if (objdata.getRises() >= 9.7 && objdata2.getRises() >= 9.7 && objdata3.getRises() >= 9.7)
 							output = "rise33Up";
-						oup1 = null != bean ? bean.getIndustry() + "   " + objdata.getStockName()
-								: objdata.getStockName();
+						
 
 						StockBaseInfo baseInfo = new StockBaseInfo();
 						baseInfo.setSbType(output);
@@ -86,13 +121,13 @@ public class StockStrongRiseHand {
 						baseInfo.setLsImp(1);
 						mapSource.put(stockCode, baseInfo);
 						result.add(baseInfo);
+						StockSelStrag.allBlckStockLst().remove(baseInfo.getStockCode());
 						System.out.println(output + "  " + oup1 + "    " + stockCode + "   rise3:"
 								+ String.format("%.2f", rise3) + "  rise5:" + String.format("%.2f", rise5));
 					} else if ((objdata.getRises() >= 9.7 && objdata2.getRises() >= 9.7)) {
 
 						String output = "rise2Up";
-						oup1 = null != bean ? bean.getIndustry() + "   " + objdata.getStockName()
-								: objdata.getStockName();
+						 
 
 						StockBaseInfo baseInfo = new StockBaseInfo();
 						baseInfo.setSbType(output);
@@ -100,13 +135,59 @@ public class StockStrongRiseHand {
 						baseInfo.setLsImp(1);
 						mapSource.put(stockCode, baseInfo);
 						result.add(baseInfo);
+						StockSelStrag.allBlckStockLst().remove(baseInfo.getStockCode());
 						System.out.println(output + "  " + oup1 + "    " + stockCode + "   rise3:"
 								+ String.format("%.2f", rise3) + "  rise5:" + String.format("%.2f", rise5));
+					}else{
+					StockBaseInfo objdata6 = getBeanFromStr(lstSource.get(6));
+					StockBaseInfo objdata7 = getBeanFromStr(lstSource.get(7));
+					StockBaseInfo objdata8 = getBeanFromStr(lstSource.get(8));
+					
+					
+					float  totoalRise=objdata.getRises()+objdata2.getRises()+objdata3.getRises()+objdata4.getRises()+objdata5.getRises()+
+							 objdata6.getRises()+objdata7.getRises()+objdata8.getRises();
+					 int nnn=0;
+					for (int i = 1; i <11; i++) {
+						 float riseseach=	getBeanFromStr(lstSource.get(i)).getRises();
+						 if(riseseach>=0)
+							 nnn++;
+						}
+//					if(objdata.getStockCode().equals("'002631")){
+//						System.out.println(totoalRise);
+//						System.out.println(objdata.getRises()>=0&&objdata2.getRises()>=0&&objdata3.getRises()>=0&&objdata4.getRises()>=0&&objdata5.getRises()>=0
+//							&&objdata6.getRises()>=0&&objdata7.getRises()>=0&&objdata8.getRises()>=0);
+//					}
+					if(objdata.getRises()>=0&&objdata2.getRises()>=0&&objdata3.getRises()>=0&&objdata4.getRises()>=0&&objdata5.getRises()>=0
+							&&objdata6.getRises()>=0&&objdata7.getRises()>=0&&objdata8.getRises()>=0&&totoalRise>10){
+						StockBaseInfo baseInfo = new StockBaseInfo();
+						String output = "upRise8";
+						baseInfo.setSbType(output);
+						baseInfo.setStockCode(stockCode);
+						baseInfo.setLsImp(2);
+						result.add(baseInfo);
+						StockSelStrag.allBlckStockLst().remove(baseInfo.getStockCode());
+						System.out.println(output + "  " + oup1 + "    " + stockCode + "   rise3:"
+								+ String.format("%.2f", rise3) + "  rise5:" + String.format("%.2f", rise5));
+					}else if(nnn>=8&&totoalRise>=15&&rise5>=12&&rise3>=8&&(objdata.getRises()>0||objdata2.getRises()>0)&&(objdata.getRises()>-4&&objdata2.getRises()>-4)) {
+						
+						if((objdata.getClose()-objdata.getOpen())/objdata.getOpen()>0.03&&TimeUtils.countDays(TimeUtils.toDate(objdata.getDate(), TimeUtils.DEFAULT_DATEYMD_FORMAT), new Date())<=7){
+						StockBaseInfo baseInfo = new StockBaseInfo();
+						String output = "upRiseU8";
+						baseInfo.setSbType(output);
+						baseInfo.setStockCode(stockCode);
+						baseInfo.setLsImp(22);
+						result.add(baseInfo);
+						StockSelStrag.allBlckStockLst().remove(baseInfo.getStockCode());
+						System.out.println(output + "  " + oup1 + "    " + stockCode + "   rise3:"
+								+ String.format("%.2f", rise3) + "  rise5:" + String.format("%.2f", rise5));
+						}
 					}
-
 					// || (rise3 >= 22) || (rise5 >= 33)
 					// }
-				}
+				}}
+				
+				
+			
 			}
 		}
 		return result;
@@ -125,4 +206,10 @@ public class StockStrongRiseHand {
 		getstockBaseInfoFile();
 	}
 
+	public static boolean objIsEmpty(String str) {
+		if (StringUtils.isEmpty(str) || str.equals("0") || str.equals("None")) {
+			return true;
+		}
+		return false;
+	}
 }

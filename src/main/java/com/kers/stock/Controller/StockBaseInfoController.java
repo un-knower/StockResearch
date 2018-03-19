@@ -50,11 +50,10 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 	@RequestMapping("/getListLonghu")
 	public Map<String, Object> getListLonghu(StockBasePageInfo page) throws Exception {
 		//获取查询时间
-		String date = TimeUtils.getaLstTradeDate();
-		System.out.println(date);
+		String date = TimeUtils.getStockDate();
 		String dateJson = "{\"must\":\"must\",\"name\":\"date\",\"type\":\"=\",\"value\":\""+date+"\"},";
 		dateJson += "{\"must\":\"must_not\",\"name\":\"stockCode\",\"type\":\"prefix\",\"value\":\""+3+"\"},";
-		  dateJson+= "{\"must\":\"must\",\"name\":\"lsImp\",\"type\":\"=\",\"value\":\""+1+"\"}]";
+		  dateJson+= "{\"must\":\"must\",\"name\":\"lsImp\",\"type\":\"in\",\"value\":\""+"1,2,22"+"\"}]";
 		String json = page.getDatas();
 		if(json.length() > 10){
 			dateJson = "," + dateJson;
@@ -73,8 +72,8 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		 
 			StockOptionalInfo stockOptionalInfo = ZxzbHand.mapsNdzData.get(baseInfo.getStockCode());
 			    if(baseInfo.getSbType().equals("rise2Up")){
-			    	
-			    	if(stockOptionalInfo!=null&&stockOptionalInfo.getPercent()<0){
+			    	 System.out.println(stockOptionalInfo);
+			    	if(stockOptionalInfo!=null&&stockOptionalInfo.getPercent()<3){
 			    		lstRes.remove(baseInfo);
 			    		System.err.println("Strong rise lose :"+baseInfo.getStockName());
 			    	}
@@ -157,20 +156,26 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 				 stockName=list.get(i-1).getStockName();
 				 bean.setStockName(stockName);
 			}
+			if(stockName.startsWith("N")){
+				 stockName=list.get(i+1).getStockName();
+				 bean.setStockName(stockName);
+			}
+			
   			legendData.add(bean.getStockName());
 			xAxisData.add(bean.getDate());
 			m.put(bean.getStockName().trim() + bean.getDate(), bean);
 			i++;
-			if(mapSource.get(bean.getDate())!=null){
+			StockBaseInfo  beanNw = mapSource.get(bean.getDate());
+			if(beanNw!=null&&beanNw.getOpen()>0){
 				mm++;
-				StockBaseInfo  beanNw = mapSource.get(bean.getDate());
+				
 				if(beanNw.getRises()>bean.getRises()){
 					name=beanNw.getStockName();
 				nn++;	
 				}
 				if((beanNw.getRises()>0&&bean.getRises()<0)||(beanNw.getRises()<0&&bean.getRises()>0)){
-					if(Math.abs(beanNw.getRises()+bean.getRises())>1){
-					System.out.println(beanNw.getRises()+" ==>"+bean.getRises());
+					if(true){//Math.abs(beanNw.getRises()+bean.getRises())>1
+				//	System.out.println(beanNw.getRises()+" ==>"+bean.getRises());
 					hhh++;
 					}
 				}

@@ -117,6 +117,7 @@ public class StoreAstockTradInfo {
 				}
 				//002252
 				stockBaseInfo.setSbType(beanParam.getSbType());
+				if(i==1)
 			   stockBaseInfo.setLsImp(beanParam.getLsImp());
 				if(stockBaseInfo.getZsz()>0||((CommonBaseStockInfo.SPEC_STOCK_CODE_SH.equals(stockCode)||CommonBaseStockInfo.SPEC_STOCK_CODE_SZ.equals(stockCode))))//排除停牌情况
 				result.add(stockBaseInfo);
@@ -315,7 +316,12 @@ public class StoreAstockTradInfo {
 		 final JestClient  jestClient =BaseCommonConfig.clientConfig();
 		 final Map<String , StockDetailInfoBean> map =QueryComLstData.getDetailInfo(); //getInfoByCsv();
 		 final Map<String , StoreTrailer> mapStoreTrailer =QueryComLstData.getStoreTrailerMapsInfo(); //getInfoByCsv();
-		 UtilEs.deleteIndex(CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "", "");
+		 try {
+			 UtilEs.deleteIndex(CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "", "");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		 
 		 
 		for(final StockDetailInfoBean  bean:lstSource){ //导入基础数据
@@ -344,7 +350,8 @@ public class StoreAstockTradInfo {
 					public void run() {
 				          try {
 				        	 List<StockBaseInfo> lstInfo = getstockBaseInfoFile(bean ,  map.get(stockCode),mapStoreTrailer.get(stockCode));
-				  			 insBatchEs(lstInfo, jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
+				        	
+				  			 insBatchEs(Lists.newArrayList(lstInfo.get(lstInfo.size()-1)), jestClient, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE);
 						} catch (Exception e) {
 							System.out.println(stockCode);
 							e.printStackTrace();
@@ -396,7 +403,7 @@ public class StoreAstockTradInfo {
 //		getHistoryData();
 //		executorServiceLocal.shutdown();
 //		 System.out.println(getAllLastStockInfo());
-//		Thread.sleep(1000*60);
+	//	Thread.sleep(1000*100);
 //		System.out.println("start write Es data ");
 		wDataToEs();
 		//Thread.sleep(1000*60);

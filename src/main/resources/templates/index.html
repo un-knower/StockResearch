@@ -128,7 +128,9 @@
 				</div>
 				<div class="col-sm-3 col-md-3" style = "padding-right:5px;padding-left:5px;">
 					<div id="main4" style="width: 220px;height:180px;"></div>
+					 <div>大盘连续上涨天数为:<span id="upDateNumSpan"></span></div>
 				</div>
+				
 				<div class="col-sm-5 col-md-5" style = "padding-right:5px;padding-left:5px;height:160px;overflow:auto;">
 					<!-- <div id="main5" style="width: 400px;height:180px;"></div> -->
 						<div class="block-flat2 pie-widget" style = "height:150px;overflow:auto;">
@@ -373,6 +375,7 @@
       
       getAllList();
       kdj('0000001');
+      stockData('0000001');
 	  //kdj('601668');
       //getReal();
       getHotHtml();
@@ -745,6 +748,25 @@
       });  
       }
       
+      function stockData(code){
+        	$.ajax({  
+        	type : "GET",  //提交方式  
+  		url : "http://www.estock.com:8080/stock/getList",//路径  
+          data : {
+  			datas:'[{"must":"must","name":"stockCode","type":"=","value":"0000001"}]',
+  			sort:'date.asc',
+  			page:1,
+  			limit:50
+
+          },//数据，这里使用的是Json格式进行传输  
+          success : function(result) {
+        	  var item = result['items'];
+        	 // alert(item[0]['upDateNum']);
+        	  $("#upDateNumSpan").text(item[0]['upDateNum']);
+        	  
+         	 }
+          })}
+      
       function tu(code){
       	$.ajax({  
       	type : "GET",  //提交方式  
@@ -832,7 +854,6 @@
         success : function(result) {//返回数据根据结果进行相应的处理  
         	 var myChart = echarts.init(document.getElementById('main3'));
         	 var data =result;
-        	 
 				
 				option = {
 			    title: {

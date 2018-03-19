@@ -83,6 +83,7 @@
         <script src="src/mmGrid.js"></script>
         <script src="src/mmPaginator.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/echarts.min.js"></script>
         <script>
             var classNames = [];
 
@@ -102,7 +103,10 @@
                 var cols = [
                    
                     { title:'日期', name:'date' , align:'center' ,sortable:true},
-                    { title:'股票代码', name:'stockCode' , align:'center' ,width:60},
+                    { title:'股票代码', name:'stockCode' , align:'center' ,width:60, renderer: function(val,item,rowIndex){
+                        var path = getPath(item['stockCode']);
+                        return '<a src = "' +path+ '" onclick = "openDiv2(\''+item['stockCode']+'\')">'+item['stockCode']+'</a>';
+                    }},
                     { title:'名称', name:'stockName' , align:'center',width:60 , renderer: function(val,item,rowIndex){
                         var path = getPath(item['stockCode']);
                         return '<a src = "' +path+ '" onclick = "openDiv(\''+item['stockCode']+'\')">'+item['stockName']+'</a>';
@@ -198,6 +202,57 @@
             	$('#imgFen').attr('src' ,getPath(code));
             	$('#myModal').modal('show');
             }
+            
+            
+            function openDiv2(code){
+              	$.ajax({  
+              	type : "GET",  //提交方式  
+        		url : "http://www.estock.com:8080/stock/zjlx/getListGraph",//路径  
+                data : {
+        			datas:'[{"must":"must","name":"stockCode","type":"queryStr","value":"'+code+'"}]',//'[{"must":"must","name":"code","type":"=","value":"'+code+'"}]',
+        			sort:'date.desc'
+                },//数据，这里使用的是Json格式进行传输  
+                success : function(result) {//返回数据根据结果进行相应的处理  
+                	
+                	 var myChart = echarts.init(document.getElementById('main2'));
+                	 var data =result;
+                	 $("#m2Tx").text(code+"    "+data[2][0]); 
+                	 var dateList = data.map(function (item) {
+        				    return item[0];
+        				});
+        				var valueList = data.map(function (item) {
+        				    return item[1];
+        				});
+        				
+        				option = {
+        				    xAxis: {
+        				        type: 'category',
+        				        data: dateList
+        				    },
+        				    yAxis: {
+        				        type: 'value'
+        				    },
+        				    series: [{
+        				        data: valueList,
+        				        type: 'line',
+        				        smooth: true,
+        				        label: {
+        			                normal: {
+        			                    show: true,
+        			                    position: 'top'
+        			                }
+        			            }
+        				    }]
+        				};
+                	  myChart.setOption(option);
+                	  
+                	  $('#myModal2').modal('show');
+              	}  
+              }); 
+              }
+            
+            
+            
             function huan(type){
             	var old = $('#code').val();
             	var imgPath = $('#imgFen').attr('src');
@@ -241,5 +296,13 @@
 			  </div>
 			</div>
         </main>
+        
+        
+        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="分时图">
+         <center><span style="align:center;font-size:14px;" id="m2Tx"></span></center>
+          <div class="modal-body">
+        <div id="main2" style="width: 600px;height:400px;"></div>
+      </div>
+      </div>
     </body>
 </html>

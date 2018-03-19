@@ -75,7 +75,7 @@ public class ZxzbHand {
 			
 			BoolQueryBuilder query2 = QueryBuilders.boolQuery();
 			query2.must(QueryBuilders.termQuery("lsImp", "1"));
-			query2.must(QueryBuilders.termQuery("date", d));
+			//query2.must(QueryBuilders.termQuery("date", d));
 			list.addAll( (List<StockBaseInfo>) SelGetStock.getfocDaysLstResult(query2, page).get("items"));
 			
 			for (final StockBaseInfo stockBaseInfo : list) {

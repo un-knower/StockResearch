@@ -4016,7 +4016,7 @@ textarea.span1,
 }
 
 .fuelux .modal.fade {
-  top: -25%;
+
   -webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
      -moz-transition: opacity 0.3s linear, top 0.3s ease-out;
        -o-transition: opacity 0.3s linear, top 0.3s ease-out;

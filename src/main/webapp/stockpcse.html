@@ -80,26 +80,7 @@
 
 
             <!-- Modal -->
-			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="分时图">
-			  <div class="modal-dialog" role="document">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="myModalLabel">分时图</h4>
-			      </div>
-			      <div class="modal-body">
-			      	<input type="hidden" id = "code"/>
-			      	<button class="btn btn-default" onclick = "huan('min')">分时</button>
-			      	<button class="btn btn-default" onclick = "huan('daily')">周</button>
-			      	<button class="btn btn-default" onclick = "huan('weekly')">月</button>
-			        <img src = "" id = "imgFen">
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-default" data-dismiss="modal">关</button>
-			      </div>
-			    </div>
-			  </div>
-			</div>
+			
         </main>
 
         <script src="js/vendor/jquery-1.9.1.min.js"></script>
@@ -109,6 +90,8 @@
         <script src="src/mmGrid.js"></script>
         <script src="src/mmPaginator.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
+          <script src="js/echarts.min.js"></script>
+        
         <script>
             var classNames = [];
             var mmg;
@@ -145,13 +128,17 @@
             	var pgBar = $('#pg').mmPaginator({"limitList":[1000,2000,2500,3000,3800]});
                 
                 var cols = [
+                            { title:'日期', name:'date',width:80 , align:'center' ,sortable:true },
                     {title:'行情', name:'', width: 100, align: 'center', renderer: function(val,item,rowIndex){
                         /*return '<div class="btnPrice" onclick = "openDiv(\''+item['stockCode']+'\')"></div>';*/
                         var path = getPath(item['stockCode']);
                         return '<img src = "' +path+ '" onclick = "openDiv(\''+item['stockCode']+'\')">';
                     }},
-                    { title:'日期', name:'date',width:80 , align:'center' ,sortable:true },
-                    { title:'股票代码', name:'stockCode' ,width:60, align:'center' },
+                  
+                    { title:'股票代码', name:'stockCode' ,width:60, align:'center' , renderer: function(val,item,rowIndex){
+                        var path = getPath(item['stockCode']);
+                        return '<a src = "' +path+ '" onclick = "openDiv2(\''+item['stockCode']+'\')">'+item['stockCode']+'</a>';
+                    }},
                     { title:'股票名称', name:'stockName' ,width:60, align:'center'},
                     //{ title:'周几', name:'dayForWeek' ,width:60, align:'center',sortable:true},
                     {title:'板块',name:'industry',width:60,sortable:true  },
@@ -302,8 +289,107 @@
             	path = path + '?'+timestamp;
             	return path;
             }
+            
+            function openDiv2(code){
+              	$.ajax({  
+              	type : "GET",  //提交方式  
+        		url : "http://www.estock.com:8080/stock/zjlx/getListGraph",//路径  
+                data : {
+        			datas:'[{"must":"must","name":"stockCode","type":"queryStr","value":"'+code+'"}]',//'[{"must":"must","name":"code","type":"=","value":"'+code+'"}]',
+        			sort:'date.desc'
+                },//数据，这里使用的是Json格式进行传输  
+                success : function(result) {//返回数据根据结果进行相应的处理  
+                	
+                	 var myChart = echarts.init(document.getElementById('main2'));
+                	 var data =result;
+                	 
+                	 $("#m2Tx").text(code+"    "+data[2][0]); 
+                	 var dateList = data.map(function (item) {
+        				    return item[0];
+        				});
+        				var valueList = data.map(function (item) {
+        				    return item[1];
+        				});
+        				
+        				
+        				option = {
+        				    xAxis: {
+        				        type: 'category',
+        				        data: dateList
+        				    },
+        				    yAxis: {
+        				        type: 'value'
+        				    },
+        				    series: [{
+        				        data: valueList,
+        				        type: 'line',
+        				        smooth: true,
+        				        label: {
+        			                normal: {
+        			                    show: true,
+        			                    position: 'top'
+        			                }
+        			            }
+        				    }]
+        				};
+                	  myChart.setOption(option);
+                	  
+                	  $('#myModal2').modal('show');
+              	}  
+              }); 
+              }
+            
 			</script>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 								
-								
+						   <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="分时图">
+           <center><span style="align:center;font-size:14px;" id="m2Tx"></span></center>
+          <div class="modal-body">
+        <div id="main2" style="width: 600px;height:400px;"></div>
+      </div>
+      </div>		
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="分时图">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">分时图</h4>
+			      </div>
+			      <div class="modal-body">
+			      	<input type="hidden" id = "code"/>
+			      	<button class="btn btn-default" onclick = "huan('min')">分时</button>
+			      	<button class="btn btn-default" onclick = "huan('daily')">周</button>
+			      	<button class="btn btn-default" onclick = "huan('weekly')">月</button>
+			        <img src = "" id = "imgFen">
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">关</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
     </body>
 </html>

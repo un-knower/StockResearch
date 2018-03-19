@@ -2,10 +2,11 @@ package com.kers.stock.strage;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.common.collect.Sets;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
@@ -318,13 +319,14 @@ public class SelGetStock {
 		SearchSourceBuilder searchSourceBuilder = buildQuery(page, query);
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, "",
 				(page.getPage() - 1) * page.getLimit(), page.getLimit());
-             System.out.println(searchSourceBuilder.toString());
+           //  System.out.println(searchSourceBuilder.toString());
 		// final JestClient jestClient = BaseCommonConfig.clientConfig();
 		JestResult results = jestClient.execute(selResult);
 		// StockSelStrag.queryGrowUpStock();//
 		List<StockBaseInfo> lstBean = results.getSourceAsObjectList(StockBaseInfo.class);// .queryBchipStock();//queryGrowUpStock();//
 																							// results.getSourceAsObjectList(StockBaseInfo.class);
 		List<StockBaseInfo> lstResult = Lists.newArrayList();
+		Set<String> setSrouce = Sets.newTreeSet();
 		for (StockBaseInfo baseInfo : lstBean) {
 			
 			//if(!(baseInfo.getUpSumRises160()>baseInfo.getUpSumRises120()&&baseInfo.getUpSumRises120()>baseInfo.getUpSumRises90()&&baseInfo.getUpSumRises90()>baseInfo.getUpSumRises10()))
@@ -332,6 +334,8 @@ public class SelGetStock {
 //			if(baseInfo.getJ()>baseInfo.getUpJ())
 		//	if(!(baseInfo.getUp2J()>baseInfo.getUpJ()&&baseInfo.getMacd()<0))
 			lstResult.add(baseInfo);
+//			if(baseInfo!=null)
+//			setSrouce.add(baseInfo.getIndustry()==null?"null":baseInfo.getIndustry());
 			// if(baseInfo.getJ()>baseInfo.getUpJ())
 			//if(baseInfo.getUp2J()<baseInfo.getJ())
 			//lstResult.add(baseInfo);
@@ -367,6 +371,7 @@ public class SelGetStock {
 
 		}
 
+//		System.out.println(setSrouce);
 		if (lstBean != null && lstBean.size() > 0) {
 			Map hitsMap = (Map) results.getValue("hits");
 			if (hitsMap != null) {
