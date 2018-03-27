@@ -1,9 +1,16 @@
 package com.kers.stock.Controller;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.collections.list.TreeList;
 import org.elasticsearch.common.collect.Lists;
@@ -24,6 +31,7 @@ import com.kers.stock.storedata.CommonBaseStockInfo;
 import com.kers.stock.storedata.ZxzbHand;
 import com.kers.stock.strage.SelGetStock;
 import com.kers.stock.strage.StrategySet;
+import com.kers.stock.utils.MathsUtils;
 import com.kers.stock.utils.TimeUtils;
 import com.kers.stock.vo.StockBasePageInfo;
 
@@ -101,7 +109,10 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		List<StockBaseInfo> lstSource = sel.getResultFromQuery(searchSourceBuilder,"", CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, 0, 6000);
 	
 		Map  mapRes = Maps.newConcurrentMap();
+				
 		Map  mapRes2 = Maps.newConcurrentMap();
+		
+		Map  mapRes3 = Maps.newConcurrentMap();
 	for(StockBaseInfo  stockBaseInfo:lstSource){
 		String stockCode = stockBaseInfo.getStockCode();            
 		SelEsRelt sel2 = new SelEsRelt(new  StockTag());
@@ -114,30 +125,77 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 	
 		if(lstSource2!=null&&(!lstSource2.isEmpty())){
 		 for(StockTag tag:lstSource2){
-			  Object obj =mapRes.get(tag.getTagName());
-			  if(obj!=null)
-			 mapRes.put(tag.getTagName(), 1);
-			 else 
-				 mapRes.put(tag.getTagName(), (Integer.getInteger(obj+"")+1));
+			 String tagName=tag.getTagName();
+			  Object obj =mapRes.get(tagName);
+			  if(obj==null)
+			 mapRes.put(tagName, 1 + "");
+			 else{
+				 mapRes.put(tagName, (Integer.parseInt(obj.toString()) + 1) + ""); 
+			 }
 			  
-			  
-			 
+			  Object obj2 =mapRes2.get(tagName);
+			  if(obj2==null){
+				  
+				  mapRes2.put(tagName, stockBaseInfo.getStockName());
+			  	 mapRes3.put(tagName+stockBaseInfo.getStockName(), "y");
+			  }else{
+					 if(null == mapRes3.get(tagName+stockBaseInfo.getStockName())){
+						 String sss=obj2+","+stockBaseInfo.getStockName();
+						 mapRes2.put(tagName, sss);
+						 mapRes3.put(tagName+stockBaseInfo.getStockName(), "y");
+					 }
+				 }
 		 }
 		 
 		 
-		 Object obj2 =mapRes.get(lstSource2.get(0).getTagName());
-		 String tagName=lstSource2.get(0).getTagName();
-		 if(obj2!=null)
-		  mapRes2.put(tagName, stockBaseInfo.getStockName());
-		 else{
-			 String sss=obj2+","+stockBaseInfo.getStockName();
-			 mapRes2.put(tagName, sss);
-			 
-		 }
 			 
 		}
 	}
+	
+	Map<String, String> resultMap = sortMapByValue(mapRes);
+	List<StockTag> returnList = Lists.newArrayList();
+	int i=0;
+	 for (Map.Entry<String, String> entry : resultMap.entrySet()) {
+		 
+		 
+		 StockTag tag = new StockTag();
+		 tag.setTagName(entry.getKey());
+		 tag.setTagFuNum(MathsUtils.parseDouble(entry.getValue()+""));
+		 tag.setStockName(mapRes2.get(entry.getKey()).toString());
+		 returnList.add(tag);
+//         System.out.println(entry.getKey() + " " + entry.getValue());
+		 i++;
+		 if(i>lstSource.size())
+			break;
+     }
+	 mapRes.put("items", returnList);
+		return mapRes;
+		
 	}
+	
+	/**
+     * 使用 Map按key进行排序
+     * @param map
+     * @return
+     */
+	public static Map<String, String> sortMapByValue(Map<String, String> oriMap) {
+        if (oriMap == null || oriMap.isEmpty()) {
+            return null;
+        }
+        Map<String, String> sortedMap = new LinkedHashMap<String, String>();
+        List<Map.Entry<String, String>> entryList = new ArrayList<Map.Entry<String, String>>(
+                oriMap.entrySet());
+        Collections.sort(entryList, new MapValueComparator());
+
+        Iterator<Map.Entry<String, String>> iter = entryList.iterator();
+        Map.Entry<String, String> tmpEntry = null;
+        while (iter.hasNext()) {
+            tmpEntry = iter.next();
+            sortedMap.put(tmpEntry.getKey(), tmpEntry.getValue());
+        }
+        return sortedMap;
+    }
+
 	
 	
 	/**
@@ -362,6 +420,14 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 
 }
 
+class MapValueComparator implements Comparator<Map.Entry<String, String>> {
+
+    public int compare(Entry<String, String> me1, Entry<String, String> me2) {
+
+        return me2.getValue().compareTo(me1.getValue());
+    }
+}
+
 class SeriesBean {
 	private String name;
 	private String type;
@@ -396,6 +462,5 @@ class SeriesBean {
 	public String toString() {
 		return "{name: '" + name + "', type:'" + type + "', data:" + data + "}";
 	}
-	
 	
 }

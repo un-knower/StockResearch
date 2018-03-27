@@ -168,19 +168,17 @@
 					
   					<div class="block-flat2 pie-widget">
 						<div class="header">
-							<span class="pull-right"><a href = "#" onclick = "longhuGo()">更多</a></span>
-							<span class="pull-right"><span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="
-								1.当日涨幅超过10% 
-								2.连续两天涨幅超过3% 
-								3.5天内三天涨幅>0 
-								4.5天内涨超过15% 
-								5.10天内涨超过15% ">
-								规则</span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+							<span class="pull-right">
+								<div class="btn-group" role="group" >
+								 <button type="button" class="btn btn-primary btn-xs" onclick = "changelonghu(1)" id = "lf">龙虎榜</button>
+								  <button type="button" class="btn btn-default  btn-xs" onclick = "changelonghu(0)" id = "tag">tag</button>
+								</div>
+							</span>
 							<h4>龙虎榜</h4>
 						</div>
 						<div class="content">
 							<table class="no-border">
-								<thead class="no-border">
+								<thead class="no-border" id = "lht">
 									<tr>
 										<th>日期</th>
 										<th>code</th>
@@ -1491,6 +1489,52 @@
     	}
     	getZjlx(da1+"."+da2,da3);
     }
+    
+    function changelonghu(type){
+      	if(type == 1){
+      		var th = "<tr><th>日期</th><th>code</th><th>名称</th>";
+			th = th + '<th><a href = "javascript:void(0)" data1 = "industry" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">板块</a></th>';
+			th = th + '<th><a href = "javascript:void(0)" data1 = "sbType" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">类型</a></th>';
+			th = th + '<th><a href = "javascript:void(0)" data1 = "percent" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">当前涨幅</a></th>';
+			th = th + '<th><a href = "javascript:void(0)" data1 = "rises" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">涨幅</a></th>';
+			th = th + '<th><a href = "javascript:void(0)" data1 = "upSumRises3" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">3天涨</a></th>';
+			th = th + '<th><a href = "javascript:void(0)" data1 = "upSumRises5" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">5天涨</a></th>';
+			th = th + '<th><a href = "javascript:void(0)" data1 = "upRisesDay" data2 = "asc" data3= "longhu" onclick = "getLonghuSort(this)">连涨幅</a></th></tr>';
+			$('#lht').html(th);
+      		$('#lf').attr("class","btn btn-primary btn-xs");
+      		$('#tag').attr("class","btn btn-default btn-xs");
+      		getLongHuTable(1,1,'rises','asc');
+      		
+      	}
+      	if(type == 0){
+      		var th = "<tr><th>名称</th><th>数量</th><th>关联</th></tr>";
+      		$('#lht').html(th);
+      		$('#tag').attr("class","btn btn-primary btn-xs");
+      		$('#lf').attr("class","btn btn-default btn-xs");
+      		getTagList();
+      	}
+      }
+      
+     function getTagList(){
+      	$('#longhu').html(getShuaHtml(3));
+    	$.ajax({  
+	      	type : "GET",  //提交方式  
+			url : "http://www.estock.com:8080/stock/getListLonghuTab2",//路径  
+	        data : {
+	        },//数据，这里使用的是Json格式进行传输  
+	        success : function(result) {//返回数据根据结果进行相应的处理  
+	        	var item = result['items'];
+	        	var html = "";
+	        	for(var i=0;i<item.length;i++){
+	        		html = html + "<tr>";
+	        		html = html + "<td>"+item[i]['tagName']+"</td>";  	
+	        		html = html + "<td>"+item[i]['tagFuNum']+"</td>";
+	        		html = html + "<td>"+item[i]['stockName']+"</td></tr>";
+	        	}
+	        	$('#longhu').html(html);
+	      	}  
+      	});  
+      }
       
   </script>
   </body>
