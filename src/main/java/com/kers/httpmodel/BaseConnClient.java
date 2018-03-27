@@ -200,7 +200,7 @@ public class BaseConnClient {
 
 	public static String regUrl(String url) {
 		url = url.replaceAll("<br />", " %20").replaceAll("，", "%20 ").replace(" ", "%20")
-				.replace("{", "%7B").replace("}", "%7D").replace(" ", "%20").replace(" ", "%20").replace(" ", "%20");
+				.replace("{", "%7B").replace("}", "%7D").replace(" ", "%20").replace(" ", "%20").replace(" ", "%20").replace("#", "%23");
 		//.replaceAll("  ", "").replaceAll(" ", "");
 		return url;
 	}

@@ -89,7 +89,7 @@ public class StockStrongRiseHand {
 									&& objdata4.getRises() >= 0 && objdata5.getRises() >= 9.7)
 								output = "rise55Up";
 							else {
-								if(!(objdata.getRises()<0&&objdata2.getRises()<0&&(objdata.getRises()+objdata2.getRises()<-5))){
+								if(!(objdata.getRises()<0&&objdata2.getRises()<0&&(objdata.getRises()+objdata2.getRises()<-5))&&objdata.getRises()>-4&&objdata2.getRises()>-4){
 									output = "rise51Up";
 								}
 							
@@ -113,6 +113,9 @@ public class StockStrongRiseHand {
 								: "rise3Up";
 						if (objdata.getRises() >= 9.7 && objdata2.getRises() >= 9.7 && objdata3.getRises() >= 9.7)
 							output = "rise33Up";
+						else
+							output = "rise31Up";
+							
 						
 
 						StockBaseInfo baseInfo = new StockBaseInfo();

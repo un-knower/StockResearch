@@ -400,10 +400,10 @@ public class StoreAstockTradInfo {
 	}
 	public static void main(String[] args) throws ClientProtocolException, IOException, Exception {
 		
-//		getHistoryData();
+		getHistoryData();
 //		executorServiceLocal.shutdown();
 //		 System.out.println(getAllLastStockInfo());
-	//	Thread.sleep(1000*100);
+		Thread.sleep(1000*100);
 //		System.out.println("start write Es data ");
 		wDataToEs();
 		//Thread.sleep(1000*60);

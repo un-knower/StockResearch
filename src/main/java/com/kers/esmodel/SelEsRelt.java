@@ -59,12 +59,11 @@ public class SelEsRelt<T> {
 
 	public static void main(String[] args) {
 		
-		SelEsRelt<JyfxInfo> sel = new SelEsRelt<JyfxInfo>(new JyfxInfo());
+		SelEsRelt  sel = new SelEsRelt(new JyfxInfo());
 		SearchSourceBuilder ssb = new SearchSourceBuilder();
 				 BoolQueryBuilder query = QueryBuilders.boolQuery();
  				 query.must(QueryBuilders.termQuery("rq","2017-06-30"));
  				 query.must(QueryBuilders.termQuery("type","2"));
-
 				SearchSourceBuilder searchSourceBuilder = ssb.query(query);
 				List<JyfxInfo>  lstSource =sel.getResultFromQuery(searchSourceBuilder, "2017-06-30", "jyfx", 0, 6000);
 				Map<String,List<JyfxInfo>> mapInfo = Maps.newConcurrentMap();

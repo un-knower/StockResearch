@@ -48,4 +48,10 @@ public class StockTag {
 		this.tagExpTime = tagExpTime;
 	}
 
+	@Override
+	public String toString() {
+		return "StockTag [tagType=" + tagType + ", tagName=" + tagName + ", stockCode=" + stockCode + ", stockName="
+				+ stockName + ", tagExpTime=" + tagExpTime + "]";
+	}
+
 }

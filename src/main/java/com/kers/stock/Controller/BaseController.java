@@ -10,6 +10,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kers.stock.utils.TimeUtils;
 import com.kers.stock.vo.StockBaseInfoVo;
 import com.kers.stock.vo.StockBasePageInfo;
 
@@ -72,6 +73,8 @@ public class BaseController<T> {
 	    
 	    public QueryBuilder getType(StockBaseInfoVo vo){
 	    	String quvalue=vo.getValue().replace(" ", "");
+	    	if(quvalue.equals("Today"))
+	    		quvalue= TimeUtils.getStockDate();
 	    	QueryBuilder q = null;
 	    	if(vo.getType().equals("=")){
 				q = QueryBuilders.termQuery(vo.getName(),quvalue );

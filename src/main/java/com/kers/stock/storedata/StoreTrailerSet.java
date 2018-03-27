@@ -103,7 +103,7 @@ public class StoreTrailerSet {
 		// savetrailerDetailInfo(bean.getStockCode());
 		//
 		// }
-		wsData(200);
+		wsData(500);
 
 	}
 

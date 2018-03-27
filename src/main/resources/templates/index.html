@@ -224,6 +224,8 @@
 										<th>code</th>
 										<th>名称</th>
 										<th>板块</th>
+										<th>macd</th>
+										<th>mdNum</th>
 										<th>涨幅</th>
 										<th>5天涨</th>
 									</tr>
@@ -264,7 +266,8 @@
 									<tr>
 										<th width = "40%">名称</th>
 										<th width = "20%"><a href = "javascript:void(0)" data1 = "monthRise" data2 = "asc" data3= "stapledayUp" onclick = "getSortZ(this)">涨幅</a></th>
-										<th width = "20%"><a href = "javascript:void(0)" data1 = "wtzf" data2 = "asc" data3= "stapledayUp" onclick = "getSortZ(this)">周涨幅</a></th>
+										<!-- <th width = "20%"><a href = "javascript:void(0)" data1 = "priceDw" data2 = "asc" data3= "stapledayUp" onclick = "getSortZ(this)">价格</a></th>
+										 --><th width = "20%"><a href = "javascript:void(0)" data1 = "wtzf" data2 = "asc" data3= "stapledayUp" onclick = "getSortZ(this)">周涨幅</a></th>
 										<th width = "20%"><a href = "javascript:void(0)" data1 = "yfzf" data2 = "asc" data3= "stapledayUp" onclick = "getSortZ(this)">月涨幅</a></th>
 										<th width = "20%"><a href = "javascript:void(0)" data1 = "jdzf" data2 = "asc" data3= "stapledayUp" onclick = "getSortZ(this)">季涨幅</a></th>
 									</tr>
@@ -550,6 +553,7 @@
         	var html = "";
         	for(var i=0;i<item.length;i++){
         		html = html + "<tr><td><a href='javascript:void(0)' onclick = 'tu("+item[i]['code']+")'>"+item[i]['productName']+"</a></td>";
+        	/* 	html = html + "<td>"+item[i]['priceDw']+"</td>"; */
         		html = html + "<td>"+fixed2percentage(item[i]['monthRise'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['wtzf'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['yfzf'])+"</td>";
@@ -667,8 +671,11 @@
         	for(var i=0;i<item.length;i++){
         			html = html + "<tr><td>"+dsj(item[i]['date'])+"</td>";
         		html = html + "<td>"+item[i]['stockCode']+"</td>";
-        		html = html + "<td>"+item[i]['stockName']+"</td>";
+        	//	html = html + "<td>"+item[i]['stockName']+"</td>";
+        		html = html + "<td><a href = 'javascript:void(0)' onclick = openDiv('"+item[i]['stockCode']+"')>"+item[i]['stockName']+"</a></td>"; 
         		html = html + "<td>"+item[i]['industry']+"</td>";
+        		html = html + "<td>"+fixed2(item[i]['macd'])+"</td>";
+        		html = html + "<td>"+item[i]['macdNum']+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['rises'])+"</td>";
         		html = html + "<td>"+fixed2percentage(item[i]['upSumRises5'])+"</td></tr>";
         	}

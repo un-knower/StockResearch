@@ -12,7 +12,7 @@ public class FilePath {
 	public final static String saveStapleDayPathsuff = "/opt/stock/data/StapleDay/";
 	public final static String saveSTORETRAILER = "/opt/stock/data/cnmarket/storetrailer/detail/";
 	public final static String zjlxFilePath= "/opt/stock/data/cnmarket/zjlx/";
-	
+	public final static String stockTagFilePath="/opt/stock/data/cnmarket/StockTag";
 	
 	
 }
