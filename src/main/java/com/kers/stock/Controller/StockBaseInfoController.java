@@ -112,14 +112,30 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 		List<StockTag> lstSource2 = sel2.getResultFromQuery(searchSourceBuilder,"", CommonBaseStockInfo.ES_INDEX_STOCK_STOCKTAG, 0, 6000);
 		
 	
+		if(lstSource2!=null&&(!lstSource2.isEmpty())){
 		 for(StockTag tag:lstSource2){
 			  Object obj =mapRes.get(tag.getTagName());
 			  if(obj!=null)
 			 mapRes.put(tag.getTagName(), 1);
 			 else 
 				 mapRes.put(tag.getTagName(), (Integer.getInteger(obj+"")+1));
+			  
+			  
+			 
 		 }
-	
+		 
+		 
+		 Object obj2 =mapRes.get(lstSource2.get(0).getTagName());
+		 String tagName=lstSource2.get(0).getTagName();
+		 if(obj2!=null)
+		  mapRes2.put(tagName, stockBaseInfo.getStockName());
+		 else{
+			 String sss=obj2+","+stockBaseInfo.getStockName();
+			 mapRes2.put(tagName, sss);
+			 
+		 }
+			 
+		}
 	}
 	}
 	
