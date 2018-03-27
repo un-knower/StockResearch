@@ -7,6 +7,7 @@ public class StockTag {
 	private String stockCode;
 	private String stockName;
 	private String tagExpTime;// tag有效期
+	private double tagFuNum;
 
 	public String getTagType() {
 		return tagType;
@@ -52,6 +53,14 @@ public class StockTag {
 	public String toString() {
 		return "StockTag [tagType=" + tagType + ", tagName=" + tagName + ", stockCode=" + stockCode + ", stockName="
 				+ stockName + ", tagExpTime=" + tagExpTime + "]";
+	}
+
+	public double getTagFuNum() {
+		return tagFuNum;
+	}
+
+	public void setTagFuNum(double tagFuNum) {
+		this.tagFuNum = tagFuNum;
 	}
 
 }

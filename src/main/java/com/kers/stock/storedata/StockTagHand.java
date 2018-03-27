@@ -120,33 +120,34 @@ public class StockTagHand {
 	public static void main(String[] args) throws Exception {
 		 saveLstInfo();
 		
-//		SelEsRelt sel = new SelEsRelt(new  StockBaseInfo());
-//		SearchSourceBuilder ssb = new SearchSourceBuilder();
-//		BoolQueryBuilder query = QueryBuilders.boolQuery();
-//		query.should(QueryBuilders.inQuery("lsImp",  "1"));
-//		query.should(QueryBuilders.inQuery("lsImp",  "2"));
-//		query.should(QueryBuilders.inQuery("lsImp",  "22"));
+		SelEsRelt sel = new SelEsRelt(new  StockBaseInfo());
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
+		BoolQueryBuilder query = QueryBuilders.boolQuery();
+		query.should(QueryBuilders.inQuery("lsImp",  "1"));
+		query.should(QueryBuilders.inQuery("lsImp",  "2"));
+		query.should(QueryBuilders.inQuery("lsImp",  "22"));
 // 
-//		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-//		List<StockBaseInfo> lstSource = sel.getResultFromQuery(searchSourceBuilder,"", CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, 0, 6000);
+		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+		List<StockBaseInfo> lstSource = sel.getResultFromQuery(searchSourceBuilder,"", CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, 0, 6000);
 //	System.out.println(lstSource);
 //	System.out.println(lstSource.size());
 //	
-//	for(StockBaseInfo  stockBaseInfo:lstSource){
-//		String stockCode = stockBaseInfo.getStockCode();            
+	for(StockBaseInfo  stockBaseInfo:lstSource){
+		String stockCode = stockBaseInfo.getStockCode();            
 //		  System.out.println(stockCode);
-//		SelEsRelt sel2 = new SelEsRelt(new  StockTag());
-//		  ssb = new SearchSourceBuilder();
-//		  query = QueryBuilders.boolQuery();
-////		
-//		query.must(QueryBuilders.queryString(stockCode).field("stockCode"));
-////		//query.should(QueryBuilders.inQuery("lsImp",  "22"));
-//// 
-//		  searchSourceBuilder = ssb.query(query);
-//		List<StockTag> lstSource2 = sel2.getResultFromQuery(searchSourceBuilder,"", CommonBaseStockInfo.ES_INDEX_STOCK_STOCKTAG, 0, 6000);
-//	System.out.println(lstSource2);
+		SelEsRelt sel2 = new SelEsRelt(new  StockTag());
+		  ssb = new SearchSourceBuilder();
+		  query = QueryBuilders.boolQuery();
+//		
+		query.must(QueryBuilders.queryString(stockCode).field("stockCode"));
+// 
+		  searchSourceBuilder = ssb.query(query);
+		List<StockTag> lstSource2 = sel2.getResultFromQuery(searchSourceBuilder,"", CommonBaseStockInfo.ES_INDEX_STOCK_STOCKTAG, 0, 6000);
+
+		
+		//System.out.println(lstSource2);
 	
-//	}
+	}
 		
 	
 	}
