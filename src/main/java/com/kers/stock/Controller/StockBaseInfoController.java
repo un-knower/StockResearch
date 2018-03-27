@@ -9,14 +9,17 @@ import org.apache.commons.collections.list.TreeList;
 import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.kers.esmodel.BaseCommonConfig;
+import com.kers.esmodel.SelEsRelt;
 import com.kers.stock.bean.StockBaseInfo;
 import com.kers.stock.bean.StockOptionalInfo;
+import com.kers.stock.bean.StockTag;
 import com.kers.stock.storedata.CommonBaseStockInfo;
 import com.kers.stock.storedata.ZxzbHand;
 import com.kers.stock.strage.SelGetStock;
@@ -77,14 +80,50 @@ public class StockBaseInfoController extends BaseController<StockBaseInfo> {
 			    		lstRes.remove(baseInfo);
 			    		System.err.println("Strong rise lose :"+baseInfo.getStockName());
 			    	}
-			    	//else 
-			    		
 			    }
 			    baseInfo.setPercent(stockOptionalInfo==null?0:stockOptionalInfo.getPercent());
 		}
 		mapRes.put("items", lstRes);
 		return mapRes;
 	}
+	
+	@RequestMapping("/getListLonghuTab2")
+	@SuppressWarnings("all")
+	public Map<String, Object> getListLonghuTab2(StockBasePageInfo page) throws Exception {
+		SelEsRelt sel = new SelEsRelt(new  StockBaseInfo());
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
+		BoolQueryBuilder query = QueryBuilders.boolQuery();
+		query.should(QueryBuilders.inQuery("lsImp",  "1"));
+		query.should(QueryBuilders.inQuery("lsImp",  "2"));
+		query.should(QueryBuilders.inQuery("lsImp",  "22"));
+		
+		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
+		List<StockBaseInfo> lstSource = sel.getResultFromQuery(searchSourceBuilder,"", CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, 0, 6000);
+	
+		Map  mapRes = Maps.newConcurrentMap();
+		Map  mapRes2 = Maps.newConcurrentMap();
+	for(StockBaseInfo  stockBaseInfo:lstSource){
+		String stockCode = stockBaseInfo.getStockCode();            
+		SelEsRelt sel2 = new SelEsRelt(new  StockTag());
+		  ssb = new SearchSourceBuilder();
+		  query = QueryBuilders.boolQuery();
+		query.must(QueryBuilders.queryString(stockCode).field("stockCode"));
+		  searchSourceBuilder = ssb.query(query);
+		List<StockTag> lstSource2 = sel2.getResultFromQuery(searchSourceBuilder,"", CommonBaseStockInfo.ES_INDEX_STOCK_STOCKTAG, 0, 6000);
+		
+	
+		 for(StockTag tag:lstSource2){
+			  Object obj =mapRes.get(tag.getTagName());
+			  if(obj!=null)
+			 mapRes.put(tag.getTagName(), 1);
+			 else 
+				 mapRes.put(tag.getTagName(), (Integer.getInteger(obj+"")+1));
+		 }
+	
+	}
+	}
+	
+	
 	/**
 	 * 指标榜
 	 *     1. kdj 金叉  (kdj)

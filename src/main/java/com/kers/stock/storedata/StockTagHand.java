@@ -3,6 +3,7 @@ package com.kers.stock.storedata;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,14 +19,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import com.google.common.collect.Maps;
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.esmodel.SelEsRelt;
 import com.kers.httpmodel.BaseConnClient;
 import com.kers.stock.bean.StockBaseInfo;
 import com.kers.stock.bean.StockTag;
-import com.kers.stock.bean.jyfx.JyfxInfo;
 import com.kers.stock.utils.FilePath;
-import com.tuchaoshi.base.utils.StringUtil;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Bulk;
@@ -120,34 +120,7 @@ public class StockTagHand {
 	public static void main(String[] args) throws Exception {
 		 saveLstInfo();
 		
-		SelEsRelt sel = new SelEsRelt(new  StockBaseInfo());
-		SearchSourceBuilder ssb = new SearchSourceBuilder();
-		BoolQueryBuilder query = QueryBuilders.boolQuery();
-		query.should(QueryBuilders.inQuery("lsImp",  "1"));
-		query.should(QueryBuilders.inQuery("lsImp",  "2"));
-		query.should(QueryBuilders.inQuery("lsImp",  "22"));
-// 
-		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
-		List<StockBaseInfo> lstSource = sel.getResultFromQuery(searchSourceBuilder,"", CommonBaseStockInfo.ES_INDEX_STOCK_STOCKPCSE, 0, 6000);
-//	System.out.println(lstSource);
-//	System.out.println(lstSource.size());
-//	
-	for(StockBaseInfo  stockBaseInfo:lstSource){
-		String stockCode = stockBaseInfo.getStockCode();            
-//		  System.out.println(stockCode);
-		SelEsRelt sel2 = new SelEsRelt(new  StockTag());
-		  ssb = new SearchSourceBuilder();
-		  query = QueryBuilders.boolQuery();
-//		
-		query.must(QueryBuilders.queryString(stockCode).field("stockCode"));
-// 
-		  searchSourceBuilder = ssb.query(query);
-		List<StockTag> lstSource2 = sel2.getResultFromQuery(searchSourceBuilder,"", CommonBaseStockInfo.ES_INDEX_STOCK_STOCKTAG, 0, 6000);
-
 		
-		//System.out.println(lstSource2);
-	
-	}
 		
 	
 	}
