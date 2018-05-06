@@ -12,6 +12,14 @@
 	.mm img{
 		width: 100%;
 	}
+	.mm2{
+		width: 100%;
+	}
+	.mm2 .mi{
+		width: 50%;
+		
+		float:left;
+	}
 </style>
 </head>
 <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
@@ -41,10 +49,41 @@
 <div class = "mm">
 	<img src="img/img01/8.png?1525591301">
 </div>
+<div class = "mm2">
+	<div class = "mi" style = "text-align:right;">
+		<img src="img/img01/8_1.png?1525591301" style = "margin-right:20px" onclick = "d1();">
+	</div>
+	<div class = "mi" style = "text-align:left;">
+		<img src="img/img01/8_2.png?1525591301"  style = "margin-left:20px" onclick = "d1();">
+	</div>
+	<div style = "clear:both"></div>
+</div>
 <div class = "mm">
 	<img src="img/img01/9.png?1525591301">
 </div>
 <!-- End Save for Web Slices -->
 
 </body>
+
+<script>
+	function d1(){
+		var json = {
+		 "type": "goods2d",
+		 "params":{
+		  "goodsId":"7389",
+		  "skuniCode": "501_501100_10103",
+		  "modelClassId": "4173",
+		  "goodsName": "TEE",
+		  "productId": "501",
+		  "productDesignType": "2",
+		  "source": "activity",
+		  "goodsType": "2"
+		 }
+		};
+		var dataJson = JSON.stringify(json);
+		nativeBridge(dataJson);
+	}
+
+</script>
+
 </html>
