@@ -51,7 +51,7 @@ public class SmsSendDemo {
 		//请求地址请登录253云通讯自助通平台查看或者询问您的商务负责人获取
 				String smsSingleRequestServerUrl = "http://smssh1.253.com/msg/send/json";
 				// 短信内容
-			    String msg = "您手机注册的验证码为："+code;
+			    String msg = "【IF定制】"+code+"（IF定制手机验证码，请完成验证）， 如非本人操作，请忽略本短信。";
 				//手机号码
 				String phone = phoneNo;
 				//状态报告
