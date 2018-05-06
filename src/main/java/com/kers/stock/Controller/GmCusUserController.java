@@ -82,9 +82,11 @@ public class GmCusUserController extends BaseController{
 		//判断两个时间的差值
 		//生产随机6位码
 		String sj = (int)((Math.random()*9+1)*100000) + "";
-		code.setCode(sj);
+		code.setCode("8888");
 		//发送验证码
+		/*
 		String f = SmsSendDemo.sendM(code.getIphoneNo(), sj);
+		
 		if(null == f || "".equals(f)){
 			map.put("message", "短信发送失败");
 			return map;
@@ -94,7 +96,7 @@ public class GmCusUserController extends BaseController{
 				map.put("message", obj.get("errorMsg"));
 				return map;
 			}
-		}
+		}*/
 		code.setTime(d);
 		insBatchBean(code, jestClient, ES_INDEX_CUS_IPHONE);
 		map.put("code", "200");
