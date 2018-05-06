@@ -16,6 +16,7 @@ import com.kers.esmodel.BaseCommonConfig;
 import com.kers.esmodel.UtilEs;
 import com.kers.stock.utils.TimeUtils;
 import com.kers.stock.vo.IphoneCodeVo;
+import com.kers.stock.vo.UserVo;
 import com.kers.stock.vo.ValuesVo;
 
 import io.searchbox.client.JestClient;
@@ -55,8 +56,11 @@ public class GmCusUserController extends BaseController{
 			return map;
 		}
 		//判断验证码时间是否超过15分钟
+		UserVo user = new UserVo();
+		user.setPhoneNo(vo.getIphoneNo());
 		map.put("code", "200");
 		map.put("message", "OK");
+		map.put("result", user);
         return map;
     }
 
