@@ -59,7 +59,7 @@ public class GmCusController extends BaseController{
 		query.must(QueryBuilders.termQuery("type",type));
 		SearchSourceBuilder searchSourceBuilder = ssb.query(query);
 		Search selResult = UtilEs.getSearch(searchSourceBuilder, ES_INDEX_CUS_KV, type,
-				0, 1);
+				0, 10);
 		System.out.println(searchSourceBuilder.toString());
 		ValuesVo bean = new ValuesVo();
 		try {

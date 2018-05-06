@@ -1377,4 +1377,17 @@ public class TimeUtils {
 		}
 		return k;
 	}
+    
+    public static long diffTime(String t1 , String t2){
+    	SimpleDateFormat df = new SimpleDateFormat(YYYY_MM_DD_HH_MM_SS);
+    	long n = 0;
+    	try {
+    		Date d1 = df.parse(t1);
+    		Date d2 = df.parse(t2);
+    		n = d1.getTime() - d2.getTime();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return n;
+	}
 }
