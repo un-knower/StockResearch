@@ -86,9 +86,9 @@ public class GmCusUserController extends BaseController{
 		//判断两个时间的差值
 		//生产随机6位码
 		String sj = (int)((Math.random()*9+1)*100000) + "";
-		code.setCode("8888");
+		code.setCode(sj);
 		//发送验证码
-		/*
+		
 		String f = SmsSendDemo.sendM(code.getIphoneNo(), sj);
 		
 		if(null == f || "".equals(f)){
@@ -96,11 +96,11 @@ public class GmCusUserController extends BaseController{
 			return map;
 		}else{
 			JSONObject obj = (JSONObject) JSON.parse(f);
-			if(!obj.get("code").equals("200")){
+			if(!obj.get("code").equals("0")){
 				map.put("message", obj.get("errorMsg"));
 				return map;
 			}
-		}*/
+		}
 		code.setTime(d);
 		insBatchBean(code, jestClient, ES_INDEX_CUS_IPHONE);
 		map.put("code", "200");
