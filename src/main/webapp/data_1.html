@@ -64,7 +64,7 @@
 <!-- End Save for Web Slices -->
 
 </body>
-
+<script type="text/javascript" src="js/bridge.js"></script>
 <script>
 	function d1(){
 		var json = {
@@ -81,7 +81,10 @@
 		 }
 		};
 		var dataJson = JSON.stringify(json);
-		window.Interface.onResultForScript("nativeBridge",dataJson);
+		//window.Interface.onResultForScript("nativeBridge",dataJson);
+		CmallBridge.initAppBridgeCallHandler(function(){
+                        CmallBridge.wBridge.callHandler('nativeBridge', dataJson, function() {});
+                    });
 	}
 
 </script>
