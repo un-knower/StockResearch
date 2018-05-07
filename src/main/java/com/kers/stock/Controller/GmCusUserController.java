@@ -138,4 +138,48 @@ public class GmCusUserController extends BaseController{
 		return bean;
 	}
 	
+	@RequestMapping("/kv/sendVerificationTest")
+    public Map<String,Object> sendVerificationTest(IphoneCodeVo code) throws Exception {
+		Map<String,Object> map = Maps.newHashMap();
+		map.put("code", "1000");
+		if(null == code.getIphoneNo() || code.getIphoneNo().equals("")){
+			map.put("message", "手机号不能为空");
+			return map;
+		}
+		final JestClient jestClient = BaseCommonConfig.clientConfig();
+		IphoneCodeVo vo = getBreakPointDatas(jestClient , code.getIphoneNo());
+		String d = TimeUtils.getDate();
+		if(null != vo && null!= vo.getTime()){
+			long hm = TimeUtils.diffTime(d,vo.getTime());
+			double m = hm / 1000;
+			if(m < 60){
+				map.put("message", "60内不能重复获取验证码");
+				return map;
+			}
+		}
+		//判断两个时间的差值
+		//生产随机6位码
+		String sj = (int)((Math.random()*9+1)*100000) + "";
+		code.setCode(sj);
+		//发送验证码
+		
+		String f = SmsSendDemo.sendM(code.getIphoneNo(), sj);
+		
+		if(null == f || "".equals(f)){
+			map.put("message", "短信发送失败");
+			return map;
+		}else{
+			JSONObject obj = (JSONObject) JSON.parse(f);
+			if(!obj.get("code").equals("200")){
+				map.put("message", obj.get("errorMsg"));
+				return map;
+			}
+		}
+		code.setTime(d);
+		//insBatchBean(code, jestClient, ES_INDEX_CUS_IPHONE);
+		map.put("code", "200");
+		map.put("message", "验证码发送成功");
+        return map;
+    }
+	
 }

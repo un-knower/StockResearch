@@ -64,6 +64,8 @@ public class SmsSendDemo {
 				System.out.println("before request string is: " + requestJson);
 				
 				String response = ChuangLanSmsUtil.sendSmsByPost(smsSingleRequestServerUrl, requestJson);
+				
+				System.out.println("before request string is: " + response);
 				return response;
 	}
 }

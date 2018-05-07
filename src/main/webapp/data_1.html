@@ -81,7 +81,7 @@
 		 }
 		};
 		var dataJson = JSON.stringify(json);
-		Interface.nativeBridge(dataJson);
+		window.Interface.onResultForScript("nativeBridge",dataJson);
 	}
 
 </script>
