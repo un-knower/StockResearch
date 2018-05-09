@@ -1,5 +1,6 @@
 package com.kers.stock.Controller;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ public class GmHttpController {
 	public final String getSkuList = "https://apimerch.cmall.com/restwsapis/open/goods/getLevelSkuList";
 	public final String cartCount = "https://apimerch.cmall.com/restwsapis/open/order/cartCount";
 	public final String queryShoppingCartListByIds = "https://apimerch.cmall.com/restwsapis/open/order/queryShoppingCartListByIds";
+	public final String creativeWritingList = "https://android.cmall.com/goodsSite/creativeWriting/creativeWritingList";
 
 	
 	public final String queryOrderByMchOrId = "https://apimerch.cmall.com/restwsapis/order/queryOrderByMchOrId";
@@ -68,6 +70,13 @@ public class GmHttpController {
     public String queryShoppingCartListByIds(HttpServletRequest request) throws Exception {
 		String json = "";
 		json = HttpUtil.get(getUrl(request,queryShoppingCartListByIds));
+        return json;
+    }
+	
+	@RequestMapping("/goodsSite/creativeWriting/creativeWritingList")
+    public String creativeWritingList(HttpServletRequest request) throws Exception {
+		String json = "";
+		json = HttpUtil.get(getUrl(request,creativeWritingList));
         return json;
     }
 	
@@ -196,6 +205,7 @@ public class GmHttpController {
 			i++;
 		}
 		url = hurl+url;
+		url=url.replaceAll(" ", "%20");
 		System.out.println(url);
 		return url;
 	}
