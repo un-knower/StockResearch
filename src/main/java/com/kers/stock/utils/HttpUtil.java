@@ -8,17 +8,21 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 public class HttpUtil {
 	
@@ -65,38 +69,34 @@ public class HttpUtil {
         return null;  
     }  
     
-    
-    /**
-     * post方式请求数据
-     * @param url 请求链接
-     * @param data post数据体
-     * @return
-     */
-    public static String post(String url, Map<String,String> data){
-        StringBuffer sb = new StringBuffer();
-        HttpPost httpPost = new HttpPost(url);
-        List<NameValuePair> valuePairs = new ArrayList<NameValuePair>();
-        if(null != data) {
-            for (String key : data.keySet()) {
-                valuePairs.add(new BasicNameValuePair(key, data.get(key)));
-            }
-        }
-        try {
-            httpPost.setEntity(new UrlEncodedFormEntity(valuePairs));
-            HttpResponse response = httpClient.execute(httpPost);
-            HttpEntity httpEntity = response.getEntity();
-            BufferedInputStream bis = new BufferedInputStream(httpEntity.getContent());
-            byte [] buffer;
-            while (0<bis.read(buffer=new byte[128])){
-                sb.append(new String(buffer,"utf-8"));
-            }
-        }catch (UnsupportedEncodingException e){//数据格式有误
-            e.printStackTrace();
-        }catch (IOException e){//请求出错
-            e.printStackTrace();
-        }finally {
-            httpPost.releaseConnection();
-        }
-        return sb.toString();
-    }
+    public static String post(String url,Map<String,String> map){    
+        HttpClient httpClient = null;    
+        HttpPost httpPost = null;    
+        String result = null;    
+        try{    
+            httpClient = new SSLClient();    
+            httpPost = new HttpPost(url);    
+            //设置参数    
+            List<NameValuePair> list = new ArrayList<NameValuePair>();    
+            Iterator iterator = map.entrySet().iterator();    
+            while(iterator.hasNext()){    
+                Entry<String,String> elem = (Entry<String, String>) iterator.next();    
+                list.add(new BasicNameValuePair(elem.getKey(),elem.getValue()));    
+            }    
+            if(list.size() > 0){    
+                UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list,"UTF-8");    
+                httpPost.setEntity(entity);    
+            }    
+            HttpResponse response = httpClient.execute(httpPost);    
+            if(response != null){    
+                HttpEntity resEntity = response.getEntity();    
+                if(resEntity != null){    
+                    result = EntityUtils.toString(resEntity,"UTF-8");    
+                }    
+            }    
+        }catch(Exception ex){    
+            ex.printStackTrace();    
+        }    
+        return result;    
+    }    
 }

@@ -2,6 +2,7 @@ package com.kers.stock.Controller;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.elasticsearch.common.collect.Maps;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSONObject;
 import com.kers.stock.utils.HttpUtil;
+import com.kers.stock.utils.TextUtil;
 
 @RestController
 public class GmHttpController {
@@ -91,6 +95,7 @@ public class GmHttpController {
     public String saveShoppingCart(HttpServletRequest request) throws Exception {
 		String json = "";
 		json = HttpUtil.post(saveShoppingCart, postUrl(request));
+		System.out.println(json);
         return json;
     }
 	
@@ -213,9 +218,12 @@ public class GmHttpController {
 	public Map<String, String> postUrl(HttpServletRequest request){
 		Map<String, Object> map = getMapByRequest(request);
 		Map<String, String> returnMap = Maps.newHashMap();
+		String ss= "";
 		for(Map.Entry<String,Object> entry:map.entrySet()){
+			ss= ss + "&"+entry.getKey()+"="+String.valueOf(entry.getValue());
 			returnMap.put(entry.getKey(), String.valueOf(entry.getValue()));
 		}
+		System.out.println(ss);
 		return returnMap;
 	}
 	
@@ -235,4 +243,32 @@ public class GmHttpController {
 		}
 		return mapSource;
 	}
+	
+	public static void main(String[] args) {
+		String url = "http://192.168.1.108:8080/cus/restwsapis/open/order/saveShoppingCart";
+		Map<String, String> map = Maps.newHashMap();
+		List<String> sss = TextUtil.readTxtFile("/Users/chensl/Downloads/ttt.txt");
+		String cc = "";
+		for (String string : sss) {
+			cc = cc + string;
+		}
+		String[] a = cc.split("&");
+		for (int i = 0; i < a.length; i++) {
+			String[] b = a[i].split("=");
+			if(b.length == 1){
+				map.put(b[0], "");
+			}else{
+				map.put(b[0], b[1]);
+			}
+			
+		}
+		String json = HttpUtil.post(url, map);
+		JSONObject obj = JSONObject.parseObject(json);
+		String code = obj.getString("code");
+		long result = obj.getLongValue("result");
+		System.out.println(code);
+		System.out.println(result);
+				
+	}
+	
 }
