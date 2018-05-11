@@ -14,7 +14,6 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.kers.esmodel.BaseCommonConfig;
 import com.kers.httpmodel.BaseConnClient;
-import com.kers.stock.Controller.StoreReportController;
 import com.kers.stock.bean.EastReportBean;
 import com.kers.stock.bean.StockBaseInfo;
 import com.kers.stock.bean.StockDetailInfoBean;

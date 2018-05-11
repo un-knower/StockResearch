@@ -23,7 +23,7 @@ public class GmHttpController {
 	public final String cartCount = "https://apimerch.cmall.com/restwsapis/open/order/cartCount";
 	public final String queryShoppingCartListByIds = "https://apimerch.cmall.com/restwsapis/open/order/queryShoppingCartListByIds";
 	public final String creativeWritingList = "https://android.cmall.com/goodsSite/creativeWriting/creativeWritingList";
-
+	public final String diyFontList = "https://apimerch.cmall.com/restwsapis/open/goods/diyFontList";
 	
 	public final String queryOrderByMchOrId = "https://apimerch.cmall.com/restwsapis/order/queryOrderByMchOrId";
 	public final String saveShoppingCart = "https://apimerch.cmall.com/restwsapis/open/order/saveShoppingCart";
@@ -74,6 +74,13 @@ public class GmHttpController {
     public String queryShoppingCartListByIds(HttpServletRequest request) throws Exception {
 		String json = "";
 		json = HttpUtil.get(getUrl(request,queryShoppingCartListByIds));
+        return json;
+    }
+	
+	@RequestMapping("/restwsapis/open/goods/diyFontList")
+    public String diyFontList(HttpServletRequest request) throws Exception {
+		String json = "";
+		json = HttpUtil.get(getUrl(request,diyFontList));
         return json;
     }
 	
@@ -245,7 +252,7 @@ public class GmHttpController {
 	}
 	
 	public static void main(String[] args) {
-		String url = "http://192.168.1.108:8080/cus/restwsapis/open/order/saveShoppingCart";
+		String url = "http://jmb.imm-hk.com:8080/if/restwsapis/open/order/saveShoppingCart";
 		Map<String, String> map = Maps.newHashMap();
 		List<String> sss = TextUtil.readTxtFile("/Users/chensl/Downloads/ttt.txt");
 		String cc = "";
