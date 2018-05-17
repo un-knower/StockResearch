@@ -1,0 +1,7 @@
+spring:
+  datasource:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://47.104.198.25:3306/nideshop?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      username: db_shop
+      password: q123456
+      initialize: true
